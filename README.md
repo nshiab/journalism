@@ -1,12 +1,13 @@
 # The Journalism Library
 
-A collection of helper functions written in TypeScrit for our journalism projects.
+A collection of helper functions written in TypeScrit for journalistic projects.
 
-If you wish to add one, create an issue and then open a pull request. Make sure to include:
+The library is available on [npm](https://www.npmjs.com/package/journalism). To install, run `npm i journalism` in your terminal.
 
--   Tests for your function
--   A description in this readme file.
+The documentation can be found [here](https://nshiab.github.io/journalism/).
 
-# How to install
+If you wish to contribute, create an issue explaining what you would like to add, create a branch from the issue, make sure to add tests, and then create a pull request.
 
-# List of helper functions
+This repository is maintained by [Nael Shiab](http://naelshiab.com/), senior data producer at [CBC/Radio-Canada](https://cbc.radio-canada.ca/).
+
+Feel free to ping me on [Mastodon](https://vis.social/@naelshiab), [Twitter](https://twitter.com/NaelShiab) or [LinkedIn](https://www.linkedin.com/in/naelshiab/) if you have any questions.
