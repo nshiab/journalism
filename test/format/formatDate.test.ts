@@ -80,7 +80,7 @@ describe("formatDate", () => {
         )
         assert.strictEqual(formattedDate, "1 janvier 2023 à 15 h 35")
     })
-    it("should return a Date in the format Month Day, YYYY, at HH:MM without ' h 00' for the minutes", () => {
+    it("should return a Date in the format Month Day, YYYY, at HH:MM with RC style without ' h 00' for the minutes ", () => {
         const formattedDate = formatDate(
             dateNoMinutes,
             "Month Day, YYYY, at HH:MM period",

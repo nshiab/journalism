@@ -6,7 +6,7 @@ The library is available on [npm](https://www.npmjs.com/package/journalism). To 
 
 The documentation can be found [here](https://nshiab.github.io/journalism/).
 
-If you wish to contribute, create an issue explaining what you would like to add, create a branch from the issue, make sure to add tests, and then create a pull request.
+If you wish to contribute, create an issue explaining what you would like to add, create a branch from the issue, make sure to add tests, import your function in index.ts and then create a pull request.
 
 This repository is maintained by [Nael Shiab](http://naelshiab.com/), senior data producer at [CBC/Radio-Canada](https://cbc.radio-canada.ca/).
 
