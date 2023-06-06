@@ -1,5 +1,5 @@
 import assert from "assert"
-import geoTo3D from "../../src/3Dfunctions/geoTo3D.js"
+import geoTo3D from "../../src/3D/geoTo3D.js"
 
 describe("geoTo3D", () => {
     it("should return 3D coordinates based on lat/lon as an object", () => {
