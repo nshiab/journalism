@@ -2,31 +2,27 @@ import { timeFormat, utcFormat } from "d3-time-format"
 import dateToCBCStyle from "./helpers/dateToCBCStyle.js"
 import dateToRCStyle from "./helpers/dateToRCStyle.js"
 
-interface options {
-    style?: "cbc" | "rc"
-    utc?: boolean
-    abbreviations?: boolean
-}
-
-interface mergedOptions {
-    style: "cbc" | "rc"
-    utc: boolean
-    abbreviations: boolean
-}
-
 export default function formatDate(
     date: Date | number,
     format:
         | "YYYY-MM-DD"
         | "Month Day, YYYY"
         | "Month Day, YYYY, at HH:MM period",
-    options: options = {}
+    options: {
+        style?: "cbc" | "rc"
+        utc?: boolean
+        abbreviations?: boolean
+    } = {}
 ): string {
     if (typeof date === "number") {
         date = new Date(date)
     }
 
-    const mergedOptions: mergedOptions = {
+    const mergedOptions: {
+        style: "cbc" | "rc"
+        utc: boolean
+        abbreviations: boolean
+    } = {
         style: "cbc",
         utc: true,
         abbreviations: false,

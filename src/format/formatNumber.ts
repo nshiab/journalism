@@ -1,31 +1,30 @@
 import round from "./round.js"
 
-interface options {
-    style?: "cbc" | "rc"
-    sign?: boolean
-    round?: boolean
-    nbDecimals?: number
-    nearestInteger?: number
-    prefix?: string
-    suffix?: string
-}
-
-interface mergedOptions {
-    style: "cbc" | "rc"
-    sign: boolean
-    round: boolean
-    nbDecimals: number
-    nearestInteger: number
-    prefix: string
-    suffix: string
-}
-
-export default function formatNumber(number: number, options: options = {}) {
+export default function formatNumber(
+    number: number,
+    options: {
+        style?: "cbc" | "rc"
+        sign?: boolean
+        round?: boolean
+        nbDecimals?: number
+        nearestInteger?: number
+        prefix?: string
+        suffix?: string
+    } = {}
+) {
     if (typeof number !== "number") {
         throw new Error("Not a number")
     }
 
-    const mergedOptions: mergedOptions = {
+    const mergedOptions: {
+        style: "cbc" | "rc"
+        sign: boolean
+        round: boolean
+        nbDecimals: number
+        nearestInteger: number
+        prefix: string
+        suffix: string
+    } = {
         style: "cbc",
         sign: false,
         round: false,

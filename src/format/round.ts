@@ -1,15 +1,14 @@
-interface options {
-    nbDecimals?: number
-    nearestInteger?: number
-}
-
-interface mergedOptions {
-    nbDecimals: number
-    nearestInteger: number
-}
-
-export default function round(number: number, options: options = {}): number {
-    const mergedOptions: mergedOptions = {
+export default function round(
+    number: number,
+    options: {
+        nbDecimals?: number
+        nearestInteger?: number
+    } = {}
+): number {
+    const mergedOptions: {
+        nbDecimals: number
+        nearestInteger: number
+    } = {
         nbDecimals: 0,
         nearestInteger: 1,
         ...options,

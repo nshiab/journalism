@@ -1,20 +1,16 @@
-interface options {
-    nbDecimals?: number
-    toArray?: boolean
-}
-
-interface mergedOptions {
-    nbDecimals: number
-    toArray: boolean
-}
-
 export default function geoTo3D(
     lat: number,
     lon: number,
     radius: number,
-    options: options = {}
+    options: {
+        nbDecimals?: number
+        toArray?: boolean
+    } = {}
 ): { x: number; y: number; z: number } | [number, number, number] {
-    const mergedOptions: mergedOptions = {
+    const mergedOptions: {
+        nbDecimals: number
+        toArray: boolean
+    } = {
         nbDecimals: 5,
         toArray: false,
         ...options,

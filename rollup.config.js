@@ -15,17 +15,6 @@ const copyright = readFileSync("./LICENSE", "utf-8")
 
 const banner = `// ${meta.homepage} v${meta.version} Copyright ${copyright}`
 
-const commonPlugins = [
-    typescript(),
-    commonjs(),
-    json(),
-    resolve({
-        jsnext: true,
-        main: true,
-        browser: true,
-    }),
-]
-
 export default [
     {
         input: "src/index.ts",
@@ -39,7 +28,14 @@ export default [
             sourcemap: true,
         },
         plugins: [
-            ...commonPlugins,
+            typescript(),
+            commonjs(),
+            json(),
+            resolve({
+                jsnext: true,
+                main: true,
+                browser: true,
+            }),
             terser({
                 output: {
                     preamble: banner,
