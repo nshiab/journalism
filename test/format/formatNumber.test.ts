@@ -64,6 +64,25 @@ describe("formatNumber", () => {
         })
         assert.strictEqual(string, "-11,520")
     })
+    it("should return the number with prefix", () => {
+        const string = formatNumber(-11523, {
+            prefix: "$",
+        })
+        assert.strictEqual(string, "$-11,523")
+    })
+    it("should return the number with suffix", () => {
+        const string = formatNumber(35, {
+            suffix: " C",
+        })
+        assert.strictEqual(string, "35 C")
+    })
+    it("should return the number with a prefix and a suffix", () => {
+        const string = formatNumber(35, {
+            prefix: "Temp.: ",
+            suffix: " C",
+        })
+        assert.strictEqual(string, "Temp.: 35 C")
+    })
 
     // Radio-Canada style
 
@@ -137,5 +156,27 @@ describe("formatNumber", () => {
             style: "rc",
         })
         assert.strictEqual(string, "-11 520")
+    })
+    it("should return the number with prefix and rc style", () => {
+        const string = formatNumber(-11523, {
+            prefix: "$",
+            style: "rc",
+        })
+        assert.strictEqual(string, "$-11 523")
+    })
+    it("should return the number with suffix and rc style", () => {
+        const string = formatNumber(35.2, {
+            suffix: " C",
+            style: "rc",
+        })
+        assert.strictEqual(string, "35,2 C")
+    })
+    it("should return the number with a prefix, a suffix and rc style", () => {
+        const string = formatNumber(35.6, {
+            prefix: "Temp.: ",
+            suffix: " C",
+            style: "rc",
+        })
+        assert.strictEqual(string, "Temp.: 35,6 C")
     })
 })
