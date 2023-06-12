@@ -7,10 +7,7 @@ export default function geoTo3D(
         toArray?: boolean
     } = {}
 ): { x: number; y: number; z: number } | [number, number, number] {
-    const mergedOptions: {
-        nbDecimals: number
-        toArray: boolean
-    } = {
+    const mergedOptions = {
         nbDecimals: 5,
         toArray: false,
         ...options,

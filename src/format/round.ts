@@ -5,10 +5,7 @@ export default function round(
         nearestInteger?: number
     } = {}
 ): number {
-    const mergedOptions: {
-        nbDecimals: number
-        nearestInteger: number
-    } = {
+    const mergedOptions = {
         nbDecimals: 0,
         nearestInteger: 1,
         ...options,

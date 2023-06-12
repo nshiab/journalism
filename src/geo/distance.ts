@@ -9,9 +9,7 @@ export default function distance(
         nbDecimals?: number
     } = {}
 ): number {
-    const mergedOptions: {
-        nbDecimals: number
-    } = { nbDecimals: 3, ...options }
+    const mergedOptions = { nbDecimals: 3, ...options }
 
     const dLat = toRad(lat2 - lat1)
     const dLon = toRad(lon2 - lon1)
