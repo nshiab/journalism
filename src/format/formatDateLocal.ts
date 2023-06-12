@@ -2,6 +2,17 @@ import { timeFormat } from "d3-time-format"
 import dateToCBCStyle from "./helpers/dateToCBCStyle.js"
 import dateToRCStyle from "./helpers/dateToRCStyle.js"
 
+/**
+ * Format a local Date as a string with a specific format and a specific style.
+ *
+ *```js
+ * const date = new Date("2023-01-01T01:35:00.000")
+ * const string = formatDate(date, "Month Day, YYYY, at HH:MM period", { abbreviations: true })
+ * // returns "Jan. 1, 2023, at 3:35 p.m."
+ * ```
+ * Options can be passed as the last parameter. Pass {style: "rc"} to parse dates in French.
+ */
+
 export default function formatDateLocal(
     date: Date | number,
     format:
