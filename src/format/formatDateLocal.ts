@@ -1,8 +1,8 @@
-import { utcFormat } from "d3-time-format"
+import { timeFormat } from "d3-time-format"
 import dateToCBCStyle from "./helpers/dateToCBCStyle.js"
 import dateToRCStyle from "./helpers/dateToRCStyle.js"
 
-export default function formatDate(
+export default function formatDateLocal(
     date: Date | number,
     format:
         | "YYYY-MM-DD"
@@ -63,6 +63,6 @@ export default function formatDate(
 }
 
 function dateToString(date: Date, representation: string) {
-    const f = utcFormat(representation)
+    const f = timeFormat(representation)
     return f(date)
 }
