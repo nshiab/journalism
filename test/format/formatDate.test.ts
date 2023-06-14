@@ -43,6 +43,14 @@ describe("formatDateLocal", () => {
         )
         assert.strictEqual(formattedDate, "January 1, 2023, at 3:35 p.m.")
     })
+    it("should return a Date in the format Month Day, YYYY, at HH:MM period (afternoon) with an abbreviated month", () => {
+        const formattedDate = formatDateLocal(
+            datePM,
+            "Month Day, YYYY, at HH:MM period",
+            { abbreviations: true }
+        )
+        assert.strictEqual(formattedDate, "Jan. 1, 2023, at 3:35 p.m.")
+    })
     it("should return a Date in the format Month Day, YYYY, at HH:MM without ':00' for the minutes", () => {
         const formattedDate = formatDateLocal(
             dateNoMinutes,
@@ -83,6 +91,14 @@ describe("formatDateLocal", () => {
             { style: "rc" }
         )
         assert.strictEqual(formattedDate, "1 janvier 2023 à 15 h 35")
+    })
+    it("should return a Date in the format Month Day, YYYY, at HH:MM period (afternoon) with an abbreviated month with RC style", () => {
+        const formattedDate = formatDateLocal(
+            datePM,
+            "Month Day, YYYY, at HH:MM period",
+            { abbreviations: true, style: "rc" }
+        )
+        assert.strictEqual(formattedDate, "1 janv. 2023 à 15 h 35")
     })
     it("should return a Date in the format Month Day, YYYY, at HH:MM with RC style without ' h 00' for the minutes ", () => {
         const formattedDate = formatDateLocal(
