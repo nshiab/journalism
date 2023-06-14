@@ -1,6 +1,5 @@
 /**
- * Convert latitude and longitude to x,y,z coordinates based on a given radius.
- * By default, round coordinates to 5 decimals.
+ * Convert latitude and longitude to x,y,z coordinates based on a given radius. The options (last parameter) are optional.
  *
  *```js
  * const coords = geoTo3D(45.5019, 73.5674, 1, { nbDecimals: 2})

@@ -1,7 +1,7 @@
 // Based on https://github.com/Turfjs/turf/blob/master/packages/turf-distance/index.ts
 
 /**
- * Compute the distance in kilometres based on latitude and longitude. By default, round the distance to the third decimal (meters).
+ * Compute the distance in kilometres based on latitude and longitude. The options (last parameter) are optional.
  *
  *```js
  * const distance = distance(45.51, -73.66, 43.66, -79.43, { nbDecimals: 0 })

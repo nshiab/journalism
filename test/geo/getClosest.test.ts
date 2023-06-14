@@ -28,7 +28,7 @@ describe("getClosest", () => {
             lon: -73.66,
         })
     })
-    it("should return the closest city from Ottawa with the distance in the returned object", () => {
+    it("should return the closest city from Ottawa with the distance in km in the returned object", () => {
         const closest = getClosest(
             ottawa.lat,
             ottawa.lon,
@@ -36,6 +36,38 @@ describe("getClosest", () => {
             (d) => (d as item).lat,
             (d) => (d as item).lon,
             { addDistance: true }
+        )
+        assert.deepStrictEqual(closest, {
+            name: "Montreal",
+            lat: 45.51,
+            lon: -73.66,
+            distance: 160.6937083445315,
+        })
+    })
+    it("should return the closest city from Ottawa with the rounded distance in km in the returned object", () => {
+        const closest = getClosest(
+            ottawa.lat,
+            ottawa.lon,
+            geoItems,
+            (d) => (d as item).lat,
+            (d) => (d as item).lon,
+            { addDistance: true, nbDecimals: 0 }
+        )
+        assert.deepStrictEqual(closest, {
+            name: "Montreal",
+            lat: 45.51,
+            lon: -73.66,
+            distance: 161,
+        })
+    })
+    it("should return the closest city from Ottawa with the distance in km with 3 decimals in the returned object", () => {
+        const closest = getClosest(
+            ottawa.lat,
+            ottawa.lon,
+            geoItems,
+            (d) => (d as item).lat,
+            (d) => (d as item).lon,
+            { addDistance: true, nbDecimals: 3 }
         )
         assert.deepStrictEqual(closest, {
             name: "Montreal",
