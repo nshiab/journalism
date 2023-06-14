@@ -4,6 +4,7 @@ import formatNumber from "./format/formatNumber.js"
 import round from "./format/round.js"
 import geoTo3D from "./geo/geoTo3D.js"
 import distance from "./geo/distance.js"
+import adjustToInflation from "./others/adjustToInflation.js"
 import getClosest from "./geo/getClosest.js"
 
 export {
@@ -13,5 +14,6 @@ export {
     round,
     geoTo3D,
     distance,
+    adjustToInflation,
     getClosest,
 }
