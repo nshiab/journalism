@@ -4,11 +4,18 @@ import geoTo3D from "../../src/geo/geoTo3D.js"
 describe("geoTo3D", () => {
     it("should return 3D coordinates based on lat/lon as an object", () => {
         const coords = geoTo3D(45.5019, 73.5674, 1)
-        assert.deepStrictEqual(coords, { x: 0.67226, y: 0.71327, z: 0.19827 })
+        assert.deepStrictEqual(coords, {
+            x: 0.6722566585728339,
+            y: 0.7132736917934053,
+            z: 0.19827159554483506,
+        })
     })
     it("should return 3D coordinates based on lat/lon as an array", () => {
         const coords = geoTo3D(45.5019, 73.5674, 1, { toArray: true })
-        assert.deepStrictEqual(coords, [0.67226, 0.71327, 0.19827])
+        assert.deepStrictEqual(
+            coords,
+            [0.6722566585728339, 0.7132736917934053, 0.19827159554483506]
+        )
     })
     it("should return 3D coordinates based on lat/lon as an object with 2 decimals", () => {
         const coords = geoTo3D(45.5019, 73.5674, 1, { nbDecimals: 2 })
