@@ -1,3 +1,15 @@
+/**
+ * Round a number. By default, round to the nearest integer.
+ *
+ *```js
+ * const string = round(1234.567, { nbDecimals: 1 })
+ * // returns 1,235.6
+ * ```
+ * These options can be passed as the last parameter:
+ * - nbDecimals : the number of decimals to keep when rounding
+ * - nearestInteger: the base to use to round. For example, 123 with the nearestInteger 10 is 120.
+ */
+
 export default function round(
     number: number,
     options: {

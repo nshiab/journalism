@@ -1,5 +1,22 @@
 import round from "./round.js"
 
+/**
+ * Format a number with a specific style.
+ *
+ *```js
+ * const string = formatNumber(1234.567, { sign: true, round: true })
+ * // returns "+1,235"
+ * ```
+ * These options can be passed as the last parameter:
+ * - style: "cbc" or "rc"
+ * - sign: if true, "-" or "+" are added in front of the number
+ * - round: to round the number
+ * - nbDecimals : the number of decimals to keep when rounding
+ * - nearestInteger: the base to use to round. For example, 123 with the nearestInteger 10 is 120.
+ * - prefix: a string to add before the number, "$" for example
+ * - suffix: a string to add after the number, "%" for example
+ */
+
 export default function formatNumber(
     number: number,
     options: {
