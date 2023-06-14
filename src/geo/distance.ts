@@ -9,8 +9,6 @@ export default function distance(
         nbDecimals?: number
     } = {}
 ): number {
-    const mergedOptions = { nbDecimals: 3, ...options }
-
     const dLat = toRad(lat2 - lat1)
     const dLon = toRad(lon2 - lon1)
     lat1 = toRad(lat1)
@@ -22,7 +20,9 @@ export default function distance(
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 
     const dist = c * 6371.0088
-    return parseFloat(dist.toFixed(mergedOptions.nbDecimals))
+    return typeof options.nbDecimals === "number"
+        ? parseFloat(dist.toFixed(options.nbDecimals))
+        : dist
 }
 
 function toRad(coord: number) {
