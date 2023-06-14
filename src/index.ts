@@ -4,5 +4,14 @@ import formatNumber from "./format/formatNumber.js"
 import round from "./format/round.js"
 import geoTo3D from "./geo/geoTo3D.js"
 import distance from "./geo/distance.js"
+import getClosest from "./geo/getClosest.js"
 
-export { formatDate, formatDateLocal, formatNumber, round, geoTo3D, distance }
+export {
+    formatDate,
+    formatDateLocal,
+    formatNumber,
+    round,
+    geoTo3D,
+    distance,
+    getClosest,
+}
