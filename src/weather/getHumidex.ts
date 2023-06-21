@@ -1,3 +1,10 @@
+/**
+ * Calculate Humidex Factor in Celsius given the temperature in Celsius and humidity percentage
+ * ```js
+ * const humidex = getHumidex(30, 70); // returns 41
+ * ```
+ */
+
 export default function getHumidex(
     temperature: number,
     humidity: number
