@@ -23,6 +23,5 @@ export default function getHumidex(
     const eTd = (eTs * humidity) / 100
     const humidex = Math.round(temperature + ((eTd - 10) * 5) / 9)
 
-    if (humidex < temperature) return temperature // possible?
     return humidex
 }
