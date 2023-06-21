@@ -6,6 +6,7 @@ import geoTo3D from "./geo/geoTo3D.js"
 import distance from "./geo/distance.js"
 import adjustToInflation from "./others/adjustToInflation.js"
 import getClosest from "./geo/getClosest.js"
+import getHumidex from "./weather/getHumidex.js"
 
 export {
     formatDate,
@@ -16,4 +17,5 @@ export {
     distance,
     adjustToInflation,
     getClosest,
+    getHumidex,
 }
