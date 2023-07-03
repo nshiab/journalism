@@ -16,6 +16,13 @@ export default function dateToCBCStyle(string: string, abrev: boolean): string {
                 .replace("October", "Oct.")
                 .replace("November", "Nov.")
                 .replace("December", "Dec.")
+                .replace("Monday", "Mon.")
+                .replace("Tuesday", "Tues.")
+                .replace("Wednesday", "Wed.")
+                .replace("Thursday", "Thu.")
+                .replace("Friday", "Fri.")
+                .replace("Saturday", "Sat.")
+                .replace("Sunday", "Sun.")
         )
     } else {
         return string
