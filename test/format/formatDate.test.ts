@@ -58,6 +58,16 @@ describe("formatDateLocal", () => {
         )
         assert.strictEqual(formattedDate, "January 1, 2023, at 1 a.m.")
     })
+    it("should return the full day name", () => {
+        const formattedDate = formatDateLocal(dateNoMinutes, "DayName")
+        assert.strictEqual(formattedDate, "Sunday")
+    })
+    it("should return the abbreviated day name", () => {
+        const formattedDate = formatDateLocal(dateNoMinutes, "DayName", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "Sun.")
+    })
 
     // Radio-Canada style
 
@@ -107,5 +117,18 @@ describe("formatDateLocal", () => {
             { style: "rc" }
         )
         assert.strictEqual(formattedDate, "1 janvier 2023 à 1 h")
+    })
+    it("should return the full day name with RC style", () => {
+        const formattedDate = formatDateLocal(dateNoMinutes, "DayName", {
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "Dimanche")
+    })
+    it("should return the abbreviated day name with RC style", () => {
+        const formattedDate = formatDateLocal(dateNoMinutes, "DayName", {
+            style: "rc",
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "Dim.")
     })
 })

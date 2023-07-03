@@ -15,6 +15,13 @@ export default function dateToRCStyle(string: string, abrev: boolean): string {
             .replace("October", "oct.")
             .replace("November", "nov.")
             .replace("December", "déc.")
+            .replace("Monday", "Lun.")
+            .replace("Tuesday", "Mar.")
+            .replace("Wednesday", "Mer.")
+            .replace("Thursday", "Jeu.")
+            .replace("Friday", "Ven.")
+            .replace("Saturday", "Sam.")
+            .replace("Sunday", "Dim.")
     } else {
         return string
             .replace("January", "janvier")
@@ -29,5 +36,12 @@ export default function dateToRCStyle(string: string, abrev: boolean): string {
             .replace("October", "octobre")
             .replace("November", "novembre")
             .replace("December", "décembre")
+            .replace("Monday", "Lundi")
+            .replace("Tuesday", "Mardi")
+            .replace("Wednesday", "Mercredi")
+            .replace("Thursday", "Jeudi")
+            .replace("Friday", "Vendredi")
+            .replace("Saturday", "Samedi")
+            .replace("Sunday", "Dimanche")
     }
 }

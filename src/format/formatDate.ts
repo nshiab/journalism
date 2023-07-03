@@ -18,7 +18,8 @@ export default function formatDate(
     format:
         | "YYYY-MM-DD"
         | "Month Day, YYYY"
-        | "Month Day, YYYY, at HH:MM period",
+        | "Month Day, YYYY, at HH:MM period"
+        | "DayName",
     options: {
         style?: "cbc" | "rc"
         abbreviations?: boolean
@@ -54,6 +55,8 @@ export default function formatDate(
             rc: "%_d %B %Y à %_H h %M",
         }
         dateFormatted = dateToString(date, representations[mergedOptions.style])
+    } else if (format === "DayName") {
+        dateFormatted = dateToString(date, "%A")
     } else {
         throw new Error("Unknown format")
     }
