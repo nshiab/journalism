@@ -4,6 +4,7 @@
  * ```js
  * const humidex = getHumidex(30, 70); // returns 41
  * ```
+ * This is using the formula from the Canadian Centre for Climate Services.
  */
 
 export default function getHumidex(
@@ -14,16 +15,16 @@ export default function getHumidex(
         throw new Error("humidity must be between 0 and 100")
     }
 
-    const temperatureInKelvin = temperature + 273
-    const eTs = Math.pow(
-        10,
-        -2937.4 / temperatureInKelvin -
-            (4.9283 * Math.log(temperatureInKelvin)) / Math.LN10 +
-            23.5471
-    )
-    const eTd = (eTs * humidity) / 100
-    const humidex = Math.round(temperature + ((eTd - 10) * 5) / 9)
+    const p =
+        (6.112 *
+            Math.pow(10, (7.5 * temperature) / (237.7 + temperature)) *
+            humidity) /
+        100
 
-    if (humidex < temperature) return temperature
-    return humidex
+    const humidex = temperature + 95 * (p - 10)
+
+    const humidexRounded = Math.round(humidex)
+
+    if (humidexRounded < temperature) return temperature
+    return humidexRounded
 }
