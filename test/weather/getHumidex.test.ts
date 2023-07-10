@@ -14,9 +14,9 @@ describe("getHumidex", () => {
         const humidex = getHumidex(21, 100)
         assert.equal(humidex, 29)
     })
-    it("should return the humidex (58) given temperature (35 C) and humidity (95%)", () => {
+    it("should return the humidex (59) given temperature (35 C) and humidity (95%)", () => {
         const humidex = getHumidex(35, 95)
-        assert.equal(humidex, 58)
+        assert.equal(humidex, 59)
     })
     it("should return the temperature (21 C) (with humidity (20%)) if humidex is less than the temperature", () => {
         const humidex = getHumidex(21, 20)

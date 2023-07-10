@@ -21,7 +21,7 @@ export default function getHumidex(
             humidity) /
         100
 
-    const humidex = temperature + 95 * (p - 10)
+    const humidex = temperature + (5 / 9) * (p - 10)
 
     const humidexRounded = Math.round(humidex)
 
