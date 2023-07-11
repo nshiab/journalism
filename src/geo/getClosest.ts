@@ -2,7 +2,7 @@ import { minIndex } from "d3-array"
 import distance from "./distance.js"
 
 /**
- * Return the closest item of a list based on longitude and latitude. The options (last parameter) are optional.
+ * Return the closest item of a list based on longitude and latitude. The options (last parameter) are optional. If addDistance is true and geoItems have a *properties* key, the distance will be added to the properties.
  *
  * ```js
  * const geoItems = [
@@ -43,9 +43,17 @@ export default function getClosest(
     }
 
     const distanceMinIndex = minIndex(distances)
-    const closest = geoItems[distanceMinIndex] as { distance?: number }
+    const closest = geoItems[distanceMinIndex] as {
+        properties?: { distance?: number }
+        distance?: number
+    }
+
     if (options.addDistance) {
-        closest.distance = distances[distanceMinIndex]
+        if (typeof closest.properties === "object") {
+            closest.properties.distance = distances[distanceMinIndex]
+        } else {
+            closest.distance = distances[distanceMinIndex]
+        }
     }
 
     return closest
