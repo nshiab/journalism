@@ -76,4 +76,25 @@ describe("getClosest", () => {
             distance: 160.694,
         })
     })
+    it("should return the closest city from Ottawa with the distance in km with 3 decimals in the properties key.", () => {
+        const geoItemsWithProperties = [
+            { name: "Montreal", lon: -73.66, lat: 45.51, properties: {} },
+            { name: "Toronto", lon: -79.43, lat: 43.66, properties: {} },
+        ]
+
+        const closest = getClosest(
+            ottawa.lon,
+            ottawa.lat,
+            geoItemsWithProperties,
+            (d) => (d as item).lon,
+            (d) => (d as item).lat,
+            { addDistance: true, nbDecimals: 3 }
+        )
+        assert.deepStrictEqual(closest, {
+            name: "Montreal",
+            lon: -73.66,
+            lat: 45.51,
+            properties: { distance: 160.694 },
+        })
+    })
 })
