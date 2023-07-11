@@ -1,17 +1,17 @@
 /**
- * Convert latitude and longitude to x,y,z coordinates based on a given radius. The options (last parameter) are optional.
+ * Convert longitude and latitude to x,y,z coordinates based on a given radius. The options (last parameter) are optional.
  *
  *```js
- * const coords = geoTo3D(45.5019, 73.5674, 1, { nbDecimals: 2})
- * // returns  { x: 0.67, y: 0.71, z: 0.2 }
+ * const coords = geoTo3D(-73.5674, 45.5019, 1, { nbDecimals: 2})
+ * // returns  { x: -0.67, y: 0.71, z: 0.2 }
  * ```
  * You can pass { toArray: true } to return an array instead of an object.
  *
  */
 
 export default function geoTo3D(
-    lat: number,
     lon: number,
+    lat: number,
     radius: number,
     options: {
         nbDecimals?: number
