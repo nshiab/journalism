@@ -1,12 +1,14 @@
-import round from "../format/round"
+import round from "../format/round.js"
 
 /**
  * Returns mortgage payments in an array. Each payment is an object with the paymentId, the payment amount, the interest and capital portions of the payment, the remaining mortgage balance, and the total amount paid, total interest paid, and total capital reimbursed so far.
  *
  * These options can be passed in an object as the last parameter:
  * - id: a string if we want to add an id in the payment objects.
- * - nbDecimals: the number of decimals to round to. By default, it's 0.
+ * - nbDecimals: the number of decimals to round to. By default, it's 2.
  * - compoudingFrequencyPerYear: Could vary depending on the countries. In Canada, it's 2 and it's the default value.
+ *
+ * Calculations are based on https://www.yorku.ca/amarshal/mortgage.htm
  */
 
 export default function mortgagePayments(
@@ -23,6 +25,7 @@ export default function mortgagePayments(
 ) {
     options = {
         compoundingFrequencyPerYear: 2, // Specific to Canada. Default.
+        nbDecimals: 2,
         ...options,
     }
 
@@ -44,24 +47,23 @@ export default function mortgagePayments(
     let periodicPayment: number
     if (paymentFrequency === "monthly") {
         numberOfPaymentsPerYear = 12
-        periodicInterestRate =
-            Math.pow(Math.pow(1 + effectiveRate / 2, 2), 1 / 12) - 1
-        periodicPayment = monthlyPayment
+        periodicInterestRate = monthlyRate
+        periodicPayment = round(monthlyPayment, { nbDecimals: 2 })
     } else if (paymentFrequency === "everyTwoWeeks") {
         numberOfPaymentsPerYear = 26
         periodicInterestRate =
             Math.pow(Math.pow(1 + effectiveRate / 2, 2), 14 / 365) - 1
-        periodicPayment = (monthlyPayment * 12) / 26
+        periodicPayment = round((monthlyPayment * 12) / 26, { nbDecimals: 2 })
     } else if (paymentFrequency === "semiMonthly") {
         numberOfPaymentsPerYear = 24
         periodicInterestRate =
             Math.pow(Math.pow(1 + effectiveRate / 2, 2), 1 / (12 * 2)) - 1
-        periodicPayment = monthlyPayment / 2
+        periodicPayment = round(monthlyPayment / 2, { nbDecimals: 2 })
     } else if (paymentFrequency === "weekly") {
         numberOfPaymentsPerYear = 52
         periodicInterestRate =
             Math.pow(Math.pow(1 + effectiveRate / 2, 2), 7 / 365) - 1
-        periodicPayment = (monthlyPayment * 12) / 52
+        periodicPayment = round((monthlyPayment * 12) / 52, { nbDecimals: 2 })
     } else {
         throw new Error(`Unknown paymentFrequency ${paymentFrequency}`)
     }
@@ -78,7 +80,7 @@ export default function mortgagePayments(
         interestPaid: number
         capitalPaid: number
     }[] = []
-    const numberOfPaymentsinTerm = numberOfPaymentsPerYear * term
+    const numberOfPaymentsinTerm = numberOfPaymentsPerYear * term - 1
     let amountPaid = 0
     let interestPaid = 0
     let capitalPaid = 0
@@ -98,7 +100,7 @@ export default function mortgagePayments(
 
         paymentSchedule.push({
             paymentId: i,
-            payment: round(periodicPayment, options),
+            payment: periodicPayment,
             interest: round(interest, options),
             capital: round(capital, options),
             balance: round(balance, options),
