@@ -43,29 +43,31 @@ export default function mortgagePayments(
         (monthlyRate * mortageAmount) /
         (1 - Math.pow(1 + monthlyRate, -amortizationPeriodinMonths))
 
-    let numberOfPaymentsPerYear: number
+    let numberOfPaymentsinTerm
     let periodicInterestRate: number
     let periodicPayment: number
     if (paymentFrequency === "monthly") {
-        numberOfPaymentsPerYear = 12
+        numberOfPaymentsinTerm = 12 * term
         periodicInterestRate = monthlyRate
         periodicPayment = round(monthlyPayment, { nbDecimals: 2 })
     } else if (paymentFrequency === "everyTwoWeeks") {
-        numberOfPaymentsPerYear = 26
+        numberOfPaymentsinTerm = Math.floor((365 / 14) * term)
+        // periodicInterestRate = Math.pow(Math.pow(1 + effectiveRate / 2, 2), 14 / 365) - 1  // Should not use effectiveRate?
         periodicInterestRate =
-            Math.pow(Math.pow(1 + effectiveRate / 2, 2), 14 / 365) - 1
-        periodicPayment = round((monthlyPayment * 12) / 26, { nbDecimals: 2 })
+            Math.pow(Math.pow(1 + nominalRate / 2, 2), 14 / 365) - 1
+        periodicPayment = round((monthlyPayment * 12) / 26, { nbDecimals: 2 }) // 26 or 365/14 ?
     } else if (paymentFrequency === "semiMonthly") {
-        numberOfPaymentsPerYear = 24
+        numberOfPaymentsinTerm = 24 * term
+        // periodicInterestRate =
+        //     Math.pow(Math.pow(1 + effectiveRate / 2, 2), 1 / (12 * 2)) - 1 // Should not use effectiveRate?
         periodicInterestRate =
-            Math.pow(Math.pow(1 + effectiveRate / 2, 2), 1 / (12 * 2)) - 1
+            Math.pow(Math.pow(1 + nominalRate / 2, 2), 1 / 24) - 1
         periodicPayment = round(monthlyPayment / 2, { nbDecimals: 2 })
     } else if (paymentFrequency === "weekly") {
-        numberOfPaymentsPerYear = 52
+        numberOfPaymentsinTerm = Math.floor((365 / 7) * term)
         // periodicInterestRate = Math.pow(Math.pow(1 + effectiveRate / 2, 2), 7 / 365) - 1 // Should not use effectiveRate?
         periodicInterestRate =
             Math.pow(Math.pow(1 + nominalRate / 2, 2), 7 / 365) - 1
-
         // periodicPayment = round((monthlyPayment * 12) / 52, { nbDecimals: 2 }) // More precise?
         periodicPayment = round(monthlyPayment / 4, { nbDecimals: 2 })
     } else {
@@ -84,7 +86,6 @@ export default function mortgagePayments(
         interestPaid: number
         capitalPaid: number
     }[] = []
-    const numberOfPaymentsinTerm = numberOfPaymentsPerYear * term
 
     options.debug &&
         console.log({
