@@ -1,12 +1,11 @@
 import round from "../format/round.js"
 
 /**
- * Returns mortgage payments in an array. Each payment is an object with the paymentId, the payment amount, the interest and capital portions of the payment, the remaining mortgage balance, and the total amount paid, total interest paid, and total capital reimbursed so far.
+ * Returns mortgage payments in an array. Each payment is an object with the paymentId, the payment amount, the interest and capital portions of the payment, the remaining mortgage balance, and the total amount paid, total interest paid, and total capital reimbursed so far. The calculations have been tested for Canada.
  *
  * These options can be passed in an object as the last parameter:
  * - id: a string if we want to add an id in the payment objects.
  * - nbDecimals: the number of decimals to round to. By default, it's 2.
- * - compoudingFrequencyPerYear: the compounding frequency could vary depending on the countries. In Canada, it's 2 and it's the default value.
  * - debug: Will log the effectiveRate, periodicInterestRate, numberOfPaymentsinTerm, and amortizationPeriodinMonths if true.
  * Calculations are based on https://www.yorku.ca/amarshal/mortgage.htm
  */
@@ -25,19 +24,12 @@ export default function mortgagePayments(
     } = {}
 ) {
     options = {
-        compoundingFrequencyPerYear: 2, // Specific to Canada. Default.
         nbDecimals: 2,
         ...options,
     }
 
     const nominalRate = rate / 100
-    const compoundingFrequencyPerYear = 2 //In Canada, mortgages are always compounded semi-annually
-    const effectiveRate =
-        Math.pow(
-            1 + nominalRate / compoundingFrequencyPerYear,
-            compoundingFrequencyPerYear
-        ) - 1
-    const monthlyRate = Math.pow(1 + effectiveRate, 1 / 12) - 1
+    const monthlyRate = Math.pow(Math.pow(1 + nominalRate / 2, 2), 1 / 12) - 1
     const amortizationPeriodinMonths = amortizationPeriod * 12
     const monthlyPayment =
         (monthlyRate * mortageAmount) /
@@ -89,7 +81,6 @@ export default function mortgagePayments(
 
     options.debug &&
         console.log({
-            effectiveRate,
             periodicInterestRate,
             numberOfPaymentsinTerm,
             amortizationPeriodinMonths,
