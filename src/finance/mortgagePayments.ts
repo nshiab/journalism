@@ -80,12 +80,12 @@ export default function mortgagePayments(
         interestPaid: number
         capitalPaid: number
     }[] = []
-    const numberOfPaymentsinTerm = numberOfPaymentsPerYear * term - 1
+    const numberOfPaymentsinTerm = numberOfPaymentsPerYear * term
     let amountPaid = 0
     let interestPaid = 0
     let capitalPaid = 0
 
-    for (let i = 0; i <= numberOfPaymentsinTerm; i++) {
+    for (let i = 0; i < numberOfPaymentsinTerm; i++) {
         const interest = paymentSchedule[i - 1]
             ? paymentSchedule[i - 1].balance * periodicInterestRate
             : mortageAmount * periodicInterestRate
