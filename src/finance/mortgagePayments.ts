@@ -6,8 +6,8 @@ import round from "../format/round.js"
  * These options can be passed in an object as the last parameter:
  * - id: a string if we want to add an id in the payment objects.
  * - nbDecimals: the number of decimals to round to. By default, it's 2.
- * - compoudingFrequencyPerYear: Could vary depending on the countries. In Canada, it's 2 and it's the default value.
- *
+ * - compoudingFrequencyPerYear: the compounding frequency could vary depending on the countries. In Canada, it's 2 and it's the default value.
+ * - debug: Will log the effectiveRate, periodicInterestRate, numberOfPaymentsinTerm, and amortizationPeriodinMonths if true.
  * Calculations are based on https://www.yorku.ca/amarshal/mortgage.htm
  */
 
@@ -21,6 +21,7 @@ export default function mortgagePayments(
         id?: string
         nbDecimals?: number
         compoundingFrequencyPerYear?: number
+        debug?: boolean
     } = {}
 ) {
     options = {
@@ -61,9 +62,12 @@ export default function mortgagePayments(
         periodicPayment = round(monthlyPayment / 2, { nbDecimals: 2 })
     } else if (paymentFrequency === "weekly") {
         numberOfPaymentsPerYear = 52
+        // periodicInterestRate = Math.pow(Math.pow(1 + effectiveRate / 2, 2), 7 / 365) - 1 // Should not use effectiveRate?
         periodicInterestRate =
-            Math.pow(Math.pow(1 + effectiveRate / 2, 2), 7 / 365) - 1
-        periodicPayment = round((monthlyPayment * 12) / 52, { nbDecimals: 2 })
+            Math.pow(Math.pow(1 + nominalRate / 2, 2), 7 / 365) - 1
+
+        // periodicPayment = round((monthlyPayment * 12) / 52, { nbDecimals: 2 }) // More precise?
+        periodicPayment = round(monthlyPayment / 4, { nbDecimals: 2 })
     } else {
         throw new Error(`Unknown paymentFrequency ${paymentFrequency}`)
     }
@@ -81,6 +85,15 @@ export default function mortgagePayments(
         capitalPaid: number
     }[] = []
     const numberOfPaymentsinTerm = numberOfPaymentsPerYear * term
+
+    options.debug &&
+        console.log({
+            effectiveRate,
+            periodicInterestRate,
+            numberOfPaymentsinTerm,
+            amortizationPeriodinMonths,
+        })
+
     let amountPaid = 0
     let interestPaid = 0
     let capitalPaid = 0

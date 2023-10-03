@@ -32,4 +32,34 @@ describe("mortgagePayments", () => {
             }
         )
     })
+    it("should return the weekly mortgage payments for a $250k loan with a 5.00% rate.", () => {
+        const payments = mortgagePayments(250_000, 5, "weekly", 5, 25)
+        const firstPayment = payments[0]
+        const lastPayment = payments[payments.length - 1]
+        assert.deepStrictEqual(
+            { firstPayment, lastPayment },
+            {
+                firstPayment: {
+                    paymentId: 0,
+                    payment: 363.5,
+                    interest: 236.89,
+                    capital: 126.61,
+                    balance: 249873.39,
+                    amountPaid: 363.5,
+                    interestPaid: 236.89,
+                    capitalPaid: 126.61,
+                },
+                lastPayment: {
+                    paymentId: 259,
+                    payment: 363.5,
+                    interest: 201.69,
+                    capital: 161.81,
+                    balance: 212691.95,
+                    amountPaid: 94510,
+                    interestPaid: 57201.94,
+                    capitalPaid: 37308.06,
+                },
+            }
+        )
+    })
 })
