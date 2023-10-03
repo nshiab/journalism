@@ -32,8 +32,14 @@ describe("mortgagePayments", () => {
             }
         )
     })
-    it("should return the weekly mortgage payments for a $250k loan with a 5.00% rate.", () => {
-        const payments = mortgagePayments(250_000, 5, "weekly", 5, 25)
+    it("should return the accelerated weekly mortgage payments for a $250k loan with a 5.00% rate.", () => {
+        const payments = mortgagePayments(
+            250_000,
+            5,
+            "acceleratedWeekly",
+            5,
+            25
+        )
         const firstPayment = payments[0]
         const lastPayment = payments[payments.length - 1]
         assert.deepStrictEqual(
