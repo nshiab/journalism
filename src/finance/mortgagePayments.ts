@@ -19,7 +19,6 @@ export default function mortgagePayments(
     options: {
         id?: string
         nbDecimals?: number
-        compoundingFrequencyPerYear?: number
         debug?: boolean
     } = {}
 ) {
