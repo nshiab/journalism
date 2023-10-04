@@ -33,8 +33,15 @@ export default function mortgagePayments(
         ...options,
     }
 
+    // The rate as a percentage
     const nominalRate = rate / 100
-    const monthlyRate = Math.pow(Math.pow(1 + nominalRate / 2, 2), 1 / 12) - 1
+    // A function to compute the rate for a given time interval
+    const computeRate = (interval: number) => {
+        return Math.pow(Math.pow(1 + nominalRate / 2, 2), interval) - 1
+    }
+
+    // The monthly rate and the montly payment
+    const monthlyRate = computeRate(1 / 12)
     const amortizationPeriodinMonths = amortizationPeriod * 12
     const monthlyPayment =
         (monthlyRate * mortageAmount) /
@@ -43,40 +50,42 @@ export default function mortgagePayments(
     let numberOfPaymentsinTerm
     let periodicInterestRate: number
     let periodicPayment: number
+
     if (paymentFrequency === "monthly") {
+        // Monthly parameters, already calculated above.
         numberOfPaymentsinTerm = 12 * term
         periodicInterestRate = monthlyRate
         periodicPayment = round(monthlyPayment, { nbDecimals: 2 })
     } else if (paymentFrequency === "biWeekly") {
+        // Payment every 14 days.
         numberOfPaymentsinTerm = Math.floor((365 / 14) * term)
-        periodicInterestRate =
-            Math.pow(Math.pow(1 + nominalRate / 2, 2), 14 / 365) - 1
-        periodicPayment = round((monthlyPayment * 12) / 26, { nbDecimals: 2 }) // 26 or 365/14 ?
+        periodicInterestRate = computeRate(14 / 365)
+        periodicPayment = round((monthlyPayment * 12) / 26, { nbDecimals: 2 })
     } else if (paymentFrequency === "acceleratedBiWeekly") {
+        // Payment every 14 days, but the periodic payment is calculated as the monthly payment divided by two, which makes it higher than biWeekly.
         numberOfPaymentsinTerm = Math.floor((365 / 14) * term)
-        periodicInterestRate =
-            Math.pow(Math.pow(1 + nominalRate / 2, 2), 14 / 365) - 1
+        periodicInterestRate = computeRate(14 / 365)
         periodicPayment = round(monthlyPayment / 2, { nbDecimals: 2 }) // 26 or 365/14 ?
     } else if (paymentFrequency === "semiMonthly") {
+        // Payment twice every month. It's two payments less than bi-weekly.
         numberOfPaymentsinTerm = 24 * term
-        periodicInterestRate =
-            Math.pow(Math.pow(1 + nominalRate / 2, 2), 1 / 24) - 1
+        periodicInterestRate = computeRate(1 / 24)
         periodicPayment = round(monthlyPayment / 2, { nbDecimals: 2 })
     } else if (paymentFrequency === "weekly") {
+        // Payment every week.
         numberOfPaymentsinTerm = Math.floor((365 / 7) * term)
-        periodicInterestRate =
-            Math.pow(Math.pow(1 + nominalRate / 2, 2), 7 / 365) - 1
+        periodicInterestRate = computeRate(7 / 365)
         periodicPayment = round((monthlyPayment * 12) / 52, { nbDecimals: 2 })
     } else if (paymentFrequency === "acceleratedWeekly") {
+        // Payment every week, but the periodic payment is calculated as the monthly payment divided by four, which makes it higher than weekly.
         numberOfPaymentsinTerm = Math.floor((365 / 7) * term)
-        periodicInterestRate =
-            Math.pow(Math.pow(1 + nominalRate / 2, 2), 7 / 365) - 1
+        periodicInterestRate = computeRate(7 / 365)
         periodicPayment = round(monthlyPayment / 4, { nbDecimals: 2 })
     } else {
         throw new Error(`Unknown paymentFrequency ${paymentFrequency}`)
     }
 
-    // Looping over each payment.
+    // The expected shape of the data we want to return.
     const paymentSchedule: {
         id?: string
         paymentId: number
@@ -89,6 +98,7 @@ export default function mortgagePayments(
         capitalPaid: number
     }[] = []
 
+    // If options.debug is true, let's log some extra information.
     options.debug &&
         console.log({
             periodicInterestRate,
@@ -96,11 +106,14 @@ export default function mortgagePayments(
             amortizationPeriodinMonths,
         })
 
+    // Three variables we will increment as we loop over the payments.
     let amountPaid = 0
     let interestPaid = 0
     let capitalPaid = 0
 
+    // We loop over the payments.
     for (let i = 0; i < numberOfPaymentsinTerm; i++) {
+        // We calculate the interest, the capital, and the balance of each payment. For the interest and the balance, we need the balance of the previous payment. If there is none (first payment), we use the mortgageAmount.
         const interest = paymentSchedule[i - 1]
             ? paymentSchedule[i - 1].balance * periodicInterestRate
             : mortageAmount * periodicInterestRate
@@ -109,10 +122,12 @@ export default function mortgagePayments(
             ? paymentSchedule[i - 1].balance - capital
             : mortageAmount - capital
 
+        // We increment the amountPaid, interestPaid, and capitalPaid to have cumulative values.
         amountPaid += periodicPayment
         interestPaid += interest
         capitalPaid += capital
 
+        // We round the values after all the calculations.
         paymentSchedule.push({
             paymentId: i,
             payment: periodicPayment,
@@ -125,6 +140,7 @@ export default function mortgagePayments(
         })
     }
 
+    // If there is an id as options, we add it to the objects before returning the array.
     return options.id
         ? paymentSchedule.map((d) => {
               return { ...d, id: options.id }
