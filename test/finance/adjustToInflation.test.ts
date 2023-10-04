@@ -1,5 +1,5 @@
 import assert from "assert"
-import adjustToInflation from "../../src/others/adjustToInflation.js"
+import adjustToInflation from "../../src/finance/adjustToInflation.js"
 
 // Using this as a reference https://www.bankofcanada.ca/rates/related/inflation-calculator/
 
