@@ -1,13 +1,15 @@
 import round from "../format/round.js"
 
 /**
- * Returns mortgage payments in an array. Each payment is an object with the paymentId, the payment amount, the interest and capital portions of the payment, the remaining mortgage balance, and the total amount paid, total interest paid, and total capital reimbursed so far. The calculations have been tested for Canada.
+ * Returns fixed rate mortgage payments in an array. Each payment is an object with the paymentId, the payment amount, the interest and capital portions of the payment, the remaining mortgage balance, and the total amount paid, total interest paid, and total capital reimbursed so far. The calculations have been tested for Canada, which requires fixed rate mortgages to be compounded semi-annually by law. But you can change the annualCompounding in the options.
  *
  * These options can be passed in an object as the last parameter:
  * - id: a string if we want to add an id in the payment objects.
  * - nbDecimals: the number of decimals to round to. By default, it's 2.
- * - debug: Will log the effectiveRate, periodicInterestRate, numberOfPaymentsinTerm, and amortizationPeriodinMonths if true.
- * Calculations are based on https://www.yorku.ca/amarshal/mortgage.htm
+ * - annualCompounding: how many times the mortgage should be compounded per year. By default, it's 2.
+ * - debug: Will log extra information if true.
+ *
+ * Calculations are based on https://www.yorku.ca/amarshal/mortgage.htm and https://www.mikesukmanowsky.com/blog/a-guide-to-canadian-mortgage-calculations
  */
 
 export default function mortgagePayments(
@@ -25,29 +27,39 @@ export default function mortgagePayments(
     options: {
         id?: string
         nbDecimals?: number
+        annualCompounding?: number
         debug?: boolean
     } = {}
 ) {
     options = {
         nbDecimals: 2,
+        annualCompounding: 2,
         ...options,
     }
 
-    // The rate as a percentage
+    if (!options.annualCompounding) {
+        throw new Error("No options.annualCompounding")
+    }
+
+    // Calculating the annualEffectiveRate with semi-annually compounding.
     const nominalRate = rate / 100
+    const annualEffectiveRate = Math.pow(
+        1 + nominalRate / options.annualCompounding,
+        options.annualCompounding
+    )
     // A function to compute the rate for a given time interval
-    const computeRate = (interval: number) => {
-        return Math.pow(Math.pow(1 + nominalRate / 2, 2), interval) - 1
+    const computePeriodicRate = (interval: number) => {
+        return Math.pow(annualEffectiveRate, interval) - 1
     }
 
     // The monthly rate and the montly payment
-    const monthlyRate = computeRate(1 / 12)
+    const monthlyRate = computePeriodicRate(1 / 12)
     const amortizationPeriodinMonths = amortizationPeriod * 12
     const monthlyPayment =
         (monthlyRate * mortageAmount) /
         (1 - Math.pow(1 + monthlyRate, -amortizationPeriodinMonths))
 
-    let numberOfPaymentsinTerm
+    let numberOfPaymentsinTerm: number
     let periodicInterestRate: number
     let periodicPayment: number
 
@@ -55,32 +67,32 @@ export default function mortgagePayments(
         // Monthly parameters, already calculated above.
         numberOfPaymentsinTerm = 12 * term
         periodicInterestRate = monthlyRate
-        periodicPayment = round(monthlyPayment, { nbDecimals: 2 })
+        periodicPayment = monthlyPayment
     } else if (paymentFrequency === "biWeekly") {
         // Payment every 14 days.
         numberOfPaymentsinTerm = Math.floor((365 / 14) * term)
-        periodicInterestRate = computeRate(14 / 365)
-        periodicPayment = round((monthlyPayment * 12) / 26, { nbDecimals: 2 })
+        periodicInterestRate = computePeriodicRate(14 / 365)
+        periodicPayment = (monthlyPayment * 12) / 26
     } else if (paymentFrequency === "acceleratedBiWeekly") {
         // Payment every 14 days, but the periodic payment is calculated as the monthly payment divided by two, which makes it higher than biWeekly.
         numberOfPaymentsinTerm = Math.floor((365 / 14) * term)
-        periodicInterestRate = computeRate(14 / 365)
-        periodicPayment = round(monthlyPayment / 2, { nbDecimals: 2 }) // 26 or 365/14 ?
+        periodicInterestRate = computePeriodicRate(14 / 365)
+        periodicPayment = monthlyPayment / 2
     } else if (paymentFrequency === "semiMonthly") {
         // Payment twice every month. It's two payments less than bi-weekly.
         numberOfPaymentsinTerm = 24 * term
-        periodicInterestRate = computeRate(1 / 24)
-        periodicPayment = round(monthlyPayment / 2, { nbDecimals: 2 })
+        periodicInterestRate = computePeriodicRate(1 / 24)
+        periodicPayment = monthlyPayment / 2
     } else if (paymentFrequency === "weekly") {
         // Payment every week.
         numberOfPaymentsinTerm = Math.floor((365 / 7) * term)
-        periodicInterestRate = computeRate(7 / 365)
-        periodicPayment = round((monthlyPayment * 12) / 52, { nbDecimals: 2 })
+        periodicInterestRate = computePeriodicRate(7 / 365)
+        periodicPayment = (monthlyPayment * 12) / 52
     } else if (paymentFrequency === "acceleratedWeekly") {
         // Payment every week, but the periodic payment is calculated as the monthly payment divided by four, which makes it higher than weekly.
         numberOfPaymentsinTerm = Math.floor((365 / 7) * term)
-        periodicInterestRate = computeRate(7 / 365)
-        periodicPayment = round(monthlyPayment / 4, { nbDecimals: 2 })
+        periodicInterestRate = computePeriodicRate(7 / 365)
+        periodicPayment = monthlyPayment / 4
     } else {
         throw new Error(`Unknown paymentFrequency ${paymentFrequency}`)
     }
@@ -101,6 +113,8 @@ export default function mortgagePayments(
     // If options.debug is true, let's log some extra information.
     options.debug &&
         console.log({
+            monthlyRate,
+            monthlyPayment,
             periodicInterestRate,
             numberOfPaymentsinTerm,
             amortizationPeriodinMonths,
@@ -130,7 +144,7 @@ export default function mortgagePayments(
         // We round the values after all the calculations.
         paymentSchedule.push({
             paymentId: i,
-            payment: periodicPayment,
+            payment: round(periodicPayment, options),
             interest: round(interest, options),
             capital: round(capital, options),
             balance: round(balance, options),
