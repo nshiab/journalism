@@ -51,7 +51,7 @@ describe("getClosest", () => {
             geoItems,
             (d) => (d as item).lon,
             (d) => (d as item).lat,
-            { addDistance: true, nbDecimals: 0 }
+            { addDistance: true, decimals: 0 }
         )
         assert.deepStrictEqual(closest, {
             name: "Montreal",
@@ -67,7 +67,7 @@ describe("getClosest", () => {
             geoItems,
             (d) => (d as item).lon,
             (d) => (d as item).lat,
-            { addDistance: true, nbDecimals: 3 }
+            { addDistance: true, decimals: 3 }
         )
         assert.deepStrictEqual(closest, {
             name: "Montreal",
@@ -88,7 +88,7 @@ describe("getClosest", () => {
             geoItemsWithProperties,
             (d) => (d as item).lon,
             (d) => (d as item).lat,
-            { addDistance: true, nbDecimals: 3 }
+            { addDistance: true, decimals: 3 }
         )
         assert.deepStrictEqual(closest, {
             name: "Montreal",

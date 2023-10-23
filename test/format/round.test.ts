@@ -19,11 +19,11 @@ describe("round", () => {
         assert.strictEqual(rounded, 2)
     })
     it("should round 1.1234567 to 1.1", () => {
-        const rounded = round(1.1234567, { nbDecimals: 1 })
+        const rounded = round(1.1234567, { decimals: 1 })
         assert.strictEqual(rounded, 1.1)
     })
     it("should round 1.1234567 to 1.12346", () => {
-        const rounded = round(1.1234567, { nbDecimals: 5 })
+        const rounded = round(1.1234567, { decimals: 5 })
         assert.strictEqual(rounded, 1.12346)
     })
     it("should round 12345 to the closest 10", () => {

@@ -16,7 +16,7 @@ import distance from "./distance.js"
  *    geoItems,
  *    d => d.lon,
  *    d => d.lat,
- *    { addDistance: true, nbDecimals: 3 }
+ *    { addDistance: true, decimals: 3 }
  * )
  * // return { name: "Montreal", lon: -73.66, lat: 45.51, distance: 160.694 }
  * ```
@@ -30,7 +30,7 @@ export default function getClosest(
     getItemLat: (d: unknown) => number,
     options: {
         addDistance?: boolean
-        nbDecimals?: number
+        decimals?: number
     } = {}
 ) {
     const distances = []
@@ -38,7 +38,7 @@ export default function getClosest(
     for (let i = 0; i < geoItems.length; i++) {
         const item = geoItems[i]
         distances[i] = distance(lon, lat, getItemLon(item), getItemLat(item), {
-            nbDecimals: options.nbDecimals,
+            decimals: options.decimals,
         })
     }
 

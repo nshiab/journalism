@@ -11,7 +11,7 @@ import round from "./round.js"
  * - style: "cbc" or "rc"
  * - sign: if true, "-" or "+" are added in front of the number
  * - round: to round the number
- * - nbDecimals : the number of decimals to keep when rounding
+ * - decimals : the number of decimals to keep when rounding
  * - nearestInteger: the base to use to round. For example, 123 with the nearestInteger 10 is 120.
  * - prefix: a string to add before the number, "$" for example
  * - suffix: a string to add after the number, "%" for example
@@ -23,7 +23,7 @@ export default function formatNumber(
         style?: "cbc" | "rc"
         sign?: boolean
         round?: boolean
-        nbDecimals?: number
+        decimals?: number
         nearestInteger?: number
         prefix?: string
         suffix?: string
@@ -37,7 +37,7 @@ export default function formatNumber(
         style: "cbc" | "rc"
         sign: boolean
         round: boolean
-        nbDecimals: number
+        decimals: number
         nearestInteger: number
         prefix: string
         suffix: string
@@ -45,7 +45,7 @@ export default function formatNumber(
         style: "cbc",
         sign: false,
         round: false,
-        nbDecimals: 0,
+        decimals: 0,
         nearestInteger: 1,
         prefix: "",
         suffix: "",
@@ -54,11 +54,11 @@ export default function formatNumber(
 
     if (
         mergedOptions.round ||
-        mergedOptions.nbDecimals !== 0 ||
+        mergedOptions.decimals !== 0 ||
         mergedOptions.nearestInteger !== 1
     ) {
         number = round(number, {
-            nbDecimals: mergedOptions.nbDecimals,
+            decimals: mergedOptions.decimals,
             nearestInteger: mergedOptions.nearestInteger,
         })
     }

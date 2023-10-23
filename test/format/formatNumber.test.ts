@@ -35,7 +35,7 @@ describe("formatNumber", () => {
         assert.strictEqual(string, "2")
     })
     it("should return the number rounded with 2 decimals", () => {
-        const string = formatNumber(1.5345, { nbDecimals: 2 })
+        const string = formatNumber(1.5345, { decimals: 2 })
         assert.strictEqual(string, "1.53")
     })
     it("should return the number rounded with base 10", () => {
@@ -43,7 +43,7 @@ describe("formatNumber", () => {
         assert.strictEqual(string, "11,520")
     })
     it("should return the number rounded with 2 decimals and + sign", () => {
-        const string = formatNumber(1.5345, { nbDecimals: 2, sign: true })
+        const string = formatNumber(1.5345, { decimals: 2, sign: true })
         assert.strictEqual(string, "+1.53")
     })
     it("should return the number rounded with base 10 and + sign", () => {
@@ -54,7 +54,7 @@ describe("formatNumber", () => {
         assert.strictEqual(string, "+11,520")
     })
     it("should return the number rounded with 2 decimals and - sign", () => {
-        const string = formatNumber(-1.5345, { nbDecimals: 2, sign: true })
+        const string = formatNumber(-1.5345, { decimals: 2, sign: true })
         assert.strictEqual(string, "-1.53")
     })
     it("should return the number rounded with base 10 and - sign", () => {
@@ -115,7 +115,7 @@ describe("formatNumber", () => {
         assert.strictEqual(string, "2")
     })
     it("should return the number rounded with 2 decimals with rc style", () => {
-        const string = formatNumber(1.5345, { nbDecimals: 2, style: "rc" })
+        const string = formatNumber(1.5345, { decimals: 2, style: "rc" })
         assert.strictEqual(string, "1,53")
     })
     it("should return the number rounded with base 10 with rc style", () => {
@@ -127,7 +127,7 @@ describe("formatNumber", () => {
     })
     it("should return the number rounded with 2 decimals, + sign and rc style", () => {
         const string = formatNumber(1.5345, {
-            nbDecimals: 2,
+            decimals: 2,
             sign: true,
             style: "rc",
         })
@@ -143,7 +143,7 @@ describe("formatNumber", () => {
     })
     it("should return the number rounded with 2 decimals, - sign and rc style", () => {
         const string = formatNumber(-1.5345, {
-            nbDecimals: 2,
+            decimals: 2,
             sign: true,
             style: "rc",
         })
