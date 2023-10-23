@@ -18,12 +18,12 @@ describe("geoTo3D", () => {
         )
     })
     it("should return 3D coordinates based on lon/lat as an object with 2 decimals", () => {
-        const coords = geoTo3D(-73.5674, 45.5019, 1, { nbDecimals: 2 })
+        const coords = geoTo3D(-73.5674, 45.5019, 1, { decimals: 2 })
         assert.deepStrictEqual(coords, { x: -0.67, y: 0.71, z: 0.2 })
     })
     it("should return 3D coordinates based on lon/lat as an array with 2 decimals", () => {
         const coords = geoTo3D(-73.5674, 45.5019, 1, {
-            nbDecimals: 2,
+            decimals: 2,
             toArray: true,
         })
         assert.deepStrictEqual(coords, [-0.67, 0.71, 0.2])

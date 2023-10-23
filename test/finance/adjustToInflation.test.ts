@@ -10,13 +10,13 @@ describe("adjustToInflation", () => {
     })
     it("should return 100$ in April 1914 adjusted to April 2023 inflation. It should be rounded to the nearest integer.", () => {
         const adjustedAmount = adjustToInflation(100, 6.0, 156.4, {
-            nbDecimals: 0,
+            decimals: 0,
         })
         assert.deepStrictEqual(adjustedAmount, 2607)
     })
     it("should return 100$ in April 1914 adjusted to April 2023 inflation. It should be rounded to third decimal.", () => {
         const adjustedAmount = adjustToInflation(100, 6.0, 156.4, {
-            nbDecimals: 3,
+            decimals: 3,
         })
         assert.deepStrictEqual(adjustedAmount, 2606.667)
     })
@@ -27,13 +27,13 @@ describe("adjustToInflation", () => {
     })
     it("should return 100$ in April 2023 adjusted to April 1914 inflation. It should be rounded to the nearest integer.", () => {
         const adjustedAmount = adjustToInflation(100, 156.4, 6.0, {
-            nbDecimals: 0,
+            decimals: 0,
         })
         assert.deepStrictEqual(adjustedAmount, 4)
     })
     it("should return 100$ in April 2023 adjusted to April 1914 inflation. It should be rounded to third decimal.", () => {
         const adjustedAmount = adjustToInflation(100, 156.4, 6.0, {
-            nbDecimals: 3,
+            decimals: 3,
         })
         assert.deepStrictEqual(adjustedAmount, 3.836)
     })

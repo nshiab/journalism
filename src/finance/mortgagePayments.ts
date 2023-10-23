@@ -5,7 +5,7 @@ import round from "../format/round.js"
  *
  * These options can be passed in an object as the last parameter:
  * - id: a string if we want to add an id in the payment objects.
- * - nbDecimals: the number of decimals to round to. By default, it's 2.
+ * - decimals: the number of decimals to round to. By default, it's 2.
  * - annualCompounding: how many times the mortgage should be compounded per year. By default, it's 2.
  * - debug: Will log extra information if true.
  *
@@ -26,13 +26,13 @@ export default function mortgagePayments(
     amortizationPeriod: number,
     options: {
         id?: string
-        nbDecimals?: number
+        decimals?: number
         annualCompounding?: number
         debug?: boolean
     } = {}
 ) {
     options = {
-        nbDecimals: 2,
+        decimals: 2,
         annualCompounding: 2,
         ...options,
     }

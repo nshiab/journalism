@@ -4,7 +4,7 @@
  * Compute the distance in kilometres based on longitude and latitude. The options (last parameter) are optional.
  *
  *```js
- * const distance = distance(-73.66, 45.51, -79.43, 43.66, { nbDecimals: 0 })
+ * const distance = distance(-73.66, 45.51, -79.43, 43.66, { decimals: 0 })
  * // returns 501
  * ```
  */
@@ -15,7 +15,7 @@ export default function distance(
     lon2: number,
     lat2: number,
     options: {
-        nbDecimals?: number
+        decimals?: number
     } = {}
 ): number {
     const dLon = toRad(lon2 - lon1)
@@ -29,8 +29,8 @@ export default function distance(
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 
     const dist = c * 6371.0088
-    return typeof options.nbDecimals === "number"
-        ? parseFloat(dist.toFixed(options.nbDecimals))
+    return typeof options.decimals === "number"
+        ? parseFloat(dist.toFixed(options.decimals))
         : dist
 }
 
