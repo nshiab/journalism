@@ -3,6 +3,8 @@ import round from "../format/round.js"
 /**
  * Returns fixed rate mortgage payments in an array. Each payment is an object with the paymentId, the payment amount, the interest and capital portions of the payment, the remaining mortgage balance, and the total amount paid, total interest paid, and total capital reimbursed so far. The calculations have been tested for Canada, which requires fixed rate mortgages to be compounded semi-annually by law. But you can change the annualCompounding in the options.
  *
+ * If the amortizationPeriod is smaller than the term, an error is thrown.
+ *
  * These options can be passed in an object as the last parameter:
  * - id: a string if we want to add an id in the payment objects.
  * - decimals: the number of decimals to round to. By default, it's 2.
@@ -31,6 +33,12 @@ export default function mortgagePayments(
         debug?: boolean
     } = {}
 ) {
+    if (amortizationPeriod < term) {
+        throw new Error(
+            "The amortizationPeriod should be equal or greater than the term."
+        )
+    }
+
     options = {
         decimals: 2,
         annualCompounding: 2,
