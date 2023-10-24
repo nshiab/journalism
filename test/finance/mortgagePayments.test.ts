@@ -2,7 +2,7 @@ import assert from "assert"
 import mortgagePayments from "../../src/finance/mortgagePayments.js"
 
 describe("mortgagePayments", () => {
-    it("should throw an error if the amortizationPeriod is small than the term", () => {
+    it("should throw an error if the amortizationPeriod is smaller than the term", () => {
         assert.throws(() => mortgagePayments(250_000, 6, "monthly", 5, 4))
     })
     it("should return the monthly mortgage payments for a $250k loan with a 6.00% rate.", () => {
