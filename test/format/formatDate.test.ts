@@ -56,6 +56,16 @@ describe("formatDate", () => {
         })
         assert.strictEqual(formattedDate, "Sun.")
     })
+    it("should return the full month name", () => {
+        const formattedDate = formatDate(date, "Month")
+        assert.strictEqual(formattedDate, "January")
+    })
+    it("should return the abbreviated month name", () => {
+        const formattedDate = formatDate(date, "Month", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "Jan.")
+    })
 
     // Radio-Canada style
 
@@ -110,5 +120,18 @@ describe("formatDate", () => {
             abbreviations: true,
         })
         assert.strictEqual(formattedDate, "Dim.")
+    })
+    it("should return the full month name with RC style", () => {
+        const formattedDate = formatDate(date, "Month", {
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "janvier")
+    })
+    it("should return the abbreviated month name with RC style", () => {
+        const formattedDate = formatDate(dateNoMinutes, "Month", {
+            style: "rc",
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "janv.")
     })
 })
