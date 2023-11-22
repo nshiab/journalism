@@ -57,6 +57,14 @@ describe("formatNumber", () => {
         const string = formatNumber(-1.5345, { decimals: 2, sign: true })
         assert.strictEqual(string, "-1.53")
     })
+    it("should return the number rounded with 2 fixed decimals and - sign", () => {
+        const string = formatNumber(-1.5023, {
+            decimals: 2,
+            fixed: true,
+            sign: true,
+        })
+        assert.strictEqual(string, "-1.50")
+    })
     it("should return the number rounded with base 10 and - sign", () => {
         const string = formatNumber(-11523.5345, {
             nearestInteger: 10,
@@ -132,6 +140,15 @@ describe("formatNumber", () => {
             style: "rc",
         })
         assert.strictEqual(string, "+1,53")
+    })
+    it("should return the number rounded, with 2 fixed decimals, +sign and rx style", () => {
+        const string = formatNumber(1.2, {
+            decimals: 2,
+            fixed: true,
+            sign: true,
+            style: "rc",
+        })
+        assert.strictEqual(string, "+1,20")
     })
     it("should return the number rounded with base 10, + sign and rc style", () => {
         const string = formatNumber(11523.5345, {
