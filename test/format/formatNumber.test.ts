@@ -153,7 +153,7 @@ describe("formatNumber", () => {
         })
         assert.strictEqual(string, "+1,53")
     })
-    it("should return the number rounded, with 2 fixed decimals, +sign and rx style", () => {
+    it("should return the number rounded, with 2 fixed decimals, +sign and rc style", () => {
         const string = formatNumber(1.2, {
             decimals: 2,
             fixed: true,
