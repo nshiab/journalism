@@ -27,7 +27,8 @@
 <li>style: &quot;cbc&quot; or &quot;rc&quot;</li>
 <li>sign: if true, &quot;-&quot; or &quot;+&quot; are added in front of the number</li>
 <li>round: to round the number</li>
-<li>decimals : the number of decimals to keep when rounding</li>
+<li>decimals: the number of decimals to keep when rounding</li>
+<li>fixed: display a fixed number of decimals. For example, if decimals is set to 2 then 0 will read 0.00.</li>
 <li>nearestInteger: the base to use to round. For example, 123 with the nearestInteger 10 is 120.</li>
 <li>prefix: a string to add before the number, &quot;$&quot; for example</li>
 <li>suffix: a string to add after the number, &quot;%&quot; for example</li>
@@ -39,10 +40,12 @@
 <li>
 <h5><span class="tsd-kind-parameter">number</span>: <span class="tsd-signature-type">number</span></h5></li>
 <li>
-<h5><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">decimals</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">nearestInteger</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">prefix</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">round</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">sign</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">style</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;cbc&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;rc&quot;</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">suffix</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol"> = {}</span></h5>
+<h5><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-symbol">{ </span><br/><span>    </span><span class="tsd-kind-property">decimals</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">fixed</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">nearestInteger</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">prefix</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">round</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">sign</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">style</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;cbc&quot;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;rc&quot;</span><span class="tsd-signature-symbol">; </span><br/><span>    </span><span class="tsd-kind-property">suffix</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span><br/><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol"> = {}</span></h5>
 <ul class="tsd-parameters">
 <li class="tsd-parameter">
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-property">decimals</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5></li>
+<li class="tsd-parameter">
+<h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-property">fixed</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span></h5></li>
 <li class="tsd-parameter">
 <h5><code class="tsd-tag ts-flagOptional">Optional</code> <span class="tsd-kind-property">nearest<wbr/>Integer</span><span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5></li>
 <li class="tsd-parameter">
@@ -58,7 +61,7 @@
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/nshiab/journalism/blob/f44c75e/src/format/formatNumber.ts#L20">format/formatNumber.ts:20</a></li></ul></aside></li></ul></section></div>
+<li>Defined in <a href="https://github.com/RobertJohnDavidson/journalism/blob/f345e5a/src/format/formatNumber.ts#L21">format/formatNumber.ts:21</a></li></ul></aside></li></ul></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
