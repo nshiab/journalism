@@ -11,7 +11,8 @@ import round from "./round.js"
  * - style: "cbc" or "rc"
  * - sign: if true, "-" or "+" are added in front of the number
  * - round: to round the number
- * - decimals : the number of decimals to keep when rounding
+ * - decimals: the number of decimals to keep when rounding
+ * - fixed: display a fixed number of decimals. For example, if decimals is set to 2 then 0 will read 0.00.
  * - nearestInteger: the base to use to round. For example, 123 with the nearestInteger 10 is 120.
  * - prefix: a string to add before the number, "$" for example
  * - suffix: a string to add after the number, "%" for example
@@ -24,6 +25,7 @@ export default function formatNumber(
         sign?: boolean
         round?: boolean
         decimals?: number
+        fixed?: boolean
         nearestInteger?: number
         prefix?: string
         suffix?: string
@@ -38,6 +40,7 @@ export default function formatNumber(
         sign: boolean
         round: boolean
         decimals: number
+        fixed: boolean
         nearestInteger: number
         prefix: string
         suffix: string
@@ -46,6 +49,7 @@ export default function formatNumber(
         sign: false,
         round: false,
         decimals: 0,
+        fixed: false,
         nearestInteger: 1,
         prefix: "",
         suffix: "",
@@ -64,7 +68,9 @@ export default function formatNumber(
     }
 
     const regex = /\B(?=(\d{3})+(?!\d))/g
-    const [integers, decimals] = number.toString().split(".")
+    const [integers, decimals] = mergedOptions.fixed
+        ? number.toFixed(mergedOptions.decimals).split(".")
+        : number.toString().split(".")
 
     let formattedNumber = ""
 
@@ -76,7 +82,9 @@ export default function formatNumber(
             formattedNumber = formattedIntegers
         }
     } else if (mergedOptions.style === "rc") {
-        const string = number.toString()
+        const string = mergedOptions.fixed
+            ? number.toFixed(mergedOptions.decimals)
+            : number.toString()
         if (string.length === 4) {
             formattedNumber = string.replace(".", ",")
         } else {
