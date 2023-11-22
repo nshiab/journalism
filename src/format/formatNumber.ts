@@ -25,7 +25,7 @@ export default function formatNumber(
         sign?: boolean
         round?: boolean
         decimals?: number
-        fixed?:boolean
+        fixed?: boolean
         nearestInteger?: number
         prefix?: string
         suffix?: string
@@ -40,7 +40,7 @@ export default function formatNumber(
         sign: boolean
         round: boolean
         decimals: number
-        fixed:boolean
+        fixed: boolean
         nearestInteger: number
         prefix: string
         suffix: string
@@ -49,7 +49,7 @@ export default function formatNumber(
         sign: false,
         round: false,
         decimals: 0,
-        fixed:false,
+        fixed: false,
         nearestInteger: 1,
         prefix: "",
         suffix: "",
@@ -68,7 +68,9 @@ export default function formatNumber(
     }
 
     const regex = /\B(?=(\d{3})+(?!\d))/g
-    const [integers, decimals] = mergedOptions.fixed ? number.toFixed(mergedOptions.decimals).split(".") : number.toString().split(".")
+    const [integers, decimals] = mergedOptions.fixed
+        ? number.toFixed(mergedOptions.decimals).split(".")
+        : number.toString().split(".")
 
     let formattedNumber = ""
 
@@ -80,7 +82,9 @@ export default function formatNumber(
             formattedNumber = formattedIntegers
         }
     } else if (mergedOptions.style === "rc") {
-        const string = mergedOptions.fixed? number.toFixed(mergedOptions.decimals) : number.toString()
+        const string = mergedOptions.fixed
+            ? number.toFixed(mergedOptions.decimals)
+            : number.toString()
         if (string.length === 4) {
             formattedNumber = string.replace(".", ",")
         } else {
