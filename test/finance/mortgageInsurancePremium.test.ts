@@ -1,6 +1,8 @@
 import assert from "assert"
 import mortgageInsurancePremium from "../../src/finance/mortgageInsurancePremium.js"
 
+// Tested against https://itools-ioutils.fcac-acfc.gc.ca/MQ-HQ/MQCalc-EAPHCalc-eng.aspx
+
 describe("mortgageInsurancePremium", () => {
     it("should throw an error if the down payment is less than 5% of the purchase price", () => {
         assert.throws(() => mortgageInsurancePremium(500_000, 10_000))
