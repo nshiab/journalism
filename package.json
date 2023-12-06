@@ -71,7 +71,8 @@
         "rollup-plugin-visualizer": "^5.9.0",
         "ts-node": "^10.9.1",
         "typedoc": "^0.25.2",
-        "typescript": "^5.2.2"
+        "typescript": "^5.2.2",
+        "tslib": "^2.6.2"
     },
     "dependencies": {
         "d3-array": "^3.2.4",
