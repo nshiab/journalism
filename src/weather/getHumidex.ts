@@ -5,6 +5,8 @@
  * const humidex = getHumidex(30, 70); // returns 41
  * ```
  * This is using the formula from the Canadian Centre for Climate Services.
+ *
+ * @category Weather and climate
  */
 
 export default function getHumidex(

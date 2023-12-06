@@ -8,6 +8,8 @@
  * These options can be passed as the last parameter:
  * - decimals : the number of decimals to keep when rounding
  * - nearestInteger: the base to use to round. For example, 123 with the nearestInteger 10 is 120.
+ *
+ * @category Formatting
  */
 
 export default function round(

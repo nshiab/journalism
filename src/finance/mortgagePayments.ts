@@ -12,6 +12,8 @@ import round from "../format/round.js"
  * - debug: Will log extra information if true.
  *
  * Calculations are based on https://www.yorku.ca/amarshal/mortgage.htm and https://www.mikesukmanowsky.com/blog/a-guide-to-canadian-mortgage-calculations
+ *
+ * @category Finance
  */
 
 export default function mortgagePayments(

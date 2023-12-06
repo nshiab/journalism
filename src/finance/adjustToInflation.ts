@@ -6,6 +6,7 @@
  * const adjustedAmount = adjustToInflation(100, 6.0, 156.4, { decimals: 0 })
  * // returns 2607 dollars
  * ```
+ * @category Finance
  */
 
 export default function adjustToInflation(
