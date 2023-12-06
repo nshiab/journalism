@@ -1,21 +1,40 @@
 import mortgageInsurancePremium from "./mortgageInsurancePremium.js"
 
 /**
- * Calculates the maximum mortgage amount (and other variables) a person can qualify for based on annual income, down payment, mortgage interest rate, and additional options.
+ * Calculates the maximum purchase price (and other variables) for a property a person can afford and the related mortgage it would qualify for based on annual income, down payment, mortgage interest rate, and additional options.
  *
  * ```ts
- * // Returns ...
- * const results = maxMortgageAmount(100_000, 25_000, 5)
+ * // With an annual income of $100,000, a down payment of $25,000, and a rate of 5.25%.
+ * const results = maxMortgageAmount(100_000, 25_000, 5.25)
+ * // results = {
+            annualIncome: 100000,
+            downPayment: 25000,
+            rate: 5.25,
+            rateTested: 7.25,
+            purchasePrice: 307000,
+            mortgageAmount: 293280,
+            insurancePremium: 11280,
+            monthlyMortgagePayment: 2099.65,
+            grossDebtServiceRatio: 0.32,
+            totalDebtServiceRatio: 0.32,
+            reason: "Gross debt service ratio would be above threshold of 0.32 with a bigger amount",
+            monthlyDebtPayment: 0,
+            monthlyHeating: 175,
+            isHeatingEstimate: true,
+            monthlyTax: 385,
+            isTaxEstimate: true,
+            monthlyCondoFees: 0,
+        }
  * ```
  *
- * @param  annualIncome - The annual income of the borrower.
- * @param  downPayment - The amount of money paid upfront as a percentage of the property price.
- * @param  rate - The annual mortgage interest rate.
- * @param  options - Additional options such.
- * @param options.monthlyDebtPayment - The monthly debt payment of the borrower. Defaults to 0.
- * @param options.monthlyHeating - The monthly heating cost. Defaults to $175, like Royal Bank of Canada does.
- * @param options.monthlyTax - The monthly property tax. Default to 1.5% of the purchase price, like Royal Bak of Canada does.
- * @param options.monthlyCondoFees - The monthly condo fees. Defaults to 0.
+ * @param annualIncome - The annual income of the borrower.
+ * @param downPayment - The amount of money paid upfront.
+ * @param rate - The mortgage interest rate.
+ * @param options - Additional options such.
+ * @param   options.monthlyDebtPayment - The monthly debt payment of the borrower. Defaults to 0.
+ * @param   options.monthlyHeating - The monthly heating cost. Defaults to $175, like Royal Bank of Canada does.
+ * @param   options.monthlyTax - The monthly property tax. Default to 1.5% of the purchase price, like Royal Bak of Canada does.
+ * @param   options.monthlyCondoFees - The monthly condo fees. Defaults to 0.
  *
  **/
 
@@ -25,7 +44,8 @@ type results = {
     downPayment: number
     rate: number
     rateTested: number
-    amount: number
+    purchasePrice: number
+    mortgageAmount: number
     insurancePremium: number
     monthlyMortgagePayment: number
     grossDebtServiceRatio: number
@@ -39,7 +59,7 @@ type results = {
     monthlyCondoFees: number
 }
 
-export default function maxMortgageAmount(
+export default function maxMortgage(
     annualIncome: number,
     downPayment: number,
     rate: number,
@@ -52,7 +72,7 @@ export default function maxMortgageAmount(
 ): results {
     const monthlyIncome = annualIncome / 12
 
-    // For the stress test, the rate should be the higher value between rate+2 or 5.25
+    // For the stress test, the rate should be the highest value between rate+2 or 5.25
     const rateTested = Math.max(rate + 2, 5.25)
 
     // Default monthlyDebtPayment is 0
@@ -78,7 +98,8 @@ export default function maxMortgageAmount(
         downPayment,
         rate,
         rateTested,
-        amount: 0,
+        purchasePrice: downPayment,
+        mortgageAmount: 0,
         insurancePremium: 0,
         monthlyMortgagePayment: 0,
         grossDebtServiceRatio: 0,
@@ -92,9 +113,9 @@ export default function maxMortgageAmount(
         monthlyCondoFees,
     }
 
-    // We start with 0 and increment by $100,000
+    // We start with the down payment and increment by $100,000
     findMaxAmount(
-        0,
+        downPayment,
         100_000,
         monthlyIncome,
         downPayment,
@@ -106,9 +127,9 @@ export default function maxMortgageAmount(
         options,
         results
     )
-    // Then with the maxAmount previously found but we increment by $10,000
+    // Then with the purchase price previously found but we increment by $10,000
     findMaxAmount(
-        results.amount,
+        results.purchasePrice,
         10_000,
         monthlyIncome,
         downPayment,
@@ -122,7 +143,7 @@ export default function maxMortgageAmount(
     )
     // Again but $1,000 increment
     findMaxAmount(
-        results.amount,
+        results.purchasePrice,
         1_000,
         monthlyIncome,
         downPayment,
@@ -135,8 +156,8 @@ export default function maxMortgageAmount(
         results
     )
 
-    if (results.amount === 10_000_000) {
-        results.reason = "Maximum amount tested with this function."
+    if (results.purchasePrice === 10_000_000) {
+        results.reason = "Maximum purchase price tested with this function."
     }
 
     // We return the results.
@@ -145,7 +166,7 @@ export default function maxMortgageAmount(
 
 // A function where we loop and test mortgage amounts.
 function findMaxAmount(
-    startAmount: number,
+    startPrice: number,
     increment: number,
     monthlyIncome: number,
     downPayment: number,
@@ -162,29 +183,36 @@ function findMaxAmount(
     let totalDebtServiceRatio = 0
 
     // We test amount up to $10,000,000
-    for (let amount = startAmount; amount <= 10_000_000; amount += increment) {
+    for (
+        let purchasePrice = startPrice;
+        purchasePrice <= 10_000_000;
+        purchasePrice += increment
+    ) {
         // The downPayment must be at least 5% of the purchase price.
-        const downPaymentPerc = downPayment / amount
+        const downPaymentPerc = downPayment / purchasePrice
 
         if (downPaymentPerc < 0.05) {
-            results.reason = `Maximum amount allowed with a down payment of ${downPayment}. The down payment must be at least 5% of the purchase price.`
+            results.reason = `Maximum purchase price allowed with a down payment of ${downPayment}. The down payment must be at least 5% of the purchase price.`
             break
         }
 
         // We calculate the insurance premium
-        const insurancePremium = mortgageInsurancePremium(amount, downPayment)
+        const insurancePremium = mortgageInsurancePremium(
+            purchasePrice,
+            downPayment
+        )
 
         // Then the actual mortgage amount
-        const mortageAmount =
-            Math.max(amount - downPayment, 0) + insurancePremium
+        const mortgageAmount =
+            Math.max(purchasePrice - downPayment, 0) + insurancePremium
 
         // And monthly mortgage payment
         const monthlyMortgagePayment =
-            (monthlyRate * mortageAmount) /
+            (monthlyRate * mortgageAmount) /
             (1 - Math.pow(1 + monthlyRate, -amortizationPeriodinMonths))
 
         // The default annual tax rate is 1.5% of purchase price, like Royal Bank of Canada.
-        const monthlyTax = options.monthlyTax ?? (amount * 0.015) / 12
+        const monthlyTax = options.monthlyTax ?? (purchasePrice * 0.015) / 12
         results.monthlyTax = monthlyTax
         results.isTaxEstimate =
             typeof options.monthlyTax === "number" ? false : true
@@ -200,18 +228,19 @@ function findMaxAmount(
         totalDebtServiceRatio =
             (monthlyHomeExpenses + monthlyDebtPayment) / monthlyIncome
 
-        // If the GDS or TDS are above the thresholds established by the Financial Consumer Agency of Canada, we break. Otherwise, we update the results values.
-        if (grossDebtServiceRatio > 0.32 && totalDebtServiceRatio > 0.4) {
+        // If the GDS or TDS are equal or above the thresholds established by the Financial Consumer Agency of Canada, we break. Otherwise, we update the results values.
+        if (grossDebtServiceRatio >= 0.32 && totalDebtServiceRatio >= 0.4) {
             results.reason = `Gross debt service ratio would be above threshold of 0.32 and total debt service ratio would be above threshold of 0.4 with a bigger amount.`
             break
-        } else if (grossDebtServiceRatio > 0.32) {
+        } else if (grossDebtServiceRatio >= 0.32) {
             results.reason = `Gross debt service ratio would be above threshold of 0.32 with a bigger amount`
             break
-        } else if (totalDebtServiceRatio > 0.4) {
+        } else if (totalDebtServiceRatio >= 0.4) {
             results.reason = `Total debt service ratio would be above threshold of 0.4 with a bigger amount`
             break
         } else {
-            results.amount = amount
+            results.purchasePrice = purchasePrice
+            results.mortgageAmount = mortgageAmount
             results.insurancePremium = insurancePremium
             results.monthlyMortgagePayment = parseFloat(
                 monthlyMortgagePayment.toFixed(2)
