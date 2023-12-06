@@ -19,6 +19,26 @@ import mortgageInsurancePremium from "./mortgageInsurancePremium.js"
  *
  **/
 
+// Type of the returned results.
+type results = {
+    annualIncome: number
+    downPayment: number
+    rate: number
+    rateTested: number
+    amount: number
+    insurancePremium: number
+    monthlyMortgagePayment: number
+    grossDebtServiceRatio: number
+    totalDebtServiceRatio: number
+    reason: string
+    monthlyDebtPayment: number
+    monthlyHeating: number
+    isHeatingEstimate: boolean
+    monthlyTax: number
+    isTaxEstimate: boolean
+    monthlyCondoFees: number
+}
+
 export default function maxMortgageAmount(
     annualIncome: number,
     downPayment: number,
@@ -29,7 +49,7 @@ export default function maxMortgageAmount(
         monthlyTax?: number
         monthlyCondoFees?: number
     } = {}
-) {
+): results {
     const monthlyIncome = annualIncome / 12
 
     // For the stress test, the rate should be the higher value between rate+2 or 5.25
@@ -46,10 +66,6 @@ export default function maxMortgageAmount(
     // Default condo fees is $0
     const monthlyCondoFees = options.monthlyCondoFees ?? 0
 
-    // We start with zeros
-    let grossDebtServiceRatio = 0
-    let totalDebtServiceRatio = 0
-
     // We calculate variables for the monthly payment. Formula comes from the mortgagePayment function and is applicable only for fixed mortgage rates in Canada.
     const nominalRate = rateTested / 100
     const annualEffectiveRate = Math.pow(1 + nominalRate / 2, 2) // Compounded two times per year
@@ -57,7 +73,7 @@ export default function maxMortgageAmount(
     const amortizationPeriodinMonths = 25 * 12 // Amortization period of 25 years
 
     // We will return an object. We define it here.
-    const results = {
+    const results: results = {
         annualIncome,
         downPayment,
         rate,
@@ -65,8 +81,8 @@ export default function maxMortgageAmount(
         amount: 0,
         insurancePremium: 0,
         monthlyMortgagePayment: 0,
-        grossDebtServiceRatio,
-        totalDebtServiceRatio,
+        grossDebtServiceRatio: 0,
+        totalDebtServiceRatio: 0,
         reason: "",
         monthlyDebtPayment,
         monthlyHeating,
@@ -76,34 +92,96 @@ export default function maxMortgageAmount(
         monthlyCondoFees,
     }
 
-    // We test amount up to $10,000,000
-    for (let amount = 1000; amount <= 10_000_000; amount += 1000) {
-        console.log("\n*** amount", amount, "***")
+    // We start with 0 and increment by $100,000
+    findMaxAmount(
+        0,
+        100_000,
+        monthlyIncome,
+        downPayment,
+        monthlyRate,
+        amortizationPeriodinMonths,
+        monthlyHeating,
+        monthlyCondoFees,
+        monthlyDebtPayment,
+        options,
+        results
+    )
+    // Then with the maxAmount previously found but we increment by $10,000
+    findMaxAmount(
+        results.amount,
+        10_000,
+        monthlyIncome,
+        downPayment,
+        monthlyRate,
+        amortizationPeriodinMonths,
+        monthlyHeating,
+        monthlyCondoFees,
+        monthlyDebtPayment,
+        options,
+        results
+    )
+    // Again but $1,000 increment
+    findMaxAmount(
+        results.amount,
+        1_000,
+        monthlyIncome,
+        downPayment,
+        monthlyRate,
+        amortizationPeriodinMonths,
+        monthlyHeating,
+        monthlyCondoFees,
+        monthlyDebtPayment,
+        options,
+        results
+    )
 
+    if (results.amount === 10_000_000) {
+        results.reason = "Maximum amount tested with this function."
+    }
+
+    // We return the results.
+    return results
+}
+
+// A function where we loop and test mortgage amounts.
+function findMaxAmount(
+    startAmount: number,
+    increment: number,
+    monthlyIncome: number,
+    downPayment: number,
+    monthlyRate: number,
+    amortizationPeriodinMonths: number,
+    monthlyHeating: number,
+    monthlyCondoFees: number,
+    monthlyDebtPayment: number,
+    options: { monthlyTax?: number },
+    results: results
+) {
+    // We start with zeros
+    let grossDebtServiceRatio = 0
+    let totalDebtServiceRatio = 0
+
+    // We test amount up to $10,000,000
+    for (let amount = startAmount; amount <= 10_000_000; amount += increment) {
         // The downPayment must be at least 5% of the purchase price.
         const downPaymentPerc = downPayment / amount
-        console.log("downPaymentPerc", downPaymentPerc)
 
         if (downPaymentPerc < 0.05) {
-            console.log("break downPaymentPerc < 0.05")
             results.reason = `Maximum amount allowed with a down payment of ${downPayment}. The down payment must be at least 5% of the purchase price.`
             break
         }
 
         // We calculate the insurance premium
         const insurancePremium = mortgageInsurancePremium(amount, downPayment)
-        console.log("insurancePremium", insurancePremium)
 
         // Then the actual mortgage amount
         const mortageAmount =
             Math.max(amount - downPayment, 0) + insurancePremium
-        console.log("mortageAmount", mortageAmount)
 
         // And monthly mortgage payment
         const monthlyMortgagePayment =
             (monthlyRate * mortageAmount) /
             (1 - Math.pow(1 + monthlyRate, -amortizationPeriodinMonths))
-        console.log("monthlyMortgagePayment", monthlyMortgagePayment)
 
         // The default annual tax rate is 1.5% of purchase price, like Royal Bank of Canada.
         const monthlyTax = options.monthlyTax ?? (amount * 0.015) / 12
@@ -111,22 +189,18 @@ export default function maxMortgageAmount(
         results.isTaxEstimate =
             typeof options.monthlyTax === "number" ? false : true
 
-        console.log("monthlyTax", monthlyTax)
-
         const monthlyHomeExpenses =
             monthlyMortgagePayment +
             monthlyHeating +
             monthlyTax +
             monthlyCondoFees
-        console.log("monthlyHomeExpenses", monthlyHomeExpenses)
 
         // We update the ratios.
         grossDebtServiceRatio = monthlyHomeExpenses / monthlyIncome
-        console.log("grossDebtServiceRatio", grossDebtServiceRatio)
         totalDebtServiceRatio =
             (monthlyHomeExpenses + monthlyDebtPayment) / monthlyIncome
-        console.log("totalDebtServiceRatio", totalDebtServiceRatio)
-        // If the GDS or TDS are above the thresholds established by the Financial Consumer Agency of Canada, we break. Otherwise, we update the previous values.
+
+        // If the GDS or TDS are above the thresholds established by the Financial Consumer Agency of Canada, we break. Otherwise, we update the results values.
         if (grossDebtServiceRatio > 0.32 && totalDebtServiceRatio > 0.4) {
             results.reason = `Gross debt service ratio would be above threshold of 0.32 and total debt service ratio would be above threshold of 0.4 with a bigger amount.`
             break
@@ -150,11 +224,4 @@ export default function maxMortgageAmount(
             )
         }
     }
-
-    if (results.amount === 10_000_000) {
-        results.reason = "Maximum amount tested with this function."
-    }
-
-    // We return the results.
-    return results
 }
