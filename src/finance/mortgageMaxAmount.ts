@@ -71,7 +71,7 @@ export default function mortgageMaxAmount(
     const monthlyIncome = annualIncome / 12
 
     // For the stress test, the rate should be the highest value between rate+2 or 5.25
-    const rateTested = Math.max(rate + 2, 5.25)
+    const rateTested = parseFloat(Math.max(rate + 2, 5.25).toFixed(2))
 
     // Default monthlyDebtPayment is 0
     const monthlyDebtPayment = options.monthlyDebtPayment ?? 0
@@ -223,12 +223,17 @@ function findMaxAmount(
             Math.max(purchasePrice - downPayment, 0) + insurancePremium
 
         // And monthly mortgage payment
-        const monthlyMortgagePayment =
-            (monthlyRate * mortgageAmount) /
-            (1 - Math.pow(1 + monthlyRate, -amortizationPeriodinMonths))
+        const monthlyMortgagePayment = parseFloat(
+            (
+                (monthlyRate * mortgageAmount) /
+                (1 - Math.pow(1 + monthlyRate, -amortizationPeriodinMonths))
+            ).toFixed(2)
+        )
 
         // The default annual tax rate is 1.5% of purchase price, like Royal Bank of Canada.
-        const monthlyTax = options.monthlyTax ?? (purchasePrice * 0.015) / 12
+        const monthlyTax =
+            options.monthlyTax ??
+            parseFloat(((purchasePrice * 0.015) / 12).toFixed(2))
         results.monthlyTax = monthlyTax
         results.isTaxEstimate =
             typeof options.monthlyTax === "number" ? false : true
