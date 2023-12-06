@@ -11,6 +11,8 @@ import dateToRCStyle from "./helpers/dateToRCStyle.js"
  * // returns "Jan. 1, 2023, at 3:35 p.m."
  * ```
  * Options can be passed as the last parameter. Pass {style: "rc"} to parse dates in French.
+ *
+ * @category Formatting
  */
 
 export default function formatDate(

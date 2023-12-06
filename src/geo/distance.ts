@@ -7,6 +7,8 @@
  * const distance = distance(-73.66, 45.51, -79.43, 43.66, { decimals: 0 })
  * // returns 501
  * ```
+ *
+ * @category Geo
  */
 
 export default function distance(

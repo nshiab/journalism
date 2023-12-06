@@ -1,11 +1,11 @@
 import assert from "assert"
-import maxMortgageAmount from "../../src/finance/maxMortgageAmount.js"
+import mortgageMaxAmount from "../../src/finance/mortgageMaxAmount.js"
 
 // Tested against https://itools-ioutils.fcac-acfc.gc.ca/MQ-HQ/MQCalc-EAPHCalc-eng.aspx
 
-describe("maxMortgageAmount", () => {
+describe("mortgageMaxAmount", () => {
     it("should return a purchase price of $0k with an income of $0k, down payment of $0k, and a rate of 5.25%", () => {
-        const results = maxMortgageAmount(0, 0, 5.25)
+        const results = mortgageMaxAmount(0, 0, 5.25)
         assert.deepStrictEqual(results, {
             annualIncome: 0,
             downPayment: 0,
@@ -27,7 +27,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $25k with an income of $0k, down payment of $25k, and a rate of 5.25%", () => {
-        const results = maxMortgageAmount(0, 25_000, 5.25)
+        const results = mortgageMaxAmount(0, 25_000, 5.25)
         assert.deepStrictEqual(results, {
             annualIncome: 0,
             downPayment: 25000,
@@ -49,7 +49,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $32k with an income of $10k, down payment of $25k, and a rate of 5.25%", () => {
-        const results = maxMortgageAmount(10_000, 25_000, 5.25)
+        const results = mortgageMaxAmount(10_000, 25_000, 5.25)
         assert.deepStrictEqual(results, {
             annualIncome: 10000,
             downPayment: 25000,
@@ -71,7 +71,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $155k with an income of $50k, down payment of $25k, and a rate of 5.25%", () => {
-        const results = maxMortgageAmount(50_000, 25_000, 5.25)
+        const results = mortgageMaxAmount(50_000, 25_000, 5.25)
         assert.deepStrictEqual(results, {
             annualIncome: 50000,
             downPayment: 25000,
@@ -93,7 +93,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $0k with an income of $100k, down payment of $0k, and a rate of 5.25%", () => {
-        const results = maxMortgageAmount(100_000, 0, 5.25)
+        const results = mortgageMaxAmount(100_000, 0, 5.25)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 0,
@@ -115,7 +115,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $0k with an income of $100k, down payment of $5k, and a rate of 5.25%", () => {
-        const results = maxMortgageAmount(100_000, 5_000, 5.25)
+        const results = mortgageMaxAmount(100_000, 5_000, 5.25)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 5000,
@@ -137,7 +137,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $307k with an income of $100k, down payment of $25k, and a rate of 5.25%", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5.25)
+        const results = mortgageMaxAmount(100_000, 25_000, 5.25)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 25000,
@@ -159,7 +159,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $332k with an income of $100k, down payment of $50k, and a rate of 5.25%", () => {
-        const results = maxMortgageAmount(100_000, 50_000, 5.25)
+        const results = mortgageMaxAmount(100_000, 50_000, 5.25)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 50000,
@@ -181,7 +181,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $360k with an income of $100k, down payment of $75k, and a rate of 5.25%", () => {
-        const results = maxMortgageAmount(100_000, 75_000, 5.25)
+        const results = mortgageMaxAmount(100_000, 75_000, 5.25)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 75000,
@@ -203,7 +203,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $381k with an income of $100k, down payment of $100k, and a rate of 5.25%", () => {
-        const results = maxMortgageAmount(100_000, 100_000, 5.25)
+        const results = mortgageMaxAmount(100_000, 100_000, 5.25)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 100000,
@@ -225,7 +225,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $355k with an income of $100k, down payment of $25k, and a rate of 1.00%", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 1)
+        const results = mortgageMaxAmount(100_000, 25_000, 1)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 25000,
@@ -247,7 +247,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $355k with an income of $100k, down payment of $25k, and a rate of 3.00%", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 3)
+        const results = mortgageMaxAmount(100_000, 25_000, 3)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 25000,
@@ -269,7 +269,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $336k with an income of $100k, down payment of $25k, and a rate of 4.00%", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 4)
+        const results = mortgageMaxAmount(100_000, 25_000, 4)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 25000,
@@ -291,7 +291,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $313k with an income of $100k, down payment of $25k, and a rate of 5.00%", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5)
+        const results = mortgageMaxAmount(100_000, 25_000, 5)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 25000,
@@ -313,7 +313,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $274k with an income of $100k, down payment of $25k, and a rate of 7.00%", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 7)
+        const results = mortgageMaxAmount(100_000, 25_000, 7)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 25000,
@@ -335,7 +335,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $231k with an income of $100k, down payment of $25k, and a rate of 10.00%", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 10)
+        const results = mortgageMaxAmount(100_000, 25_000, 10)
         assert.deepStrictEqual(results, {
             annualIncome: 100000,
             downPayment: 25000,
@@ -357,7 +357,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $313k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly debt payment of $0.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyDebtPayment: 0,
         })
         assert.deepStrictEqual(results, {
@@ -381,7 +381,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $313k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly debt payment of $50.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyDebtPayment: 50,
         })
         assert.deepStrictEqual(results, {
@@ -405,7 +405,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $313k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly debt payment of $100.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyDebtPayment: 100,
         })
         assert.deepStrictEqual(results, {
@@ -429,7 +429,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $313k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly debt payment of $250.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyDebtPayment: 250,
         })
         assert.deepStrictEqual(results, {
@@ -453,7 +453,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $313k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly debt payment of $500.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyDebtPayment: 500,
         })
         assert.deepStrictEqual(results, {
@@ -477,7 +477,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $303k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly debt payment of $750.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyDebtPayment: 750,
         })
         assert.deepStrictEqual(results, {
@@ -501,7 +501,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $333k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly heating cost of $1.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyHeating: 1,
         })
         assert.deepStrictEqual(results, {
@@ -525,7 +525,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $322k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly heating cost of $100.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyHeating: 100,
         })
         assert.deepStrictEqual(results, {
@@ -549,7 +549,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $304k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly heating cost of $250.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyHeating: 250,
         })
         assert.deepStrictEqual(results, {
@@ -573,7 +573,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $304k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly heating cost of $500.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyHeating: 500,
         })
         assert.deepStrictEqual(results, {
@@ -597,7 +597,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $366k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly tax cost of $1.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyTax: 1,
         })
         assert.deepStrictEqual(results, {
@@ -621,7 +621,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $298k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly tax cost of $500.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyTax: 500,
         })
         assert.deepStrictEqual(results, {
@@ -645,7 +645,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $231k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly tax cost of $1k.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyTax: 1000,
         })
         assert.deepStrictEqual(results, {
@@ -669,7 +669,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $313k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly condo fees of $0.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyCondoFees: 0,
         })
         assert.deepStrictEqual(results, {
@@ -693,7 +693,7 @@ describe("maxMortgageAmount", () => {
         })
     })
     it("should return a purchase price of $301k with an income of $100k, down payment of $25k, a rate of 5.00%, and monthly condo fees of $100.", () => {
-        const results = maxMortgageAmount(100_000, 25_000, 5, {
+        const results = mortgageMaxAmount(100_000, 25_000, 5, {
             monthlyCondoFees: 100,
         })
         assert.deepStrictEqual(results, {

@@ -7,6 +7,7 @@
  * ```
  * You can pass { toArray: true } to return an array instead of an object.
  *
+ * @category Geo
  */
 
 export default function geoTo3D(

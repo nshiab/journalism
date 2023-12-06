@@ -16,6 +16,8 @@ import round from "./round.js"
  * - nearestInteger: the base to use to round. For example, 123 with the nearestInteger 10 is 120.
  * - prefix: a string to add before the number, "$" for example
  * - suffix: a string to add after the number, "%" for example
+ *
+ * @category Formatting
  */
 
 export default function formatNumber(

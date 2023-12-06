@@ -7,24 +7,24 @@ import mortgageInsurancePremium from "./mortgageInsurancePremium.js"
  * // With an annual income of $100,000, a down payment of $25,000, and a rate of 5.25%.
  * const results = maxMortgageAmount(100_000, 25_000, 5.25)
  * // results = {
-            annualIncome: 100000,
-            downPayment: 25000,
-            rate: 5.25,
-            rateTested: 7.25,
-            purchasePrice: 307000,
-            mortgageAmount: 293280,
-            insurancePremium: 11280,
-            monthlyMortgagePayment: 2099.65,
-            grossDebtServiceRatio: 0.32,
-            totalDebtServiceRatio: 0.32,
-            reason: "Gross debt service ratio would be above threshold of 0.32 with a bigger amount",
-            monthlyDebtPayment: 0,
-            monthlyHeating: 175,
-            isHeatingEstimate: true,
-            monthlyTax: 385,
-            isTaxEstimate: true,
-            monthlyCondoFees: 0,
-        }
+ * //   annualIncome: 100000,
+ * //   downPayment: 25000,
+ * //   rate: 5.25,
+ * //   rateTested: 7.25,
+ * //   purchasePrice: 307000,
+ * //   mortgageAmount: 293280,
+ * //   insurancePremium: 11280,
+ * //   monthlyMortgagePayment: 2099.65,
+ * //   grossDebtServiceRatio: 0.32,
+ * //   totalDebtServiceRatio: 0.32,
+ * //   reason: "Gross debt service ratio would be above threshold of 0.32 with a bigger amount",
+ * //   monthlyDebtPayment: 0,
+ * //   monthlyHeating: 175,
+ * //   isHeatingEstimate: true,
+ * //   monthlyTax: 385,
+ * //   isTaxEstimate: true,
+ * //   monthlyCondoFees: 0,
+ * // }
  * ```
  *
  * @param annualIncome - The annual income of the borrower.
@@ -36,10 +36,20 @@ import mortgageInsurancePremium from "./mortgageInsurancePremium.js"
  * @param   options.monthlyTax - The monthly property tax. Default to 1.5% of the purchase price, like Royal Bak of Canada does.
  * @param   options.monthlyCondoFees - The monthly condo fees. Defaults to 0.
  *
+ * @category Finance
  **/
 
-// Type of the returned results.
-type results = {
+export default function mortgageMaxAmount(
+    annualIncome: number,
+    downPayment: number,
+    rate: number,
+    options: {
+        monthlyDebtPayment?: number
+        monthlyHeating?: number
+        monthlyTax?: number
+        monthlyCondoFees?: number
+    } = {}
+): {
     annualIncome: number
     downPayment: number
     rate: number
@@ -57,19 +67,7 @@ type results = {
     monthlyTax: number
     isTaxEstimate: boolean
     monthlyCondoFees: number
-}
-
-export default function maxMortgage(
-    annualIncome: number,
-    downPayment: number,
-    rate: number,
-    options: {
-        monthlyDebtPayment?: number
-        monthlyHeating?: number
-        monthlyTax?: number
-        monthlyCondoFees?: number
-    } = {}
-): results {
+} {
     const monthlyIncome = annualIncome / 12
 
     // For the stress test, the rate should be the highest value between rate+2 or 5.25
@@ -93,7 +91,7 @@ export default function maxMortgage(
     const amortizationPeriodinMonths = 25 * 12 // Amortization period of 25 years
 
     // We will return an object. We define it here.
-    const results: results = {
+    const results = {
         annualIncome,
         downPayment,
         rate,
@@ -176,7 +174,25 @@ function findMaxAmount(
     monthlyCondoFees: number,
     monthlyDebtPayment: number,
     options: { monthlyTax?: number },
-    results: results
+    results: {
+        annualIncome: number
+        downPayment: number
+        rate: number
+        rateTested: number
+        purchasePrice: number
+        mortgageAmount: number
+        insurancePremium: number
+        monthlyMortgagePayment: number
+        grossDebtServiceRatio: number
+        totalDebtServiceRatio: number
+        reason: string
+        monthlyDebtPayment: number
+        monthlyHeating: number
+        isHeatingEstimate: boolean
+        monthlyTax: number
+        isTaxEstimate: boolean
+        monthlyCondoFees: number
+    }
 ) {
     // We start with zeros
     let grossDebtServiceRatio = 0

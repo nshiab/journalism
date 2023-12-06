@@ -20,6 +20,8 @@ import distance from "./distance.js"
  * )
  * // return { name: "Montreal", lon: -73.66, lat: 45.51, distance: 160.694 }
  * ```
+ *
+ * @category Geo
  */
 
 export default function getClosest(
