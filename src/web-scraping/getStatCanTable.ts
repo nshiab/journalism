@@ -6,6 +6,7 @@ export default async function getStatCanTable(
     options: {
         lang?: "en" | "fr"
         skipFirstCharacter?: boolean
+        returnRawCSV?: boolean
         debug?: boolean
     } = {}
 ) {
@@ -37,6 +38,11 @@ export default async function getStatCanTable(
         throw new Error(`No ${pid}.csv in the zipped file.`)
     }
     const csv = csvEntry.getData().toString()
+
+    if (options.returnRawCSV) {
+        return csv
+    }
+
     const data = options.skipFirstCharacter
         ? csvParse(csv.slice(1))
         : csvParse(csv)

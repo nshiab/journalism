@@ -470,4 +470,477 @@ describe("getStatCanTable", () => {
             },
         ])
     })
+    it("should return an array of objects from a table id in French", async function () {
+        const data = await getStatCanTable("9810000101", {
+            lang: "fr",
+            skipFirstCharacter: true,
+        })
+
+        assert.deepStrictEqual(data, [
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Canada",
+                DGUID: "2021A000011124",
+                Coordonnée: "1",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "36991981",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Terre-Neuve-et-Labrador",
+                DGUID: "2021A000210",
+                Coordonnée: "2",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "510550",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Île-du-Prince-Édouard",
+                DGUID: "2021A000211",
+                Coordonnée: "3",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "154331",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Nouvelle-Écosse",
+                DGUID: "2021A000212",
+                Coordonnée: "4",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "969383",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Nouveau-Brunswick",
+                DGUID: "2021A000213",
+                Coordonnée: "5",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "775610",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Québec",
+                DGUID: "2021A000224",
+                Coordonnée: "6",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "8501833",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Ontario",
+                DGUID: "2021A000235",
+                Coordonnée: "7",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "14223942",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Manitoba",
+                DGUID: "2021A000246",
+                Coordonnée: "8",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "1342153",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Saskatchewan",
+                DGUID: "2021A000247",
+                Coordonnée: "9",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "1132505",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Alberta",
+                DGUID: "2021A000248",
+                Coordonnée: "10",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "4262635",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Colombie-Britannique",
+                DGUID: "2021A000259",
+                Coordonnée: "11",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "5000879",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Yukon",
+                DGUID: "2021A000260",
+                Coordonnée: "12",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "40232",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Territoires du Nord-Ouest",
+                DGUID: "2021A000261",
+                Coordonnée: "13",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "41070",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "2021",
+                GÉO: "Nunavut",
+                DGUID: "2021A000262",
+                Coordonnée: "14",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "36858",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "",
+                GÉO: "",
+                DGUID: "",
+                Coordonnée: "",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+            {
+                "PÉRIODE DE RÉFÉRENCE": "",
+                GÉO: "",
+                DGUID: "",
+                Coordonnée: "",
+                "Chiffres de population et des logements (11): Population, 2021 [1]":
+                    "",
+                Symboles: "",
+                "Chiffres de population et des logements (11): Population, 2016 [2]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage de la population, 2016 à 2021 [3]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2021 [4]":
+                    "",
+                "Chiffres de population et des logements (11): Total des logements privés, 2016 [5]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage du total des logements privés, 2016 à 2021 [6]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2021 [7]":
+                    "",
+                "Chiffres de population et des logements (11): Logements privés occupés par des résidents habituels, 2016 [8]":
+                    "",
+                "Chiffres de population et des logements (11): Variation en pourcentage des logements privés occupés par des résidents habituels, 2016 à 2021 [9]":
+                    "",
+                "Chiffres de population et des logements (11): Superficie des terres en kilomètres carrés, 2021 [10]":
+                    "",
+                "Chiffres de population et des logements (11): Densité de population au kilomètre carré, 2021 [11]":
+                    "",
+            },
+        ])
+    })
 })
