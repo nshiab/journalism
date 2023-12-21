@@ -2,7 +2,7 @@
     "compilerOptions": {
         "outDir": "./dist",
         "rootDir": "./src",
-        "target": "ES2016",
+        "target": "es2022",
         "module": "esNext",
         "moduleResolution": "node",
         "esModuleInterop": true,

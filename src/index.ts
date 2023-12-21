@@ -10,6 +10,7 @@ import mortgageInsurancePremium from "./finance/mortgageInsurancePremium.js"
 import mortgageMaxAmount from "./finance/mortgageMaxAmount.js"
 import getClosest from "./geo/getClosest.js"
 import getHumidex from "./weather/getHumidex.js"
+import getStatCanTable from "./web-scraping/getStatCanTable.js"
 
 export {
     formatDate,
@@ -24,4 +25,6 @@ export {
     mortgageMaxAmount,
     getClosest,
     getHumidex,
+    // NODE ONLY
+    getStatCanTable,
 }
