@@ -55,8 +55,8 @@ export default async function savePlotChart(
         path: "node_modules/@observablehq/plot/dist/plot.umd.js",
     })
 
-    // We create an empty div.
-    await page.setContent("<div id='dataviz'></div>")
+    // We create an empty div with a display flex to avoid blank space in the screenshot.
+    await page.setContent("<div id='dataviz' style='display:flex;'></div>")
 
     // We convert back dates, generate the chart and append it to our div.
     await page.evaluate(`
