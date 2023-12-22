@@ -1,11 +1,32 @@
 import puppeteer from "puppeteer"
-import { Plot } from "@observablehq/plot"
+
+/**
+ * Saves an Observable Plot chart as an image.
+ *
+ * ```js
+ * // The data must be an array of objects.
+ * const data = [{ salary: 75000, hireDate: new Date("2023-12-22") }, ...]
+ *
+ * // The Plot options must be wrapped into a function.
+ * const chart = () => Plot.plot({
+ *  marks: [
+ *    Plot.dot(data, {x: "hireDate", y: "salary"})
+ *  ]
+ * })
+ *
+ * // Change the extension to .jpg to get a JPEG file.
+ * const path = "./my-chart.png"
+ *
+ * await savePlotChart(data, chart, path)
+ * ```
+ * @category Dataviz
+ */
 
 export default async function savePlotChart(
     data: { [key: string]: unknown }[],
     makeChart: (
         data: { [key: string]: unknown }[]
-    ) => (SVGSVGElement | HTMLElement) & Plot,
+    ) => SVGSVGElement | HTMLElement,
     path: string
 ) {
     // We check which keys hold dates, based on the first data item.

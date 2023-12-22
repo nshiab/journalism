@@ -12,6 +12,7 @@ import getClosest from "./geo/getClosest.js"
 import getHumidex from "./weather/getHumidex.js"
 import getStatCanTable from "./web-scraping/getStatCanTable.js"
 import getHtmlTable from "./web-scraping/getHtmlTable.js"
+import savePlotChart from "./dataviz/savePlotChart.js"
 
 export {
     formatDate,
@@ -29,4 +30,5 @@ export {
     // NODE ONLY
     getStatCanTable,
     getHtmlTable,
+    savePlotChart,
 }

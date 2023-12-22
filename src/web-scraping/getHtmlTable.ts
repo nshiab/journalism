@@ -1,6 +1,21 @@
 import { load } from "cheerio"
 import { csvFormatRow, csvParse } from "d3-dsv"
 
+/**
+ * Returns the data from an HTML table as an array of objects. The first parameter is an url. The second parameter is an optional object specifying a css selector and/or an index.
+ *
+ * ```js
+ * // This would parse the data from the fourth
+ * // table with the class name data-table.
+ * const data = await getHtmlTable("your-url-here", {
+ *   selector: ".data-table",
+ *   index: 3
+ * })
+ * ```
+ *
+ * @category Web scraping
+ */
+
 export default async function getHtmlTable(
     url: string,
     options: {

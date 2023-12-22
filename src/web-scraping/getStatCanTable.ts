@@ -1,6 +1,19 @@
 import AdmZip from "adm-zip"
 import { csvParse } from "d3-dsv"
 
+/**
+ * Returns the data from a Statistics Canada table as an array of objects. The first parameter is the pid value that can be found in the table url. The second parameter is an optional object specifying:
+ * - the language
+ * - if the first character of the file should be skipped (sometimes the files are weirdly formatted)
+ * - if the raw csv values should be returned as text instead of an array of objects
+ *
+ * ```js
+ * const data = await getStatCanTable('98100001')
+ * ```
+ *
+ * @category Web scraping
+ */
+
 export default async function getStatCanTable(
     pid: string,
     options: {
