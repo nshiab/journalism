@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer"
 
 /**
- * Saves an Observable Plot chart as an image.
+ * Saves an Observable Plot chart as an image. You must use the Plot.dot syntax.
  *
  * ```js
  * // The data must be an array of objects.
@@ -45,7 +45,7 @@ export default async function savePlotChart(
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
     // For better screenshot resolution
-    page.setViewport({ width: 1000, height: 1000, deviceScaleFactor: 2 })
+    await page.setViewport({ width: 1000, height: 1000, deviceScaleFactor: 2 })
 
     // We inject the d3 and plot code.
     await page.addScriptTag({
@@ -56,7 +56,7 @@ export default async function savePlotChart(
     })
 
     // We create an empty div.
-    await page.setContent("<div id='dataviz' style='display:flex;'></div>")
+    await page.setContent("<div id='dataviz'></div>")
 
     // We convert back dates, generate the chart and append it to our div.
     await page.evaluate(`
@@ -68,12 +68,12 @@ export default async function savePlotChart(
             }
         }
         const makeChart = ${makeChart.toString()}
-        const plot = makeChart(data)
+        const chart = makeChart(data)
         const div = document.querySelector("#dataviz")
         if (!div) {
             throw new Error("No div with id dataviz")
         }
-        div.append(plot)`)
+        div.append(chart)`)
 
     // We select the generated figure or svg and save a screenshot of it.
     const dataviz = await page.$("#dataviz > figure, #dataviz > svg")
