@@ -55,7 +55,6 @@
         "url": "https://github.com/nshiab/journalism/issues"
     },
     "devDependencies": {
-        "@observablehq/plot": "^0.6.13",
         "@rollup/plugin-commonjs": "^25.0.0",
         "@rollup/plugin-node-resolve": "^15.1.0",
         "@rollup/plugin-terser": "^0.4.3",
@@ -67,22 +66,24 @@
         "@types/mocha": "^10.0.1",
         "@typescript-eslint/eslint-plugin": "^6.8.0",
         "@typescript-eslint/parser": "^6.8.0",
-        "adm-zip": "^0.5.10",
-        "cheerio": "^1.0.0-rc.12",
-        "d3": "^7.8.5",
-        "d3-array": "^3.2.4",
-        "d3-dsv": "^3.0.1",
-        "d3-time-format": "^4.1.0",
         "eslint": "^8.42.0",
         "eslint-config-prettier": "^9.0.0",
         "mocha": "^10.2.0",
         "prettier": "^3.0.3",
-        "puppeteer": "^21.6.1",
         "rollup-plugin-visualizer": "^5.9.0",
         "ts-node": "^10.9.1",
         "tslib": "^2.6.2",
         "typedoc": "^0.25.2",
         "typescript": "^5.2.2"
     },
-    "dependencies": {}
+    "dependencies": {
+        "@observablehq/plot": "^0.6.13",
+        "adm-zip": "^0.5.10",
+        "cheerio": "^1.0.0-rc.12",
+        "d3": "^7.8.5",
+        "d3-array": "^3.2.4",
+        "d3-dsv": "^3.0.1",
+        "d3-time-format": "^4.1.0",
+        "puppeteer": "^21.6.1"
+    }
 }
