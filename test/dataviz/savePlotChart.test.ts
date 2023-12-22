@@ -1,5 +1,11 @@
+import { existsSync, mkdirSync } from "fs"
 import savePlotChart from "../../src/dataviz/savePlotChart.js"
 import * as Plot from "@observablehq/plot"
+
+const outputPath = "./test/output/"
+if (!existsSync(outputPath)) {
+    mkdirSync(outputPath)
+}
 
 describe("savePlotChart", () => {
     it("save a chart", async () => {
