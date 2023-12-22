@@ -32,5 +32,7 @@ describe("savePlotChart", () => {
                 }),
             "./test/output/screenshot.png"
         )
+
+        // Not sure what/how to test, except making it work for now.
     })
 })
