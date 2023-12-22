@@ -1,4 +1,4 @@
-import { minIndex } from "d3-array"
+import { minIndex } from "d3"
 import distance from "./distance.js"
 
 /**

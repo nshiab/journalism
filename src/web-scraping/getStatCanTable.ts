@@ -1,5 +1,5 @@
 import AdmZip from "adm-zip"
-import { csvParse } from "d3-dsv"
+import { csvParse } from "d3"
 
 /**
  * Returns the data from a Statistics Canada table as an array of objects. The first parameter is the pid value that can be found in the table url. The second parameter is an optional object specifying:

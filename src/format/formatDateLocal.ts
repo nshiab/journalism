@@ -1,4 +1,4 @@
-import { timeFormat } from "d3-time-format"
+import { timeFormat } from "d3"
 import dateToCBCStyle from "./helpers/dateToCBCStyle.js"
 import dateToRCStyle from "./helpers/dateToRCStyle.js"
 

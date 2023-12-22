@@ -1,5 +1,5 @@
 import { load } from "cheerio"
-import { csvFormatRow, csvParse } from "d3-dsv"
+import { csvFormatRow, csvParse } from "d3"
 
 /**
  * Returns the data from an HTML table as an array of objects. The first parameter is an url. The second parameter is an optional object specifying a css selector and/or an index.
