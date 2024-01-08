@@ -75,7 +75,8 @@
         "ts-node": "^10.9.1",
         "tslib": "^2.6.2",
         "typedoc": "^0.25.2",
-        "typescript": "^5.2.2"
+        "typescript": "^5.2.2",
+        "rollup": "^4.9.4"
     },
     "dependencies": {
         "@observablehq/plot": "^0.6.13",
