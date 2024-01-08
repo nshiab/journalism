@@ -10,6 +10,8 @@ import mortgageInsurancePremium from "./finance/mortgageInsurancePremium.js"
 import mortgageMaxAmount from "./finance/mortgageMaxAmount.js"
 import getClosest from "./geo/getClosest.js"
 import getHumidex from "./weather/getHumidex.js"
+import arraysToData from "./format/arraysToData.js"
+import dataToArrays from "./format/dataToArrays.js"
 
 export {
     formatDate,
@@ -24,4 +26,6 @@ export {
     mortgageMaxAmount,
     getClosest,
     getHumidex,
+    arraysToData,
+    dataToArrays,
 }
