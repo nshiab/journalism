@@ -78,6 +78,76 @@ describe("formatDateLocal", () => {
         })
         assert.strictEqual(formattedDate, "Jan.")
     })
+    it("should return the day name, followed by the month and the day", () => {
+        const formattedDate = formatDateLocal(date, "DayName, Month Day")
+        assert.strictEqual(formattedDate, "Sunday, January 1")
+    })
+    it("should return the day name, followed by the month and the day, abbreviated", () => {
+        const formattedDate = formatDateLocal(date, "DayName, Month Day", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "Sun., Jan. 1")
+    })
+    it("should return the month and the day", () => {
+        const formattedDate = formatDateLocal(date, "Month Day")
+        assert.strictEqual(formattedDate, "January 1")
+    })
+    it("should return the month and the day", () => {
+        const formattedDate = formatDateLocal(date, "Month Day", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "Jan. 1")
+    })
+    it("should return the day", () => {
+        const formattedDate = formatDateLocal(date, "Day")
+        assert.strictEqual(formattedDate, "1")
+    })
+    it("should return the day and abbreviations should change a thing", () => {
+        const formattedDate = formatDateLocal(date, "Day", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "1")
+    })
+    it("should return the month", () => {
+        const formattedDate = formatDateLocal(date, "Month")
+        assert.strictEqual(formattedDate, "January")
+    })
+    it("should return the month abbreviated", () => {
+        const formattedDate = formatDateLocal(date, "Month", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "Jan.")
+    })
+    it("should return the zero-padded day", () => {
+        const formattedDate = formatDateLocal(date, "DD")
+        assert.strictEqual(formattedDate, "01")
+    })
+    it("should return the zero-padded day and abbreviations shouldn't change a thing", () => {
+        const formattedDate = formatDateLocal(date, "DD", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "01")
+    })
+    it("should return the zero-padded month", () => {
+        const formattedDate = formatDateLocal(date, "DD")
+        assert.strictEqual(formattedDate, "01")
+    })
+    it("should return the zero-padded month and abbreviations shouldn't change a thing", () => {
+        const formattedDate = formatDateLocal(date, "DD", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "01")
+    })
+    it("should return the year", () => {
+        const formattedDate = formatDateLocal(date, "YYYY")
+        assert.strictEqual(formattedDate, "2023")
+    })
+    it("should return the year and abbreviations shouldn't change a thing", () => {
+        const formattedDate = formatDateLocal(date, "YYYY", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "2023")
+    })
 
     // Radio-Canada style
 
@@ -153,5 +223,86 @@ describe("formatDateLocal", () => {
             abbreviations: true,
         })
         assert.strictEqual(formattedDate, "janv.")
+    })
+    it("should return the day name, followed by the month and the day with RC style", () => {
+        const formattedDate = formatDateLocal(date, "DayName, Month Day", {
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "Dimanche 1 janvier")
+    })
+    it("should return the day name, followed by the month and the day, abbreviated with RC style", () => {
+        const formattedDate = formatDateLocal(date, "DayName, Month Day", {
+            style: "rc",
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "Dim. 1 janv.")
+    })
+    it("should return the month and the day with RC style", () => {
+        const formattedDate = formatDateLocal(date, "Month Day", {
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "1 janvier")
+    })
+    it("should return the month and the day with RC style abbreviated", () => {
+        const formattedDate = formatDateLocal(date, "Month Day", {
+            style: "rc",
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "1 janv.")
+    })
+    it("should return the day with RC style", () => {
+        const formattedDate = formatDateLocal(date, "Day", { style: "rc" })
+        assert.strictEqual(formattedDate, "1")
+    })
+    it("should return the day and abbreviations should change a thing with RC style", () => {
+        const formattedDate = formatDateLocal(date, "Day", {
+            style: "rc",
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "1")
+    })
+    it("should return the month with RC style", () => {
+        const formattedDate = formatDateLocal(date, "Month", { style: "rc" })
+        assert.strictEqual(formattedDate, "janvier")
+    })
+    it("should return the month abbreviated with RC style", () => {
+        const formattedDate = formatDateLocal(date, "Month", {
+            style: "rc",
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "janv.")
+    })
+    it("should return the zero-padded day with RC style", () => {
+        const formattedDate = formatDateLocal(date, "DD", { style: "rc" })
+        assert.strictEqual(formattedDate, "01")
+    })
+    it("should return the zero-padded day and abbreviations shouldn't change a thing with RC style", () => {
+        const formattedDate = formatDateLocal(date, "DD", {
+            style: "rc",
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "01")
+    })
+    it("should return the zero-padded month with RC style", () => {
+        const formattedDate = formatDateLocal(date, "DD", { style: "rc" })
+        assert.strictEqual(formattedDate, "01")
+    })
+    it("should return the zero-padded month and abbreviations shouldn't change a thing with RC style", () => {
+        const formattedDate = formatDateLocal(date, "DD", {
+            style: "rc",
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "01")
+    })
+    it("should return the year with RC style", () => {
+        const formattedDate = formatDateLocal(date, "YYYY", { style: "rc" })
+        assert.strictEqual(formattedDate, "2023")
+    })
+    it("should return the year and abbreviations shouldn't change a thing with RC style", () => {
+        const formattedDate = formatDateLocal(date, "YYYY", {
+            style: "rc",
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "2023")
     })
 })
