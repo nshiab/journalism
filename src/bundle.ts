@@ -2,6 +2,7 @@ import formatDate from "./format/formatDate.js"
 import formatDateLocal from "./format/formatDateLocal.js"
 import formatNumber from "./format/formatNumber.js"
 import round from "./format/round.js"
+import prettyDuration from "./format/prettyDuration.js"
 import geoTo3D from "./geo/geoTo3D.js"
 import distance from "./geo/distance.js"
 import adjustToInflation from "./finance/adjustToInflation.js"
@@ -18,6 +19,7 @@ export {
     formatDateLocal,
     formatNumber,
     round,
+    prettyDuration,
     geoTo3D,
     distance,
     adjustToInflation,
