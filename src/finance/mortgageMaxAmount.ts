@@ -207,7 +207,10 @@ function findMaxAmount(
         // The downPayment must be at least 5% of the purchase price.
         const downPaymentPerc = downPayment / purchasePrice
 
-        if (downPaymentPerc < 0.05) {
+        if (purchasePrice >= 1_000_000 && downPaymentPerc < 0.2) {
+            results.reason = `Maximum purchase price allowed with a down payment of ${downPayment}. The down payment must be at least 20% of the purchase price when the purchase price is $1,000,000 or more.`
+            break
+        } else if (downPaymentPerc < 0.05) {
             results.reason = `Maximum purchase price allowed with a down payment of ${downPayment}. The down payment must be at least 5% of the purchase price.`
             break
         }

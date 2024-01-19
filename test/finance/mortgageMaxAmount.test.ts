@@ -716,4 +716,70 @@ describe("mortgageMaxAmount", () => {
             monthlyCondoFees: 100,
         })
     })
+    it("should return a purchase price of $999k with an income of $500k, down payment of $100k, and a rate of 5.00%", () => {
+        const results = mortgageMaxAmount(500_000, 100_000, 5)
+        assert.deepStrictEqual(results, {
+            annualIncome: 500000,
+            downPayment: 100000,
+            rate: 5,
+            rateTested: 7,
+            purchasePrice: 999000,
+            mortgageAmount: 926869,
+            insurancePremium: 27869,
+            monthlyMortgagePayment: 6491.94,
+            grossDebtServiceRatio: 0.19,
+            totalDebtServiceRatio: 0.19,
+            reason: "Maximum purchase price allowed with a down payment of 100000. The down payment must be at least 20% of the purchase price when the purchase price is $1,000,000 or more.",
+            monthlyDebtPayment: 0,
+            monthlyHeating: 175,
+            isHeatingEstimate: true,
+            monthlyTax: 1248.75,
+            isTaxEstimate: true,
+            monthlyCondoFees: 0,
+        })
+    })
+    it("should return a purchase price of $1,000,001 with an income of $500k, down payment of $200,001, and a rate of 5.00%", () => {
+        const results = mortgageMaxAmount(500_000, 200_001, 5)
+        assert.deepStrictEqual(results, {
+            annualIncome: 500000,
+            downPayment: 200001,
+            rate: 5,
+            rateTested: 7,
+            purchasePrice: 1000001,
+            mortgageAmount: 800000,
+            insurancePremium: 0,
+            monthlyMortgagePayment: 5603.33,
+            grossDebtServiceRatio: 0.17,
+            totalDebtServiceRatio: 0.17,
+            reason: "Maximum purchase price allowed with a down payment of 200001. The down payment must be at least 20% of the purchase price when the purchase price is $1,000,000 or more.",
+            monthlyDebtPayment: 0,
+            monthlyHeating: 175,
+            isHeatingEstimate: true,
+            monthlyTax: 1250,
+            isTaxEstimate: true,
+            monthlyCondoFees: 0,
+        })
+    })
+    it("should return a purchase price of $2,442,000 with an income of $500k, down payment of $1,000,000, and a rate of 5.00%", () => {
+        const results = mortgageMaxAmount(500_000, 1_000_000, 5)
+        assert.deepStrictEqual(results, {
+            annualIncome: 500000,
+            downPayment: 1000000,
+            rate: 5,
+            rateTested: 7,
+            purchasePrice: 2442000,
+            mortgageAmount: 1442000,
+            insurancePremium: 0,
+            monthlyMortgagePayment: 10100,
+            grossDebtServiceRatio: 0.32,
+            totalDebtServiceRatio: 0.32,
+            reason: "Gross debt service ratio would be above threshold of 0.32 with a bigger amount",
+            monthlyDebtPayment: 0,
+            monthlyHeating: 175,
+            isHeatingEstimate: true,
+            monthlyTax: 3053.75,
+            isTaxEstimate: true,
+            monthlyCondoFees: 0,
+        })
+    })
 })
