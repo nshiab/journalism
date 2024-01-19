@@ -1,3 +1,14 @@
+/**
+ * Returns the duration between two dates as a string in terms of seconds, minutes, hours, and days.
+ * ```js
+ * const duration = prettyDuration(
+ *   new Date("2024-01-01T17:00:00"),
+ *   new Date("2024-01-23T23:03:15")
+ * )
+ * // Returns "22 days, 6 hours, 3 minutes, 15 seconds"
+ * ```
+ * @category Formatting
+ */
 export default function prettyDuration(start: Date, end: Date) {
     const differenceInSeconds = Math.round(
         (end.getTime() - start.getTime()) / 1000
