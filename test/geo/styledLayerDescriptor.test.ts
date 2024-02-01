@@ -11,6 +11,7 @@ describe("styledLayerDescriptor", () => {
             { color: "#e0e9f0", value: 0 },
             { color: "#97b4cd", value: -10 },
             { color: "#5881a1", value: -20 },
+            { color: "#334f60", value: -30 },
             { color: "#21353f", value: -100 },
         ])
 
