@@ -1,5 +1,5 @@
 /**
- * Returns the OpenGIS Styled Layer Descriptor encoded for a URL. The required parameters are the layer and the color scale.
+ * Returns the OpenGIS Styled Layer Descriptor encoded for an URL. The required parameters are the layer and the color scale.
  *
  * ```ts
  * // Returns the SLD for the GDPS.ETA_TT layer with a color scale going from blue to red.
@@ -11,10 +11,11 @@
                 { color: "#e0e9f0", value: 0 },
                 { color: "#97b4cd", value: -10 },
                 { color: "#5881a1", value: -20 },
+                { color: "#334f60", value: -30 },
                 { color: "#21353f", value: -100 },
             ])
 
- * // The sdl can now be used in in a WMS request as SLD_BODY
+ * // The sdl can now be used in a WMS request as SLD_BODY
  * const url = `https://geo.weather.gc.ca/geomet?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX=-90,-180,90,180&CRS=EPSG:4326&WIDTH=2400&HEIGHT=1200&LAYERS=GDPS.ETA_TT&FORMAT=image/jpeg&SLD_BODY=${sld}`
  * ```
  *
