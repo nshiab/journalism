@@ -24,7 +24,7 @@ export default function styledLayerDescriptor(
     layer: string,
     colorScale: { color: string; value: number }[]
 ) {
-    // Color map entrie need to be in descending order.
+    // Color map entrie need to be in ascending order.
     colorScale.sort((a, b) => (a.value < b.value ? -1 : 1))
 
     const xml = `<?xml version="1.0" encoding="UTF-8"?><StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd"><NamedLayer><se:Name>${layer}</se:Name><UserStyle><Title>Custom style</Title><se:FeatureTypeStyle><se:Rule><se:RasterSymbolizer><se:Opacity>1.0</se:Opacity><ColorMap>${colorScale
