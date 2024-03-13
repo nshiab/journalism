@@ -9,7 +9,7 @@ import round from "./round.js"
  * ```
  * These options can be passed as the last parameter:
  * - style: "cbc" or "rc"
- * - sign: if true, "-" or "+" are added in front of the number
+ * - sign: if true, "–" or "+" are added in front of the number
  * - round: to round the number
  * - decimals: the number of decimals to keep when rounding
  * - fixed: display a fixed number of decimals. For example, if decimals is set to 2 then 0 will read 0.00.
@@ -103,6 +103,10 @@ export default function formatNumber(
 
     if (mergedOptions.sign && number > 0) {
         formattedNumber = `+${formattedNumber}`
+    }
+    // Always, not just with {sign: true}
+    if (number < 0) {
+        formattedNumber = formattedNumber.replace("-", "–")
     }
 
     return `${mergedOptions.prefix}${formattedNumber}${mergedOptions.suffix}`
