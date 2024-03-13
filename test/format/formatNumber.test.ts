@@ -26,9 +26,13 @@ describe("formatNumber", () => {
         const string = formatNumber(1.12, { sign: true })
         assert.strictEqual(string, "+1.12")
     })
-    it("should return the number with - sign", () => {
+    it("should return the number with – sign", () => {
         const string = formatNumber(-2.23, { sign: true })
-        assert.strictEqual(string, "-2.23")
+        assert.strictEqual(string, "–2.23")
+    })
+    it("should return 0 even if with option sign to true", () => {
+        const string = formatNumber(0, { sign: true })
+        assert.strictEqual(string, "0")
     })
     it("should return the number rounded", () => {
         const string = formatNumber(1.5345, { round: true })
@@ -57,30 +61,30 @@ describe("formatNumber", () => {
         })
         assert.strictEqual(string, "+11,520")
     })
-    it("should return the number rounded with 2 decimals and - sign", () => {
+    it("should return the number rounded with 2 decimals and – sign", () => {
         const string = formatNumber(-1.5345, { decimals: 2, sign: true })
-        assert.strictEqual(string, "-1.53")
+        assert.strictEqual(string, "–1.53")
     })
-    it("should return the number rounded with 2 fixed decimals and - sign", () => {
+    it("should return the number rounded with 2 fixed decimals and – sign", () => {
         const string = formatNumber(-1.5023, {
             decimals: 2,
             fixed: true,
             sign: true,
         })
-        assert.strictEqual(string, "-1.50")
+        assert.strictEqual(string, "–1.50")
     })
-    it("should return the number rounded with base 10 and - sign", () => {
+    it("should return the number rounded with base 10 and – sign", () => {
         const string = formatNumber(-11523.5345, {
             nearestInteger: 10,
             sign: true,
         })
-        assert.strictEqual(string, "-11,520")
+        assert.strictEqual(string, "–11,520")
     })
     it("should return the number with prefix", () => {
         const string = formatNumber(-11523, {
             prefix: "$",
         })
-        assert.strictEqual(string, "$-11,523")
+        assert.strictEqual(string, "$–11,523")
     })
     it("should return the number with suffix", () => {
         const string = formatNumber(35, {
@@ -118,9 +122,9 @@ describe("formatNumber", () => {
         const string = formatNumber(1.12, { sign: true, style: "rc" })
         assert.strictEqual(string, "+1,12")
     })
-    it("should return the number with - sign with rc style", () => {
+    it("should return the number with – sign with rc style", () => {
         const string = formatNumber(-2.23, { sign: true, style: "rc" })
-        assert.strictEqual(string, "-2,23")
+        assert.strictEqual(string, "–2,23")
     })
     it("should return the number rounded with rc style", () => {
         const string = formatNumber(1.5345, { round: true, style: "rc" })
@@ -170,28 +174,28 @@ describe("formatNumber", () => {
         })
         assert.strictEqual(string, "+11 520")
     })
-    it("should return the number rounded with 2 decimals, - sign and rc style", () => {
+    it("should return the number rounded with 2 decimals, – sign and rc style", () => {
         const string = formatNumber(-1.5345, {
             decimals: 2,
             sign: true,
             style: "rc",
         })
-        assert.strictEqual(string, "-1,53")
+        assert.strictEqual(string, "–1,53")
     })
-    it("should return the number rounded with base 10, - sign and rc style", () => {
+    it("should return the number rounded with base 10, – sign and rc style", () => {
         const string = formatNumber(-11523.5345, {
             nearestInteger: 10,
             sign: true,
             style: "rc",
         })
-        assert.strictEqual(string, "-11 520")
+        assert.strictEqual(string, "–11 520")
     })
     it("should return the number with prefix and rc style", () => {
         const string = formatNumber(-11523, {
             prefix: "$",
             style: "rc",
         })
-        assert.strictEqual(string, "$-11 523")
+        assert.strictEqual(string, "$–11 523")
     })
     it("should return the number with suffix and rc style", () => {
         const string = formatNumber(35.2, {
