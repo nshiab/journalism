@@ -33,7 +33,7 @@
         "default": "./dist/bundle.js"
     },
     "scripts": {
-        "test": "npx mocha \"test/**/*.test.ts\"",
+        "test": "npx mocha \"test/**/*.test.ts\" --timeout 5000",
         "test-build": "npx tsc && npx rollup --config",
         "build": "rm -rf dist && npx tsc && npx rollup --config",
         "all-tests": "npm run format && npm run test && npm run lint && npm run test-build",
@@ -71,18 +71,18 @@
         "eslint-config-prettier": "^9.0.0",
         "mocha": "^10.2.0",
         "prettier": "^3.0.3",
+        "rollup": "^4.9.4",
         "rollup-plugin-visualizer": "^5.9.0",
         "ts-node": "^10.9.1",
         "tslib": "^2.6.2",
         "typedoc": "^0.25.2",
         "typescript": "^5.2.2",
-        "rollup": "^4.9.4"
+        "puppeteer": "^22.4.1"
     },
     "dependencies": {
         "@observablehq/plot": "^0.6.13",
         "adm-zip": "^0.5.10",
         "cheerio": "^1.0.0-rc.12",
-        "d3": "^7.8.5",
-        "puppeteer": "^21.6.1"
+        "d3": "^7.8.5"
     }
 }

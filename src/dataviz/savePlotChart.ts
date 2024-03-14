@@ -1,7 +1,5 @@
-import puppeteer from "puppeteer"
-
 /**
- * Saves an Observable Plot chart as an image. You must use the Plot.dot syntax.
+ * Saves an Observable Plot chart as an image. You must use the Plot.dot syntax and install puppeeter (npm i puppeeter).
  *
  * ```js
  * // The data must be an array of objects.
@@ -42,6 +40,19 @@ export default async function savePlotChart(
         }
     }
 
+    let puppeteer
+    try {
+        // If puppeteer is not installed, you'll see an error here.
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        puppeteer = await import("puppeteer")
+    } catch (error) {
+        throw new Error("You need to install puppeteer => npm i puppeteer")
+    }
+
+    // Even if puppeteer is installed, you'll see an error here because possibly undefined.
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const browser = await puppeteer.launch({ headless: "new" })
     const page = await browser.newPage()
     // For better screenshot resolution
