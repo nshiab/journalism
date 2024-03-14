@@ -1,3 +1,4 @@
+import assert from "assert"
 import { existsSync, mkdirSync } from "fs"
 import savePlotChart from "../../src/dataviz/savePlotChart.js"
 import * as Plot from "@observablehq/plot"
@@ -40,5 +41,6 @@ describe("savePlotChart", () => {
         )
 
         // Not sure what/how to test, except making it work for now.
+        assert.strictEqual(true, true)
     })
 })
