@@ -1,5 +1,5 @@
 /**
- * Saves an Observable Plot chart as an image. You must use the Plot.dot syntax.
+ * Saves an Observable Plot chart as an image. You must use the Plot.dot syntax and install puppeeter (npm i puppeeter).
  *
  * ```js
  * // The data must be an array of objects.
