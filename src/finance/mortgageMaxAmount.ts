@@ -226,17 +226,14 @@ function findMaxAmount(
             Math.max(purchasePrice - downPayment, 0) + insurancePremium
 
         // And monthly mortgage payment
-        const monthlyMortgagePayment = parseFloat(
-            (
-                (monthlyRate * mortgageAmount) /
+        const monthlyMortgagePayment = Math.round(
+            (monthlyRate * mortgageAmount) /
                 (1 - Math.pow(1 + monthlyRate, -amortizationPeriodinMonths))
-            ).toFixed(2)
         )
 
         // The default annual tax rate is 1.5% of purchase price, like Royal Bank of Canada.
         const monthlyTax =
-            options.monthlyTax ??
-            parseFloat(((purchasePrice * 0.015) / 12).toFixed(2))
+            options.monthlyTax ?? Math.round((purchasePrice * 0.015) / 12)
         results.monthlyTax = monthlyTax
         results.isTaxEstimate =
             typeof options.monthlyTax === "number" ? false : true
@@ -266,9 +263,8 @@ function findMaxAmount(
             results.purchasePrice = purchasePrice
             results.mortgageAmount = mortgageAmount
             results.insurancePremium = insurancePremium
-            results.monthlyMortgagePayment = parseFloat(
-                monthlyMortgagePayment.toFixed(2)
-            )
+            results.monthlyMortgagePayment = monthlyMortgagePayment
+
             results.grossDebtServiceRatio = parseFloat(
                 grossDebtServiceRatio.toFixed(2)
             )
