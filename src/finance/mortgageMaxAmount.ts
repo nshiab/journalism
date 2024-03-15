@@ -155,7 +155,7 @@ export default function mortgageMaxAmount(
     )
 
     if (results.purchasePrice === 10_000_000) {
-        results.reason = "Maximum purchase price tested with this function."
+        results.reason = "max purchase price"
     }
 
     // We return the results.
@@ -199,19 +199,32 @@ function findMaxAmount(
     let totalDebtServiceRatio = 0
 
     // We test amount up to $10,000,000
+    let downPaymentTooLow = false
     for (
         let purchasePrice = startPrice;
         purchasePrice <= 10_000_000;
         purchasePrice += increment
     ) {
-        // The downPayment must be at least 5% of the purchase price.
-        const downPaymentPerc = downPayment / purchasePrice
+        // We check that the down payment is enough
+        if (purchasePrice <= 500_000) {
+            const downPaymentMin = purchasePrice * 0.05
+            if (downPayment < downPaymentMin) {
+                downPaymentTooLow = true
+            }
+        } else if (purchasePrice > 500_000 && purchasePrice < 1_000_000) {
+            const downPaymentMin = 25_000 + (purchasePrice - 500_000) * 0.1
+            if (downPayment < downPaymentMin) {
+                downPaymentTooLow = true
+            }
+        } else if (purchasePrice >= 1_000_000) {
+            const downPaymentMin = purchasePrice * 0.2
+            if (downPayment < downPaymentMin) {
+                downPaymentTooLow = true
+            }
+        }
 
-        if (purchasePrice >= 1_000_000 && downPaymentPerc < 0.2) {
-            results.reason = `Maximum purchase price allowed with a down payment of ${downPayment}. The down payment must be at least 20% of the purchase price when the purchase price is $1,000,000 or more.`
-            break
-        } else if (downPaymentPerc < 0.05) {
-            results.reason = `Maximum purchase price allowed with a down payment of ${downPayment}. The down payment must be at least 5% of the purchase price.`
+        if (downPaymentTooLow) {
+            results.reason = `downPayment limit`
             break
         }
 
@@ -250,14 +263,8 @@ function findMaxAmount(
             (monthlyHomeExpenses + monthlyDebtPayment) / monthlyIncome
 
         // If the GDS or TDS are equal or above the thresholds established by the Financial Consumer Agency of Canada, we break. Otherwise, we update the results values.
-        if (grossDebtServiceRatio >= 0.32 && totalDebtServiceRatio >= 0.4) {
-            results.reason = `Gross debt service ratio would be above threshold of 0.32 and total debt service ratio would be above threshold of 0.4 with a bigger amount.`
-            break
-        } else if (grossDebtServiceRatio >= 0.32) {
-            results.reason = `Gross debt service ratio would be above threshold of 0.32 with a bigger amount`
-            break
-        } else if (totalDebtServiceRatio >= 0.4) {
-            results.reason = `Total debt service ratio would be above threshold of 0.4 with a bigger amount`
+        if (grossDebtServiceRatio >= 0.32 || totalDebtServiceRatio >= 0.4) {
+            results.reason = `debt limit`
             break
         } else {
             results.purchasePrice = purchasePrice
