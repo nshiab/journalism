@@ -212,8 +212,7 @@ function findMaxAmount(
                 downPaymentTooLow = true
             }
         } else if (purchasePrice > 500_000 && purchasePrice < 1_000_000) {
-            const downPaymentMin =
-                500_000 * 0.05 + (purchasePrice - 500_000) * 0.1
+            const downPaymentMin = 25_000 + (purchasePrice - 500_000) * 0.1
             if (downPayment < downPaymentMin) {
                 downPaymentTooLow = true
             }
