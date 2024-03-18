@@ -1,3 +1,5 @@
+import noScientificNotation from "../format/helpers/noScientificNotation.js"
+
 /**
  * Returns the OpenGIS Styled Layer Descriptor encoded for an URL. The required parameters are the layer and the color scale.
  *
@@ -18,7 +20,7 @@
  * // The sdl can now be used in a WMS request as SLD_BODY
  * const url = `https://geo.weather.gc.ca/geomet?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX=-90,-180,90,180&CRS=EPSG:4326&WIDTH=2400&HEIGHT=1200&LAYERS=GDPS.ETA_TT&FORMAT=image/jpeg&SLD_BODY=${sld}`
  * ```
- *
+ * 
  * @category Geo
  */
 export default function styledLayerDescriptor(
@@ -31,7 +33,7 @@ export default function styledLayerDescriptor(
     const xml = `<?xml version="1.0" encoding="UTF-8"?><StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd"><NamedLayer><se:Name>${layer}</se:Name><UserStyle><Title>Custom style</Title><se:FeatureTypeStyle><se:Rule><se:RasterSymbolizer><se:Opacity>1.0</se:Opacity><ColorMap>${colorScale
         .map(
             (item) =>
-                `<ColorMapEntry color="${item.color}" quantity="${item.value}"/>`
+                `<ColorMapEntry color="${item.color}" quantity="${noScientificNotation(item.value)}"/>`
         )
         .join(
             ""
