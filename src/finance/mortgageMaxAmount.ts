@@ -32,8 +32,8 @@ import mortgageInsurancePremium from "./mortgageInsurancePremium.js"
  * @param rate - The mortgage interest rate.
  * @param options - Additional options such.
  * @param   options.monthlyDebtPayment - The monthly debt payment of the borrower. Defaults to 0.
- * @param   options.monthlyHeating - The monthly heating cost. Defaults to $175, like Royal Bank of Canada does.
- * @param   options.monthlyTax - The monthly property tax. Default to 1.5% of the purchase price, like Royal Bak of Canada does.
+ * @param   options.monthlyHeating - The monthly heating cost. Defaults to $175.
+ * @param   options.monthlyTax - The monthly property tax. Default to 1.5% of the purchase price.
  * @param   options.monthlyCondoFees - The monthly condo fees. Defaults to 0.
  *
  * @category Finance
