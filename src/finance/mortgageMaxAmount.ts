@@ -17,7 +17,7 @@ import mortgageInsurancePremium from "./mortgageInsurancePremium.js"
  * //   monthlyMortgagePayment: 2099.65,
  * //   grossDebtServiceRatio: 0.32,
  * //   totalDebtServiceRatio: 0.32,
- * //   reason: "Gross debt service ratio would be above threshold of 0.32 with a bigger amount",
+ * //   reason: "debt limit",
  * //   monthlyDebtPayment: 0,
  * //   monthlyHeating: 175,
  * //   isHeatingEstimate: true,
