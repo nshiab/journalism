@@ -14,6 +14,7 @@ import getClosest from "./geo/getClosest.js"
 import getHumidex from "./weather/getHumidex.js"
 import arraysToData from "./format/arraysToData.js"
 import dataToArrays from "./format/dataToArrays.js"
+import dataAsCsv from "./format/dataAsCsv.js"
 
 export {
     formatDate,
@@ -32,4 +33,5 @@ export {
     getHumidex,
     arraysToData,
     dataToArrays,
+    dataAsCsv,
 }
