@@ -20,6 +20,7 @@ import dataToArrays from "./format/dataToArrays.js"
 import updateDataDW from "./dataviz/updateDataDW.js"
 import updateAnnotationDW from "./dataviz/updateAnnotationDW.js"
 import publishChartDW from "./dataviz/publishChartDW.js"
+import dataAsCsv from "./format/dataAsCsv.js"
 
 export {
     formatDate,
@@ -38,6 +39,7 @@ export {
     getHumidex,
     arraysToData,
     dataToArrays,
+    dataAsCsv,
     // NODE ONLY
     getStatCanTable,
     getHtmlTable,

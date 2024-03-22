@@ -1,6 +1,7 @@
 import { utcFormat } from "d3"
 import dateToCBCStyle from "./helpers/dateToCBCStyle.js"
 import dateToRCStyle from "./helpers/dateToRCStyle.js"
+import noZeroPadding from "./helpers/noZeroPadding.js"
 
 /**
  * Format a UTC Date as a string with a specific format and a specific style.
@@ -19,12 +20,11 @@ export default function formatDate(
     date: Date | number,
     format:
         | "YYYY-MM-DD"
-        | "DayName, Month Day"
-        | "Month Day"
-        | "Month Day, YYYY"
-        | "Month Day, YYYY, at HH:MM period"
-        | "DayName"
-        | "Day"
+        | "DayOfWeek, Month Day"
+        | "Month DD"
+        | "Month DD, YYYY"
+        | "Month DD, YYYY, at HH:MM period"
+        | "DayOfWeek"
         | "Month"
         | "YYYY"
         | "MM"
@@ -32,6 +32,7 @@ export default function formatDate(
     options: {
         style?: "cbc" | "rc"
         abbreviations?: boolean
+        noZeroPadding?: boolean
     } = {}
 ): string {
     if (typeof date === "number") {
@@ -41,9 +42,11 @@ export default function formatDate(
     const mergedOptions: {
         style: "cbc" | "rc"
         abbreviations: boolean
+        noZeroPadding: boolean
     } = {
         style: "cbc",
         abbreviations: false,
+        noZeroPadding: false,
         ...options,
     }
 
@@ -52,42 +55,46 @@ export default function formatDate(
     if (format === "YYYY-MM-DD") {
         const representation = "%Y-%m-%d"
         dateFormatted = dateToString(date, representation)
-    } else if (format === "DayName, Month Day") {
+    } else if (format === "DayOfWeek, Month Day") {
         const representations = {
             cbc: "%A, %B %_d",
             rc: "%A %_d %B",
         }
         dateFormatted = dateToString(date, representations[mergedOptions.style])
-    } else if (format === "Month Day") {
+    } else if (format === "Month DD") {
         const representations = {
             cbc: "%B %_d",
             rc: "%_d %B",
         }
         dateFormatted = dateToString(date, representations[mergedOptions.style])
-    } else if (format === "Month Day, YYYY") {
+    } else if (format === "Month DD, YYYY") {
         const representations = {
             cbc: "%B %_d, %Y",
             rc: "%_d %B %Y",
         }
         dateFormatted = dateToString(date, representations[mergedOptions.style])
-    } else if (format === "Month Day, YYYY, at HH:MM period") {
+    } else if (format === "Month DD, YYYY, at HH:MM period") {
         const representations = {
             cbc: "%B %_d, %Y, at %_I:%M %p",
             rc: "%_d %B %Y à %_H h %M",
         }
         dateFormatted = dateToString(date, representations[mergedOptions.style])
-    } else if (format === "DayName") {
+    } else if (format === "DayOfWeek") {
         dateFormatted = dateToString(date, "%A")
-    } else if (format === "Day") {
-        dateFormatted = dateToString(date, "%_d")
     } else if (format === "Month") {
         dateFormatted = dateToString(date, "%B")
     } else if (format === "YYYY") {
         dateFormatted = dateToString(date, "%Y")
     } else if (format === "MM") {
         dateFormatted = dateToString(date, "%m")
+        if (options.noZeroPadding) {
+            dateFormatted = noZeroPadding(dateFormatted)
+        }
     } else if (format === "DD") {
-        dateFormatted = dateToString(date, "%d")
+        dateFormatted = dateToString(date, "%d").trim()
+        if (options.noZeroPadding) {
+            dateFormatted = noZeroPadding(dateFormatted)
+        }
     } else {
         throw new Error("Unknown format")
     }
