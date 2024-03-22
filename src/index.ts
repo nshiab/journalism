@@ -17,6 +17,9 @@ import getHtmlTable from "./web-scraping/getHtmlTable.js"
 import savePlotChart from "./dataviz/savePlotChart.js"
 import arraysToData from "./format/arraysToData.js"
 import dataToArrays from "./format/dataToArrays.js"
+import updateDataDW from "./dataviz/updateDataDW.js"
+import updateAnnotationDW from "./dataviz/updateAnnotationDW.js"
+import publishChartDW from "./dataviz/publishChartDW.js"
 import dataAsCsv from "./format/dataAsCsv.js"
 
 export {
@@ -41,4 +44,7 @@ export {
     getStatCanTable,
     getHtmlTable,
     savePlotChart,
+    updateDataDW,
+    updateAnnotationDW,
+    publishChartDW,
 }
