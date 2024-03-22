@@ -46,5 +46,5 @@ export {
     savePlotChart,
     updateDataDW,
     updateAnnotationDW,
-    publishChartDW
+    publishChartDW,
 }
