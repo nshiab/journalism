@@ -40,4 +40,3 @@ export default async function updateAnnotationDW(
 		console.log(`Annotation for ${chartId} has been updated.`)
 	}
 };
-

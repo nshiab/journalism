@@ -18,6 +18,8 @@ import savePlotChart from "./dataviz/savePlotChart.js"
 import arraysToData from "./format/arraysToData.js"
 import dataToArrays from "./format/dataToArrays.js"
 import updateDataDW from "./dataviz/updateDataDW.js"
+import updateAnnotationDW from "./dataviz/updateAnnotationDW.js"
+import publishChartDW from "./dataviz/publishChartDW.js"
 
 export {
     formatDate,
@@ -41,4 +43,6 @@ export {
     getHtmlTable,
     savePlotChart,
     updateDataDW,
+    updateAnnotationDW,
+    publishChartDW
 }
