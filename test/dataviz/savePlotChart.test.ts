@@ -43,4 +43,3 @@ describe("savePlotChart", () => {
         // Not sure what/how to test, except making it work for now.
         assert.strictEqual(true, true)
     })
-})
