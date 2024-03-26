@@ -34,4 +34,13 @@ describe("round", () => {
         const rounded = round(12345, { nearestInteger: 100 })
         assert.strictEqual(rounded, 12300)
     })
+    it("should throw an error if the passed value is not a number", () => {
+        // @ts-expect-error we test for the error
+        assert.throws(() => round("a"))
+    })
+    it("should return NaN when the passed value is not a number and try is set to true", () => {
+        // @ts-expect-error we test for try true
+        const rounded = round("a", { try: true })
+        assert.strictEqual(rounded, NaN)
+    })
 })
