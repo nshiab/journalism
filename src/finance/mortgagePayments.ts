@@ -34,7 +34,17 @@ export default function mortgagePayments(
         annualCompounding?: number
         debug?: boolean
     } = {}
-) {
+): {
+    id?: string | undefined
+    paymentId: number
+    payment: number
+    interest: number
+    capital: number
+    balance: number
+    amountPaid: number
+    interestPaid: number
+    capitalPaid: number
+}[] {
     if (amortizationPeriod < term) {
         throw new Error(
             "The amortizationPeriod should be equal or greater than the term."

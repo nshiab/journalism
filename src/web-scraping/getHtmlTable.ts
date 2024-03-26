@@ -1,5 +1,5 @@
 import { load } from "cheerio"
-import { csvFormatRow, csvParse } from "d3"
+import { DSVRowArray, csvFormatRow, csvParse } from "d3-dsv"
 
 /**
  * Returns the data from an HTML table as an array of objects. The first parameter is an url. The second parameter is an optional object specifying a css selector and/or an index.
@@ -22,7 +22,7 @@ export default async function getHtmlTable(
         selector?: string
         index?: number
     } = {}
-) {
+): Promise<DSVRowArray<string>> {
     const response = await fetch(url)
     const html = await response.text()
 

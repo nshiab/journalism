@@ -1,4 +1,4 @@
-import { minIndex } from "d3"
+import { minIndex } from "d3-array"
 import distance from "./distance.js"
 
 /**
@@ -34,7 +34,14 @@ export default function getClosest(
         addDistance?: boolean
         decimals?: number
     } = {}
-) {
+): {
+    properties?:
+        | {
+              distance?: number | undefined
+          }
+        | undefined
+    distance?: number | undefined
+} {
     const distances = []
 
     for (let i = 0; i < geoItems.length; i++) {

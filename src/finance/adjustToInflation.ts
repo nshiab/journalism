@@ -16,7 +16,7 @@ export default function adjustToInflation(
     options: {
         decimals?: number
     } = {}
-) {
+): number {
     const inflation = (targetCPI - amountCPI) / amountCPI
     const adjustedAmount = amount + amount * inflation
 

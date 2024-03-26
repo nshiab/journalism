@@ -20,7 +20,9 @@
  * @category Formatting
  */
 
-export default function dataToArrays(data: { [key: string]: unknown }[]) {
+export default function dataToArrays(data: { [key: string]: unknown }[]): {
+    [key: string]: unknown[]
+} {
     const newData: { [key: string]: unknown[] } = {}
 
     const keys = Object.keys(data[0])

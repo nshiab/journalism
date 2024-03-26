@@ -26,7 +26,7 @@ import noScientificNotation from "../format/helpers/noScientificNotation.js"
 export default function styledLayerDescriptor(
     layer: string,
     colorScale: { color: string; value: number }[]
-) {
+): string {
     // Color map entrie need to be in ascending order.
     colorScale.sort((a, b) => (a.value < b.value ? -1 : 1))
 

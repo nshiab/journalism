@@ -16,6 +16,6 @@ import { csvFormat } from "d3-dsv"
  */
 export default function dataAsCsv(
     arrayOfObjects: { [key: string]: unknown }[]
-) {
+): string {
     return csvFormat(arrayOfObjects)
 }

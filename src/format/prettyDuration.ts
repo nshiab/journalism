@@ -9,7 +9,7 @@
  * ```
  * @category Formatting
  */
-export default function prettyDuration(start: Date, end: Date) {
+export default function prettyDuration(start: Date, end: Date): string {
     const differenceInSeconds = Math.round(
         (end.getTime() - start.getTime()) / 1000
     )

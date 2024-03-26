@@ -1,5 +1,5 @@
 import AdmZip from "adm-zip"
-import { csvParse } from "d3"
+import { DSVRowArray, csvParse } from "d3-dsv"
 
 /**
  * Returns the data from a Statistics Canada table as an array of objects. The first parameter is the pid value that can be found in the table url. The second parameter is an optional object specifying:
@@ -22,7 +22,7 @@ export default async function getStatCanTable(
         returnRawCSV?: boolean
         debug?: boolean
     } = {}
-) {
+): Promise<string | DSVRowArray<string>> {
     const lang = options.lang ?? "en"
 
     if (pid.length > 8) {

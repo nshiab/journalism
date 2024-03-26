@@ -32,7 +32,7 @@ export default function formatNumber(
         prefix?: string
         suffix?: string
     } = {}
-) {
+): string {
     if (typeof number !== "number") {
         throw new Error("Not a number")
     }

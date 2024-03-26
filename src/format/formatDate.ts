@@ -1,4 +1,4 @@
-import { utcFormat } from "d3"
+import { utcFormat } from "d3-time-format"
 import dateToCBCStyle from "./helpers/dateToCBCStyle.js"
 import dateToRCStyle from "./helpers/dateToRCStyle.js"
 import noZeroPadding from "./helpers/noZeroPadding.js"
