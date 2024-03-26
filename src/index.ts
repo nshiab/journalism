@@ -21,6 +21,7 @@ import updateDataDW from "./dataviz/updateDataDW.js"
 import updateAnnotationDW from "./dataviz/updateAnnotationDW.js"
 import publishChartDW from "./dataviz/publishChartDW.js"
 import dataAsCsv from "./format/dataAsCsv.js"
+import downloadFile from "./web-scraping/downloadFile.js"
 
 export {
     formatDate,
@@ -47,4 +48,5 @@ export {
     updateDataDW,
     updateAnnotationDW,
     publishChartDW,
+    downloadFile,
 }
