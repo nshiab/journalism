@@ -8,6 +8,7 @@ import { finished } from "stream/promises"
  * ```ts
  * await dowloadFile("http://some-website.com/data.csv", "./downloads/data.csv" )
  * ```
+ * @category Web scraping
  */
 
 export default async function downloadFile(url: string, filePath: string) {
