@@ -22,8 +22,7 @@ export default async function publishChartDW(apiKey: string, chartId: string) {
     )
 
     if (response.status !== 200) {
-        console.log(response)
-        throw new Error("publishChartDW error")
+        throw new Error(JSON.stringify(response, null, 1))
     } else {
         console.log(`Chart ${chartId} has been published.`)
     }

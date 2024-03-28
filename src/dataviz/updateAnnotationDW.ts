@@ -38,8 +38,7 @@ export default async function updateAnnotationDW(
     )
 
     if (response.status !== 200) {
-        console.log(response)
-        throw new Error("updateAnnotationDW error")
+        throw new Error(JSON.stringify(response, null, 1))
     } else {
         console.log(`Annotation for ${chartId} has been updated.`)
     }
