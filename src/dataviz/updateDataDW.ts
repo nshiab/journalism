@@ -111,8 +111,7 @@ export default async function updateDataDW(
     )
 
     if (response.status !== 204) {
-        console.log(response)
-        throw new Error("updateDataDW error")
+        throw new Error(JSON.stringify(response, null, 1))
     } else {
         console.log(`Data for chart ${chartId} has been updated.`)
     }
