@@ -2,6 +2,7 @@ import { utcFormat } from "d3-time-format"
 import dateToCBCStyle from "./helpers/dateToCBCStyle.js"
 import dateToRCStyle from "./helpers/dateToRCStyle.js"
 import noZeroPadding from "./helpers/noZeroPadding.js"
+import { utcToZonedTime, format as formatFns } from "date-fns-tz"
 
 /**
  * Format a UTC Date as a string with a specific format and a specific style.
@@ -24,6 +25,7 @@ export default function formatDate(
         | "Month DD"
         | "Month DD, YYYY"
         | "Month DD, YYYY, at HH:MM period"
+        | "Month DD, YYYY, at HH:MM period TZ"
         | "DayOfWeek"
         | "Month"
         | "YYYY"
@@ -33,10 +35,22 @@ export default function formatDate(
         style?: "cbc" | "rc"
         abbreviations?: boolean
         noZeroPadding?: boolean
+        timeZone?:
+            | "Canada/Atlantic"
+            | "Canada/Central"
+            | "Canada/Eastern"
+            | "Canada/Mountain"
+            | "Canada/Newfoundland"
+            | "Canada/Pacific"
+            | "Canada/Saskatchewan"
+            | "Canada/Yukon"
     } = {}
 ): string {
     if (typeof date === "number") {
         date = new Date(date)
+    }
+    if (typeof options.timeZone === "string") {
+        date = utcToZonedTime(date, options.timeZone)
     }
 
     const mergedOptions: {
@@ -73,7 +87,7 @@ export default function formatDate(
             rc: "%_d %B %Y",
         }
         dateFormatted = dateToString(date, representations[mergedOptions.style])
-    } else if (format === "Month DD, YYYY, at HH:MM period") {
+    } else if (format.includes("Month DD, YYYY, at HH:MM period")) {
         const representations = {
             cbc: "%B %_d, %Y, at %_I:%M %p",
             rc: "%_d %B %Y à %_H h %M",
@@ -97,6 +111,10 @@ export default function formatDate(
         }
     } else {
         throw new Error("Unknown format")
+    }
+
+    if (format.includes("TZ") && typeof options.timeZone === "string") {
+        dateFormatted = `${dateFormatted} ${formatFns(date, "zzz", { timeZone: options.timeZone })}`
     }
 
     if (mergedOptions.style === "cbc") {

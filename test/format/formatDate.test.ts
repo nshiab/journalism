@@ -126,6 +126,22 @@ describe("formatDate", () => {
         const formattedDate = formatDate(date, "YYYY", { abbreviations: true })
         assert.strictEqual(formattedDate, "2023")
     })
+    it("should return the date for a specific time zone", () => {
+        const formattedDate = formatDate(
+            date,
+            "Month DD, YYYY, at HH:MM period",
+            { timeZone: "Canada/Atlantic" }
+        )
+        assert.strictEqual(formattedDate, "January 1, 2023, at 2:35 a.m.")
+    })
+    it("should return the date for a specific time zone with the time zone in the string", () => {
+        const formattedDate = formatDate(
+            date,
+            "Month DD, YYYY, at HH:MM period TZ",
+            { timeZone: "Canada/Atlantic" }
+        )
+        assert.strictEqual(formattedDate, "January 1, 2023, at 2:35 a.m. AST")
+    })
 
     // Radio-Canada style
 
