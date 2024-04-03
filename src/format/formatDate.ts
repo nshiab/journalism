@@ -1,14 +1,13 @@
-import { utcFormat } from "d3-time-format"
 import dateToCBCStyle from "./helpers/dateToCBCStyle.js"
 import dateToRCStyle from "./helpers/dateToRCStyle.js"
-import noZeroPadding from "./helpers/noZeroPadding.js"
+import { utcToZonedTime, format as formatFns } from "date-fns-tz"
 
 /**
- * Format a UTC Date as a string with a specific format and a specific style.
+ * Format a Date as a string with a specific format and a specific style. To parse as UTC Date, set the utc option to true.
  *
  *```js
  * const date = new Date("2023-01-01T01:35:00.000Z")
- * const string = formatDate(date, "Month Day, YYYY, at HH:MM period", { abbreviations: true })
+ * const string = formatDate(date, "Month Day, YYYY, at HH:MM period", { utc: true, abbreviations: true })
  * // returns "Jan. 1, 2023, at 3:35 p.m."
  * ```
  * Options can be passed as the last parameter. Pass {style: "rc"} to parse dates in French.
@@ -24,19 +23,39 @@ export default function formatDate(
         | "Month DD"
         | "Month DD, YYYY"
         | "Month DD, YYYY, at HH:MM period"
+        | "Month DD, YYYY, at HH:MM period TZ"
         | "DayOfWeek"
         | "Month"
         | "YYYY"
         | "MM"
         | "DD",
     options: {
+        utc?: boolean
         style?: "cbc" | "rc"
         abbreviations?: boolean
         noZeroPadding?: boolean
+        timeZone?:
+            | "Canada/Atlantic"
+            | "Canada/Central"
+            | "Canada/Eastern"
+            | "Canada/Mountain"
+            | "Canada/Newfoundland"
+            | "Canada/Pacific"
+            | "Canada/Saskatchewan"
+            | "Canada/Yukon"
+            | string
     } = {}
 ): string {
-    if (typeof date === "number") {
-        date = new Date(date)
+    let timeZone
+    if (options.utc === true) {
+        timeZone = "UTC"
+    }
+    if (typeof options.timeZone === "string") {
+        timeZone = options.timeZone
+    }
+
+    if (typeof timeZone === "string") {
+        date = utcToZonedTime(date, timeZone)
     }
 
     const mergedOptions: {
@@ -53,47 +72,56 @@ export default function formatDate(
     let dateFormatted = ""
 
     if (format === "YYYY-MM-DD") {
-        const representation = "%Y-%m-%d"
-        dateFormatted = dateToString(date, representation)
+        dateFormatted = formatFns(date, "yyyy-MM-dd")
     } else if (format === "DayOfWeek, Month Day") {
-        const representations = {
-            cbc: "%A, %B %_d",
-            rc: "%A %_d %B",
+        if (mergedOptions.style === "cbc") {
+            dateFormatted = formatFns(date, "EEEE, MMMM d")
+        } else if (mergedOptions.style === "rc") {
+            dateFormatted = formatFns(date, "EEEE d MMMM")
         }
-        dateFormatted = dateToString(date, representations[mergedOptions.style])
     } else if (format === "Month DD") {
-        const representations = {
-            cbc: "%B %_d",
-            rc: "%_d %B",
+        if (mergedOptions.style === "cbc") {
+            dateFormatted = formatFns(date, "MMMM d")
+        } else if (mergedOptions.style === "rc") {
+            dateFormatted = formatFns(date, "d MMMM")
         }
-        dateFormatted = dateToString(date, representations[mergedOptions.style])
     } else if (format === "Month DD, YYYY") {
-        const representations = {
-            cbc: "%B %_d, %Y",
-            rc: "%_d %B %Y",
+        if (mergedOptions.style === "cbc") {
+            dateFormatted = formatFns(date, "MMMM d, yyyy")
+        } else if (mergedOptions.style === "rc") {
+            dateFormatted = formatFns(date, "d MMMM yyyy")
         }
-        dateFormatted = dateToString(date, representations[mergedOptions.style])
     } else if (format === "Month DD, YYYY, at HH:MM period") {
-        const representations = {
-            cbc: "%B %_d, %Y, at %_I:%M %p",
-            rc: "%_d %B %Y à %_H h %M",
+        if (mergedOptions.style === "cbc") {
+            dateFormatted = formatFns(date, "MMMM d, yyyy, 'at' h:mm aa")
+        } else if (mergedOptions.style === "rc") {
+            dateFormatted = formatFns(date, "d MMMM yyyy à H 'h' mm")
         }
-        dateFormatted = dateToString(date, representations[mergedOptions.style])
+    } else if (format === "Month DD, YYYY, at HH:MM period TZ") {
+        if (mergedOptions.style === "cbc") {
+            dateFormatted = formatFns(date, "MMMM d, yyyy, 'at' h:mm aa zzz", {
+                timeZone,
+            })
+        } else if (mergedOptions.style === "rc") {
+            dateFormatted = formatFns(date, "d MMMM yyyy à H 'h' mm zzz")
+        }
     } else if (format === "DayOfWeek") {
-        dateFormatted = dateToString(date, "%A")
+        dateFormatted = formatFns(date, "EEEE")
     } else if (format === "Month") {
-        dateFormatted = dateToString(date, "%B")
+        dateFormatted = formatFns(date, "MMMM")
     } else if (format === "YYYY") {
-        dateFormatted = dateToString(date, "%Y")
+        dateFormatted = formatFns(date, "yyyy")
     } else if (format === "MM") {
-        dateFormatted = dateToString(date, "%m")
         if (options.noZeroPadding) {
-            dateFormatted = noZeroPadding(dateFormatted)
+            dateFormatted = formatFns(date, "M")
+        } else {
+            dateFormatted = formatFns(date, "MM")
         }
     } else if (format === "DD") {
-        dateFormatted = dateToString(date, "%d").trim()
         if (options.noZeroPadding) {
-            dateFormatted = noZeroPadding(dateFormatted)
+            dateFormatted = formatFns(date, "d")
+        } else {
+            dateFormatted = formatFns(date, "dd")
         }
     } else {
         throw new Error("Unknown format")
@@ -111,10 +139,10 @@ export default function formatDate(
         )
     }
 
-    return dateFormatted.replace(/ {2}/g, " ")
+    return dateFormatted
 }
 
-function dateToString(date: Date, representation: string) {
-    const f = utcFormat(representation)
-    return f(date)
-}
+// function dateToString(date: Date, representation: string) {
+//     const f = utcFormat(representation)
+//     return f(date)
+// }

@@ -1,5 +1,4 @@
 import formatDate from "./format/formatDate.js"
-import formatDateLocal from "./format/formatDateLocal.js"
 import formatNumber from "./format/formatNumber.js"
 import round from "./format/round.js"
 import prettyDuration from "./format/prettyDuration.js"
@@ -18,7 +17,6 @@ import dataAsCsv from "./format/dataAsCsv.js"
 
 export {
     formatDate,
-    formatDateLocal,
     formatNumber,
     round,
     prettyDuration,
