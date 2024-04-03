@@ -5,7 +5,7 @@ export default function dateToCBCStyle(string: string, abrev: boolean): string {
         .replace(":00", "")
         .replace("NDT", "NT")
         .replace("NST", "NT")
-        .replace("ADT", "AD")
+        .replace("ADT", "AT")
         .replace("AST", "AT")
         .replace("CDT", "CT")
         .replace("CST", "CT")
