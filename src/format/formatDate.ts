@@ -141,8 +141,3 @@ export default function formatDate(
 
     return dateFormatted
 }
-
-// function dateToString(date: Date, representation: string) {
-//     const f = utcFormat(representation)
-//     return f(date)
-// }
