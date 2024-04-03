@@ -3,12 +3,12 @@ import dateToRCStyle from "./helpers/dateToRCStyle.js"
 import { utcToZonedTime, format as formatFns } from "date-fns-tz"
 
 /**
- * Format a Date as a string with a specific format and a specific style. To parse as UTC Date, set the utc option to true.
+ * Format a Date as a string with a specific format and a specific style. To format as UTC Date, set the utc option to true.
  *
  *```js
  * const date = new Date("2023-01-01T01:35:00.000Z")
  * const string = formatDate(date, "Month Day, YYYY, at HH:MM period", { utc: true, abbreviations: true })
- * // returns "Jan. 1, 2023, at 3:35 p.m."
+ * // returns "Jan. 1, 2023, at 1:35 p.m."
  * ```
  * Options can be passed as the last parameter. Pass {style: "rc"} to parse dates in French.
  *

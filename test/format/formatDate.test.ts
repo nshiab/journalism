@@ -13,6 +13,10 @@ describe("formatDate", () => {
         const formattedDate = formatDate(unix, "YYYY-MM-DD")
         assert.strictEqual(formattedDate, "2022-12-31")
     })
+    it("should accept a number a return a date formatted as a string with UTC time", () => {
+        const formattedDate = formatDate(unix, "YYYY-MM-DD", { utc: true })
+        assert.strictEqual(formattedDate, "2023-01-01")
+    })
     it("should accept a Date a return it formatted as a string with local time", () => {
         const formattedDate = formatDate(date, "YYYY-MM-DD")
         assert.strictEqual(formattedDate, "2022-12-31")
