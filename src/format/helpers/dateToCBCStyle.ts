@@ -3,6 +3,18 @@ export default function dateToCBCStyle(string: string, abrev: boolean): string {
         .replace("AM", "a.m.")
         .replace("PM", "p.m.")
         .replace(":00", "")
+        .replace("NDT", "NT")
+        .replace("NST", "NT")
+        .replace("ADT", "AD")
+        .replace("AST", "AT")
+        .replace("CDT", "CT")
+        .replace("CST", "CT")
+        .replace("MDT", "MT")
+        .replace("MST", "MT")
+        .replace("PDT", "PT")
+        .replace("PST", "PT")
+        .replace("EDT", "ET")
+        .replace("EST", "ET")
         .trim()
 
     if (abrev) {

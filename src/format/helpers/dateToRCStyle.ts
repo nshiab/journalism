@@ -1,5 +1,19 @@
 export default function dateToRCStyle(string: string, abrev: boolean): string {
-    string = string.replace(" h 00", " h").trim()
+    string = string
+        .replace(" h 00", " h")
+        .replace("NDT", "HAT")
+        .replace("NST", "HNT")
+        .replace("ADT", "HAA")
+        .replace("AST", "HNA")
+        .replace("CDT", "HAC")
+        .replace("CST", "HNC")
+        .replace("MDT", "HAR")
+        .replace("MST", "HNR")
+        .replace("PDT", "HAP")
+        .replace("PST", "HNP")
+        .replace("EDT", "HAE")
+        .replace("EST", "HNE")
+        .trim()
 
     if (abrev) {
         return string

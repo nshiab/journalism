@@ -1,5 +1,4 @@
 import formatDate from "./format/formatDate.js"
-import formatDateLocal from "./format/formatDateLocal.js"
 import formatNumber from "./format/formatNumber.js"
 import round from "./format/round.js"
 import prettyDuration from "./format/prettyDuration.js"
@@ -25,7 +24,6 @@ import downloadFile from "./web-scraping/downloadFile.js"
 
 export {
     formatDate,
-    formatDateLocal,
     formatNumber,
     round,
     prettyDuration,
