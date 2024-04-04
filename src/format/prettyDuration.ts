@@ -2,10 +2,10 @@
  * Returns the duration between two dates as a string in terms of milliseconds, seconds, minutes, hours, and days.
  * ```js
  * const duration = prettyDuration(
- *   new Date("2024-01-01T17:00:00"),
- *   new Date("2024-01-23T23:03:15")
+ *   new Date("2024-01-01T17:00:00.000"),
+ *   new Date("2024-01-23T23:03:15.003")
  * )
- * // Returns "22 days, 6 hours, 3 minutes, 15 seconds"
+ * // Returns "22 days, 6 h, 3 min, 15 sec, 3 ms"
  * ```
  * @category Formatting
  */
