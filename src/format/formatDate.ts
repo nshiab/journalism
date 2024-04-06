@@ -1,6 +1,6 @@
 import dateToCBCStyle from "./helpers/dateToCBCStyle.js"
 import dateToRCStyle from "./helpers/dateToRCStyle.js"
-import { utcToZonedTime, format as formatFns } from "date-fns-tz"
+import { toZonedTime, format as formatFns } from "date-fns-tz"
 
 /**
  * Format a Date as a string with a specific format and a specific style. To format as UTC Date, set the utc option to true.
@@ -55,7 +55,7 @@ export default function formatDate(
     }
 
     if (typeof timeZone === "string") {
-        date = utcToZonedTime(date, timeZone)
+        date = toZonedTime(date, timeZone)
     }
 
     const mergedOptions: {
