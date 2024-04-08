@@ -9,14 +9,6 @@ describe("formatDate", () => {
     const datePM = new Date("2023-01-01T15:35:00.000Z")
     const dateNoMinutes = new Date("2023-01-01T01:00:00.000Z")
 
-    it("should accept a number a return a date formatted as a string with local time", () => {
-        const formattedDate = formatDate(unix, "YYYY-MM-DD")
-        assert.strictEqual(formattedDate, "2022-12-31")
-    })
-    it("should accept a number a return a date formatted as a string with UTC time", () => {
-        const formattedDate = formatDate(unix, "YYYY-MM-DD", { utc: true })
-        assert.strictEqual(formattedDate, "2023-01-01")
-    })
     it("should accept a Date constructed from a unix timestamp and a return a date formatted as a string with local time", () => {
         const formattedDate = formatDate(new Date(unix), "YYYY-MM-DD")
         assert.strictEqual(formattedDate, "2022-12-31")

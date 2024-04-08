@@ -1,6 +1,7 @@
 import dateToCBCStyle from "./helpers/dateToCBCStyle.js"
 import dateToRCStyle from "./helpers/dateToRCStyle.js"
 import { toZonedTime, format as formatFns } from "date-fns-tz"
+import isValid from "./helpers/isValidDate.js"
 
 /**
  * Format a Date as a string with a specific format and a specific style. To format as UTC Date, set the utc option to true.
@@ -16,7 +17,7 @@ import { toZonedTime, format as formatFns } from "date-fns-tz"
  */
 
 export default function formatDate(
-    date: Date | number,
+    date: Date,
     format:
         | "YYYY-MM-DD"
         | "DayOfWeek, Month Day"
@@ -46,6 +47,10 @@ export default function formatDate(
             | string
     } = {}
 ): string {
+    if (!isValid(date)) {
+        throw new Error(`${date} is not a valid Date.`)
+    }
+
     let timeZone
     if (options.utc === true) {
         timeZone = "UTC"
