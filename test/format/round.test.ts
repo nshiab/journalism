@@ -34,6 +34,38 @@ describe("round", () => {
         const rounded = round(12345, { nearestInteger: 100 })
         assert.strictEqual(rounded, 12300)
     })
+    it("should round 12345 with 1 significant digit", () => {
+        const rounded = round(12345, { significantDigits: 1 })
+        assert.strictEqual(rounded, 10000)
+    })
+    it("should round 15000 with 1 significant digit", () => {
+        const rounded = round(15000, { significantDigits: 1 })
+        assert.strictEqual(rounded, 20000)
+    })
+    it("should round 0.012345 with 2 significant digit", () => {
+        const rounded = round(0.012345, { significantDigits: 2 })
+        assert.strictEqual(rounded, 0.012)
+    })
+    it("should round 0.0378 with 2 significant digit", () => {
+        const rounded = round(0.038, { significantDigits: 2 })
+        assert.strictEqual(rounded, 0.038)
+    })
+    it("should round -12345 with 1 significant digit", () => {
+        const rounded = round(-12345, { significantDigits: 1 })
+        assert.strictEqual(rounded, -10000)
+    })
+    it("should round -15000 with 1 significant digit", () => {
+        const rounded = round(-15000, { significantDigits: 1 })
+        assert.strictEqual(rounded, -20000)
+    })
+    it("should round -0.012345 with 2 significant digit", () => {
+        const rounded = round(-0.012345, { significantDigits: 2 })
+        assert.strictEqual(rounded, -0.012)
+    })
+    it("should round -0.0378 with 2 significant digit", () => {
+        const rounded = round(-0.038, { significantDigits: 2 })
+        assert.strictEqual(rounded, -0.038)
+    })
     it("should throw an error if the passed value is not a number", () => {
         // @ts-expect-error we test for the error
         assert.throws(() => round("a"))
