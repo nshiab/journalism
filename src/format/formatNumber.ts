@@ -12,7 +12,8 @@ import round from "./round.js"
  * - sign: if true, "–" or "+" are added in front of the number
  * - round: to round the number
  * - decimals: the number of decimals to keep when rounding
- * - fixed: display a fixed number of decimals. For example, if decimals is set to 2 then 0 will read 0.00.
+ * - significantDigits: The number of digits to keep. Significant digits start being counted at the first non-zero digit. For example, 0.004622 with 1 significant digit will the rounded to 0.005.
+ * - fixed: display a fixed number of decimals by keeping 0 digits. For example, if decimals is set to 2 and fixed is true, then 0 will read 0.00.
  * - nearestInteger: the base to use to round. For example, 123 with the nearestInteger 10 is 120.
  * - prefix: a string to add before the number, "$" for example
  * - suffix: a string to add after the number, "%" for example
@@ -27,6 +28,7 @@ export default function formatNumber(
         sign?: boolean
         round?: boolean
         decimals?: number
+        significantDigits?: number
         fixed?: boolean
         nearestInteger?: number
         prefix?: string
@@ -41,18 +43,17 @@ export default function formatNumber(
         style: "cbc" | "rc"
         sign: boolean
         round: boolean
-        decimals: number
+        decimals?: number
+        nearestInteger?: number
+        significantDigits?: number
         fixed: boolean
-        nearestInteger: number
         prefix: string
         suffix: string
     } = {
         style: "cbc",
         sign: false,
         round: false,
-        decimals: 0,
         fixed: false,
-        nearestInteger: 1,
         prefix: "",
         suffix: "",
         ...options,
@@ -60,12 +61,14 @@ export default function formatNumber(
 
     if (
         mergedOptions.round ||
-        mergedOptions.decimals !== 0 ||
-        mergedOptions.nearestInteger !== 1
+        typeof mergedOptions.decimals === "number" ||
+        typeof mergedOptions.nearestInteger === "number" ||
+        typeof mergedOptions.significantDigits === "number"
     ) {
         number = round(number, {
             decimals: mergedOptions.decimals,
             nearestInteger: mergedOptions.nearestInteger,
+            significantDigits: mergedOptions.significantDigits,
         })
     }
 
