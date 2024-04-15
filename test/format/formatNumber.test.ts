@@ -212,4 +212,22 @@ describe("formatNumber", () => {
         })
         assert.strictEqual(string, "Temp.: 35,6 C")
     })
+    it("should return the number round with 1 significant digit", () => {
+        const string = formatNumber(0.01578, { significantDigits: 1 })
+        assert.strictEqual(string, "0.02")
+    })
+    it("should return the number round with 2 significant digit and a positive sign", () => {
+        const string = formatNumber(0.01578, {
+            significantDigits: 2,
+            sign: true,
+        })
+        assert.strictEqual(string, "+0.016")
+    })
+    it("should return the number round with 2 significant digit and a negative sign", () => {
+        const string = formatNumber(-0.01578, {
+            significantDigits: 2,
+            sign: true,
+        })
+        assert.strictEqual(string, "–0.016")
+    })
 })

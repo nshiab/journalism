@@ -50,7 +50,6 @@ describe("round", () => {
         const rounded = round(0.038, { significantDigits: 2 })
         assert.strictEqual(rounded, 0.038)
     })
-    // Negative
     it("should round -12345 with 1 significant digit", () => {
         const rounded = round(-12345, { significantDigits: 1 })
         assert.strictEqual(rounded, -10000)
