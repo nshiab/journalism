@@ -216,18 +216,25 @@ describe("formatNumber", () => {
         const string = formatNumber(0.01578, { significantDigits: 1 })
         assert.strictEqual(string, "0.02")
     })
-    it("should return the number round with 2 significant digit and a positive sign", () => {
+    it("should return the number round with 2 significant digits and a positive sign", () => {
         const string = formatNumber(0.01578, {
             significantDigits: 2,
             sign: true,
         })
         assert.strictEqual(string, "+0.016")
     })
-    it("should return the number round with 2 significant digit and a negative sign", () => {
+    it("should return the number round with 2 significant digits and a negative sign", () => {
         const string = formatNumber(-0.01578, {
             significantDigits: 2,
             sign: true,
         })
         assert.strictEqual(string, "–0.016")
+    })
+    it("should return the number round with 2 significant digits and a percentage sign", () => {
+        const string = formatNumber(1.3922092532695824, {
+            suffix: "%",
+            significantDigits: 2,
+        })
+        assert.strictEqual(string, "1.4%")
     })
 })
