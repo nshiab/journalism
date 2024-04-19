@@ -1,7 +1,7 @@
 import AdmZip from "adm-zip"
 
 /**
- * Unzips a file and output the result in a folder.
+ * Unzips a file and outputs the result in a folder.
  *
  * ```js
  * unzip("files.zip", "./output/")
