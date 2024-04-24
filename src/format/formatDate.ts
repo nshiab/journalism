@@ -8,7 +8,7 @@ import isValid from "./helpers/isValidDate.js"
  *
  *```js
  * const date = new Date("2023-01-01T01:35:00.000Z")
- * const string = formatDate(date, "Month Day, YYYY, at HH:MM period", { utc: true, abbreviations: true })
+ * const string = formatDate(date, "Month DD, YYYY, at HH:MM period", { utc: true, abbreviations: true })
  * // returns "Jan. 1, 2023, at 1:35 p.m."
  * ```
  * Options can be passed as the last parameter. Pass {style: "rc"} to parse dates in French.
