@@ -38,6 +38,17 @@ describe("formatDate", () => {
         })
         assert.strictEqual(formattedDate, "Jan. 1, 2023")
     })
+    it("should return a Date in the format Month DD, YYYY, at HH:MM period with an abbreviated month", () => {
+        const formattedDate = formatDate(
+            date,
+            "Month DD, YYYY, at HH:MM period",
+            {
+                abbreviations: true,
+                utc: true,
+            }
+        )
+        assert.strictEqual(formattedDate, "Jan. 1, 2023, at 1:35 a.m.")
+    })
     it("should return a Date in the format Month DD, YYYY, at HH:MM period (morning)", () => {
         const formattedDate = formatDate(
             date,
