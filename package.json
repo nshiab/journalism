@@ -23,17 +23,17 @@
         "dist/",
         "src/"
     ],
-    "main": "dist/index.js",
-    "module": "dist/index.js",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
     "browser": "./dist/bundle.js",
-    "jsdelivr": "dist/journalism.min.js",
-    "unpkg": "dist/journalism.min.js",
+    "jsdelivr": "./dist/journalism.min.js",
+    "unpkg": "./dist/journalism.min.js",
     "exports": {
-        "bun": "./src/index.js",
+        "bun": "./dist/index.js",
         "node": "./dist/index.js",
         "browser": "./dist/bundle.js",
         "umd": "./dist/journalism.min.js",
-        "default": "./src/index.js"
+        "default": "./dist/index.js"
     },
     "scripts": {
         "test": "npx mocha \"test/**/*.test.ts\" --timeout 5000",
