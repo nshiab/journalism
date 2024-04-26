@@ -6,20 +6,27 @@
  *
  * const apiKey = "myApiKey"
  * const chartID = "myChartId"
- * const annotations = [{
-    "x": "2024/09/29",
-    "y": "15035128.6500",
-    "text": "This is some text"
-},
-{
+ * const myAnnotations = [
+    {
+    "x": "2024/08/30 01:52",
+    "y": "14496235.1500",
+    "text": "This is an annotation!",
+    },
+    {
     "x": "2024/06/29",
-    "y": "15035128.6500",
-    "text": "This is some text also",
-    "color": "#C42127"
-  }
+        "y": "15035128.6500",
+        "dy": "50",
+        "text": "This is also some text, but with an arrow!",
+        "connectorLine": {
+        "enabled": true,
+    "type": "straight",
+    "arrowHead": "lines"
+    },
+    "mobileFallback": false
+    }
 ]
  *
- * await updateAnnotationsDW(annotations, apiKey, chartID)
+ * await updateAnnotationsDW(myAnnotations, apiKey, chartID)
  * ```
  *
  * @category Dataviz
@@ -52,9 +59,9 @@ export default async function updateAnnotationsDW(
         "showDesktop"?: boolean,
         "connectorLine"?: {
             "type"?:
-                | "lines"
-                | "triangle"
-                | false
+                | "straight"
+                | "curveRight"
+                | "curveLeft"
             "circle"?: boolean,
             "stroke"?: 
                 | 1
@@ -62,9 +69,9 @@ export default async function updateAnnotationsDW(
                 | 3
             "enabled"?: boolean,
             "arrowHead"?: 
-                | "straight"
-                | "curveRight"
-                | "curveLeft"
+                | "lines"
+                | "triangle"
+                | false
             "circleStyle"?: string,
             "circleRadius"?: number,
             "inheritColor"?: boolean,
@@ -130,3 +137,24 @@ export default async function updateAnnotationsDW(
                 }
             console.log(response)
 }
+
+
+const myAnnotations = [
+    {
+    "x": "2024/08/30 01:52",
+    "y": "14496235.1500",
+    "text": "This is an annotation!",
+    },
+    {
+    "x": "2024/06/29",
+        "y": "15035128.6500",
+        "dy": "50",
+        "text": "This is also some text, but with an arrow!",
+        "connectorLine": {
+        "enabled": true,
+    "type": "straight",
+    "arrowHead": "lines"
+    },
+    "mobileFallback": false
+    }
+]
