@@ -1,21 +1,21 @@
 /**
- * Updates annotation for a specified Datawrapper chart, table or map.
+ * Updates notes field for a specified Datawrapper chart, table or map.
  *
  * ```js
- * import { updateAnnotationDW, formatDate } from "journalism"
+ * import { updateNotesDW, formatDate } from "journalism"
  *
  * const apiKey = "myApiKey"
  * const chartID = "myChartId"
  * const dateString = formatDate(new Date(), "Month Day, YYYY, at HH:MM period", { abbreviations: true })
- * const annotation = `This chart was last updated on ${dateString}`
+ * const note = `This chart was last updated on ${dateString}`
  *
- * await updateAnnotationDW(annotation, apiKey, chartID)
+ * await updateNotesDW(note, apiKey, chartID)
  * ```
  *
  * @category Dataviz
  */
-export default async function updateAnnotationDW(
-    annotationText: string,
+export default async function updateNotesDW(
+    note: string,
     apiKey: string,
     chartId: string
 ): Promise<void> {
@@ -30,7 +30,7 @@ export default async function updateAnnotationDW(
             body: JSON.stringify({
                 metadata: {
                     annotate: {
-                        notes: annotationText,
+                        notes: note,
                     },
                 },
             }),
@@ -40,6 +40,6 @@ export default async function updateAnnotationDW(
     if (response.status !== 200) {
         throw new Error(JSON.stringify(response, null, 1))
     } else {
-        console.log(`Annotation for ${chartId} has been updated.`)
+        console.log(`Note for ${chartId} has been updated.`)
     }
 }
