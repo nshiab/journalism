@@ -2,14 +2,14 @@
  * Updates annotation for a specified Datawrapper chart, table or map.
  *
  * ```js
- * import { updateAnnotationDW, formatDate } from "journalism"
+ * import { updateNotesDW, formatDate } from "journalism"
  *
  * const apiKey = "myApiKey"
  * const chartID = "myChartId"
  * const dateString = formatDate(new Date(), "Month Day, YYYY, at HH:MM period", { abbreviations: true })
  * const annotation = `This chart was last updated on ${dateString}`
  *
- * await updateAnnotationDW(annotation, apiKey, chartID)
+ * await updateNotesDW(annotation, apiKey, chartID)
  * ```
  *
  * @category Dataviz
