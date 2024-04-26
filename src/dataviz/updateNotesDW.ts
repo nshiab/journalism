@@ -14,7 +14,7 @@
  *
  * @category Dataviz
  */
-export default async function updateAnnotationDW(
+export default async function updateNotesDW(
     annotationText: string,
     apiKey: string,
     chartId: string
