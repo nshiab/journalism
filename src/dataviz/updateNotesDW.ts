@@ -40,6 +40,6 @@ export default async function updateNotesDW(
     if (response.status !== 200) {
         throw new Error(JSON.stringify(response, null, 1))
     } else {
-        console.log(`Annotation for ${chartId} has been updated.`)
+        console.log(`Note for ${chartId} has been updated.`)
     }
 }
