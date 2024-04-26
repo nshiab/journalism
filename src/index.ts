@@ -17,6 +17,7 @@ import savePlotChart from "./dataviz/savePlotChart.js"
 import arraysToData from "./format/arraysToData.js"
 import dataToArrays from "./format/dataToArrays.js"
 import updateDataDW from "./dataviz/updateDataDW.js"
+import updateAnnotationsDW from "./dataviz/updateAnnotationsDW.js"
 import updateNotesDW from "./dataviz/updateNotesDW.js"
 import publishChartDW from "./dataviz/publishChartDW.js"
 import dataAsCsv from "./format/dataAsCsv.js"
@@ -45,6 +46,7 @@ export {
     getHtmlTable,
     savePlotChart,
     updateDataDW,
+    updateAnnotationsDW,
     updateNotesDW,
     publishChartDW,
     downloadFile,
