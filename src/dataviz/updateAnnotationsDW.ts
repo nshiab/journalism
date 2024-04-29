@@ -8,21 +8,21 @@
  * const chartID = "myChartId"
  * const myAnnotations = [
     {
-    "x": "2024/08/30 01:52",
-    "y": "14496235",
-    "text": "This is an annotation!",
+        "x": "2024/08/30 01:52",
+        "y": "14496235",
+        "text": "This is an annotation!",
     },
     {
-    "x": "2024/06/29",
+        "x": "2024/06/29",
         "y": "15035128",
         "dy": "50",
         "text": "This is also some text, but with an arrow!",
         "connectorLine": {
-        "enabled": true,
-    "type": "straight",
-    "arrowHead": "lines"
-    },
-    "mobileFallback": false
+            "enabled": true,
+            "type": "straight",
+            "arrowHead": "lines"
+        },
+        "mobileFallback": false
     }
 ]
  *
@@ -65,7 +65,6 @@ export default async function updateAnnotationsDW(
     apiKey: string
 ) {
     const annotationsWithProps = annotations.map((annotation) => ({
-        ...annotation,
         bg: annotation.bg ?? false,
         dx: annotation.dx ?? 0,
         dy: annotation.dy ?? 0,
@@ -79,7 +78,6 @@ export default async function updateAnnotationsDW(
         showMobile: annotation.showMobile ?? true,
         showDesktop: annotation.showDesktop ?? true,
         connectorLine: {
-            ...annotation.connectorLine,
             type: annotation.connectorLine?.type ?? "straight",
             circle: annotation.connectorLine?.circle ?? false,
             stroke: annotation.connectorLine?.stroke ?? 1,
