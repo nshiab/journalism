@@ -82,7 +82,6 @@ export default async function updateAnnotationsDW(
     chartId: string,
     apiKey: string
 ) {
-    // Handling default values for each annotation object
     const annotationsWithProps = annotations.map(annotation => ({
         ...annotation,
         bg: annotation.bg ?? false,
@@ -133,28 +132,7 @@ export default async function updateAnnotationsDW(
                 if (response.status !== 200) {
                     throw new Error(JSON.stringify(response, null, 1))
                 } else {
-                    console.log(`Note for ${chartId} has been updated.`)
+                    console.log(`Annotations for ${chartId} has been updated.`)
                 }
             console.log(response)
 }
-
-
-const myAnnotations = [
-    {
-    "x": "2024/08/30 01:52",
-    "y": "14496235.1500",
-    "text": "This is an annotation!",
-    },
-    {
-    "x": "2024/06/29",
-        "y": "15035128.6500",
-        "dy": "50",
-        "text": "This is also some text, but with an arrow!",
-        "connectorLine": {
-        "enabled": true,
-    "type": "straight",
-    "arrowHead": "lines"
-    },
-    "mobileFallback": false
-    }
-]
