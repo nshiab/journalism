@@ -33,56 +33,38 @@
  */
 export default async function updateAnnotationsDW(
     annotations: {
-        "x": string,
-        "y": string,
-        "bg"?: boolean,
-        "dx"?: number,
-        "dy"?: number,
-        "bold"?: boolean,
-        "size"?: number,
-        "text": string,
-        "align"?:
-            | "tl"
-            | "tc"
-            | "tr"
-            | "ml"
-            | "mc"
-            | "mr"
-            | "bl"
-            | "bc"
-            | "br",
-        "color"?: string,
-        "width"?: number,
-        "italic"?: boolean,
-        "underline"?: boolean,
-        "showMobile"?: boolean,
-        "showDesktop"?: boolean,
-        "connectorLine"?: {
-            "type"?:
-                | "straight"
-                | "curveRight"
-                | "curveLeft"
-            "circle"?: boolean,
-            "stroke"?: 
-                | 1
-                | 2
-                | 3
-            "enabled"?: boolean,
-            "arrowHead"?: 
-                | "lines"
-                | "triangle"
-                | false
-            "circleStyle"?: string,
-            "circleRadius"?: number,
-            "inheritColor"?: boolean,
-            "targetPadding"?: number
-        },
-        "mobileFallback"?: boolean
+        x: string
+        y: string
+        bg?: boolean
+        dx?: number
+        dy?: number
+        bold?: boolean
+        size?: number
+        text: string
+        align?: "tl" | "tc" | "tr" | "ml" | "mc" | "mr" | "bl" | "bc" | "br"
+        color?: string
+        width?: number
+        italic?: boolean
+        underline?: boolean
+        showMobile?: boolean
+        showDesktop?: boolean
+        connectorLine?: {
+            type?: "straight" | "curveRight" | "curveLeft"
+            circle?: boolean
+            stroke?: 1 | 2 | 3
+            enabled?: boolean
+            arrowHead?: "lines" | "triangle" | false
+            circleStyle?: string
+            circleRadius?: number
+            inheritColor?: boolean
+            targetPadding?: number
+        }
+        mobileFallback?: boolean
     }[],
     chartId: string,
     apiKey: string
 ) {
-    const annotationsWithProps = annotations.map(annotation => ({
+    const annotationsWithProps = annotations.map((annotation) => ({
         ...annotation,
         bg: annotation.bg ?? false,
         dx: annotation.dx ?? 0,
@@ -106,33 +88,33 @@ export default async function updateAnnotationsDW(
             circleStyle: annotation.connectorLine?.circleStyle ?? "solid",
             circleRadius: annotation.connectorLine?.circleRadius ?? 10,
             inheritColor: annotation.connectorLine?.inheritColor ?? false,
-            targetPadding: annotation.connectorLine?.targetPadding ?? 4
+            targetPadding: annotation.connectorLine?.targetPadding ?? 4,
         },
-        mobileFallback: annotation.mobileFallback ?? false
-    }));
+        mobileFallback: annotation.mobileFallback ?? false,
+    }))
 
     const response = await fetch(
-                    `https://api.datawrapper.de/v3/charts/${chartId}`,
-                    {
-                        method: "PATCH",
-                        headers: {
-                            Authorization: `Bearer ${apiKey}`,
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            metadata: {
-                                visualize: {
-                                    "text-annotations": annotationsWithProps,
-                                },
-                            },
-                        }),
-                    }
-                )
-            
-                if (response.status !== 200) {
-                    throw new Error(JSON.stringify(response, null, 1))
-                } else {
-                    console.log(`Annotations for ${chartId} has been updated.`)
-                }
-            console.log(response)
+        `https://api.datawrapper.de/v3/charts/${chartId}`,
+        {
+            method: "PATCH",
+            headers: {
+                Authorization: `Bearer ${apiKey}`,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                metadata: {
+                    visualize: {
+                        "text-annotations": annotationsWithProps,
+                    },
+                },
+            }),
+        }
+    )
+
+    if (response.status !== 200) {
+        throw new Error(JSON.stringify(response, null, 1))
+    } else {
+        console.log(`Annotations for ${chartId} has been updated.`)
+    }
+    console.log(response)
 }
