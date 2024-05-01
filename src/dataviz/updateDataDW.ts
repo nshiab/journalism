@@ -6,8 +6,8 @@
  * ```js
  * import { updateDataDW, dataAsCsv } from "journalism"
  *
- * const apiKey = "myApiKey"
  * const chartID = "myChartId"
+ * const apiKey = "myApiKey"
  *
  * const data = [
  *  { salary: 75000, hireDate: new Date("2022-12-15") },
@@ -15,15 +15,15 @@
  * ]
  * const dataForChart = dataAsCsv(data)
  *
- * await updateDataDW(dataForChart,api,chartID)
+ * await updateDataDW(chartID, apiKey, dataForChart)
  * ```
  *
  * Example for a locator map.
  * ```js
  * import { updateDataDW } from "journalism"
  *
- * const apiKey = "myApiKey"
  * const mapID = "myMapId"
+ * const apiKey = "myApiKey"
  *
  * const geojson = {
  *  "type": "FeatureCollection",
@@ -87,16 +87,16 @@
  *   ]
  * }
  *
- * await updateDataDW(JSON.stringify(dataForMap), apiKey, mapID)
+ * await updateDataDW(mapID, apiKey, JSON.stringify(dataForMap))
  * ```
  *
  * @category Dataviz
  */
 
 export default async function updateDataDW(
-    data: string,
+    chartId: string,
     apiKey: string,
-    chartId: string
+    data: string
 ) {
     const response = await fetch(
         `https://api.datawrapper.de/v3/charts/${chartId}/data`,
@@ -111,8 +111,9 @@ export default async function updateDataDW(
     )
 
     if (response.status !== 204) {
+        console.log("There is a problem with updateDataDW!")
+        console.log({ chartId, apiKey, data })
+        console.log(response)
         throw new Error(JSON.stringify(response, null, 1))
-    } else {
-        console.log(`Data for chart ${chartId} has been updated.`)
     }
 }

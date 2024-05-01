@@ -4,20 +4,20 @@
  * ```js
  * import { updateNotesDW, formatDate } from "journalism"
  *
- * const apiKey = "myApiKey"
  * const chartID = "myChartId"
- * const dateString = formatDate(new Date(), "Month Day, YYYY, at HH:MM period", { abbreviations: true })
+ * const apiKey = "myApiKey"
+ * const dateString = formatDate(new Date(), "Month DD, YYYY, at HH:MM period", { abbreviations: true })
  * const note = `This chart was last updated on ${dateString}`
  *
- * await updateNotesDW(note, apiKey, chartID)
+ * await updateNotesDW(chartID, apiKey, note)
  * ```
  *
  * @category Dataviz
  */
 export default async function updateNotesDW(
-    note: string,
+    chartId: string,
     apiKey: string,
-    chartId: string
+    note: string
 ): Promise<void> {
     const response = await fetch(
         `https://api.datawrapper.de/v3/charts/${chartId}`,
@@ -38,8 +38,8 @@ export default async function updateNotesDW(
     )
 
     if (response.status !== 200) {
+        console.log("There is a problem with updateNotesDW!")
+        console.log({ chartId, apiKey, note })
         throw new Error(JSON.stringify(response, null, 1))
-    } else {
-        console.log(`Note for ${chartId} has been updated.`)
     }
 }

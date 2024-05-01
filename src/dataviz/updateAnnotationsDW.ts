@@ -4,8 +4,8 @@
  * ```js
  * import { updateAnnotationsDW } from "journalism"
  *
- * const apiKey = "myApiKey"
  * const chartID = "myChartId"
+ * const apiKey = "myApiKey"
  * const myAnnotations = [
     {
         "x": "2024/08/30 01:52",
@@ -15,7 +15,7 @@
     {
         "x": "2024/06/29",
         "y": "15035128",
-        "dy": "50",
+        "dy": 50,
         "text": "This is also some text, but with an arrow!",
         "connectorLine": {
             "enabled": true,
@@ -26,12 +26,14 @@
     }
 ]
  *
- * await updateAnnotationsDW(myAnnotations, apiKey, chartID)
+ * await updateAnnotationsDW(chartID, apiKey, myAnnotations)
  * ```
  *
  * @category Dataviz
  */
 export default async function updateAnnotationsDW(
+    chartId: string,
+    apiKey: string,
     annotations: {
         x: string
         y: string
@@ -60,9 +62,7 @@ export default async function updateAnnotationsDW(
             targetPadding?: number
         }
         mobileFallback?: boolean
-    }[],
-    chartId: string,
-    apiKey: string
+    }[]
 ) {
     const annotationsWithProps = annotations.map((annotation) => ({
         bg: annotation.bg ?? false,
@@ -110,9 +110,8 @@ export default async function updateAnnotationsDW(
     )
 
     if (response.status !== 200) {
+        console.log("There is a problem with updateAnnotationsDW!")
+        console.log({ chartId, apiKey, annotations })
         throw new Error(JSON.stringify(response, null, 1))
-    } else {
-        console.log(`Annotations for ${chartId} has been updated.`)
     }
-    console.log(response)
 }

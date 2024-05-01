@@ -36,7 +36,7 @@
         "default": "./dist/index.js"
     },
     "scripts": {
-        "test": "npx mocha \"test/**/*.test.ts\" --timeout 5000",
+        "test": "npx mocha \"test/**/*.test.ts\" --timeout 10000 -r dotenv/config",
         "build": "rm -rf dist && npx tsc && npx rollup --config",
         "all-tests": "npm run format && npm run lint && npm run test && npm run build && npm run test-doc",
         "rollup": "npx rollup --config",
