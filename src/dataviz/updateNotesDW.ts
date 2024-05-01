@@ -39,7 +39,7 @@ export default async function updateNotesDW(
 
     if (response.status !== 200) {
         console.log("There is a problem with updateNotesDW!")
-        console.log({ chartId, apiKey, note })
+        console.log({ chartId, apiKey: "*".repeat(apiKey.length), note })
         throw new Error(JSON.stringify(response, null, 1))
     }
 }

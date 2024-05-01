@@ -3,7 +3,7 @@ import updateAnnotationsDW from "../../src/dataviz/updateAnnotationsDW.js"
 
 describe("updateAnnotationsDW", () => {
     it("should update annotations in a chart", async () => {
-        const apiKey = process.env.dw_key
+        const apiKey = process.env.DW_KEY
 
         if (typeof apiKey === "string") {
             await updateAnnotationsDW("ntURh", apiKey, [
@@ -26,7 +26,7 @@ describe("updateAnnotationsDW", () => {
                 },
             ])
         } else {
-            console.log("No dw_key in .env")
+            console.log("No DW_KEY in .env")
         }
 
         // Just making sure it doesn't crash for now.

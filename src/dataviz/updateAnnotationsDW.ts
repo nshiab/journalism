@@ -111,7 +111,7 @@ export default async function updateAnnotationsDW(
 
     if (response.status !== 200) {
         console.log("There is a problem with updateAnnotationsDW!")
-        console.log({ chartId, apiKey, annotations })
+        console.log({ chartId, apiKey: "*".repeat(apiKey.length), annotations })
         throw new Error(JSON.stringify(response, null, 1))
     }
 }

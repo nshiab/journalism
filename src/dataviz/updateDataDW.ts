@@ -112,7 +112,7 @@ export default async function updateDataDW(
 
     if (response.status !== 204) {
         console.log("There is a problem with updateDataDW!")
-        console.log({ chartId, apiKey, data })
+        console.log({ chartId, apiKey: "*".repeat(apiKey.length), data })
         console.log(response)
         throw new Error(JSON.stringify(response, null, 1))
     }

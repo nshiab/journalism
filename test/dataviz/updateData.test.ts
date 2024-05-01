@@ -4,7 +4,7 @@ import dataAsCsv from "../../src/format/dataAsCsv.js"
 
 describe("updateDataDW", () => {
     it("should update data in a chart", async () => {
-        const apiKey = process.env.dw_key
+        const apiKey = process.env.DW_KEY
 
         if (typeof apiKey === "string") {
             const data = [{ salary: 75000, hireDate: new Date("2022-12-15") }]
@@ -12,7 +12,7 @@ describe("updateDataDW", () => {
 
             await updateDataDW("ntURh", apiKey, dataCSV)
         } else {
-            console.log("No dw_key in .env")
+            console.log("No DW_KEY in .env")
         }
 
         // Just making sure it doesn't crash for now.
@@ -20,7 +20,7 @@ describe("updateDataDW", () => {
     })
 
     it("should update data in a map", async () => {
-        const apiKey = process.env.dw_key
+        const apiKey = process.env.DW_KEY
 
         if (typeof apiKey === "string") {
             const data = {
@@ -47,7 +47,7 @@ describe("updateDataDW", () => {
 
             await updateDataDW("lDO6F", apiKey, JSON.stringify(data))
         } else {
-            console.log("No dw_key in .env")
+            console.log("No DW_KEY in .env")
         }
 
         // Just making sure it doesn't crash for now.

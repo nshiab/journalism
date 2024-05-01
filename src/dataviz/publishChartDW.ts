@@ -23,7 +23,7 @@ export default async function publishChartDW(chartId: string, apiKey: string) {
 
     if (response.status !== 200) {
         console.log("There is a problem with publishChartDW!")
-        console.log({ chartId, apiKey })
+        console.log({ chartId, apiKey: "*".repeat(apiKey.length) })
         throw new Error(JSON.stringify(response, null, 1))
     }
 }
