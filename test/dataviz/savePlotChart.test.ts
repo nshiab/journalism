@@ -9,7 +9,7 @@ if (!existsSync(outputPath)) {
 }
 
 describe("savePlotChart", () => {
-    it("save a chart", async () => {
+    it("should save a chart", async () => {
         const data = [
             { salary: 75000, hireDate: new Date("2022-12-15") },
             { salary: 82000, hireDate: new Date("2022-11-20") },
