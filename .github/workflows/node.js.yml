@@ -25,7 +25,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "npm"
-                  DW_KEY: ${{ secrets.DW_KEY }}
+                  dw_key: ${{ secrets.dw_key }}
             - run: npm install
             - run: npm run check-format
             - run: npm run lint
