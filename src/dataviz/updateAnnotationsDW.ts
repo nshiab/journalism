@@ -65,6 +65,7 @@ export default async function updateAnnotationsDW(
     }[]
 ) {
     const annotationsWithProps = annotations.map((annotation) => ({
+        ...annotation,
         bg: annotation.bg ?? false,
         dx: annotation.dx ?? 0,
         dy: annotation.dy ?? 0,
