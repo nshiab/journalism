@@ -78,6 +78,7 @@ export default async function updateAnnotationsDW(
         underline: false,
         showMobile: true,
         showDesktop: true,
+        mobileFallback: false,
     }
     const defaultConnectorLine = {
         type: "straight",
@@ -91,15 +92,16 @@ export default async function updateAnnotationsDW(
         targetPadding: 4,
     }
 
+    // We map over annotations to add defaults.
     const annotationsWithProps = annotations.map((annotation) => {
-        // We test for mandatory values.
+        // We check for mandatory values.
         if (!annotation.x || !annotation.y || !annotation.text) {
             throw new Error(
                 "Missing x, y, or text for at least one annotation."
             )
         }
 
-        // For each annotation passed by the user, we extract the connectorLine from the rest
+        // We extract the connectorLine from the rest
         const { connectorLine, ...rest } = annotation
 
         // We create the nested object required for the DW API. We pass the defaults first, then we overwrite them with any value passed by the user.
