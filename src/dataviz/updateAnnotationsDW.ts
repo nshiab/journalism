@@ -92,6 +92,13 @@ export default async function updateAnnotationsDW(
     }
 
     const annotationsWithProps = annotations.map((annotation) => {
+        // We test for mandatory values.
+        if (!annotation.x || !annotation.y || !annotation.text) {
+            throw new Error(
+                "Missing x, y, or text for at least one annotation."
+            )
+        }
+
         // For each annotation passed by the user, we extract the connectorLine from the rest
         const { connectorLine, ...rest } = annotation
 
