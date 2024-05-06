@@ -6,7 +6,7 @@ describe("updateAnnotationsDW", () => {
         const apiKey = process.env.DW_KEY
 
         if (typeof apiKey === "string") {
-            await updateAnnotationsDW("ntURh", apiKey, [
+            await updateAnnotationsDW("Ga9oq", apiKey, [
                 {
                     x: "2024/08/30 01:52",
                     y: "14496235",

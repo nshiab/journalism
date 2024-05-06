@@ -93,7 +93,7 @@ export default async function updateAnnotationsDW(
     }
 
     // We map over annotations to add defaults.
-    const annotationsWithProps = annotations.map((annotation) => {
+    const annotationsWithDefaults = annotations.map((annotation) => {
         // We check for mandatory values.
         if (!annotation.x || !annotation.y || !annotation.text) {
             throw new Error(
@@ -123,7 +123,7 @@ export default async function updateAnnotationsDW(
             body: JSON.stringify({
                 metadata: {
                     visualize: {
-                        "text-annotations": annotationsWithProps,
+                        "text-annotations": annotationsWithDefaults,
                     },
                 },
             }),
