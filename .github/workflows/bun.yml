@@ -16,4 +16,4 @@ jobs:
               with:
                   bun-version: latest
             - run: bun install
-            - run: DW_KEY=${{ secrets.DW_KEY }} GOOGLE_SERVICE_ACCOUNT_EMAIL=${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }} GOOGLE_PRIVATE_KEY=${{ secrets.GOOGLE_PRIVATE_KEY }} bun run test-bun
+            - run: bun run test-bun

@@ -18,5 +18,5 @@ jobs:
             - run: npm install
             - run: npm run check-format
             - run: npm run lint
-            - run: DW_KEY=${{ secrets.DW_KEY }} GOOGLE_SERVICE_ACCOUNT_EMAIL=${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }} GOOGLE_PRIVATE_KEY=${{ secrets.GOOGLE_PRIVATE_KEY }} npm run test
+            - run: npm run test-node
             - run: npm run build
