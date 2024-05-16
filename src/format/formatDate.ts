@@ -20,6 +20,7 @@ export default function formatDate(
     date: Date,
     format:
         | "YYYY-MM-DD"
+        | "YYYY-MM-DD HH:MM:SS TZ"
         | "DayOfWeek, Month Day"
         | "Month DD"
         | "Month DD, YYYY"
@@ -44,7 +45,6 @@ export default function formatDate(
             | "Canada/Pacific"
             | "Canada/Saskatchewan"
             | "Canada/Yukon"
-            | string
     } = {}
 ): string {
     if (!isValid(date)) {
@@ -78,6 +78,10 @@ export default function formatDate(
 
     if (format === "YYYY-MM-DD") {
         dateFormatted = formatFns(date, "yyyy-MM-dd")
+    } else if (format === "YYYY-MM-DD HH:MM:SS TZ") {
+        dateFormatted = formatFns(date, "yyyy-MM-dd HH:mm:ss zzz", {
+            timeZone,
+        })
     } else if (format === "DayOfWeek, Month Day") {
         if (mergedOptions.style === "cbc") {
             dateFormatted = formatFns(date, "EEEE, MMMM d")
@@ -108,7 +112,9 @@ export default function formatDate(
                 timeZone,
             })
         } else if (mergedOptions.style === "rc") {
-            dateFormatted = formatFns(date, "d MMMM yyyy à H 'h' mm zzz")
+            dateFormatted = formatFns(date, "d MMMM yyyy à H 'h' mm zzz", {
+                timeZone,
+            })
         }
     } else if (format === "DayOfWeek") {
         dateFormatted = formatFns(date, "EEEE")
