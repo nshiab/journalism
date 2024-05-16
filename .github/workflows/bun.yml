@@ -15,6 +15,5 @@ jobs:
             - uses: oven-sh/setup-bun@v1
               with:
                   bun-version: latest
-            - run: touch .env && echo DW_KEY=${{ secrets.DW_KEY }} >> .env && echo GOOGLE_SERVICE_ACCOUNT_EMAIL=${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }} >> .env && echo GOOGLE_PRIVATE_KEY=${{ secrets.GOOGLE_PRIVATE_KEY }} >> .env
             - run: bun install
-            - run: bun run test-bun
+            - run: DW_KEY=${{ secrets.DW_KEY }} GOOGLE_SERVICE_ACCOUNT_EMAIL=${{ secrets.GOOGLE_SERVICE_ACCOUNT_EMAIL }} GOOGLE_PRIVATE_KEY=${{ secrets.GOOGLE_PRIVATE_KEY }} bun run test-bun
