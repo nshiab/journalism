@@ -8,6 +8,7 @@ describe("formatDate", () => {
     const date = new Date("2023-01-01T01:35:00.000Z")
     const datePM = new Date("2023-01-01T15:35:00.000Z")
     const dateNoMinutes = new Date("2023-01-01T01:00:00.000Z")
+    const dateWithSeconds = new Date("2023-01-01T01:35:05.000Z")
 
     it("should accept a Date constructed from a unix timestamp and a return a date formatted as a string with local time", () => {
         const formattedDate = formatDate(new Date(unix), "YYYY-MM-DD")
@@ -26,6 +27,24 @@ describe("formatDate", () => {
     it("should accept a Date a return it formatted as a string with UTC time", () => {
         const formattedDate = formatDate(date, "YYYY-MM-DD", { utc: true })
         assert.strictEqual(formattedDate, "2023-01-01")
+    })
+    it("should return a Date in the format YYYY-MM-DD HH:MM:SS TZ", () => {
+        const formattedDate = formatDate(
+            dateWithSeconds,
+            "YYYY-MM-DD HH:MM:SS TZ",
+            {
+                utc: true,
+            }
+        )
+        assert.strictEqual(formattedDate, "2023-01-01 01:35:05 UTC")
+    })
+    it("should return a Date in the format YYYY-MM-DD HH:MM:SS TZ with a specific time zone", () => {
+        const formattedDate = formatDate(
+            dateWithSeconds,
+            "YYYY-MM-DD HH:MM:SS TZ",
+            { timeZone: "Canada/Eastern" }
+        )
+        assert.strictEqual(formattedDate, "2022-12-31 20:35:05 ET")
     })
     it("should return a Date in the format Month DD, YYYY", () => {
         const formattedDate = formatDate(date, "Month DD, YYYY", { utc: true })
@@ -193,6 +212,14 @@ describe("formatDate", () => {
             { timeZone: "Canada/Atlantic" }
         )
         assert.strictEqual(formattedDate, "December 31, 2022, at 9:35 p.m.")
+    })
+    it("should return the date for UTC time zone with the time zone in the string", () => {
+        const formattedDate = formatDate(
+            date,
+            "Month DD, YYYY, at HH:MM period TZ",
+            { utc: true }
+        )
+        assert.strictEqual(formattedDate, "January 1, 2023, at 1:35 a.m. UTC")
     })
     it("should return the date for a specific time zone with the time zone in the string", () => {
         const formattedDate = formatDate(
@@ -401,6 +428,6 @@ describe("formatDate", () => {
             "Month DD, YYYY, at HH:MM period TZ",
             { timeZone: "Canada/Atlantic", style: "rc" }
         )
-        assert.strictEqual(formattedDate, "31 décembre 2022 à 21 h 35 HNE")
+        assert.strictEqual(formattedDate, "31 décembre 2022 à 21 h 35 HNA")
     })
 })

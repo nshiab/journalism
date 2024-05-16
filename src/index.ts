@@ -23,6 +23,8 @@ import publishChartDW from "./dataviz/publishChartDW.js"
 import dataAsCsv from "./format/dataAsCsv.js"
 import downloadFile from "./web-scraping/downloadFile.js"
 import unzip from "./other/unzip.js"
+import overwriteSheetData from "./google/overwriteSheetData.js"
+import getSheetData from "./google/getSheetData.js"
 
 export {
     formatDate,
@@ -51,4 +53,6 @@ export {
     publishChartDW,
     downloadFile,
     unzip,
+    overwriteSheetData,
+    getSheetData,
 }
