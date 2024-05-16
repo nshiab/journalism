@@ -3,7 +3,7 @@ import publishChartDW from "../../src/dataviz/publishChartDW.js"
 
 describe("publishChartDW", () => {
     const apiKey = process.env.DW_KEY
-    if (typeof apiKey === "string") {
+    if (typeof apiKey === "string" && apiKey !== "") {
         it("should publish a chart", async () => {
             await publishChartDW("ntURh", apiKey)
 

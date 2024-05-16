@@ -16,7 +16,12 @@ describe("overwriteSheetData", () => {
     const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL
     const key = process.env.GOOGLE_PRIVATE_KEY
 
-    if (typeof email === "string" && typeof key === "string") {
+    if (
+        typeof email === "string" &&
+        email !== "" &&
+        typeof key === "string" &&
+        key !== ""
+    ) {
         // it("should overwrite the data in a sheet", async () => {
         //     await overwriteSheetData(data, sheetUrl)
 

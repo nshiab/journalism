@@ -3,26 +3,19 @@ import updateDataDW from "../../src/dataviz/updateDataDW.js"
 import dataAsCsv from "../../src/format/dataAsCsv.js"
 
 describe("updateDataDW", () => {
-    it("should update data in a chart", async () => {
-        const apiKey = process.env.DW_KEY
-
-        if (typeof apiKey === "string") {
+    const apiKey = process.env.DW_KEY
+    if (typeof apiKey === "string" && apiKey !== "") {
+        it("should update data in a chart", async () => {
             const data = [{ salary: 75000, hireDate: new Date("2022-12-15") }]
             const dataCSV = dataAsCsv(data)
 
             await updateDataDW("ntURh", apiKey, dataCSV)
-        } else {
-            console.log("No DW_KEY in .env")
-        }
 
-        // Just making sure it doesn't crash for now.
-        assert.strictEqual(true, true)
-    })
+            // Just making sure it doesn't crash for now.
+            assert.strictEqual(true, true)
+        })
 
-    it("should update data in a map", async () => {
-        const apiKey = process.env.DW_KEY
-
-        if (typeof apiKey === "string") {
+        it("should update data in a map", async () => {
             const data = {
                 type: "FeatureCollection",
                 features: [
@@ -46,11 +39,11 @@ describe("updateDataDW", () => {
             }
 
             await updateDataDW("lDO6F", apiKey, JSON.stringify(data))
-        } else {
-            console.log("No DW_KEY in .env")
-        }
 
-        // Just making sure it doesn't crash for now.
-        assert.strictEqual(true, true)
-    })
+            // Just making sure it doesn't crash for now.
+            assert.strictEqual(true, true)
+        })
+    } else {
+        console.log("No DW_KEY in .env")
+    }
 })

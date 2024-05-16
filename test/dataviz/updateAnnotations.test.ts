@@ -2,10 +2,9 @@ import assert from "assert"
 import updateAnnotationsDW from "../../src/dataviz/updateAnnotationsDW.js"
 
 describe("updateAnnotationsDW", () => {
-    it("should update annotations in a chart", async () => {
-        const apiKey = process.env.DW_KEY
-
-        if (typeof apiKey === "string") {
+    const apiKey = process.env.DW_KEY
+    if (typeof apiKey === "string" && apiKey !== "") {
+        it("should update annotations in a chart", async () => {
             await updateAnnotationsDW("Ga9oq", apiKey, [
                 {
                     x: "2024/08/30 01:52",
@@ -25,11 +24,11 @@ describe("updateAnnotationsDW", () => {
                     mobileFallback: false,
                 },
             ])
-        } else {
-            console.log("No DW_KEY in .env")
-        }
 
-        // Just making sure it doesn't crash for now.
-        assert.strictEqual(true, true)
-    })
+            // Just making sure it doesn't crash for now.
+            assert.strictEqual(true, true)
+        })
+    } else {
+        console.log("No DW_KEY in .env")
+    }
 })

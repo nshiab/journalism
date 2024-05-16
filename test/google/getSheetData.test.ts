@@ -16,7 +16,12 @@ describe("getSheetData", () => {
     const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL
     const key = process.env.GOOGLE_PRIVATE_KEY
 
-    if (typeof email === "string" && typeof key === "string") {
+    if (
+        typeof email === "string" &&
+        email !== "" &&
+        typeof key === "string" &&
+        key !== ""
+    ) {
         // Commented tests because too many requests on API.
 
         // it("should return the data from a sheet as an array of object", async () => {
