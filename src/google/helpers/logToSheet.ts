@@ -12,9 +12,9 @@ export default async function logToSheet(sheetUrl: string) {
     const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL
     const key = process.env.GOOGLE_PRIVATE_KEY
 
-    if (typeof email !== "string" || typeof key !== "string") {
+    if (email === undefined || key === undefined) {
         throw new Error(
-            `You need environment variables GOOGLE_SERVICE_ACCOUNT_EMAIL and GOOGLE_PRIVATE_KEY available in process.env. If you don't have credentials, see https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication. DON'T COMMIT THESE VARIABLES. ADD YOUR .ENV TO .GITIGNORE.`
+            `process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL or process.env.GOOGLE_PRIVATE_KEY is undefined.`
         )
     }
 

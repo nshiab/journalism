@@ -2,9 +2,8 @@ import { csvParse } from "d3-dsv"
 import logToSheet from "./helpers/logToSheet.js"
 
 /**
- * Returns the data of a Google Sheet.
+ * Returns the data of a Google Sheet. This function requires the API key in process.env.GOOGLE_PRIVATE_KEY and the service account email in process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL. If you don't have credentials, check [this](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
  *
- * You need environment variables GOOGLE_SERVICE_ACCOUNT_EMAIL and GOOGLE_PRIVATE_KEY available in process.env. If you don't have credentials, see [this](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication). Don't forget to add your .env to .gitignore. DON'T COMMIT THESE VARIABLES.
  *
  * ```ts
  * // Fake url used as an example.

@@ -3,13 +3,13 @@ import updateDataDW from "../../src/dataviz/updateDataDW.js"
 import dataAsCsv from "../../src/format/dataAsCsv.js"
 
 describe("updateDataDW", () => {
-    const apiKey = process.env.DW_KEY
+    const apiKey = process.env.DATAWRAPPER_KEY
     if (typeof apiKey === "string" && apiKey !== "") {
         it("should update data in a chart", async () => {
             const data = [{ salary: 75000, hireDate: new Date("2022-12-15") }]
             const dataCSV = dataAsCsv(data)
 
-            await updateDataDW("ntURh", apiKey, dataCSV)
+            await updateDataDW("ntURh", dataCSV)
 
             // Just making sure it doesn't crash for now.
             assert.strictEqual(true, true)
@@ -38,12 +38,12 @@ describe("updateDataDW", () => {
                 ],
             }
 
-            await updateDataDW("lDO6F", apiKey, JSON.stringify(data))
+            await updateDataDW("lDO6F", JSON.stringify(data))
 
             // Just making sure it doesn't crash for now.
             assert.strictEqual(true, true)
         })
     } else {
-        console.log("No DW_KEY in .env")
+        console.log("No DATAWRAPPER_KEY in process.env")
     }
 })

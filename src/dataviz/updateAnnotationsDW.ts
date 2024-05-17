@@ -1,11 +1,10 @@
 /**
- * Updates annotations in on a chart.
+ * Updates annotations in on a chart. This function requires the API key in process.env.DATAWRAPPER_KEY.
  *
  * ```js
  * import { updateAnnotationsDW } from "journalism"
  *
  * const chartID = "myChartId"
- * const apiKey = "myApiKey"
  * const myAnnotations = [
     {
         "x": "2024/08/30 01:52",
@@ -26,14 +25,13 @@
     }
 ]
  *
- * await updateAnnotationsDW(chartID, apiKey, myAnnotations)
+ * await updateAnnotationsDW(chartID, myAnnotations)
  * ```
  *
  * @category Dataviz
  */
 export default async function updateAnnotationsDW(
     chartId: string,
-    apiKey: string,
     annotations: {
         x: string
         y: string
@@ -64,6 +62,11 @@ export default async function updateAnnotationsDW(
         }
     }[]
 ) {
+    const apiKey = process.env.DATAWRAPPER_KEY
+    if (apiKey === undefined) {
+        throw new Error("process.env.DATAWRAPPER_KEY is undefined.")
+    }
+
     // We set defaults as non-nested objects
     const defaultsWithoutConnectorLine = {
         bg: false,
