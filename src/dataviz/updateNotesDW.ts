@@ -10,7 +10,7 @@
  *
  * await updateNotesDW(chartID, note)
  *
- * // If your API key is stored under a different name, use the options.
+ * // If your API key is stored under a different name in process.env, use the options.
  * await updateNotesDW(chartID, note, { apiKey: "DW_KEY" })
  * ```
  *

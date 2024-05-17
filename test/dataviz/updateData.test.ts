@@ -46,4 +46,18 @@ describe("updateDataDW", () => {
     } else {
         console.log("No DATAWRAPPER_KEY in process.env")
     }
+    const differentApiKey = process.env.DW_KEY
+    if (typeof differentApiKey === "string" && differentApiKey !== "") {
+        it("should update data in a chart with a specific API key", async () => {
+            const data = [{ salary: 75000, hireDate: new Date("2022-12-15") }]
+            const dataCSV = dataAsCsv(data)
+
+            await updateDataDW("ntURh", dataCSV, { apiKey: "DW_KEY" })
+
+            // Just making sure it doesn't crash for now.
+            assert.strictEqual(true, true)
+        })
+    } else {
+        console.log("No DW_KEY in process.env")
+    }
 })

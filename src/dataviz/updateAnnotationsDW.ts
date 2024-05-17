@@ -27,7 +27,7 @@
  *
  * await updateAnnotationsDW(chartID, myAnnotations)
  * 
- * // If your API key is stored under a different name, use the options.
+ * // If your API key is stored under a different name in process.env, use the options.
  * await updateAnnotationsDW(chartID, myAnnotations, { apiKey: "DW_KEY" })
  * ```
  *

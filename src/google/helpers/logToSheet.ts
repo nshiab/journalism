@@ -4,18 +4,24 @@ import {
     GoogleSpreadsheetWorksheet,
 } from "google-spreadsheet"
 
-export default async function logToSheet(sheetUrl: string) {
+export default async function logToSheet(
+    sheetUrl: string,
+    options: { apiEmail?: string; apiKey?: string }
+) {
     const urlItems = sheetUrl.split("/")
     const spreadsheetId = urlItems[5]
     const sheetId = urlItems[6].split("=")[1]
 
-    const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL
-    const key = process.env.GOOGLE_PRIVATE_KEY
+    const emailVar = options.apiEmail ?? "GOOGLE_SERVICE_ACCOUNT_EMAIL"
+    const keyVar = options.apiKey ?? "GOOGLE_PRIVATE_KEY"
+    const email = process.env[emailVar]
+    const key = process.env[keyVar]
 
-    if (email === undefined || key === undefined) {
-        throw new Error(
-            `process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL or process.env.GOOGLE_PRIVATE_KEY is undefined.`
-        )
+    if (email === undefined) {
+        throw new Error(`process.env.${emailVar} is undefined.`)
+    }
+    if (key === undefined) {
+        throw new Error(`process.env.${keyVar} is undefined.`)
     }
 
     const jwt = new JWT({

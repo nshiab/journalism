@@ -87,7 +87,7 @@
  *
  * await updateDataDW(mapID, JSON.stringify(dataForMap))
  *
- * // If your API key is stored under a different name, use the options.
+ * // If your API key is stored under a different name in process.env, use the options.
  * await updateDataDW(mapID, JSON.stringify(dataForMap), { apiKey: "DW_KEY" })
  * ```
  *

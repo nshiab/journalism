@@ -5,7 +5,7 @@
  * const chartID = "myChartId"
  * await publishChartDW(chartID)
  *
- * // If your API key is stored under a different name, use the options.
+ * // If your API key is stored under a different name in process.env, use the options.
  * await publishChartDW(chartID, { apiKey: "DW_KEY" })
  * ```
  *

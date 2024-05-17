@@ -2,7 +2,7 @@ import formatDate from "../format/formatDate.js"
 import logToSheet from "./helpers/logToSheet.js"
 
 /**
- * Clears a Google Sheet and populates it with new data. This function requires the API key in process.env.GOOGLE_PRIVATE_KEY and the service account email in process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL. If you don't have credentials, check [this](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
+ * Clears a Google Sheet and populates it with new data. By default, this function looks for the API key in process.env.GOOGLE_PRIVATE_KEY and the service account email in process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL. If you don't have credentials, check [this](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
  *
  * ```ts
  * // The data needs to be an array of objects. The keys of the first object will be used to create the header row.
@@ -27,6 +27,9 @@ import logToSheet from "./helpers/logToSheet.js"
  * 
  * // The prepend option allows you to add extra text on the first row. 
  * await overwriteSheetData(data, sheetUrl, { prepend: "Contact xxxx.xxxx@gmail.com for more information", lastUpdate: true, timeZone: "Canada/Eastern" });
+ * 
+ * // If your API email and key are stored under different names in process.env, use the options.
+ * await overwriteSheetData(data, sheetUrl, { apiEmail: "GG_EMAIL", apiKey: "GG_KEY" });
  * ```
  *
  * @param data - An array of objects.
@@ -36,6 +39,8 @@ import logToSheet from "./helpers/logToSheet.js"
  *   @param options.lastUpdate - If true, adds a row before the data with the date of the update.
  *   @param options.timeZone - If lastUpdate is true, you can use this option to format the date to a specific time zone.
  *   @param options.raw - If true, Google Sheet won't try to guess the data type and won't format or parse the values.
+ *   @param options.apiEmail - If your API email is stored under different names in process.env, use this option.
+ *   @param options.apiKey - If your API key is stored under different names in process.env, use this option.
  *
  * @category Google
  */
@@ -55,9 +60,11 @@ export default async function overwriteSheetData(
             | "Canada/Saskatchewan"
             | "Canada/Yukon"
         raw?: boolean
+        apiEmail?: string
+        apiKey?: string
     } = {}
 ) {
-    const sheet = await logToSheet(sheetUrl)
+    const sheet = await logToSheet(sheetUrl, options)
     await sheet.clear()
 
     let startIndex = 1
