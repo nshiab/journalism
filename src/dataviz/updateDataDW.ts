@@ -15,6 +15,9 @@
  * const dataForChart = dataAsCsv(data)
  *
  * await updateDataDW(chartID, dataForChart)
+ *
+ * // If your API key is stored under a different name in process.env, use the options.
+ * await updateDataDW(chartID, dataForChart, { apiKey: "DW_KEY" })
  * ```
  *
  * Example for a locator map.
