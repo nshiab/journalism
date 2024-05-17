@@ -57,6 +57,8 @@ describe("getSheetData", () => {
         //     )
         // })
     } else {
-        console.log("No Google service account email or no google private key.")
+        console.log(
+            "No GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY in process.env"
+        )
     }
 })

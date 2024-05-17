@@ -1,5 +1,5 @@
 /**
- * Updates the data of a specified Datawrapper chart, table or map.
+ * Updates the data of a specified Datawrapper chart, table or map. This function requires the API key in process.env.DATAWRAPPER_KEY.
  *
  *
  * Example for a chart.
@@ -7,7 +7,6 @@
  * import { updateDataDW, dataAsCsv } from "journalism"
  *
  * const chartID = "myChartId"
- * const apiKey = "myApiKey"
  *
  * const data = [
  *  { salary: 75000, hireDate: new Date("2022-12-15") },
@@ -15,7 +14,7 @@
  * ]
  * const dataForChart = dataAsCsv(data)
  *
- * await updateDataDW(chartID, apiKey, dataForChart)
+ * await updateDataDW(chartID, dataForChart)
  * ```
  *
  * Example for a locator map.
@@ -23,7 +22,6 @@
  * import { updateDataDW } from "journalism"
  *
  * const mapID = "myMapId"
- * const apiKey = "myApiKey"
  *
  * const geojson = {
  *  "type": "FeatureCollection",
@@ -87,17 +85,18 @@
  *   ]
  * }
  *
- * await updateDataDW(mapID, apiKey, JSON.stringify(dataForMap))
+ * await updateDataDW(mapID, JSON.stringify(dataForMap))
  * ```
  *
  * @category Dataviz
  */
 
-export default async function updateDataDW(
-    chartId: string,
-    apiKey: string,
-    data: string
-) {
+export default async function updateDataDW(chartId: string, data: string) {
+    const apiKey = process.env.DATAWRAPPER_KEY
+    if (apiKey === undefined) {
+        throw new Error("process.env.DATAWRAPPER_KEY is undefined.")
+    }
+
     const response = await fetch(
         `https://api.datawrapper.de/v3/charts/${chartId}/data`,
         {

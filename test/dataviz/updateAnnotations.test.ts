@@ -2,10 +2,10 @@ import assert from "assert"
 import updateAnnotationsDW from "../../src/dataviz/updateAnnotationsDW.js"
 
 describe("updateAnnotationsDW", () => {
-    const apiKey = process.env.DW_KEY
+    const apiKey = process.env.DATAWRAPPER_KEY
     if (typeof apiKey === "string" && apiKey !== "") {
         it("should update annotations in a chart", async () => {
-            await updateAnnotationsDW("Ga9oq", apiKey, [
+            await updateAnnotationsDW("Ga9oq", [
                 {
                     x: "2024/08/30 01:52",
                     y: "14496235",
@@ -29,6 +29,6 @@ describe("updateAnnotationsDW", () => {
             assert.strictEqual(true, true)
         })
     } else {
-        console.log("No DW_KEY in .env")
+        console.log("No DATAWRAPPER_KEY in process.env")
     }
 })

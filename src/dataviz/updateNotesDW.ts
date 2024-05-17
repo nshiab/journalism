@@ -1,24 +1,27 @@
 /**
- * Updates notes field for a specified Datawrapper chart, table or map.
+ * Updates notes field for a specified Datawrapper chart, table or map. This function requires the API key in process.env.DATAWRAPPER_KEY.
  *
  * ```js
  * import { updateNotesDW, formatDate } from "journalism"
  *
  * const chartID = "myChartId"
- * const apiKey = "myApiKey"
  * const dateString = formatDate(new Date(), "Month DD, YYYY, at HH:MM period", { abbreviations: true })
  * const note = `This chart was last updated on ${dateString}`
  *
- * await updateNotesDW(chartID, apiKey, note)
+ * await updateNotesDW(chartID, note)
  * ```
  *
  * @category Dataviz
  */
 export default async function updateNotesDW(
     chartId: string,
-    apiKey: string,
     note: string
 ): Promise<void> {
+    const apiKey = process.env.DATAWRAPPER_KEY
+    if (apiKey === undefined) {
+        throw new Error("process.env.DATAWRAPPER_KEY is undefined.")
+    }
+
     const response = await fetch(
         `https://api.datawrapper.de/v3/charts/${chartId}`,
         {
