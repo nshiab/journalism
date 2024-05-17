@@ -1,5 +1,5 @@
 /**
- * Updates annotations in on a chart. This function requires the API key in process.env.DATAWRAPPER_KEY.
+ * Updates annotations in on a chart. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
  *
  * ```js
  * import { updateAnnotationsDW } from "journalism"
@@ -26,6 +26,9 @@
 ]
  *
  * await updateAnnotationsDW(chartID, myAnnotations)
+ * 
+ * // If your API key is stored under a different name in process.env, use the options.
+ * await updateAnnotationsDW(chartID, myAnnotations, { apiKey: "DW_KEY" })
  * ```
  *
  * @category Dataviz
@@ -60,11 +63,13 @@ export default async function updateAnnotationsDW(
             inheritColor?: boolean
             targetPadding?: number
         }
-    }[]
+    }[],
+    options: { apiKey?: string } = {}
 ) {
-    const apiKey = process.env.DATAWRAPPER_KEY
-    if (apiKey === undefined) {
-        throw new Error("process.env.DATAWRAPPER_KEY is undefined.")
+    const envVar = options.apiKey ?? "DATAWRAPPER_KEY"
+    const apiKey = process.env[envVar]
+    if (apiKey === undefined || apiKey === "") {
+        throw new Error(`process.env.${envVar} is undefined or ''.`)
     }
 
     // We set defaults as non-nested objects

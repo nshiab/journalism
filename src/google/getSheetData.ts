@@ -2,7 +2,7 @@ import { csvParse } from "d3-dsv"
 import logToSheet from "./helpers/logToSheet.js"
 
 /**
- * Returns the data of a Google Sheet. This function requires the API key in process.env.GOOGLE_PRIVATE_KEY and the service account email in process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL. If you don't have credentials, check [this](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
+ * Returns the data of a Google Sheet. By default, this function looks for the API key in process.env.GOOGLE_PRIVATE_KEY and the service account email in process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL. If you don't have credentials, check [this](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
  *
  *
  * ```ts
@@ -17,12 +17,17 @@ import logToSheet from "./helpers/logToSheet.js"
  *
  * // You have an option to return the data as a CSV string. Useful if you just want to write the data somewhere.
  * const csv = await getSheetData(data, sheetUrl, { csv: true });
+ *
+ * // If your API email and key are stored under different names in process.env, use the options.
+ * const csv = await getSheetData(data, sheetUrl, { apiEmail: "GG_EMAIL", apiKey: "GG_KEY" });
  * ```
  *
  * @param sheetUrl - The url directing to a specific sheet.
  * @param options - An optional object with configuration options:
  *   @param options.skip - The number of rows to skip before parsing the data. Defaults to 0.
  *   @param options.csv - If true, the function will return a CSV string instead of an array of objects.
+ *   @param options.apiEmail - If your API email is stored under different names in process.env, use this option.
+ *   @param options.apiKey - If your API key is stored under different names in process.env, use this option.
  *
  * @category Google
  */
@@ -31,9 +36,11 @@ export default async function getSheetData(
     options: {
         csv?: boolean
         skip?: number
+        apiEmail?: string
+        apiKey?: string
     } = {}
 ) {
-    const sheet = await logToSheet(sheetUrl)
+    const sheet = await logToSheet(sheetUrl, options)
 
     const buffer = await sheet.downloadAsCSV()
     const enc = new TextDecoder("utf-8")

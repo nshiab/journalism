@@ -1,5 +1,5 @@
 /**
- * Updates the data of a specified Datawrapper chart, table or map. This function requires the API key in process.env.DATAWRAPPER_KEY.
+ * Updates the data of a specified Datawrapper chart, table or map. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
  *
  *
  * Example for a chart.
@@ -15,6 +15,9 @@
  * const dataForChart = dataAsCsv(data)
  *
  * await updateDataDW(chartID, dataForChart)
+ *
+ * // If your API key is stored under a different name in process.env, use the options.
+ * await updateDataDW(chartID, dataForChart, { apiKey: "DW_KEY" })
  * ```
  *
  * Example for a locator map.
@@ -86,15 +89,23 @@
  * }
  *
  * await updateDataDW(mapID, JSON.stringify(dataForMap))
+ *
+ * // If your API key is stored under a different name in process.env, use the options.
+ * await updateDataDW(mapID, JSON.stringify(dataForMap), { apiKey: "DW_KEY" })
  * ```
  *
  * @category Dataviz
  */
 
-export default async function updateDataDW(chartId: string, data: string) {
-    const apiKey = process.env.DATAWRAPPER_KEY
-    if (apiKey === undefined) {
-        throw new Error("process.env.DATAWRAPPER_KEY is undefined.")
+export default async function updateDataDW(
+    chartId: string,
+    data: string,
+    options: { apiKey?: string } = {}
+) {
+    const envVar = options.apiKey ?? "DATAWRAPPER_KEY"
+    const apiKey = process.env[envVar]
+    if (apiKey === undefined || apiKey === "") {
+        throw new Error(`process.env.${envVar} is undefined or ''.`)
     }
 
     const response = await fetch(

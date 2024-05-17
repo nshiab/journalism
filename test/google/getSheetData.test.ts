@@ -12,6 +12,8 @@ const originalData = [
     { first: "Dexter", last: "McMillan" },
 ]
 
+// Commented tests because too many requests on API.
+
 describe("getSheetData", () => {
     const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL
     const key = process.env.GOOGLE_PRIVATE_KEY
@@ -22,8 +24,6 @@ describe("getSheetData", () => {
         typeof key === "string" &&
         key !== ""
     ) {
-        // Commented tests because too many requests on API.
-
         // it("should return the data from a sheet as an array of object", async () => {
         //     await overwriteSheetData(originalData, sheetUrl)
 
@@ -39,6 +39,15 @@ describe("getSheetData", () => {
         //         "first,last\r\nNael,Shiab\r\nAndrew,Ryan\r\nGraeme,Bruce\r\nDexter,McMillan"
         //     )
         // })
+        // it("should return the data as a csv after skipping the first row", async () => {
+        //     const data = await getSheetData(sheetUrl, { skip: 1, csv: true })
+
+        //     assert.deepStrictEqual(
+        //         data,
+        //         "first,last\r\nNael,Shiab\r\nAndrew,Ryan\r\nGraeme,Bruce\r\nDexter,McMillan"
+        //     )
+        // })
+
         it("should return the data as an array of objects after skipping the first row", async () => {
             await overwriteSheetData(originalData, sheetUrl, {
                 prepend: "Contact me for more info",
@@ -48,17 +57,36 @@ describe("getSheetData", () => {
 
             assert.deepStrictEqual(data, originalData)
         })
-        // it("should return the data as a csv after skipping the first row", async () => {
-        //     const data = await getSheetData(sheetUrl, { skip: 1, csv: true })
-
-        //     assert.deepStrictEqual(
-        //         data,
-        //         "first,last\r\nNael,Shiab\r\nAndrew,Ryan\r\nGraeme,Bruce\r\nDexter,McMillan"
-        //     )
-        // })
     } else {
         console.log(
             "No GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY in process.env"
         )
+    }
+
+    const differentEmail = process.env.GG_EMAIL
+    const differentKey = process.env.GG_KEY
+
+    if (
+        typeof differentEmail === "string" &&
+        differentEmail !== "" &&
+        typeof differentKey === "string" &&
+        differentKey !== ""
+    ) {
+        it("should return the data as an array of objects after skipping the first row, with a specific apiEmail and apiKey", async () => {
+            await overwriteSheetData(originalData, sheetUrl, {
+                prepend: "Contact me for more info",
+                apiEmail: "GG_EMAIL",
+                apiKey: "GG_KEY",
+            })
+            const data = await getSheetData(sheetUrl, {
+                skip: 1,
+                apiEmail: "GG_EMAIL",
+                apiKey: "GG_KEY",
+            })
+
+            assert.deepStrictEqual(data, originalData)
+        })
+    } else {
+        console.log("No GG_EMAIL or GG_KEY in process.env")
     }
 })

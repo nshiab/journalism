@@ -1,5 +1,5 @@
 /**
- * Updates notes field for a specified Datawrapper chart, table or map. This function requires the API key in process.env.DATAWRAPPER_KEY.
+ * Updates notes field for a specified Datawrapper chart, table or map. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
  *
  * ```js
  * import { updateNotesDW, formatDate } from "journalism"
@@ -9,17 +9,22 @@
  * const note = `This chart was last updated on ${dateString}`
  *
  * await updateNotesDW(chartID, note)
+ *
+ * // If your API key is stored under a different name in process.env, use the options.
+ * await updateNotesDW(chartID, note, { apiKey: "DW_KEY" })
  * ```
  *
  * @category Dataviz
  */
 export default async function updateNotesDW(
     chartId: string,
-    note: string
+    note: string,
+    options: { apiKey?: string } = {}
 ): Promise<void> {
-    const apiKey = process.env.DATAWRAPPER_KEY
-    if (apiKey === undefined) {
-        throw new Error("process.env.DATAWRAPPER_KEY is undefined.")
+    const envVar = options.apiKey ?? "DATAWRAPPER_KEY"
+    const apiKey = process.env[envVar]
+    if (apiKey === undefined || apiKey === "") {
+        throw new Error(`process.env.${envVar} is undefined or ''.`)
     }
 
     const response = await fetch(

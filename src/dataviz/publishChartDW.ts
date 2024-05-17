@@ -1,18 +1,24 @@
 /**
- * Publishes the specified Datawrapper chart, table, or map. This function requires the API key in process.env.DATAWRAPPER_KEY.
+ * Publishes the specified Datawrapper chart, table, or map. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
  *
  * ```js
  * const chartID = "myChartId"
- *
  * await publishChartDW(chartID)
+ *
+ * // If your API key is stored under a different name in process.env, use the options.
+ * await publishChartDW(chartID, { apiKey: "DW_KEY" })
  * ```
  *
  * @category Dataviz
  */
-export default async function publishChartDW(chartId: string) {
-    const apiKey = process.env.DATAWRAPPER_KEY
-    if (apiKey === undefined) {
-        throw new Error("process.env.DATAWRAPPER_KEY is undefined.")
+export default async function publishChartDW(
+    chartId: string,
+    options: { apiKey?: string } = {}
+) {
+    const envVar = options.apiKey ?? "DATAWRAPPER_KEY"
+    const apiKey = process.env[envVar]
+    if (apiKey === undefined || apiKey === "") {
+        throw new Error(`process.env.${envVar} is undefined or ''.`)
     }
 
     const response = await fetch(
