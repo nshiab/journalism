@@ -1,11 +1,13 @@
 /**
- * Saves an Observable Plot chart as an image. You must use the Plot.dot syntax and install puppeeter (npm i puppeeter).
+ * Saves an Observable Plot chart as an image. You must use the Plot.dot syntax and install puppeteer (npm i puppeteer).
  *
  * ```js
+ * import * as Plot from "@observablehq/plot"
+ *
  * // The data must be an array of objects.
  * const data = [{ salary: 75000, hireDate: new Date("2023-12-22") }, ...]
  *
- * // The Plot options must be wrapped into a function.
+ * // The Plot options must be wrapped into a function and use the Plot. syntax.
  * const chart = () => Plot.plot({
  *  marks: [
  *    Plot.dot(data, {x: "hireDate", y: "salary"})
