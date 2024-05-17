@@ -23,8 +23,8 @@ export default async function updateNotesDW(
 ): Promise<void> {
     const envVar = options.apiKey ?? "DATAWRAPPER_KEY"
     const apiKey = process.env[envVar]
-    if (apiKey === undefined) {
-        throw new Error(`process.env.${envVar} is undefined.`)
+    if (apiKey === undefined || apiKey === "") {
+        throw new Error(`process.env.${envVar} is undefined or ''.`)
     }
 
     const response = await fetch(

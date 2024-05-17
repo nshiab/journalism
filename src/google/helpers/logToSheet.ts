@@ -6,7 +6,7 @@ import {
 
 export default async function logToSheet(
     sheetUrl: string,
-    options: { apiEmail?: string; apiKey?: string }
+    options: { apiEmail?: string; apiKey?: string } = {}
 ) {
     const urlItems = sheetUrl.split("/")
     const spreadsheetId = urlItems[5]
@@ -17,11 +17,11 @@ export default async function logToSheet(
     const email = process.env[emailVar]
     const key = process.env[keyVar]
 
-    if (email === undefined) {
-        throw new Error(`process.env.${emailVar} is undefined.`)
+    if (email === undefined || email === "") {
+        throw new Error(`process.env.${emailVar} is undefined or ''.`)
     }
-    if (key === undefined) {
-        throw new Error(`process.env.${keyVar} is undefined.`)
+    if (key === undefined || key === "") {
+        throw new Error(`process.env.${keyVar} is undefined or ''.`)
     }
 
     const jwt = new JWT({
