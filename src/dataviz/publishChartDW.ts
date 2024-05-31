@@ -13,8 +13,8 @@
  */
 export default async function publishChartDW(
     chartId: string,
-    options: { apiKey?: string } = {}
-) {
+    options: { apiKey?: string; returnResponse?: boolean } = {}
+): Promise<void | Response> {
     const envVar = options.apiKey ?? "DATAWRAPPER_KEY"
     const apiKey = process.env[envVar]
     if (apiKey === undefined || apiKey === "") {
@@ -31,9 +31,14 @@ export default async function publishChartDW(
         }
     )
 
+    // if returning a response, do it before the response.status checks
+    if (options.returnResponse === true) {
+        return response
+    }
+
     if (response.status !== 200) {
-        console.log("There is a problem with publishChartDW!")
-        console.log({ chartId, apiKey: "*".repeat(apiKey.length) })
-        throw new Error(JSON.stringify(response, null, 1))
+        throw new Error(
+            `publishChartDW ${chartId}: Upstream HTTP ${response.status} - ${response.statusText}`
+        )
     }
 }

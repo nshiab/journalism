@@ -64,8 +64,8 @@ export default async function updateAnnotationsDW(
             targetPadding?: number
         }
     }[],
-    options: { apiKey?: string } = {}
-) {
+    options: { apiKey?: string; returnResponse?: boolean } = {}
+): Promise<void | Response> {
     const envVar = options.apiKey ?? "DATAWRAPPER_KEY"
     const apiKey = process.env[envVar]
     if (apiKey === undefined || apiKey === "") {
@@ -138,9 +138,14 @@ export default async function updateAnnotationsDW(
         }
     )
 
+    // if returning a response, do it before the response.status checks
+    if (options.returnResponse === true) {
+        return response
+    }
+
     if (response.status !== 200) {
-        console.log("There is a problem with updateAnnotationsDW!")
-        console.log({ chartId, apiKey: "*".repeat(apiKey.length), annotations })
-        throw new Error(JSON.stringify(response, null, 1))
+        throw new Error(
+            `updateAnnotationsDW ${chartId}: Upstream HTTP ${response.status} - ${response.statusText}`
+        )
     }
 }
