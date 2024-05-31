@@ -45,7 +45,7 @@ describe("overwriteSheetData", () => {
         //         (csv as string).replace(
         //             /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/,
         //             "DATE"
-        //         ),
+        //         ).replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/, "DATE"),,
         //         "Last update:,DATE UTC\r\nfirst,last\r\nNael,Shiab\r\nAndrew,Ryan"
         //     )
         // })
@@ -61,7 +61,7 @@ describe("overwriteSheetData", () => {
         //         (csv as string).replace(
         //             /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/,
         //             "DATE"
-        //         ),
+        //         ).replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/, "DATE"),,
         //         "Last update:,DATE ET\r\nfirst,last\r\nNael,Shiab\r\nAndrew,Ryan"
         //     )
         // })
@@ -88,10 +88,9 @@ describe("overwriteSheetData", () => {
             const csv = await getSheetData(sheetUrl, { csv: true })
 
             assert.deepStrictEqual(
-                (csv as string).replace(
-                    /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/,
-                    "DATE"
-                ),
+                (csv as string)
+                    .replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/, "DATE")
+                    .replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/, "DATE"),
                 "Contact me for more info,\r\nLast update:,DATE ET\r\nfirst,last\r\nNael,Shiab\r\nAndrew,Ryan"
             )
         })
@@ -126,10 +125,9 @@ describe("overwriteSheetData", () => {
             })
 
             assert.deepStrictEqual(
-                (csv as string).replace(
-                    /\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/,
-                    "DATE"
-                ),
+                (csv as string)
+                    .replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/, "DATE")
+                    .replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/, "DATE"),
                 "Contact me for more info,\r\nLast update:,DATE ET\r\nfirst,last\r\nNael,Shiab\r\nAndrew,Ryan"
             )
         })
