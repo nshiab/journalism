@@ -19,8 +19,8 @@
 export default async function updateNotesDW(
     chartId: string,
     note: string,
-    options: { apiKey?: string } = {}
-): Promise<void> {
+    options: { apiKey?: string; returnResponse?: boolean } = {}
+): Promise<void | Response> {
     const envVar = options.apiKey ?? "DATAWRAPPER_KEY"
     const apiKey = process.env[envVar]
     if (apiKey === undefined || apiKey === "") {
@@ -45,9 +45,14 @@ export default async function updateNotesDW(
         }
     )
 
+    // if returning a response, do it before the response.status checks
+    if (options.returnResponse === true) {
+        return response
+    }
+
     if (response.status !== 200) {
-        console.log("There is a problem with updateNotesDW!")
-        console.log({ chartId, apiKey: "*".repeat(apiKey.length), note })
-        throw new Error(JSON.stringify(response, null, 1))
+        throw new Error(
+            `updateNotesDW ${chartId}: Upstream HTTP ${response.status} - ${response.statusText}`
+        )
     }
 }
