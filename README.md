@@ -10,4 +10,4 @@ If you wish to contribute, create an issue explaining what you would like to add
 
 This repository is maintained by [Nael Shiab](http://naelshiab.com/), senior data producer at [CBC/Radio-Canada](https://cbc.radio-canada.ca/).
 
-Feel free to ping me on [Mastodon](https://vis.social/@naelshiab), [Twitter](https://twitter.com/NaelShiab) or [LinkedIn](https://www.linkedin.com/in/naelshiab/) if you have any questions.
+You might also find [simple-data-analysis](https://github.com/nshiab/simple-data-analysis) and [Code Like a Journalist](https://github.com/nshiab/code-like-a-journalist) interesting.
