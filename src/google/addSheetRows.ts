@@ -1,7 +1,9 @@
 import logToSheet from "./helpers/logToSheet.js"
 
 /**
- * Appends rows to a Google Sheet.  By default, this function looks for the API key in process.env.GOOGLE_PRIVATE_KEY and the service account email in process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL. If you don't have credentials, check [this](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
+ * Appends rows to a Google Sheet.
+ * 
+ * By default, this function looks for the API key in process.env.GOOGLE_PRIVATE_KEY and the service account email in process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL. If you don't have credentials, check [this](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
  * 
  * ```ts
  * // The data needs to be an array of objects. The keys of the objects must match the sheet's columns.
