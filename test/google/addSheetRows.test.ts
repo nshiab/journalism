@@ -66,37 +66,35 @@ describe("addSheetRows", () => {
         )
     }
 
-    // const differentEmail = process.env.GG_EMAIL
-    // const differentKey = process.env.GG_KEY
+    const differentEmail = process.env.GG_EMAIL
+    const differentKey = process.env.GG_KEY
 
-    // if (
-    //     typeof differentEmail === "string" &&
-    //     differentEmail !== "" &&
-    //     typeof differentKey === "string" &&
-    //     differentKey !== ""
-    // ) {
-    //     it("should add rows with a specific apiEmail and apiKey", async () => {
-    //         it("should add a row to a sheet", async () => {
-    //             await overwriteSheetData(data, sheetUrl)
+    if (
+        typeof differentEmail === "string" &&
+        differentEmail !== "" &&
+        typeof differentKey === "string" &&
+        differentKey !== ""
+    ) {
+        it("should add rows with a specific apiEmail and apiKey", async () => {
+            await overwriteSheetData(data, sheetUrl)
 
-    //             await addSheetRows(
-    //                 [{ first: "Dexter", last: "McMillan" }],
-    //                 sheetUrl,
-    //                 {
-    //                     apiEmail: differentEmail,
-    //                     apiKey: differentKey,
-    //                 }
-    //             )
+            await addSheetRows(
+                [{ first: "Dexter", last: "McMillan" }],
+                sheetUrl,
+                {
+                    apiEmail: "GG_EMAIL",
+                    apiKey: "GG_KEY",
+                }
+            )
 
-    //             const testData = await getSheetData(sheetUrl)
+            const testData = await getSheetData(sheetUrl)
 
-    //             assert.deepStrictEqual(testData, [
-    //                 ...data,
-    //                 { first: "Dexter", last: "McMillan" },
-    //             ])
-    //         })
-    //     })
-    // } else {
-    //     console.log("No GG_EMAIL or GG_KEY in process.env")
-    // }
+            assert.deepStrictEqual(testData, [
+                ...data,
+                { first: "Dexter", last: "McMillan" },
+            ])
+        })
+    } else {
+        console.log("No GG_EMAIL or GG_KEY in process.env")
+    }
 })
