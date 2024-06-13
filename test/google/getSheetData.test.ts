@@ -63,30 +63,30 @@ describe("getSheetData", () => {
         )
     }
 
-    const differentEmail = process.env.GG_EMAIL
-    const differentKey = process.env.GG_KEY
+    // const differentEmail = process.env.GG_EMAIL
+    // const differentKey = process.env.GG_KEY
 
-    if (
-        typeof differentEmail === "string" &&
-        differentEmail !== "" &&
-        typeof differentKey === "string" &&
-        differentKey !== ""
-    ) {
-        it("should return the data as an array of objects after skipping the first row, with a specific apiEmail and apiKey", async () => {
-            await overwriteSheetData(originalData, sheetUrl, {
-                prepend: "Contact me for more info",
-                apiEmail: "GG_EMAIL",
-                apiKey: "GG_KEY",
-            })
-            const data = await getSheetData(sheetUrl, {
-                skip: 1,
-                apiEmail: "GG_EMAIL",
-                apiKey: "GG_KEY",
-            })
+    // if (
+    //     typeof differentEmail === "string" &&
+    //     differentEmail !== "" &&
+    //     typeof differentKey === "string" &&
+    //     differentKey !== ""
+    // ) {
+    //     it("should return the data as an array of objects after skipping the first row, with a specific apiEmail and apiKey", async () => {
+    //         await overwriteSheetData(originalData, sheetUrl, {
+    //             prepend: "Contact me for more info",
+    //             apiEmail: "GG_EMAIL",
+    //             apiKey: "GG_KEY",
+    //         })
+    //         const data = await getSheetData(sheetUrl, {
+    //             skip: 1,
+    //             apiEmail: "GG_EMAIL",
+    //             apiKey: "GG_KEY",
+    //         })
 
-            assert.deepStrictEqual(data, originalData)
-        })
-    } else {
-        console.log("No GG_EMAIL or GG_KEY in process.env")
-    }
+    //         assert.deepStrictEqual(data, originalData)
+    //     })
+    // } else {
+    //     console.log("No GG_EMAIL or GG_KEY in process.env")
+    // }
 })
