@@ -14,7 +14,7 @@
  *  ]
  * })
  *
- * // Change the extension to .jpg to get a JPEG file.
+ * // Change the extension to .jpeg to get a JPEG file.
  * const path = "./my-chart.png"
  *
  * await savePlotChart(data, chart, path)
@@ -69,7 +69,9 @@ export default async function savePlotChart(
     })
 
     // We create an empty div with a display flex to avoid blank space in the screenshot.
-    await page.setContent("<div id='dataviz' style='display:flex;'></div>")
+    await page.setContent(
+        "<div id='dataviz' style='display:inline-block; font-family:system-ui,sans-serif;'></div>"
+    )
 
     // We convert back dates, generate the chart and append it to our div.
     await page.evaluate(`
@@ -89,7 +91,7 @@ export default async function savePlotChart(
         div.append(chart)`)
 
     // We select the generated figure or svg and save a screenshot of it.
-    const dataviz = await page.$("#dataviz > figure, #dataviz > svg")
+    const dataviz = await page.$("#dataviz")
     if (!dataviz) {
         throw new Error("No dataviz element.")
     }

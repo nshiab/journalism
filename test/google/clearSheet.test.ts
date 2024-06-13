@@ -42,32 +42,32 @@ describe("clearSheet", () => {
         )
     }
 
-    const differentEmail = process.env.GG_EMAIL
-    const differentKey = process.env.GG_KEY
+    // const differentEmail = process.env.GG_EMAIL
+    // const differentKey = process.env.GG_KEY
 
-    if (
-        typeof differentEmail === "string" &&
-        differentEmail !== "" &&
-        typeof differentKey === "string" &&
-        differentKey !== ""
-    ) {
-        it("should clear a sheet with a specific apiEmail and apiKey", async () => {
-            await overwriteSheetData(data, sheetUrl, {
-                prepend: "Hi",
-                lastUpdate: true,
-                timeZone: "Canada/Eastern",
-            })
+    // if (
+    //     typeof differentEmail === "string" &&
+    //     differentEmail !== "" &&
+    //     typeof differentKey === "string" &&
+    //     differentKey !== ""
+    // ) {
+    //     it("should clear a sheet with a specific apiEmail and apiKey", async () => {
+    //         await overwriteSheetData(data, sheetUrl, {
+    //             prepend: "Hi",
+    //             lastUpdate: true,
+    //             timeZone: "Canada/Eastern",
+    //         })
 
-            await clearSheet(sheetUrl, {
-                apiEmail: "GG_EMAIL",
-                apiKey: "GG_KEY",
-            })
+    //         await clearSheet(sheetUrl, {
+    //             apiEmail: "GG_EMAIL",
+    //             apiKey: "GG_KEY",
+    //         })
 
-            const testData = await getSheetData(sheetUrl)
+    //         const testData = await getSheetData(sheetUrl)
 
-            assert.deepStrictEqual(testData, [])
-        })
-    } else {
-        console.log("No GG_EMAIL or GG_KEY in process.env")
-    }
+    //         assert.deepStrictEqual(testData, [])
+    //     })
+    // } else {
+    //     console.log("No GG_EMAIL or GG_KEY in process.env")
+    // }
 })

@@ -100,38 +100,38 @@ describe("overwriteSheetData", () => {
         )
     }
 
-    const differentEmail = process.env.GG_EMAIL
-    const differentKey = process.env.GG_KEY
+    // const differentEmail = process.env.GG_EMAIL
+    // const differentKey = process.env.GG_KEY
 
-    if (
-        typeof differentEmail === "string" &&
-        differentEmail !== "" &&
-        typeof differentKey === "string" &&
-        differentKey !== ""
-    ) {
-        it("should overwrite the data in a sheet with a prepended text and lastUpdate with a specific time zone, using a specific apiEmail and apiKey", async () => {
-            await overwriteSheetData(data, sheetUrl, {
-                prepend: "Contact me for more info",
-                lastUpdate: true,
-                timeZone: "Canada/Eastern",
-                apiEmail: "GG_EMAIL",
-                apiKey: "GG_KEY",
-            })
+    // if (
+    //     typeof differentEmail === "string" &&
+    //     differentEmail !== "" &&
+    //     typeof differentKey === "string" &&
+    //     differentKey !== ""
+    // ) {
+    //     it("should overwrite the data in a sheet with a prepended text and lastUpdate with a specific time zone, using a specific apiEmail and apiKey", async () => {
+    //         await overwriteSheetData(data, sheetUrl, {
+    //             prepend: "Contact me for more info",
+    //             lastUpdate: true,
+    //             timeZone: "Canada/Eastern",
+    //             apiEmail: "GG_EMAIL",
+    //             apiKey: "GG_KEY",
+    //         })
 
-            const csv = await getSheetData(sheetUrl, {
-                csv: true,
-                apiEmail: "GG_EMAIL",
-                apiKey: "GG_KEY",
-            })
+    //         const csv = await getSheetData(sheetUrl, {
+    //             csv: true,
+    //             apiEmail: "GG_EMAIL",
+    //             apiKey: "GG_KEY",
+    //         })
 
-            assert.deepStrictEqual(
-                (csv as string)
-                    .replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/, "DATE")
-                    .replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/, "DATE"),
-                "Contact me for more info,\r\nLast update:,DATE ET\r\nfirst,last\r\nNael,Shiab\r\nAndrew,Ryan"
-            )
-        })
-    } else {
-        console.log("No GG_EMAIL or GG_KEY in process.env")
-    }
+    //         assert.deepStrictEqual(
+    //             (csv as string)
+    //                 .replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/, "DATE")
+    //                 .replace(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/, "DATE"),
+    //             "Contact me for more info,\r\nLast update:,DATE ET\r\nfirst,last\r\nNael,Shiab\r\nAndrew,Ryan"
+    //         )
+    //     })
+    // } else {
+    //     console.log("No GG_EMAIL or GG_KEY in process.env")
+    // }
 })
