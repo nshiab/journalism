@@ -7,6 +7,8 @@ import { fromFile } from "geotiff"
  * const geoTiffDetails = await getGeoTiffDetails("./some-file.tif")
  * const value = await getGeoTiffValues(45.50, -73.57, geoTiffDetails)
  * ```
+ *
+ * @category Geo
  */
 export default async function getGeoTiffDetails(path: string) {
     const file = await fromFile(path)

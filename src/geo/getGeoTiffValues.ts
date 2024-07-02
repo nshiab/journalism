@@ -7,6 +7,8 @@ import { GeoTIFFImage, TypedArray } from "geotiff"
  * const geoTiffDetails = await getGeoTiffDetails("./some-file.tif")
  * const value = await getGeoTiffValues(45.50, -73.57, geoTiffDetails)
  * ```
+ *
+ * @category Geo
  */
 export default async function getGeoTiffValues(
     lat: number,
