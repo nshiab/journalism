@@ -1,11 +1,5 @@
 // import assert from "assert"
 import zip from "../../src/other/zip.js"
-import { existsSync, mkdirSync } from "fs"
-
-const outputPath = "./test/output/"
-if (!existsSync(outputPath)) {
-    mkdirSync(outputPath)
-}
 
 describe("zip", () => {
     it("should zip multiple files together", () => {
