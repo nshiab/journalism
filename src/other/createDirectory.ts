@@ -1,7 +1,7 @@
 import { mkdirSync, existsSync } from "fs"
 
 /**
- * Creates folders recursively if they don't exist. The path must use folder names must not include `.`.
+ * Creates folders recursively if they don't exist. Folder names must not include `.`.
  *
  * ```js
  * // Creates folders if they don't exist
