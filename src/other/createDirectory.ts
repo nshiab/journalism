@@ -1,13 +1,13 @@
 import { mkdirSync, existsSync } from "fs"
 
 /**
- * Creates folders recursively if they don't exist. Folder names must not include `.`.
+ * Creates folders recursively if they don't exist.
  *
  * ```js
  * // Creates folders if they don't exist
  * createDirectory("./data/json")
  *
- * // This will give the same result. The file at the end of the path is ignored.
+ * // This will give the same result. A file with an extension at the end of the path will be ignored.
  * createDirectory("./data/json/items.json")
  * ```
  */
@@ -17,12 +17,12 @@ export default function createDirectory(path: string) {
     if (path.includes("\\")) {
         path = path
             .split("\\")
-            .filter((d) => !d.includes("."))
+            .filter((d) => (d.startsWith(".") ? true : !d.includes(".")))
             .join("\\")
     } else {
         path = path
             .split("/")
-            .filter((d) => !d.includes("."))
+            .filter((d) => (d.startsWith(".") ? true : !d.includes(".")))
             .join("/")
     }
 

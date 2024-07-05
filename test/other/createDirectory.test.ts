@@ -6,6 +6,8 @@ const outputPath = "./test/output/folder"
 const outputPathRecursive = "./test/output/folder/subfolder/subsubfolder"
 const outputPathFile = "./test/output/folder/differentSubfolder/text.csv"
 const outputPathWithoutFile = "./test/output/folder/differentSubfolder/"
+const outputPathHidden =
+    "./test/output/folder/differentSubfolder/.hiddenFolder/"
 
 describe("createDirectory", () => {
     it("should create a folder that doesn't exist", () => {
@@ -31,5 +33,9 @@ describe("createDirectory", () => {
             folder: existsSync(outputPathWithoutFile),
         }
         assert.deepStrictEqual(result, { file: false, folder: true })
+    })
+    it("should create folders recursively even if the path contains hidden folders", () => {
+        createDirectory(outputPathHidden)
+        assert.deepStrictEqual(existsSync(outputPathHidden), true)
     })
 })
