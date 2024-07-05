@@ -25,6 +25,8 @@ import downloadFile from "./web-scraping/downloadFile.js"
 import unzip from "./other/unzip.js"
 import overwriteSheetData from "./google/overwriteSheetData.js"
 import getSheetData from "./google/getSheetData.js"
+import getGeoTiffDetails from "./geo/getGeoTiffDetails.js"
+import getGeoTiffValues from "./geo/getGeoTiffValues.js"
 
 export {
     formatDate,
@@ -55,4 +57,6 @@ export {
     unzip,
     overwriteSheetData,
     getSheetData,
+    getGeoTiffDetails,
+    getGeoTiffValues,
 }
