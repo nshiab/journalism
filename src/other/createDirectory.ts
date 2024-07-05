@@ -7,7 +7,7 @@ import { mkdirSync, existsSync } from "fs"
  * // Creates folders if they don't exist
  * createDirectory("./data/json")
  *
- * // This will give the same result. The file at the end of the path is ignored.
+ * // This will give the same result. A file with an extension at the end of the path will be ignored.
  * createDirectory("./data/json/items.json")
  * ```
  */
