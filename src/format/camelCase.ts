@@ -7,6 +7,8 @@ import capitalize from "./capitalize.js"
  * // Returns journalismIsAwesome
  * const text = camelCase("Journalism is awesome")
  * ```
+ *
+ * @category Formatting
  */
 export default function camelCase(input: string): string {
     const words = input
