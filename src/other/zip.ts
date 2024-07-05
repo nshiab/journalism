@@ -1,4 +1,5 @@
 import AdmZip from "adm-zip"
+import createDirectory from "./createDirectory.js"
 
 /**
  * Zips multiple files together. To zip an entire folder, pass the folder path as the first parameter. To zip specific files, pass their path as an array of strings.
@@ -23,5 +24,6 @@ export default function zip(files: string | string[], zipFile: string) {
         z.addLocalFolder(files)
     }
 
+    createDirectory(zipFile)
     z.writeZip(zipFile)
 }
