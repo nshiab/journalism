@@ -2,7 +2,7 @@ import AdmZip from "adm-zip"
 import createDirectory from "./createDirectory.js"
 
 /**
- * Zips multiple files together. To zip an entire folder, pass the folder path as the first parameter. To zip specific files, pass their path as an array of strings. The function will create the path if it doesn't exist.
+ * Zips multiple files together. To zip an entire folder, pass the folder path as the first parameter. To zip specific files, pass their path as an array of strings. The function will create the path of the zipped file if it doesn't exist.
  *
  * ```js
  * // Entire folder
