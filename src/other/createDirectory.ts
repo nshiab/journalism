@@ -1,7 +1,7 @@
 import { mkdirSync, existsSync } from "fs"
 
 /**
- * Creates folders recursively if they don't exist. The path must use `/` and folder names must not include `.`.
+ * Creates folders recursively if they don't exist. The path must use folder names must not include `.`.
  *
  * ```js
  * // Creates folders if they don't exist
@@ -13,10 +13,19 @@ import { mkdirSync, existsSync } from "fs"
  */
 
 export default function createDirectory(path: string) {
-    path = path
-        .split("/")
-        .filter((d) => !d.includes("."))
-        .join("/")
+    // For windows?
+    if (path.includes("\\")) {
+        path = path
+            .split("\\")
+            .filter((d) => !d.includes("."))
+            .join("\\")
+    } else {
+        path = path
+            .split("/")
+            .filter((d) => !d.includes("."))
+            .join("/")
+    }
+
     if (!existsSync(path)) {
         mkdirSync(path, { recursive: true })
     }
