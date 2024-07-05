@@ -30,6 +30,7 @@ import overwriteSheetData from "./google/overwriteSheetData.js"
 import getSheetData from "./google/getSheetData.js"
 import getGeoTiffDetails from "./geo/getGeoTiffDetails.js"
 import getGeoTiffValues from "./geo/getGeoTiffValues.js"
+import createDirectory from "./other/createDirectory.js"
 
 export {
     formatDate,
@@ -65,4 +66,5 @@ export {
     getSheetData,
     getGeoTiffDetails,
     getGeoTiffValues,
+    createDirectory,
 }
