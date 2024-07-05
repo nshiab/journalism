@@ -21,6 +21,8 @@ import updateAnnotationsDW from "./dataviz/updateAnnotationsDW.js"
 import updateNotesDW from "./dataviz/updateNotesDW.js"
 import publishChartDW from "./dataviz/publishChartDW.js"
 import dataAsCsv from "./format/dataAsCsv.js"
+import capitalize from "./format/capitalize.js"
+import camelCase from "./format/camelCase.js"
 import downloadFile from "./web-scraping/downloadFile.js"
 import unzip from "./other/unzip.js"
 import zip from "./other/zip.js"
@@ -46,6 +48,8 @@ export {
     arraysToData,
     dataToArrays,
     dataAsCsv,
+    capitalize,
+    camelCase,
     // NODE ONLY
     getStatCanTable,
     getHtmlTable,
