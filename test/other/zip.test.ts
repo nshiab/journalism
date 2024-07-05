@@ -19,4 +19,8 @@ describe("zip", () => {
         zip("test/data/", "test/output/dataFolder.zip")
         // How to assert?
     })
+    it("should zip an entire folder together and create the path if it doesn't exist", () => {
+        zip("test/data/", "test/output/zipFolder/dataFolder.zip")
+        // How to assert?
+    })
 })
