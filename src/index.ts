@@ -23,6 +23,7 @@ import publishChartDW from "./dataviz/publishChartDW.js"
 import dataAsCsv from "./format/dataAsCsv.js"
 import downloadFile from "./web-scraping/downloadFile.js"
 import unzip from "./other/unzip.js"
+import zip from "./other/zip.js"
 import overwriteSheetData from "./google/overwriteSheetData.js"
 import getSheetData from "./google/getSheetData.js"
 import getGeoTiffDetails from "./geo/getGeoTiffDetails.js"
@@ -55,6 +56,7 @@ export {
     publishChartDW,
     downloadFile,
     unzip,
+    zip,
     overwriteSheetData,
     getSheetData,
     getGeoTiffDetails,
