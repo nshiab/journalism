@@ -229,6 +229,56 @@ describe("formatDate", () => {
         )
         assert.strictEqual(formattedDate, "December 31, 2022, at 9:35 p.m. AT")
     })
+    it("should return the date in the format Month DD, HH:MM period", () => {
+        const formattedDate = formatDate(date, "Month DD, HH:MM period")
+        assert.strictEqual(formattedDate, "December 31, 8:35 p.m.")
+    })
+    it("should return the date in the format Month DD, HH:MM period with abbreviated month", () => {
+        const formattedDate = formatDate(date, "Month DD, HH:MM period", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "Dec. 31, 8:35 p.m.")
+    })
+    it("should return the date in the format Month DD, HH:MM period TZ", () => {
+        const formattedDate = formatDate(date, "Month DD, HH:MM period TZ")
+        assert.strictEqual(formattedDate, "December 31, 8:35 p.m. ET")
+    })
+    it("should return the date in the format Month DD, HH:MM period TZ with abbreviated month", () => {
+        const formattedDate = formatDate(date, "Month DD, HH:MM period TZ", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "Dec. 31, 8:35 p.m. ET")
+    })
+    it("should return the date in the format DayOfWeek, HH:MM period", () => {
+        const formattedDate = formatDate(date, "DayOfWeek, HH:MM period")
+        assert.strictEqual(formattedDate, "Saturday, 8:35 p.m.")
+    })
+    it("should return the date in the format DayOfWeek, HH:MM period with abbreviated month", () => {
+        const formattedDate = formatDate(date, "DayOfWeek, HH:MM period", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "Sat., 8:35 p.m.")
+    })
+    it("should return the date in the format DayOfWeek, HH:MM period TZ", () => {
+        const formattedDate = formatDate(date, "DayOfWeek, HH:MM period TZ")
+        assert.strictEqual(formattedDate, "Saturday, 8:35 p.m. ET")
+    })
+    it("should return the date in the format DayOfWeek, HH:MM period TZ with abbreviated month", () => {
+        const formattedDate = formatDate(date, "DayOfWeek, HH:MM period TZ", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "Sat., 8:35 p.m. ET")
+    })
+    it("should return the date in the format HH:MM period", () => {
+        const formattedDate = formatDate(date, "HH:MM period")
+        assert.strictEqual(formattedDate, "8:35 p.m.")
+    })
+    it("should return the date in the format HH:MM period TZ", () => {
+        const formattedDate = formatDate(date, "HH:MM period TZ", {
+            abbreviations: true,
+        })
+        assert.strictEqual(formattedDate, "8:35 p.m. ET")
+    })
 
     // Radio-Canada style
 
@@ -429,5 +479,68 @@ describe("formatDate", () => {
             { timeZone: "Canada/Atlantic", style: "rc" }
         )
         assert.strictEqual(formattedDate, "31 décembre 2022 à 21 h 35 HNA")
+    })
+    it("should return the date in the format Month DD, HH:MM period with RC style", () => {
+        const formattedDate = formatDate(date, "Month DD, HH:MM period", {
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "31 décembre, 20 h 35")
+    })
+    it("should return the date in the format Month DD, HH:MM period with abbreviated month with RC style", () => {
+        const formattedDate = formatDate(date, "Month DD, HH:MM period", {
+            abbreviations: true,
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "31 déc., 20 h 35")
+    })
+    it("should return the date in the format Month DD, HH:MM period TZ with RC style", () => {
+        const formattedDate = formatDate(date, "Month DD, HH:MM period TZ", {
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "31 décembre, 20 h 35 HNE")
+    })
+    it("should return the date in the format Month DD, HH:MM period TZ with abbreviated month with RC style", () => {
+        const formattedDate = formatDate(date, "Month DD, HH:MM period TZ", {
+            abbreviations: true,
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "31 déc., 20 h 35 HNE")
+    })
+    it("should return the date in the format DayOfWeek, HH:MM period with RC style", () => {
+        const formattedDate = formatDate(date, "DayOfWeek, HH:MM period", {
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "Samedi, 20 h 35")
+    })
+    it("should return the date in the format DayOfWeek, HH:MM period with abbreviated month with RC style", () => {
+        const formattedDate = formatDate(date, "DayOfWeek, HH:MM period", {
+            abbreviations: true,
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "Sam., 20 h 35")
+    })
+    it("should return the date in the format DayOfWeek, HH:MM period TZ with RC style", () => {
+        const formattedDate = formatDate(date, "DayOfWeek, HH:MM period TZ", {
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "Samedi, 20 h 35 HNE")
+    })
+    it("should return the date in the format DayOfWeek, HH:MM period TZ with abbreviated month with RC style", () => {
+        const formattedDate = formatDate(date, "DayOfWeek, HH:MM period TZ", {
+            abbreviations: true,
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "Sam., 20 h 35 HNE")
+    })
+    it("should return the date in the format HH:MM period with RC style", () => {
+        const formattedDate = formatDate(date, "HH:MM period", { style: "rc" })
+        assert.strictEqual(formattedDate, "20 h 35")
+    })
+    it("should return the date in the format HH:MM period TZ with RC style", () => {
+        const formattedDate = formatDate(date, "HH:MM period TZ", {
+            abbreviations: true,
+            style: "rc",
+        })
+        assert.strictEqual(formattedDate, "20 h 35 HNE")
     })
 })
