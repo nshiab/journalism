@@ -23,6 +23,10 @@ export default function formatDate(
         | "YYYY-MM-DD HH:MM:SS TZ"
         | "DayOfWeek, Month Day"
         | "Month DD"
+        | "Month DD, HH:MM period"
+        | "Month DD, HH:MM period TZ"
+        | "DayOfWeek, HH:MM period"
+        | "DayOfWeek, HH:MM period TZ"
         | "Month DD, YYYY"
         | "Month DD, YYYY, at HH:MM period"
         | "Month DD, YYYY, at HH:MM period TZ"
@@ -30,7 +34,9 @@ export default function formatDate(
         | "Month"
         | "YYYY"
         | "MM"
-        | "DD",
+        | "DD"
+        | "HH:MM period"
+        | "HH:MM period TZ",
     options: {
         utc?: boolean
         style?: "cbc" | "rc"
@@ -133,6 +139,42 @@ export default function formatDate(
             dateFormatted = formatFns(date, "d")
         } else {
             dateFormatted = formatFns(date, "dd")
+        }
+    } else if (format === "Month DD, HH:MM period") {
+        if (mergedOptions.style === "cbc") {
+            dateFormatted = formatFns(date, "MMMM d, h:mm aa")
+        } else if (mergedOptions.style === "rc") {
+            dateFormatted = formatFns(date, "d MMMM, H 'h' mm")
+        }
+    } else if (format === "Month DD, HH:MM period TZ") {
+        if (mergedOptions.style === "cbc") {
+            dateFormatted = formatFns(date, "MMMM d, h:mm aa zzz")
+        } else if (mergedOptions.style === "rc") {
+            dateFormatted = formatFns(date, "d MMMM, H 'h' mm zzz")
+        }
+    } else if (format === "DayOfWeek, HH:MM period") {
+        if (mergedOptions.style === "cbc") {
+            dateFormatted = formatFns(date, "EEEE, h:mm aa")
+        } else if (mergedOptions.style === "rc") {
+            dateFormatted = formatFns(date, "EEEE, H 'h' mm")
+        }
+    } else if (format === "DayOfWeek, HH:MM period TZ") {
+        if (mergedOptions.style === "cbc") {
+            dateFormatted = formatFns(date, "EEEE, h:mm aa zzz")
+        } else if (mergedOptions.style === "rc") {
+            dateFormatted = formatFns(date, "EEEE, H 'h' mm zzz")
+        }
+    } else if (format === "HH:MM period") {
+        if (mergedOptions.style === "cbc") {
+            dateFormatted = formatFns(date, "h:mm aa")
+        } else if (mergedOptions.style === "rc") {
+            dateFormatted = formatFns(date, "H 'h' mm")
+        }
+    } else if (format === "HH:MM period TZ") {
+        if (mergedOptions.style === "cbc") {
+            dateFormatted = formatFns(date, "h:mm aa zzz")
+        } else if (mergedOptions.style === "rc") {
+            dateFormatted = formatFns(date, "H 'h' mm zzz")
         }
     } else {
         throw new Error("Unknown format")
