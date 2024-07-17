@@ -38,4 +38,8 @@ describe("createDirectory", () => {
         createDirectory(outputPathHidden)
         assert.deepStrictEqual(existsSync(outputPathHidden), true)
     })
+    it("should do nothing if the path is just a file folders", () => {
+        createDirectory("data.csv")
+        assert.deepStrictEqual(existsSync(outputPathHidden), true)
+    })
 })

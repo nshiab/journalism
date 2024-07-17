@@ -26,7 +26,7 @@ export default function createDirectory(path: string) {
             .join("/")
     }
 
-    if (!existsSync(path)) {
+    if (path !== "" && !existsSync(path)) {
         mkdirSync(path, { recursive: true })
     }
 }
