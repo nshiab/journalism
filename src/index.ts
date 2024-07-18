@@ -31,6 +31,7 @@ import getSheetData from "./google/getSheetData.js"
 import getGeoTiffDetails from "./geo/getGeoTiffDetails.js"
 import getGeoTiffValues from "./geo/getGeoTiffValues.js"
 import createDirectory from "./other/createDirectory.js"
+import getId from "./other/getId.js"
 
 export {
     formatDate,
@@ -51,6 +52,7 @@ export {
     dataAsCsv,
     capitalize,
     camelCase,
+    getId,
     // NODE ONLY
     getStatCanTable,
     getHtmlTable,
