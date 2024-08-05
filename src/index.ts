@@ -32,6 +32,7 @@ import getGeoTiffDetails from "./geo/getGeoTiffDetails.js"
 import getGeoTiffValues from "./geo/getGeoTiffValues.js"
 import createDirectory from "./other/createDirectory.js"
 import getId from "./other/getId.js"
+import getSeason from "./weather/getSeason.js"
 
 export {
     formatDate,
@@ -53,6 +54,7 @@ export {
     capitalize,
     camelCase,
     getId,
+    getSeason,
     // NODE ONLY
     getStatCanTable,
     getHtmlTable,

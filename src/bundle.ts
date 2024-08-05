@@ -17,6 +17,7 @@ import dataAsCsv from "./format/dataAsCsv.js"
 import capitalize from "./format/capitalize.js"
 import camelCase from "./format/camelCase.js"
 import getId from "./other/getId.js"
+import getSeason from "./weather/getSeason.js"
 
 export {
     formatDate,
@@ -38,4 +39,5 @@ export {
     capitalize,
     camelCase,
     getId,
+    getSeason,
 }
