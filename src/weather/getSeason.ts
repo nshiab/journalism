@@ -3,7 +3,7 @@
  *
  * @category Weather and climate
  */
-export default function getCurrentSeason(
+export default function getSeason(
     options: {
         date?: Date
         hemisphere?: "northern" | "southern"
