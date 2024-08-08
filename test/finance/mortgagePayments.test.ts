@@ -139,6 +139,38 @@ describe("mortgagePayments", () => {
             }
         )
     })
+    it("should return the monthly mortgage payments for a $700k loan with a 5% rate and a 30-year amortization.", () => {
+        // Checking against https://www.mikesukmanowsky.com/blog/a-guide-to-canadian-mortgage-calculations and https://apps.royalbank.com/apps/mortgages/mortgage-payment-calculator/
+        const payments = mortgagePayments(700_000, 5, "monthly", 5, 30)
+        const firstPayment = payments[0]
+        const fifthPayment = payments[4]
+
+        assert.deepStrictEqual(
+            { firstPayment, fifthPayment },
+            {
+                firstPayment: {
+                    paymentId: 0,
+                    payment: 3735.83,
+                    interest: 2886.74,
+                    capital: 849.09,
+                    balance: 699150.91,
+                    amountPaid: 3735.83,
+                    interestPaid: 2886.74,
+                    capitalPaid: 849.09,
+                },
+                fifthPayment: {
+                    paymentId: 4,
+                    payment: 3735.83,
+                    interest: 2872.65,
+                    capital: 863.19,
+                    balance: 695719.37,
+                    amountPaid: 18679.17,
+                    interestPaid: 14398.54,
+                    capitalPaid: 4280.63,
+                },
+            }
+        )
+    })
     it("should return the monthly mortgage payments for a $100k loan with a 5.00% rate.", () => {
         // Checking against https://itools-ioutils.fcac-acfc.gc.ca/MC-CH/MCCalc-CHCalc-eng.aspx and https://apps.royalbank.com/apps/mortgages/mortgage-payment-calculator/
         const payments = mortgagePayments(100_000, 5, "monthly", 5, 25)
