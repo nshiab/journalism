@@ -51,29 +51,34 @@ import getMahalanobisDistance from "./getMahalanobisDistance.js"
 
 export default function addMahalanobisDistance(
     origin: Record<string, number>,
-    data: Record<string, number>[],
+    data: Record<string, unknown>[],
     options: { similarity?: boolean } = {}
 ) {
     const variables = Object.keys(origin)
     const originArray = variables.map((v) => origin[v])
     const dataArray = data.map((d) => variables.map((v) => d[v]))
 
-    const invertedCovarianceMatrix = getCovarianceMatrix(dataArray, {
-        invert: true,
-    })
+    const invertedCovarianceMatrix = getCovarianceMatrix(
+        dataArray as number[][], // getCovarianceMatrix will check the types
+        {
+            invert: true,
+        }
+    )
 
     data.forEach(
         (d) =>
             (d.mahaDist = getMahalanobisDistance(
                 originArray,
-                variables.map((v) => d[v]),
+                variables.map((v) => d[v] as number), // types checked in getCovarianceMatrix
                 invertedCovarianceMatrix
             ))
     )
 
     if (options.similarity) {
-        const maxDist = Math.max(...data.map((d) => d.mahaDist))
-        data.forEach((d) => (d.similarity = 1 - d.mahaDist / maxDist))
+        const maxDist = Math.max(...data.map((d) => d.mahaDist as number))
+        data.forEach(
+            (d) => (d.similarity = 1 - (d.mahaDist as number) / maxDist)
+        )
     }
 
     return data

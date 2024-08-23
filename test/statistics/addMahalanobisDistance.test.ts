@@ -18,7 +18,7 @@ describe("addMahalanobisDistance", () => {
         const origin = { "fixed acidity": 7.2, alcohol: 11.3 }
 
         const dataWithDist = addMahalanobisDistance(origin, data).sort(
-            (a, b) => a.mahaDist - b.mahaDist
+            (a, b) => (a.mahaDist as number) - (b.mahaDist as number)
         )
 
         assert.deepStrictEqual(dataWithDist, [
@@ -50,7 +50,7 @@ describe("addMahalanobisDistance", () => {
 
         const dataWithDist = addMahalanobisDistance(origin, data, {
             similarity: true,
-        }).sort((a, b) => a.mahaDist - b.mahaDist)
+        }).sort((a, b) => (a.mahaDist as number) - (b.mahaDist as number))
 
         assert.deepStrictEqual(dataWithDist, [
             { "fixed acidity": 7.2, alcohol: 11.3, mahaDist: 0, similarity: 1 },
@@ -91,7 +91,7 @@ describe("addMahalanobisDistance", () => {
 
         assert.deepStrictEqual(
             winesTwoVariables
-                .sort((a, b) => a.mahaDist - b.mahaDist)
+                .sort((a, b) => (a.mahaDist as number) - (b.mahaDist as number))
                 .slice(0, 20),
             [
                 { "fixed acidity": 7.2, alcohol: 11.3, mahaDist: 0 },
@@ -185,7 +185,7 @@ describe("addMahalanobisDistance", () => {
 
         assert.deepStrictEqual(
             winesThreeVariables
-                .sort((a, b) => a.mahaDist - b.mahaDist)
+                .sort((a, b) => (a.mahaDist as number) - (b.mahaDist as number))
                 .slice(0, 20),
             [
                 {
@@ -329,7 +329,7 @@ describe("addMahalanobisDistance", () => {
 
         assert.deepStrictEqual(
             winesFourVariables
-                .sort((a, b) => a.mahaDist - b.mahaDist)
+                .sort((a, b) => (a.mahaDist as number) - (b.mahaDist as number))
                 .slice(0, 20),
             [
                 {
