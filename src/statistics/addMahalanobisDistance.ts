@@ -4,7 +4,7 @@ import getMahalanobisDistance from "./getMahalanobisDistance.js"
 /**
  * Computes the Mahalanobis distance from an origin object for each object in an array. The keys in the origin object are the dimensions considered (tested up to four dimensions but should work for more in theory). The function adds the key `mahaDist` in each object in the original array.
  *
- * If you pass the option `{ similarity: true }`, it will add another key `similarity` which goes from 1 to 0. The closer similarity is to 1, the closer the item is to the origin.
+ * If you pass the option `{ similarity: true }`, it will add another key `similarity` which goes from 1 to 0. The closer similarity is to 1, the closer the item is to the origin. You can also pass a precomputed matrix in options if needed: `{ matrix : precomputedMatrix }.`
  *
  * @example Basic usage
  * ```js
@@ -52,18 +52,20 @@ import getMahalanobisDistance from "./getMahalanobisDistance.js"
 export default function addMahalanobisDistance(
     origin: Record<string, number>,
     data: Record<string, unknown>[],
-    options: { similarity?: boolean } = {}
+    options: { similarity?: boolean; matrix?: number[][] } = {}
 ) {
     const variables = Object.keys(origin)
     const originArray = variables.map((v) => origin[v])
     const dataArray = data.map((d) => variables.map((v) => d[v]))
 
-    const invertedCovarianceMatrix = getCovarianceMatrix(
-        dataArray as number[][], // getCovarianceMatrix will check the types
-        {
-            invert: true,
-        }
-    )
+    const invertedCovarianceMatrix = Array.isArray(options.matrix)
+        ? options.matrix
+        : getCovarianceMatrix(
+              dataArray as number[][], // getCovarianceMatrix will check the types
+              {
+                  invert: true,
+              }
+          )
 
     data.forEach(
         (d) =>
