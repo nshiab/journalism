@@ -2,6 +2,7 @@ import assert from "assert"
 import addMahalanobisDistance from "../../src/statistics/addMahalanobisDistance.js"
 import wineQuality from "../data/wine-quality.json" with { type: "json" }
 import arraysToData from "../../src/format/arraysToData.js"
+import getCovarianceMatrix from "../../src/statistics/getCovarianceMatrix.js"
 
 const wines = arraysToData(wineQuality) as Record<string, number>[]
 
@@ -50,6 +51,54 @@ describe("addMahalanobisDistance", () => {
 
         const dataWithDist = addMahalanobisDistance(origin, data, {
             similarity: true,
+        }).sort((a, b) => (a.mahaDist as number) - (b.mahaDist as number))
+
+        assert.deepStrictEqual(dataWithDist, [
+            { "fixed acidity": 7.2, alcohol: 11.3, mahaDist: 0, similarity: 1 },
+            {
+                "fixed acidity": 7.5,
+                alcohol: 10.5,
+                mahaDist: 0.939177365543612,
+                similarity: 0.6105960454460067,
+            },
+            {
+                "fixed acidity": 7.3,
+                alcohol: 11.4,
+                mahaDist: 1.2633328837091,
+                similarity: 0.4761939130105882,
+            },
+            {
+                "fixed acidity": 6.5,
+                alcohol: 13,
+                mahaDist: 2.0790687857292087,
+                similarity: 0.13797155185472976,
+            },
+            {
+                "fixed acidity": 7.1,
+                alcohol: 12.2,
+                mahaDist: 2.411833147969197,
+                similarity: 0,
+            },
+        ])
+    })
+    it("should add the Mahalanobis distance with a precomputed matrix with two variables (example from doc)", () => {
+        const data = [
+            { "fixed acidity": 6.5, alcohol: 13 },
+            { "fixed acidity": 7.1, alcohol: 12.2 },
+            { "fixed acidity": 7.3, alcohol: 11.4 },
+            { "fixed acidity": 7.2, alcohol: 11.3 },
+            { "fixed acidity": 7.5, alcohol: 10.5 },
+        ]
+        const matrix = getCovarianceMatrix(
+            data.map((d) => [d["fixed acidity"], d["alcohol"]]),
+            { invert: true }
+        )
+
+        const origin = { "fixed acidity": 7.2, alcohol: 11.3 }
+
+        const dataWithDist = addMahalanobisDistance(origin, data, {
+            similarity: true,
+            matrix,
         }).sort((a, b) => (a.mahaDist as number) - (b.mahaDist as number))
 
         assert.deepStrictEqual(dataWithDist, [
