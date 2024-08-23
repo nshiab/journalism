@@ -1,7 +1,5 @@
-import { capitalize } from "../bundle.js"
-
 /**
- * Computes the Z-Score for a given variable in an array of objects. The function adds a new key with the format `zScoreVariable` in each object.
+ * Computes the Z-Score for a given variable in an array of objects. By default, the function adds a new key `zScore` in each object, but you can change it by passing this option as the last parameter `{ newKey: "myNewKey" }`.
  *
  * @example Basic example
  * ```js
@@ -17,6 +15,18 @@ import { capitalize } from "../bundle.js"
  * // We compute the Z-Score for the variable grade.
  * addZScore(data, "grade")
  *
+ * // We now have the key zScore in the data.
+ * // [
+ * //  { grade: 1, zScore: -1.3155870289605438 },
+ * //  { grade: 4, zScore: 0 },
+ * //  { grade: 7, zScore: 1.3155870289605438 },
+ * //  { grade: 2, zScore: -0.8770580193070292 },
+ * //  { grade: 6, zScore: 0.8770580193070292 },
+ * // ]
+ *
+ * // If you want a specific new key, use the options.
+ * addZScore(data, "grade", { newKey: "zScoreGrade"})
+ *
  * // We now have the key zScoreGrade in the data.
  * // [
  * //  { grade: 1, zScoreGrade: -1.3155870289605438 },
@@ -31,7 +41,8 @@ import { capitalize } from "../bundle.js"
 
 export default function addZScore(
     data: Record<string, unknown>[],
-    variable: string
+    variable: string,
+    options: { newKey?: string } = {}
 ) {
     // Average
     let sum = 0
@@ -52,9 +63,10 @@ export default function addZScore(
     const stdDev = Math.sqrt(sqdDistFromMean / data.length)
 
     // Z-Score
-    const newVariable = `zScore${capitalize(variable)}`
+    const newKey =
+        typeof options.newKey === "string" ? options.newKey : "zScore"
     for (let i = 0; i < data.length; i++) {
-        data[i][newVariable] = ((data[i][variable] as number) - mean) / stdDev // we checked the type above
+        data[i][newKey] = ((data[i][variable] as number) - mean) / stdDev // we checked the type above
     }
 
     return data
