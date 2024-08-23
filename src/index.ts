@@ -33,6 +33,10 @@ import getGeoTiffValues from "./geo/getGeoTiffValues.js"
 import createDirectory from "./other/createDirectory.js"
 import getId from "./other/getId.js"
 import getSeason from "./weather/getSeason.js"
+import getCovarianceMatrix from "./statistics/getCovarianceMatrix.js"
+import invertMatrix from "./statistics/invertMatrix.js"
+import getMahalanobisDistance from "./statistics/getMahalanobisDistance.js"
+import addMahalanobisDistance from "./statistics/addMahalanobisDistance.js"
 
 export {
     formatDate,
@@ -55,6 +59,10 @@ export {
     camelCase,
     getId,
     getSeason,
+    getCovarianceMatrix,
+    invertMatrix,
+    getMahalanobisDistance,
+    addMahalanobisDistance,
     // NODE ONLY
     getStatCanTable,
     getHtmlTable,
