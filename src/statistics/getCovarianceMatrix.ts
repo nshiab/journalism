@@ -23,6 +23,9 @@ export default function getCovarianceMatrix(
     // Calculate sums
     for (let i = 0; i < n; i++) {
         for (let v = 0; v < m; v++) {
+            if (typeof data[i][v] !== "number") {
+                throw new Error(`This is not a number: ${data[i][v]}`)
+            }
             sums[v] += data[i][v]
             squaredSums[v] += data[i][v] * data[i][v]
             for (let w = 0; w < m; w++) {

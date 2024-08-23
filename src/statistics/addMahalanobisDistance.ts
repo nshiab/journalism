@@ -2,7 +2,7 @@ import getCovarianceMatrix from "./getCovarianceMatrix.js"
 import getMahalanobisDistance from "./getMahalanobisDistance.js"
 
 /**
- * Computes the Mahalanobis distance for each object in an array, based on the keys and values in an origin. The function adds the key `mahaDist` in each object in the original array.
+ * Computes the Mahalanobis distance from an origin object for each object in an array. The keys in the origin object are the dimensions considered. The function adds the key `mahaDist` in each object in the original array.
  *
  * If you pass the option `{ similarity: true }`, it will add another key `similarity` which goes from 1 to 0. The closer similarity is to 1, the closer the item is to the origin.
  *

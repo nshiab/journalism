@@ -1,5 +1,5 @@
 /**
- * Computes the Mahalanobis distance. You first need to compute the inverted covariance matrix of your data.
+ * Computes the Mahalanobis distance. You first need to compute the inverted covariance matrix of your data with `getCovarianceMatrix`.
  *
  * @category Statistics
  */
