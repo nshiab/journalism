@@ -37,7 +37,7 @@ import getCovarianceMatrix from "./statistics/getCovarianceMatrix.js"
 import invertMatrix from "./statistics/invertMatrix.js"
 import getMahalanobisDistance from "./statistics/getMahalanobisDistance.js"
 import addMahalanobisDistance from "./statistics/addMahalanobisDistance.js"
-import addZscore from "./statistics/addZScore.js"
+import addZScore from "./statistics/addZScore.js"
 
 export {
     formatDate,
@@ -64,7 +64,7 @@ export {
     invertMatrix,
     getMahalanobisDistance,
     addMahalanobisDistance,
-    addZscore,
+    addZScore,
     // NODE ONLY
     getStatCanTable,
     getHtmlTable,
