@@ -812,46 +812,46 @@ describe("mortgageMaxAmount", () => {
             monthlyCondoFees: 100,
         })
     })
-    it("should return a purchase price of $999k with an income of $500k, down payment of $100k, and a rate of 5.00%", () => {
+    it("should return a purchase price of $125k with an income of $500k, down payment of $100k, and a rate of 5.00%", () => {
         const results = mortgageMaxAmount(500_000, 100_000, 5)
         assert.deepStrictEqual(results, {
             annualIncome: 500000,
             downPayment: 100000,
             rate: 5,
             rateTested: 7,
-            purchasePrice: 999000,
-            mortgageAmount: 926869,
-            insurancePremium: 27869,
-            monthlyMortgagePayment: 6492,
-            grossDebtServiceRatio: 0.19,
-            totalDebtServiceRatio: 0.19,
+            purchasePrice: 1250000,
+            mortgageAmount: 1196000,
+            insurancePremium: 46000,
+            monthlyMortgagePayment: 8377,
+            grossDebtServiceRatio: 0.24,
+            totalDebtServiceRatio: 0.24,
             reason: "downPayment limit",
             monthlyDebtPayment: 0,
             monthlyHeating: 175,
             isHeatingEstimate: true,
-            monthlyTax: 1249,
+            monthlyTax: 1563,
             isTaxEstimate: true,
             monthlyCondoFees: 0,
         })
     })
-    it("should return a purchase price of $1,000,001 with an income of $500k, down payment of $200,001, and a rate of 5.00%", () => {
+    it("should return a purchase price of $1,499,001 with an income of $500k, down payment of $200,001, and a rate of 5.00%", () => {
         const results = mortgageMaxAmount(500_000, 200_001, 5)
         assert.deepStrictEqual(results, {
             annualIncome: 500000,
             downPayment: 200001,
             rate: 5,
             rateTested: 7,
-            purchasePrice: 1000001,
-            mortgageAmount: 800000,
-            insurancePremium: 0,
-            monthlyMortgagePayment: 5603,
-            grossDebtServiceRatio: 0.17,
-            totalDebtServiceRatio: 0.17,
+            purchasePrice: 1499001,
+            mortgageAmount: 1339269,
+            insurancePremium: 40269,
+            monthlyMortgagePayment: 9380,
+            grossDebtServiceRatio: 0.27,
+            totalDebtServiceRatio: 0.27,
             reason: "downPayment limit",
             monthlyDebtPayment: 0,
             monthlyHeating: 175,
             isHeatingEstimate: true,
-            monthlyTax: 1250,
+            monthlyTax: 1874,
             isTaxEstimate: true,
             monthlyCondoFees: 0,
         })

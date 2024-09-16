@@ -211,12 +211,12 @@ function findMaxAmount(
             if (downPayment < downPaymentMin) {
                 downPaymentTooLow = true
             }
-        } else if (purchasePrice > 500_000 && purchasePrice < 1_000_000) {
+        } else if (purchasePrice > 500_000 && purchasePrice < 1_500_000) {
             const downPaymentMin = 25_000 + (purchasePrice - 500_000) * 0.1
             if (downPayment < downPaymentMin) {
                 downPaymentTooLow = true
             }
-        } else if (purchasePrice >= 1_000_000) {
+        } else if (purchasePrice >= 1_500_000) {
             const downPaymentMin = purchasePrice * 0.2
             if (downPayment < downPaymentMin) {
                 downPaymentTooLow = true
