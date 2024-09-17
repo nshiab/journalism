@@ -38,6 +38,7 @@ import invertMatrix from "./statistics/invertMatrix.js"
 import getMahalanobisDistance from "./statistics/getMahalanobisDistance.js"
 import addMahalanobisDistance from "./statistics/addMahalanobisDistance.js"
 import addZScore from "./statistics/addZScore.js"
+import addClusters from "./statistics/addClusters.js"
 
 export {
     formatDate,
@@ -65,6 +66,7 @@ export {
     getMahalanobisDistance,
     addMahalanobisDistance,
     addZScore,
+    addClusters,
     // NODE ONLY
     getStatCanTable,
     getHtmlTable,
