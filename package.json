@@ -59,10 +59,10 @@
         "url": "https://github.com/nshiab/journalism/issues"
     },
     "devDependencies": {
-        "@rollup/plugin-commonjs": "^26.0.1",
+        "@rollup/plugin-commonjs": "^28.0.0",
         "@rollup/plugin-node-resolve": "^15.1.0",
         "@rollup/plugin-terser": "^0.4.3",
-        "@rollup/plugin-typescript": "^11.1.1",
+        "@rollup/plugin-typescript": "^12.1.0",
         "@types/adm-zip": "^0.5.5",
         "@types/d3-array": "^3.0.5",
         "@types/d3-dsv": "^3.0.7",
