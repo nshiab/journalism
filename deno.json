@@ -3,7 +3,7 @@
     "version": "1.17.0",
     "exports": "./src/index.ts",
     "tasks": {
-        "test": "mocha \"test/unit/**/*.test.ts\" --timeout 10000 -r dotenv/config"
+        "test": "mocha \"test/unit/**/*.test.ts\" --timeout 10000"
     },
     "nodeModuleDir": "auto",
     "compilerOptions": {
