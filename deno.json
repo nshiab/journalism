@@ -1,12 +1,14 @@
 {
-    "name": "@nshiab/journalism",
-    "version": "1.17.0",
-    "exports": "./src/index.ts",
-    "tasks": {
-        "test": "mocha \"test/unit/**/*.test.ts\" --timeout 10000"
-    },
-    "nodeModuleDir": "auto",
-    "compilerOptions": {
-        "lib": ["dom"]
-    }
+  "name": "@nshiab/journalism",
+  "version": "1.17.2",
+  "exports": "./src/index.ts",
+  "tasks": {
+    "test": "mocha \"test/unit/**/*.test.ts\" --timeout 10000"
+  },
+  "nodeModuleDir": "auto",
+  "compilerOptions": {
+    "lib": [
+      "dom"
+    ]
+  }
 }
