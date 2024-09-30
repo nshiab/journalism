@@ -2,9 +2,22 @@
 
 A collection of TypeScript functions for journalistic projects.
 
-The library is available on [npm](https://www.npmjs.com/package/journalism). To install, run `npm i journalism` in your terminal.
+The library is available on [NPM](https://www.npmjs.com/package/journalism) and [JSR](https://jsr.io/@nshiab/journalism).
 
-The documentation can be found [here](https://nshiab.github.io/journalism/).
+The documentation can be found on [Github](https://nshiab.github.io/journalism/) and [JSR](https://jsr.io/@nshiab/journalism/doc).
+
+To install, run the relevant command in your terminal
+
+```bash
+# DENO
+deno install jsr:@nshiab/journalism
+
+# NODE.JS
+npm i journalism
+
+# BUN
+bun add journalism
+```
 
 If you wish to contribute, create an issue explaining what you would like to add, create a branch from the issue, make sure to add tests, import your function in index.ts and then create a pull request. To run a specific test, you can use a command like this one `npx mocha --require ts-node/register ./test/finance/adjustToInflation.test.ts --timeout 10000 -r dotenv/config`. To run all tests, including building the library and generating the docs (in ./test-docs), run `npm run all-tests`.
 
