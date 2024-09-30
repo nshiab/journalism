@@ -1,4 +1,4 @@
-import { GeoTIFFImage, TypedArray } from "geotiff"
+import type { GeoTIFFImage, TypedArray } from "geotiff"
 
 /**
  * Extracts values at specific lat/lon coordinates from a geotiff. Works with the values returned by the getGeoTiffDetails function.
@@ -28,7 +28,7 @@ export default async function getGeoTiffValues(
         bboxWidth: number
         bboxHeight: number
     }
-) {
+): Promise<number | TypedArray> {
     const widthPct = (lon - bbox[0]) / bboxWidth
     const heightPct = (lat - bbox[1]) / bboxHeight
     const xPx = Math.floor(pixelWidth * widthPct)
@@ -36,5 +36,5 @@ export default async function getGeoTiffValues(
     const window = [xPx, yPx, xPx + 1, yPx + 1]
     const data = await image.readRasters({ window })
 
-    return data[0] as TypedArray
+    return data[0]
 }

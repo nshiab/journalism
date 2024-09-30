@@ -46,14 +46,13 @@ import getMahalanobisDistance from "./getMahalanobisDistance.js"
  * ```
  *
  * @category Statistics
- *
  */
 
 export default function addMahalanobisDistance(
     origin: Record<string, number>,
     data: Record<string, unknown>[],
     options: { similarity?: boolean; matrix?: number[][] } = {}
-) {
+): Record<string, unknown>[] {
     const variables = Object.keys(origin)
     const originArray = variables.map((v) => origin[v])
     const dataArray = data.map((d) => variables.map((v) => d[v]))

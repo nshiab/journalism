@@ -1,3 +1,5 @@
+import process from "node:process"
+
 /**
  * Publishes the specified Datawrapper chart, table, or map. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
  *

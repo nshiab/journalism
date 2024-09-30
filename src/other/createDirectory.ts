@@ -1,4 +1,4 @@
-import { mkdirSync, existsSync } from "fs"
+import { mkdirSync, existsSync } from "node:fs"
 
 /**
  * Creates folders recursively if they don't exist.

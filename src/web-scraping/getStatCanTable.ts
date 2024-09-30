@@ -1,5 +1,6 @@
 import AdmZip from "adm-zip"
-import { DSVRowArray, csvParse } from "d3-dsv"
+import { csvParse, DSVRowArray } from "d3-dsv"
+import { Buffer } from "node:buffer"
 
 /**
  * Returns the data from a Statistics Canada table as an array of objects. The first parameter is the pid value that can be found in the table url. The second parameter is an optional object specifying:

@@ -1,4 +1,5 @@
 import { fromFile } from "geotiff"
+import type { GeoTIFFImage } from "geotiff"
 
 /**
  * Extracts detailed informations from a geoTIFF that can be used with the getGeoTiffValues function. Just for NodeJS and similar runtimes.
@@ -10,7 +11,14 @@ import { fromFile } from "geotiff"
  *
  * @category Geo
  */
-export default async function getGeoTiffDetails(path: string) {
+export default async function getGeoTiffDetails(path: string): Promise<{
+    image: GeoTIFFImage
+    bbox: number[]
+    pixelWidth: number
+    pixelHeight: number
+    bboxWidth: number
+    bboxHeight: number
+}> {
     const file = await fromFile(path)
     const image = await file.getImage()
     const bbox = image.getBoundingBox()

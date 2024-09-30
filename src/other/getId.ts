@@ -5,7 +5,7 @@ const characters =
 /**
  * Creates a unique id with letters, numbers, but no spaces or special characters. By default, the length is 6 characters. Works in the browser and NodeJS (and other runtimes). Handy, but not cryptographically secure.
  */
-export default function getId(length: number = 6) {
+export default function getId(length: number = 6): string {
     let i = 0
     let id = ""
     do {

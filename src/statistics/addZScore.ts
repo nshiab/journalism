@@ -43,7 +43,7 @@ export default function addZScore(
     data: Record<string, unknown>[],
     variable: string,
     options: { newKey?: string } = {}
-) {
+): Record<string, unknown>[] {
     // Average
     let sum = 0
     for (let i = 0; i < data.length; i++) {
