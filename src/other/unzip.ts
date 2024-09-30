@@ -1,5 +1,5 @@
 import AdmZip from "adm-zip"
-import { unlinkSync } from "fs"
+import { unlinkSync } from "node:fs"
 
 /**
  * Unzips a file and outputs the result in a folder.

@@ -1,5 +1,5 @@
-import getCovarianceMatrix from "./getCovarianceMatrix.js"
-import getMahalanobisDistance from "./getMahalanobisDistance.js"
+import getCovarianceMatrix from "./getCovarianceMatrix.js";
+import getMahalanobisDistance from "./getMahalanobisDistance.js";
 
 /**
  * Computes the Mahalanobis distance from an origin object for each object in an array. The keys in the origin object are the dimensions considered (tested up to four dimensions but should work for more in theory). The function adds the key `mahaDist` in each object in the original array.
@@ -46,42 +46,40 @@ import getMahalanobisDistance from "./getMahalanobisDistance.js"
  * ```
  *
  * @category Statistics
- *
  */
 
 export default function addMahalanobisDistance(
     origin: Record<string, number>,
     data: Record<string, unknown>[],
-    options: { similarity?: boolean; matrix?: number[][] } = {}
-) {
-    const variables = Object.keys(origin)
-    const originArray = variables.map((v) => origin[v])
-    const dataArray = data.map((d) => variables.map((v) => d[v]))
+    options: { similarity?: boolean; matrix?: number[][] } = {},
+): Record<string, unknown>[] {
+    const variables = Object.keys(origin);
+    const originArray = variables.map((v) => origin[v]);
+    const dataArray = data.map((d) => variables.map((v) => d[v]));
 
     const invertedCovarianceMatrix = Array.isArray(options.matrix)
         ? options.matrix
         : getCovarianceMatrix(
-              dataArray as number[][], // getCovarianceMatrix will check the types
-              {
-                  invert: true,
-              }
-          )
+            dataArray as number[][], // getCovarianceMatrix will check the types
+            {
+                invert: true,
+            },
+        );
 
     data.forEach(
-        (d) =>
-            (d.mahaDist = getMahalanobisDistance(
-                originArray,
-                variables.map((v) => d[v] as number), // types checked in getCovarianceMatrix
-                invertedCovarianceMatrix
-            ))
-    )
+        (d) => (d.mahaDist = getMahalanobisDistance(
+            originArray,
+            variables.map((v) => d[v] as number), // types checked in getCovarianceMatrix
+            invertedCovarianceMatrix,
+        )),
+    );
 
     if (options.similarity) {
-        const maxDist = Math.max(...data.map((d) => d.mahaDist as number))
+        const maxDist = Math.max(...data.map((d) => d.mahaDist as number));
         data.forEach(
-            (d) => (d.similarity = 1 - (d.mahaDist as number) / maxDist)
-        )
+            (d) => (d.similarity = 1 - (d.mahaDist as number) / maxDist),
+        );
     }
 
-    return data
+    return data;
 }

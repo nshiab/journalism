@@ -1,11 +1,10 @@
-import { csvParse } from "d3-dsv"
-import logToSheet from "./helpers/logToSheet.js"
+import { csvParse } from "d3-dsv";
+import logToSheet from "./helpers/logToSheet.js";
 
 /**
  * Returns the data of a Google Sheet.
  *
  * By default, this function looks for the API key in process.env.GOOGLE_PRIVATE_KEY and the service account email in process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL. If you don't have credentials, check [this](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
- *
  *
  * ```ts
  * // Fake url used as an example.
@@ -36,28 +35,28 @@ import logToSheet from "./helpers/logToSheet.js"
 export default async function getSheetData(
     sheetUrl: string,
     options: {
-        csv?: boolean
-        skip?: number
-        apiEmail?: string
-        apiKey?: string
-    } = {}
-) {
-    const sheet = await logToSheet(sheetUrl, options)
+        csv?: boolean;
+        skip?: number;
+        apiEmail?: string;
+        apiKey?: string;
+    } = {},
+): Promise<Record<string, string>[] | string> {
+    const sheet = await logToSheet(sheetUrl, options);
 
-    const buffer = await sheet.downloadAsCSV()
-    const enc = new TextDecoder("utf-8")
-    let csv = enc.decode(buffer)
+    const buffer = await sheet.downloadAsCSV();
+    const enc = new TextDecoder("utf-8");
+    let csv = enc.decode(buffer);
 
     if (typeof options.skip === "number") {
-        csv = csv.split("\n").slice(options.skip).join("\n")
+        csv = csv.split("\n").slice(options.skip).join("\n");
     }
 
     if (options.csv) {
-        return csv
+        return csv;
     } else {
-        const data = csvParse(csv)
+        const data = csvParse(csv);
         // @ts-expect-error no sure why
-        delete data.columns
-        return data
+        delete data.columns;
+        return data;
     }
 }

@@ -1,3 +1,5 @@
+import process from "node:process"
+
 import { JWT } from "google-auth-library"
 import {
     GoogleSpreadsheet,

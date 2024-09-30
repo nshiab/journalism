@@ -24,9 +24,7 @@
 
 export default async function savePlotChart(
     data: { [key: string]: unknown }[],
-    makeChart: (
-        data: { [key: string]: unknown }[]
-    ) => SVGSVGElement | HTMLElement,
+    makeChart: (data: { [key: string]: unknown }[]) => SVGElement | HTMLElement,
     path: string
 ) {
     // We check which keys hold dates, based on the first data item.
@@ -48,7 +46,7 @@ export default async function savePlotChart(
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         puppeteer = await import("puppeteer")
-    } catch (error) {
+    } catch (_error) {
         throw new Error("You need to install puppeteer => npm i puppeteer")
     }
 

@@ -1,3 +1,5 @@
+import process from "node:process"
+
 /**
  * Updates annotations in on a chart. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
  *
