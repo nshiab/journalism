@@ -1,7 +1,7 @@
 // Based on https://github.com/Turfjs/turf/blob/master/packages/turf-distance/index.ts
 
 /**
- * Compute the distance in kilometres based on longitude and latitude. The options (last parameter) are optional.
+ * Compute the Haversine distance in kilometres based on longitude and latitude. The options (last parameter) are optional.
  *
  *```js
  * const distance = distance(-73.66, 45.51, -79.43, 43.66, { decimals: 0 })
