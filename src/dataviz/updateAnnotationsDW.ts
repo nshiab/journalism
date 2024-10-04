@@ -1,37 +1,45 @@
 import process from "node:process"
 
 /**
- * Updates annotations in on a chart. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
+ * Updates annotations on a chart. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
  *
- * ```js
+ * @example
+ * Basic usage
+ * ```ts
  * import { updateAnnotationsDW } from "journalism"
  *
  * const chartID = "myChartId"
  * const myAnnotations = [
-    {
-        "x": "2024/08/30 01:52",
-        "y": "14496235",
-        "text": "This is an annotation!",
-    },
-    {
-        "x": "2024/06/29",
-        "y": "15035128",
-        "dy": 50,
-        "text": "This is also some text, but with an arrow!",
-        "connectorLine": {
-            "enabled": true,
-            "type": "straight",
-            "arrowHead": "lines"
-        },
-        "mobileFallback": false
-    }
-]
+ *    {
+ *        "x": "2024/08/30 01:52",
+ *        "y": "14496235",
+ *        "text": "This is an annotation!"
+ *    },
+ *    {
+ *        "x": "2024/06/29",
+ *        "y": "15035128",
+ *        "dy": 50,
+ *        "text": "This is also some text, but with an arrow!",
+ *        "connectorLine": {
+ *            "enabled": true,
+ *            "type": "straight",
+ *            "arrowHead": "lines"
+ *        },
+ *        "mobileFallback": false
+ *    }
+ * ]
  *
  * await updateAnnotationsDW(chartID, myAnnotations)
- * 
+ *
  * // If your API key is stored under a different name in process.env, use the options.
  * await updateAnnotationsDW(chartID, myAnnotations, { apiKey: "DW_KEY" })
  * ```
+ *
+ * @param chartId - The ID of the chart to update.
+ * @param annotations - An array of annotation objects.
+ * @param options - Additional options.
+ * @param options.apiKey - The process.env API key name to use for authentication. If not provided, it defaults to process.env.DATAWRAPPER_KEY.
+ * @param options.returnResponse - Whether to return the response object.
  *
  * @category Dataviz
  */

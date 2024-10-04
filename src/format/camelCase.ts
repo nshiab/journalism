@@ -3,10 +3,14 @@ import capitalize from "./capitalize.js"
 /**
  * Formats a string to camel case.
  *
+ * @example
+ * Basic usage
  * ```js
  * // Returns journalismIsAwesome
  * const text = camelCase("Journalism is awesome")
  * ```
+ *
+ * @param input The string to be formatted.
  *
  * @category Formatting
  */

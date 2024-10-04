@@ -6,12 +6,19 @@ import isValid from "./helpers/isValidDate.js"
 /**
  * Format a Date as a string with a specific format and a specific style. To format as UTC Date, set the utc option to true.
  *
+ * @example
+ * Basic usage
  *```js
  * const date = new Date("2023-01-01T01:35:00.000Z")
  * const string = formatDate(date, "Month DD, YYYY, at HH:MM period", { utc: true, abbreviations: true })
  * // returns "Jan. 1, 2023, at 1:35 p.m."
  * ```
+ *
  * Options can be passed as the last parameter. Pass {style: "rc"} to parse dates in French.
+ *
+ * @param date - The date to format.
+ * @param format - The format string.
+ * @param options - Additional options for formatting.
  *
  * @category Formatting
  */

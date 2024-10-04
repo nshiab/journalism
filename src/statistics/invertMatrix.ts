@@ -1,6 +1,18 @@
 /**
  * Computes the invert of a square matrix.
  *
+ * @param matrix - The square matrix to be inverted.
+ *
+ * @example
+ * Basic usage
+ * ```typescript
+ * const matrix = [
+ *   [1, 2],
+ *   [3, 4]
+ * ];
+ * const inverted = invertMatrix(matrix);
+ * ```
+ *
  * @category Statistics
  */
 export default function invertMatrix(matrix: number[][]): number[][] {

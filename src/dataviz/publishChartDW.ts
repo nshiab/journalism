@@ -3,6 +3,8 @@ import process from "node:process"
 /**
  * Publishes the specified Datawrapper chart, table, or map. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
  *
+ * @example
+ * Basic usage
  * ```js
  * const chartID = "myChartId"
  * await publishChartDW(chartID)
@@ -10,6 +12,11 @@ import process from "node:process"
  * // If your API key is stored under a different name in process.env, use the options.
  * await publishChartDW(chartID, { apiKey: "DW_KEY" })
  * ```
+ *
+ * @param chartId - The ID of the chart to be published.
+ * @param options - Optional parameters.
+ * @param options.apiKey - The process.env API key name to use for authentication. If not provided, it defaults to process.env.DATAWRAPPER_KEY.
+ * @param options.returnResponse - If true, the function returns the response object from the fetch call.
  *
  * @category Dataviz
  */

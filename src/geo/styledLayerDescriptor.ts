@@ -2,24 +2,29 @@ import noScientificNotation from "../format/helpers/noScientificNotation.js"
 
 /**
  * Returns the OpenGIS Styled Layer Descriptor encoded for an URL. The required parameters are the layer and the color scale.
- *
+ * 
+ * @example
+ * Basic usage
  * ```ts
  * // Returns the SLD for the GDPS.ETA_TT layer with a color scale going from blue to red.
  * const sdl = styledLayerDescriptor("GDPS.ETA_TT", [
-                { color: "#550c24", value: 100 },
-                { color: "#7f2e34", value: 30 },
-                { color: "#c26847", value: 20 },
-                { color: "#bdbb7a", value: 10 },
-                { color: "#e0e9f0", value: 0 },
-                { color: "#97b4cd", value: -10 },
-                { color: "#5881a1", value: -20 },
-                { color: "#334f60", value: -30 },
-                { color: "#21353f", value: -100 },
-            ])
+ *   { color: "#550c24", value: 100 },
+ *   { color: "#7f2e34", value: 30 },
+ *   { color: "#c26847", value: 20 },
+ *   { color: "#bdbb7a", value: 10 },
+ *   { color: "#e0e9f0", value: 0 },
+ *   { color: "#97b4cd", value: -10 },
+ *   { color: "#5881a1", value: -20 },
+ *   { color: "#334f60", value: -30 },
+ *   { color: "#21353f", value: -100 },
+ * ])
 
  * // The sdl can now be used in a WMS request as SLD_BODY
  * const url = `https://geo.weather.gc.ca/geomet?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX=-90,-180,90,180&CRS=EPSG:4326&WIDTH=2400&HEIGHT=1200&LAYERS=GDPS.ETA_TT&FORMAT=image/jpeg&SLD_BODY=${sld}`
  * ```
+ * 
+ * @param layer The name of the layer.
+ * @param colorScale An array of objects containing color and value properties.
  * 
  * @category Geo
  */

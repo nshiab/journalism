@@ -1,21 +1,25 @@
 /**
- * Returns an array of objects from an object made of arrays.
+ * Converts an object containing arrays into an array of objects, where each object corresponds to an index in the arrays.
  *
- * For example, this data...
+ *
+ * @example
+ * Basic usage
  * ```ts
- * {
- *  keyA: ["a", "b", "c"],
- *  keyB: [1, 2, 3],
- * }
+ * const input = {
+ *   keyA: ["a", "b", "c"],
+ *   keyB: [1, 2, 3],
+ * };
+ * const result = arraysToData(input);
+ * console.log(result);
+ * // Output:
+ * // [
+ * //   { keyA: "a", keyB: 1 },
+ * //   { keyA: "b", keyB: 2 },
+ * //   { keyA: "c", keyB: 3 },
+ * // ]
  * ```
- * ...would be returned like this.
- * ```ts
- * [
- *  { keyA: "a", keyB: 1 },
- *  { keyA: "b", keyB: 2 },
- *  { keyA: "c", keyB: 3 },
- * ]
- * ```
+ *
+ * @param data - An object where each key maps to an array of values.
  *
  * @category Formatting
  */

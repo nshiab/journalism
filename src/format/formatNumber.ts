@@ -2,21 +2,23 @@ import round from "./round.js"
 
 /**
  * Format a number with a specific style.
- *
- *```js
+ * @example
+ * Basic usage
+ * ```js
  * const string = formatNumber(1234.567, { sign: true, round: true })
  * // returns "+1,235"
  * ```
- * These options can be passed as the last parameter:
- * - style: "cbc" or "rc"
- * - sign: if true, "-" or "+" are added in front of the number
- * - round: to round the number
- * - decimals: the number of decimals to keep when rounding
- * - significantDigits: The number of digits to keep. Significant digits start being counted at the first non-zero digit. For example, 0.004622 with 1 significant digit will the rounded to 0.005.
- * - fixed: display a fixed number of decimals by keeping 0 digits. For example, if decimals is set to 2 and fixed is true, then 0 will read 0.00.
- * - nearestInteger: the base to use to round. For example, 123 with the nearestInteger 10 is 120.
- * - prefix: a string to add before the number, "$" for example
- * - suffix: a string to add after the number, "%" for example
+ * @param number The number to format.
+ * @param options An object containing the formatting options.
+ * @param options.style The style to use for formatting. Can be "cbc" or "rc".
+ * @param options.sign If true, "-" or "+" are added in front of the number.
+ * @param options.round If true, the number will be rounded.
+ * @param options.decimals The number of decimals to keep when rounding.
+ * @param options.significantDigits The number of significant digits to keep.
+ * @param options.fixed If true, display a fixed number of decimals by keeping 0 digits.
+ * @param options.nearestInteger The base to use to round the number.
+ * @param options.prefix A string to add before the number.
+ * @param options.suffix A string to add after the number.
  *
  * @category Formatting
  */

@@ -1,6 +1,8 @@
 /**
  * Saves an Observable Plot chart as an image. You must use the Plot.dot syntax and install puppeteer (npm i puppeteer).
  *
+ * @example
+ * Basic usage
  * ```js
  * import * as Plot from "@observablehq/plot"
  *
@@ -19,6 +21,11 @@
  *
  * await savePlotChart(data, chart, path)
  * ```
+ *
+ * @param data - The data to be visualized.
+ * @param makeChart - A function that returns an SVGElement or HTMLElement representing the chart.
+ * @param path - The file path where the chart image will be saved.
+ *
  * @category Dataviz
  */
 

@@ -2,8 +2,15 @@ import { load } from "cheerio"
 import { DSVRowArray, csvFormatRow, csvParse } from "d3-dsv"
 
 /**
- * Returns the data from an HTML table as an array of objects. The first parameter is an url. The second parameter is an optional object specifying a css selector and/or an index.
+ * Returns the data from an HTML table as an array of objects.
  *
+ * @param url The URL of the page containing the HTML table.
+ * @param options Optional parameters to specify the table selector and index.
+ * @param options.selector A CSS selector to identify the table.
+ * @param options.index The index of the table if multiple tables match the selector.
+ *
+ * @example
+ * Basic usage
  * ```js
  * // This would parse the data from the fourth
  * // table with the class name data-table.

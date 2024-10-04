@@ -3,6 +3,9 @@ import process from "node:process"
 /**
  * Updates notes field for a specified Datawrapper chart, table or map. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
  *
+ *
+ * @example
+ * Basic usage
  * ```js
  * import { updateNotesDW, formatDate } from "journalism"
  *
@@ -15,6 +18,12 @@ import process from "node:process"
  * // If your API key is stored under a different name in process.env, use the options.
  * await updateNotesDW(chartID, note, { apiKey: "DW_KEY" })
  * ```
+ *
+ * @param chartId - The ID of the chart to update.
+ * @param note - The note content to update in the chart.
+ * @param options - Optional parameters.
+ * @param options.apiKey - The process.env API key name to use for authentication. If not provided, defaults to process.env.DATAWRAPPER_KEY.
+ * @param options.returnResponse - If true, the function returns the response object from the fetch call.
  *
  * @category Dataviz
  */
