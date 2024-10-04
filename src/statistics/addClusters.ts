@@ -17,6 +17,8 @@
  * @param options.reset - If true, resets the clusterId and clusterType of all points before clustering.
  *
  * @returns void
+ *
+ * @category Statistics
  */
 export default function addClusters(
     data: { [key: string]: unknown }[],
