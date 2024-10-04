@@ -27,11 +27,53 @@ describe("prettyDuration", () => {
         })
         assert.strictEqual(duration, "6 h, 3 min, 15 sec, 0 ms")
     })
-    it("should return a string with a number of seconds, minutes, hours, and days", () => {
+    it("should return a string with a number of seconds, minutes, hours, and days (singular)", () => {
+        const duration = prettyDuration(new Date("2024-01-01T17:00:00"), {
+            end: new Date("2024-01-02T23:03:15"),
+        })
+        assert.strictEqual(duration, "1 day, 6 h, 3 min, 15 sec, 0 ms")
+    })
+    it("should return a string with a number of seconds, minutes, hours, and days (plural)", () => {
         const duration = prettyDuration(new Date("2024-01-01T17:00:00"), {
             end: new Date("2024-01-23T23:03:15"),
         })
         assert.strictEqual(duration, "22 days, 6 h, 3 min, 15 sec, 0 ms")
+    })
+    it("should return a string with a number of seconds, minutes, hours, days, and months (singular)", () => {
+        const duration = prettyDuration(new Date("2024-01-01T17:00:00"), {
+            end: new Date("2024-02-02T23:03:15"),
+        })
+        assert.strictEqual(
+            duration,
+            "1 month, 2 days, 6 h, 3 min, 15 sec, 0 ms"
+        )
+    })
+    it("should return a string with a number of seconds, minutes, hours, days, and months (plural)", () => {
+        const duration = prettyDuration(new Date("2024-01-01T17:00:00"), {
+            end: new Date("2024-06-23T23:03:15"),
+        })
+        assert.strictEqual(
+            duration,
+            "5 months, 24 days, 5 h, 3 min, 15 sec, 0 ms"
+        )
+    })
+    it("should return a string with a number of seconds, minutes, hours, days, months, and years (singular)", () => {
+        const duration = prettyDuration(new Date("2024-01-01T17:00:00"), {
+            end: new Date("2025-02-02T23:03:15"),
+        })
+        assert.strictEqual(
+            duration,
+            "1 year, 1 month, 8 days, 6 h, 3 min, 15 sec, 0 ms"
+        )
+    })
+    it("should return a string with a number of seconds, minutes, hours, days, months, and year (plural)", () => {
+        const duration = prettyDuration(new Date("2024-01-01T17:00:00"), {
+            end: new Date("2034-06-23T23:03:15"),
+        })
+        assert.strictEqual(
+            duration,
+            "10 years, 5 months, 16 days, 5 h, 3 min, 15 sec, 0 ms"
+        )
     })
     it("should return a string with a number of seconds, minutes, hours, and days. It should also add a prefix.", () => {
         const duration = prettyDuration(new Date("2024-01-01T17:00:00"), {

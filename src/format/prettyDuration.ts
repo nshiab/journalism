@@ -1,5 +1,5 @@
 /**
- * Returns the duration as a string in terms of milliseconds, seconds, minutes, hours, and days.
+ * Returns the duration as a string in terms of milliseconds, seconds, minutes, hours, days, months and years. Note that months are considered to be 30 days and years 365 days.
  *
  * ```js
  * // A starting Date somewhere in your code
@@ -73,8 +73,8 @@ export default function prettyDuration(
         const sec = Math.floor(remainingMsAfterMinutes / 1000)
         const ms = remainingMsAfterMinutes % 1000
         prettyDuration = `${hours} h, ${min} min, ${sec} sec, ${ms} ms`
-    } else {
-        // At least one day
+    } else if (differenceInMs < 2_592_000_000) {
+        // Less than a month
         const days = Math.floor(differenceInMs / 86_400_000)
         const remainingMsAfterDays = differenceInMs % 86_400_000
         const hours = Math.floor(remainingMsAfterDays / 3_600_000)
@@ -83,7 +83,35 @@ export default function prettyDuration(
         const remainingMsAfterMin = remainingMsAfterHours % 60_000
         const sec = Math.floor(remainingMsAfterMin / 1000)
         const ms = remainingMsAfterMin % 1000
-        prettyDuration = `${days} days, ${hours} h, ${min} min, ${sec} sec, ${ms} ms`
+        prettyDuration = `${days} ${days <= 1 ? "day" : "days"}, ${hours} h, ${min} min, ${sec} sec, ${ms} ms`
+    } else if (differenceInMs < 31_536_000_000) {
+        // Less than a year
+        const months = Math.floor(differenceInMs / 2_592_000_000)
+        const remainingMsAfterMonths = differenceInMs % 2_592_000_000
+        const days = Math.floor(remainingMsAfterMonths / 86_400_000)
+        const remainingMsAfterDays = differenceInMs % 86_400_000
+        const hours = Math.floor(remainingMsAfterDays / 3_600_000)
+        const remainingMsAfterHours = remainingMsAfterDays % 3_600_000
+        const min = Math.floor(remainingMsAfterHours / 60_000)
+        const remainingMsAfterMin = remainingMsAfterHours % 60_000
+        const sec = Math.floor(remainingMsAfterMin / 1000)
+        const ms = remainingMsAfterMin % 1000
+        prettyDuration = `${months} ${months <= 1 ? "month" : "months"}, ${days} ${days <= 1 ? "day" : "days"}, ${hours} h, ${min} min, ${sec} sec, ${ms} ms`
+    } else {
+        // More than a year
+        const years = Math.floor(differenceInMs / 31_536_000_000)
+        const remainingMsAfterYears = differenceInMs % 31_536_000_000
+        const months = Math.floor(remainingMsAfterYears / 2_592_000_000)
+        const remainingMsAfterMonths = differenceInMs % 2_592_000_000
+        const days = Math.floor(remainingMsAfterMonths / 86_400_000)
+        const remainingMsAfterDays = differenceInMs % 86_400_000
+        const hours = Math.floor(remainingMsAfterDays / 3_600_000)
+        const remainingMsAfterHours = remainingMsAfterDays % 3_600_000
+        const min = Math.floor(remainingMsAfterHours / 60_000)
+        const remainingMsAfterMin = remainingMsAfterHours % 60_000
+        const sec = Math.floor(remainingMsAfterMin / 1000)
+        const ms = remainingMsAfterMin % 1000
+        prettyDuration = `${years} ${years <= 1 ? "year" : "years"}, ${months} ${months <= 1 ? "month" : "months"}, ${days} ${days <= 1 ? "day" : "days"}, ${hours} h, ${min} min, ${sec} sec, ${ms} ms`
     }
 
     if (typeof options.prefix === "string") {
