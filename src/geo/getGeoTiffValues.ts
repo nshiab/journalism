@@ -12,26 +12,14 @@ import type { GeoTIFFImage, TypedArray } from "geotiff"
  *
  * @param lat - The latitude coordinate.
  * @param lon - The longitude coordinate.
- * @param image - The GeoTIFF image object.
- * @param bbox - The bounding box of the GeoTIFF image [minX, minY, maxX, maxY].
- * @param pixelWidth - The width of the image in pixels.
- * @param pixelHeight - The height of the image in pixels.
- * @param bboxWidth - The width of the bounding box.
- * @param bboxHeight - The height of the bounding box.
+ * @param geoTiffDetails - The details of the GeoTIFF file, computed with the getGeoTiffDetails function.
  *
  * @category Geo
  */
 export default async function getGeoTiffValues(
     lat: number,
     lon: number,
-    {
-        image,
-        bbox,
-        pixelWidth,
-        pixelHeight,
-        bboxWidth,
-        bboxHeight,
-    }: {
+    geoTiffDetails: {
         image: GeoTIFFImage
         bbox: number[]
         pixelWidth: number
@@ -40,6 +28,9 @@ export default async function getGeoTiffValues(
         bboxHeight: number
     }
 ): Promise<number | TypedArray> {
+    const { image, bbox, pixelWidth, pixelHeight, bboxWidth, bboxHeight } =
+        geoTiffDetails
+
     const widthPct = (lon - bbox[0]) / bboxWidth
     const heightPct = (lat - bbox[1]) / bboxHeight
     const xPx = Math.floor(pixelWidth * widthPct)
