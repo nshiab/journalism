@@ -2,17 +2,20 @@ import AdmZip from "adm-zip"
 import createDirectory from "./createDirectory.js"
 
 /**
- * Zips multiple files together. To zip an entire folder, pass the folder path as the first parameter. To zip specific files, pass their path as an array of strings. The function will create the path of the zipped file if it doesn't exist.
+ * Compresses files or a folder into a zip archive.
  *
- * ```js
- * // Entire folder
- * zip("./data", "./data.zip")
+ * @example
+ * Basic usage
+ * ```typescript
+ * // Compressing multiple files into a zip archive
+ * zip(['file1.txt', 'file2.txt'], 'archive.zip');
  *
- * // Specific files
- * zip(["./file1.json", "./file2.txt", "./file3.jpg"], "./files.zip")
+ * // Compressing a folder into a zip archive
+ * zip('filePath', 'archive.zip');
  * ```
  *
- * @category Other
+ * @param files - A folder path or an array of file paths to be included in the zip archive.
+ * @param zipFile - The destination path for the created zip file.
  */
 export default function zip(files: string | string[], zipFile: string) {
     const z = new AdmZip()

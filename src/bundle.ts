@@ -24,6 +24,7 @@ import getMahalanobisDistance from "./statistics/getMahalanobisDistance.js"
 import addMahalanobisDistance from "./statistics/addMahalanobisDistance.js"
 import addClusters from "./statistics/addClusters.js"
 import addZScore from "./statistics/addZScore.js"
+import euclideanDistance from "./statistics/euclidianDistance.js"
 
 export {
     formatDate,
@@ -52,4 +53,5 @@ export {
     addMahalanobisDistance,
     addZScore,
     addClusters,
+    euclideanDistance,
 }

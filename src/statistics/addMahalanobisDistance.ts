@@ -6,7 +6,8 @@ import getMahalanobisDistance from "./getMahalanobisDistance.js"
  *
  * If you pass the option `{ similarity: true }`, it will add another key `similarity` which goes from 1 to 0. The closer similarity is to 1, the closer the item is to the origin. You can also pass a precomputed matrix in options if needed: `{ matrix : precomputedMatrix }.`
  *
- * @example Basic usage
+ * @example
+ * Basic usage
  * ```js
  * // Wines
  * const data = [
@@ -45,6 +46,11 @@ import getMahalanobisDistance from "./getMahalanobisDistance.js"
  * // ]
  * ```
  *
+ * @param origin - The origin object with keys as dimensions and values as the reference point.
+ * @param data - The array of objects to compute the Mahalanobis distance for.
+ * @param options - Optional parameters.
+ * @param options.similarity - If true, adds a similarity key to each object.
+ * @param options.matrix - A precomputed covariance matrix.
  * @category Statistics
  */
 

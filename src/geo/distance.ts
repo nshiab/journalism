@@ -3,11 +3,19 @@
 /**
  * Compute the Haversine distance in kilometres based on longitude and latitude. The options (last parameter) are optional.
  *
+ * @example
+ * Basic usage
  *```js
  * const distance = distance(-73.66, 45.51, -79.43, 43.66, { decimals: 0 })
  * // returns 501
  * ```
  *
+ * @param lon1 - Longitude of the first point
+ * @param lat1 - Latitude of the first point
+ * @param lon2 - Longitude of the second point
+ * @param lat2 - Latitude of the second point
+ * @param options - Optional parameter to specify the number of decimal places
+ * @param options.decimals - The number of decimal places to keep in the result
  * @category Geo
  */
 

@@ -13,6 +13,24 @@ import round from "../format/round.js"
  *
  * Calculations are based on https://www.yorku.ca/amarshal/mortgage.htm and https://www.mikesukmanowsky.com/blog/a-guide-to-canadian-mortgage-calculations
  *
+ * @example
+ * Basic usage
+ * ```js
+ * // return the monthly mortgage payments for a $250k loan with a 6.00% rate
+ * const payments = mortgagePayments(250_000, 6, "monthly", 5, 25)
+ * ```
+ *
+ * @param mortageAmount The amount of the mortgage loan
+ * @param rate The interest rate of the mortgage
+ * @param paymentFrequency The frequency of the mortgage payments
+ * @param term The term of the mortgage in years
+ * @param amortizationPeriod The amortization period of the mortgage in years
+ * @param options Additional options for the mortgage calculation
+ * @param options.id A string if we want to add an id in the payment objects
+ * @param options.decimals The number of decimals to round to. By default, it's 2
+ * @param options.annualCompounding How many times the mortgage should be compounded per year. By default, it's 2
+ * @param options.debug Will log extra information if true
+ *
  * @category Finance
  */
 

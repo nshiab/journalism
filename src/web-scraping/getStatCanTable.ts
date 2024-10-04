@@ -3,14 +3,30 @@ import { csvParse, DSVRowArray } from "d3-dsv"
 import { Buffer } from "node:buffer"
 
 /**
- * Returns the data from a Statistics Canada table as an array of objects. The first parameter is the pid value that can be found in the table url. The second parameter is an optional object specifying:
- * - the language
- * - if the first character of the file should be skipped (sometimes the files are weirdly formatted)
- * - if the raw csv values should be returned as text instead of an array of objects
+ * Returns the data from a Statistics Canada table as an array of objects. The first parameter is the pid value that can be found in the table url.
  *
+ * @example
+ * Basic usage
  * ```js
  * const data = await getStatCanTable('98100001')
  * ```
+ *
+ * @example
+ * With options
+ * ```js
+ * const data = await getStatCanTable('98100001', {
+ *   lang: 'fr',
+ *   skipFirstCharacter: true,
+ *   returnRawCSV: true,
+ * })
+ * ```
+ *
+ * @param pid The pid value that can be found in the table URL.
+ * @param options Optional settings.
+ * @param options.lang Language of the table, either 'en' or 'fr'. Defaults to 'en'.
+ * @param options.skipFirstCharacter Whether to skip the first character of the CSV data. Defaults to false.
+ * @param options.returnRawCSV Whether to return the raw CSV data as a string. Defaults to false.
+ * @param options.debug Whether to enable debug logging. Defaults to false.
  *
  * @category Web scraping
  */

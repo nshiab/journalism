@@ -5,9 +5,15 @@ import { finished } from "node:stream/promises"
 /**
  * Downloads a file.
  *
+ * @example
+ * Basic usage
  * ```ts
- * await dowloadFile("http://some-website.com/data.csv", "./downloads/data.csv" )
+ * await downloadFile("http://some-website.com/data.csv", "./downloads/data.csv")
  * ```
+ *
+ * @param url - The URL of the file to download
+ * @param filePath - The local path where the file should be saved
+ *
  * @category Web scraping
  */
 

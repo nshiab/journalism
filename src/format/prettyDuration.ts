@@ -1,6 +1,8 @@
 /**
  * Returns the duration as a string in terms of milliseconds, seconds, minutes, hours, days, months and years. Note that months are considered to be 30 days and years 365 days.
  *
+ * @example
+ * Basic usage
  * ```js
  * // A starting Date somewhere in your code
  * const startDate = new Date() // or Date.now()
@@ -20,6 +22,13 @@
  * prettyDuration(new Date("2024-01-01T17:00:00"), { end: new Date("2024-01-23T23:03:15") })
  * // Returns "22 days, 6 h, 3 min, 15 sec, 0 ms"
  * ```
+ *
+ * @param start - The start date or timestamp.
+ * @param options - Optional settings.
+ * @param options.log - If true, logs the duration to the console.
+ * @param options.end - The end date or timestamp.
+ * @param options.prefix - A string to prefix the duration with.
+ * @param options.suffix - A string to suffix the duration with.
  *
  * @category Formatting
  */

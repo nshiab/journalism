@@ -3,33 +3,35 @@ import logToSheet from "./helpers/logToSheet.js"
 
 /**
  * Clears a Google Sheet and populates it with new data.
- * 
+ *
  * By default, this function looks for the API key in process.env.GOOGLE_PRIVATE_KEY and the service account email in process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL. If you don't have credentials, check [this](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
  *
+ * @example
+ * Basic usage
  * ```ts
  * // The data needs to be an array of objects. The keys of the first object will be used to create the header row.
  * const data = [
-  { first: "Nael", last: "Shiab" },
-  { first: "Andrew", last: "Ryan" },
-];
+ *   { first: "Nael", last: "Shiab" },
+ *   { first: "Andrew", last: "Ryan" }
+ * ];
  * // Fake url used as an example.
  * const sheetUrl = "https://docs.google.com/spreadsheets/d/nrqo3oP4KMWYbELScQa8W1nHZPfIrA7LIz9UmcRE4GyJN/edit#gid=0";
- * 
- * // Clearing the sheet and then populating it. 
+ *
+ * // Clearing the sheet and then populating it.
  * await overwriteSheetData(data, sheetUrl);
- * 
+ *
  * // Same thing but with raw values. Google Sheet won't try to guess the data types and won't format or parse the values.
  * await overwriteSheetData(data, sheetUrl, { raw: true });
  *
- * // Adding the UTC date of the update before the data. 
+ * // Adding the UTC date of the update before the data.
  * await overwriteSheetData(data, sheetUrl, { lastUpdate: true });
- * 
- * // You can also format the date to a specific time zone. 
+ *
+ * // You can also format the date to a specific time zone.
  * await overwriteSheetData(data, sheetUrl, { lastUpdate: true, timeZone: "Canada/Eastern" });
- * 
- * // The prepend option allows you to add extra text on the first row. 
+ *
+ * // The prepend option allows you to add extra text on the first row.
  * await overwriteSheetData(data, sheetUrl, { prepend: "Contact xxxx.xxxx@gmail.com for more information", lastUpdate: true, timeZone: "Canada/Eastern" });
- * 
+ *
  * // If your API email and key are stored under different names in process.env, use the options.
  * await overwriteSheetData(data, sheetUrl, { apiEmail: "GG_EMAIL", apiKey: "GG_KEY" });
  * ```

@@ -1,21 +1,24 @@
 /**
- * Returns an object made of arrays from an array of objects.
+ * Converts an array of objects into an object of arrays.
  *
- * For example, this data...
+ * @example
+ * Basic usage
  * ```ts
- * [
- *  { keyA: "a", keyB: 1 },
- *  { keyA: "b", keyB: 2 },
- *  { keyA: "c", keyB: 3 },
- * ]
+ * const data = [
+ *   { name: 'Alice', age: 25 },
+ *   { name: 'Bob', age: 30 },
+ *   { name: 'Charlie', age: 35 }
+ * ];
+ * const result = dataToArrays(data);
+ * console.log(result);
+ * // Output:
+ * // {
+ * //   name: ['Alice', 'Bob', 'Charlie'],
+ * //   age: [25, 30, 35]
+ * // }
  * ```
- * ...would be returned like this.
- * ```ts
- * {
- *  keyA: ["a", "b", "c"],
- *  keyB: [1, 2, 3],
- * }
- * ```
+ *
+ * @param data - An array of objects where each object has the same set of keys.
  *
  * @category Formatting
  */

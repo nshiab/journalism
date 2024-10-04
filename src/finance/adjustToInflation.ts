@@ -1,11 +1,19 @@
 /**
  * Compute the adjusted to inflation amount of money, based on the Consumer Price Index. The options (last parameter) are optional.
  *
- *```js
- * // $100 in 1914 (CPI of 6.0) to 2023 value (CPI of 156.4)
+ * @example
+ * Basic usage
+ * ```js
  * const adjustedAmount = adjustToInflation(100, 6.0, 156.4, { decimals: 0 })
  * // returns 2607 dollars
  * ```
+ *
+ * @param amount - The initial amount of money.
+ * @param amountCPI - The Consumer Price Index (CPI) at the time of the initial amount.
+ * @param targetCPI - The Consumer Price Index (CPI) at the target time.
+ * @param options - Optional parameters.
+ * @param options.decimals - Number of decimal places to round the result to.
+ *
  * @category Finance
  */
 

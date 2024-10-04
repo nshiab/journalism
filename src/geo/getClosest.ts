@@ -2,8 +2,10 @@ import { minIndex } from "d3-array"
 import distance from "./distance.js"
 
 /**
- * Return the closest item of a list based on longitude and latitude. The options (last parameter) are optional. If addDistance is true and geoItems have a *properties* key, the distance will be added to the properties.
+ * Return the closest item of a list based on longitude and latitude. The options (last parameter) are optional. If `addDistance` is true and `geoItems` have a `properties` key, the distance will be added to the properties.
  *
+ * @example
+ * Basic usage
  * ```js
  * const geoItems = [
  *    {name: "Montreal", lon: -73.66, lat: 45.51 },
@@ -20,6 +22,15 @@ import distance from "./distance.js"
  * )
  * // return { name: "Montreal", lon: -73.66, lat: 45.51, distance: 160.694 }
  * ```
+ *
+ * @param lon - The longitude of the reference point.
+ * @param lat - The latitude of the reference point.
+ * @param geoItems - The list of geographical items to search through.
+ * @param getItemLon - Function to get the longitude of an item.
+ * @param getItemLat - Function to get the latitude of an item.
+ * @param options - Optional settings.
+ * @param options.addDistance - Whether to add the distance to the closest item.
+ * @param options.decimals - Number of decimal places for the distance.
  *
  * @category Geo
  */

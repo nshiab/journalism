@@ -3,10 +3,21 @@ import type { GeoTIFFImage, TypedArray } from "geotiff"
 /**
  * Extracts values at specific lat/lon coordinates from a geotiff. Works with the values returned by the getGeoTiffDetails function.
  *
+ * @example
+ * Basic usage
  * ```js
  * const geoTiffDetails = await getGeoTiffDetails("./some-file.tif")
  * const value = await getGeoTiffValues(45.50, -73.57, geoTiffDetails)
  * ```
+ *
+ * @param lat - The latitude coordinate.
+ * @param lon - The longitude coordinate.
+ * @param image - The GeoTIFF image object.
+ * @param bbox - The bounding box of the GeoTIFF image [minX, minY, maxX, maxY].
+ * @param pixelWidth - The width of the image in pixels.
+ * @param pixelHeight - The height of the image in pixels.
+ * @param bboxWidth - The width of the bounding box.
+ * @param bboxHeight - The height of the bounding box.
  *
  * @category Geo
  */

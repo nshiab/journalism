@@ -1,7 +1,8 @@
 /**
  * Computes the Z-Score for a given variable in an array of objects. By default, the function adds a new key `zScore` in each object, but you can change it by passing this option as the last parameter `{ newKey: "myNewKey" }`.
  *
- * @example Basic example
+ * @example
+ * Basic example
  * ```js
  * // Let's say we have a data set like this.
  * const data = [
@@ -36,6 +37,12 @@
  * //  { grade: 6, zScoreGrade: 0.8770580193070292 },
  * // ]
  * ```
+ *
+ * @param data - The array of objects containing the data.
+ * @param variable - The key of the variable to compute the Z-Score for.
+ * @param options - Optional settings for the computation.
+ * @param options.newKey - The key to use for the Z-Score. Default is "zScore".
+ *
  * @category Statistics
  */
 
