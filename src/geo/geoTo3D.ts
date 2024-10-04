@@ -1,11 +1,20 @@
 /**
  * Convert longitude and latitude to x,y,z coordinates based on a given radius. The options (last parameter) are optional.
  *
+ * @example
+ * Basic usage
  *```js
  * const coords = geoTo3D(-73.5674, 45.5019, 1, { decimals: 2})
  * // returns  { x: -0.67, y: 0.71, z: 0.2 }
  * ```
  * You can pass { toArray: true } to return an array instead of an object.
+ *
+ * @param lon
+ * @param lat
+ * @param radius
+ * @param options
+ * @param options.decimals - The number of decimal places to keep in the result
+ * @param options.toArray - Return an array instead of an object
  *
  * @category Geo
  */

@@ -1,16 +1,20 @@
 /**
  * Round a number. By default, round to the nearest integer.
  *
- *```js
- * const string = round(1234.567, { decimals: 1 })
- * // returns 1,235.6
+ * @example
+ * Basic usage
+ * ```js
+ * const result = round(1234.567, { decimals: 1 });
+ * // returns 1234.6
  * ```
  *
- * These options can be passed as the last parameter. Note that decimals, nearestInteger, and significantDigits options can't be used together.
- * - decimals: the number of decimals to keep when rounding
- * - nearestInteger: the base to use to round. For example, 123 with the nearestInteger 10 is 120.
- * - significantDigits: The number of digits to keep. Significant digits start being counted at the first non-zero digit. For example, 0.004622 with 1 significant digit will the rounded to 0.005.
- * - try: by default, the function throws an error if the passed value is not a number. With try set to true, no error is thrown but the returned value is NaN.
+ * @param number - The number to be rounded.
+ * @param options - The options for rounding.
+ * @param options.decimals - The number of decimals to keep when rounding.
+ * @param options.nearestInteger - The base to use to round. For example, 123 with the nearestInteger 10 is 120.
+ * @param options.significantDigits - The number of significant digits to keep. Significant digits start being counted at the first non-zero digit. For example, 0.004622 with 1 significant digit will be rounded to 0.005.
+ * @param options.try - By default, the function throws an error if the passed value is not a number. With try set to true, no error is thrown but the returned value is NaN.
+ *
  *
  * @category Formatting
  */

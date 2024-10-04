@@ -1,6 +1,8 @@
 /**
  * Calculates the mortgage insurance premium based on the property value and down payment. The returned value is rounded to the nearest integer. Based on the [Financial Consumer Agency of Canada calculator](https://itools-ioutils.fcac-acfc.gc.ca/MQ-HQ/MQCalc-EAPHCalc-eng.aspx?lang=eng).
  *
+ * @example
+ * Basic usage
  * ```ts
  * // Returns 19_000
  * const insurancePremium = mortgageInsurancePremium(500_000, 25_000)

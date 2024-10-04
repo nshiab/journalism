@@ -4,10 +4,19 @@
  * The Euclidean distance is the straight-line distance between two points in a
  * Euclidean space and is calculated using the Pythagorean theorem.
  *
+ * @example
+ * Basic usage
+ * ```
+ * const distance = euclideanDistance(0, 0, 3, 4);
+ * console.log(distance); // 5
+ * ```
+ *
  * @param x1 - The x-coordinate of the first point.
  * @param y1 - The y-coordinate of the first point.
  * @param x2 - The x-coordinate of the second point.
  * @param y2 - The y-coordinate of the second point.
+ *
+ * @category Statistics
  */
 export default function euclideanDistance(
     x1: number,

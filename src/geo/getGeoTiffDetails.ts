@@ -4,10 +4,14 @@ import type { GeoTIFFImage } from "geotiff"
 /**
  * Extracts detailed informations from a geoTIFF that can be used with the getGeoTiffValues function. Just for NodeJS and similar runtimes.
  *
+ * @example
+ * Basic usage
  * ```js
  * const geoTiffDetails = await getGeoTiffDetails("./some-file.tif")
  * const value = await getGeoTiffValues(45.50, -73.57, geoTiffDetails)
  * ```
+ *
+ * @param path - The path to the geoTIFF file.
  *
  * @category Geo
  */

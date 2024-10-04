@@ -2,8 +2,8 @@ import process from "node:process"
 /**
  * Updates the data of a specified Datawrapper chart, table or map. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
  *
- *
- * Example for a chart.
+ * @example
+ * Basic usage
  * ```js
  * import { updateDataDW, dataAsCsv } from "journalism"
  *
@@ -94,6 +94,12 @@ import process from "node:process"
  * // If your API key is stored under a different name in process.env, use the options.
  * await updateDataDW(mapID, JSON.stringify(dataForMap), { apiKey: "DW_KEY" })
  * ```
+ *
+ * @param chartId - The ID of the chart, table, or map to update.
+ * @param data - The data to update the chart, table, or map with, in CSV format for charts or JSON format for maps.
+ * @param options - Optional parameters.
+ * @param options.apiKey - The process.env API key name to use for authentication. If not provided, the function will look for the key in process.env.DATAWRAPPER_KEY.
+ * @param options.returnResponse - If true, the function will return the response object from the fetch call.
  *
  * @category Dataviz
  */

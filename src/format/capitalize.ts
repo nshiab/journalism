@@ -1,9 +1,14 @@
 /**
  * Capitalizes the first character of a string.
- * ```
+ *
+ * @example
+ * Basic usage
+ * ```js
  * // Returns 'Journalism'.
  * const text = capitalize('journalism')
  * ```
+ *
+ * @param string - The string to capitalize.
  *
  * @category Formatting
  */

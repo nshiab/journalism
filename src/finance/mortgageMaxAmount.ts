@@ -3,10 +3,13 @@ import mortgageInsurancePremium from "./mortgageInsurancePremium.js"
 /**
  * Calculates the maximum purchase price (and other variables) for a property a person can afford and the related mortgage it would qualify for based on annual income, down payment, mortgage interest rate, and additional options.
  *
+ * @example
+ * Basic usage
  * ```ts
  * // With an annual income of $100,000, a down payment of $25,000, and a rate of 5.25%.
  * const results = maxMortgageAmount(100_000, 25_000, 5.25)
- * // results = {
+ * // returns...
+ * // {
  * //   annualIncome: 100000,
  * //   downPayment: 25000,
  * //   rate: 5.25,
@@ -31,10 +34,10 @@ import mortgageInsurancePremium from "./mortgageInsurancePremium.js"
  * @param downPayment - The amount of money paid upfront.
  * @param rate - The mortgage interest rate.
  * @param options - Additional options such.
- * @param   options.monthlyDebtPayment - The monthly debt payment of the borrower. Defaults to 0.
- * @param   options.monthlyHeating - The monthly heating cost. Defaults to $175.
- * @param   options.monthlyTax - The monthly property tax. Default to 1.5% of the purchase price.
- * @param   options.monthlyCondoFees - The monthly condo fees. Defaults to 0.
+ * @param  options.monthlyDebtPayment - The monthly debt payment of the borrower. Defaults to 0.
+ * @param  options.monthlyHeating - The monthly heating cost. Defaults to $175.
+ * @param  options.monthlyTax - The monthly property tax. Default to 1.5% of the purchase price.
+ * @param  options.monthlyCondoFees - The monthly condo fees. Defaults to 0.
  *
  * @category Finance
  **/

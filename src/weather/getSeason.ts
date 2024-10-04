@@ -1,6 +1,27 @@
 /**
  * Determines the current season based on a date (current date by default). Options include hemisphere (northern by default) and type (astronomical by default).
  *
+ * @example
+ * Basic usage
+ * ```js
+ * // Get the current season in the northern hemisphere using astronomical seasons
+ * const season = getSeason();
+ * console.log(season); // e.g., "spring"
+ * ```
+ *
+ * @example
+ * With options
+ * ```js
+ * // Get the season for a specific date in the southern hemisphere using meteorological seasons
+ * const season = getSeason({ date: new Date('2023-06-15'), hemisphere: 'southern', type: 'meteorological' });
+ * console.log(season); // e.g., "winter"
+ * ```
+ *
+ * @param options - The options for determining the season.
+ * @param options.date - The date to determine the season for.
+ * @param options.hemisphere - The hemisphere ("northern" or "southern").
+ * @param options.type - The type of season calculation ("meteorological" or "astronomical").
+ *
  * @category Weather and climate
  */
 export default function getSeason(

@@ -3,6 +3,22 @@ import invertMatrix from "./invertMatrix.js"
 /**
  * Computes the covariance matrix, with an option to invert it.
  *
+ * @example
+ * Basic usage
+ * ```js
+ * const data = [
+ *   [1, 2, 3],
+ *   [4, 5, 6],
+ *   [7, 8, 9]
+ * ];
+ * const covMatrix = getCovarianceMatrix(data);
+ * // Or inverted...
+ * const invertedCovMatrix = getCovarianceMatrix(data, { invert: true });
+ * ```
+ *
+ * @param data - A 2D array of numbers representing the dataset.
+ * @param options - An optional object with an `invert` boolean property.
+ *
  * @category Statistics
  */
 

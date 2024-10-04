@@ -3,20 +3,47 @@
  *
  * This function is an implementation of the [DBSCAN](https://en.wikipedia.org/wiki/DBSCAN), a density-based clustering algorithm to group points into clusters. Points are classified as core points, border points, or noise based on their neighbourhood.
  *
- * - Core points have at least `minNeighbours` within `minDistance`.
+ * - Core points have at least `minNeighbours` (including themselves) within `minDistance`.
  * - Border points are within `minDistance` of a core point but have fewer than `minNeighbours`.
  * - Noise points are not within `minDistance` of any core points.
  *
  * The function modifies the input data array in place, adding `clusterId` and `clusterType` properties to each point.
  *
+ * @example
+ * Basic usage
+ * ```js
+ * const data = [
+ *   { x: 1, y: 2 },
+ *   { x: 2, y: 3 },
+ *   { x: 10, y: 10 },
+ *   { x: 11, y: 11 },
+ *   { x: 50, y: 50 }
+ * ];
+ *
+ * // We use the euclideanDistance function from the journalism library to calculate the distance between points.
+ * const distance = (a, b) => euclideanDistance(a.x, a.y, b.x, b.y);
+ *
+ * addClusters(data, 5, 2, distance);
+ *
+ * console.log(data);
+ * // Output:
+ * // [
+ * //   { x: 1, y: 2, clusterId: 'cluster1', clusterType: 'core' },
+ * //   { x: 2, y: 3, clusterId: 'cluster1', clusterType: 'core' },
+ * //   { x: 10, y: 10, clusterId: 'cluster2', clusterType: 'core' },
+ * //   { x: 11, y: 11, clusterId: 'cluster2', clusterType: 'core' },
+ * //   { x: 50, y: 50, clusterId: null, clusterType: 'noise' }
+ * // ]
+ * ```
+ *
  * @param data - An array of data points where each point is an object with arbitrary properties.
  * @param minDistance - The maximum distance between points to be considered neighbours.
- * @param minNeighbours - The minimum number of neighbours required for a point to be considered a core point.
+ * @param minNeighbours - The minimum number of neighbours (including the current point) required for a point to be considered a core point.
  * @param distance - A function that calculates the distance between two points.
  * @param options - Optional settings for the clustering process.
  * @param options.reset - If true, resets the clusterId and clusterType of all points before clustering.
  *
- * @returns void
+ * @category Statistics
  */
 export default function addClusters(
     data: { [key: string]: unknown }[],
@@ -77,9 +104,7 @@ export default function addClusters(
     function getNeighbours(point: {
         [key: string]: unknown
     }): { [key: string]: unknown }[] {
-        return data.filter(
-            (p) => p !== point && distance(point, p) <= minDistance
-        )
+        return data.filter((p) => distance(point, p) <= minDistance)
     }
 
     // Add a point and its neighbours to the same cluster.
