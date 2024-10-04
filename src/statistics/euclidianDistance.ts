@@ -23,7 +23,7 @@ export default function euclideanDistance(
     y1: number,
     x2: number,
     y2: number
-) {
+): number {
     // Calculate the differences
     const dx = x2 - x1
     const dy = y2 - y1
