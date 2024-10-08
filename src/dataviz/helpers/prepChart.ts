@@ -152,8 +152,8 @@ export default function prepChart(
 
         for (let i = 0; i < allLabelsX.length; i++) {
             chartString = chartString
-                .replaceAll(allLabelsX[i], `\x1b[90m${allLabelsX[i]}\x1b[0m`)
-                .replaceAll(allLabelsX[i], `\x1b[90m${allLabelsX[i]}\x1b[0m`)
+                .replace(allLabelsX[i], `\x1b[90m${allLabelsX[i]}\x1b[0m`)
+                .replace(allLabelsX[i], `\x1b[90m${allLabelsX[i]}\x1b[0m`)
         }
 
         console.log(`\n${chartString}\n`)
