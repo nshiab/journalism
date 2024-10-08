@@ -8,7 +8,6 @@ describe("logBarChart", () => {
         const data = JSON.parse(
             readFileSync("test/data/firesPerProvince.json", "utf-8")
         )
-        console.table(data)
 
         logBarChart(data, "nameEnglish", "burntArea")
         // How to assert
@@ -18,7 +17,6 @@ describe("logBarChart", () => {
         const data = JSON.parse(
             readFileSync("test/data/firesPerProvince.json", "utf-8")
         )
-        console.table(data)
 
         logBarChart(data, "nameEnglish", "burntArea", {
             formatLabels: (d) => String(d).toUpperCase(),
