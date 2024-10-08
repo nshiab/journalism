@@ -15,10 +15,11 @@ export default function getAxisX(
         throw new Error(`The first or last ${x} is null or undefined.`)
     }
 
-    options.width = Math.max(
-        options.width,
-        xLabelFirst.length + 3 + xLabelLast.length
-    )
+    if (xLabelFirst.length + 3 + xLabelLast.length > options.width) {
+        throw new Error(
+            `The x labels "${xLabelFirst}" and "${xLabelLast}" are overlapping. Format them using formatX or increase the width.`
+        )
+    }
 
     const xAxis = []
     for (let i = 0; i < options.width; i++) {

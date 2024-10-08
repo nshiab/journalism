@@ -9,6 +9,7 @@ export default function createLine(
     y: string,
     color: string,
     options: {
+        title?: string
         width: number
         height: number
         xMin: number
@@ -55,6 +56,10 @@ export default function createLine(
         } else if (i === chart.length - 2) {
             chart[i].push("\x1b[90m┘\x1b[0m")
         }
+    }
+
+    if (options.title) {
+        chart.unshift([`${options.title}`.padEnd(chart[0].length, " ")])
     }
 
     return { chart, xLabels }

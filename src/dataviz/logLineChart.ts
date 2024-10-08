@@ -18,7 +18,7 @@ export default function logLineChart(
     } = {}
 ) {
     console.log(
-        `\nLine chart: "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}` : ""}"}\n`
+        `\nLine chart: "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""}\n`
     )
 
     const formatX =
@@ -33,9 +33,11 @@ export default function logLineChart(
         }
     const width = options.width ?? 75
     const height = options.height ?? 15
-    // const smallMultiplesPerRow = options.smallMultiplesPerRow ?? 3
+    const smallMultiplesPerRow = options.smallMultiplesPerRow ?? 2
     const smallMultiples = options.smallMultiples ?? null
     const fixedScales = options.fixedScales ?? false
+
+    let warning = false
 
     if (typeof smallMultiples === "string") {
         const categories = Array.from(
@@ -44,8 +46,6 @@ export default function logLineChart(
         const colors = getColors(categories)
 
         const allLabelsX: string[] = []
-
-        let warning = false
 
         let xMin: number
         let xMax: number
@@ -79,28 +79,25 @@ export default function logLineChart(
 
             // The min and max values for each small multiple
             if (!fixedScales) {
-                const xValues = dataFiltered
-                    .map((d) => d[x])
-                    .filter((d) => typeof d === "number")
-                xMin = Math.min(...xValues)
-                xMax = Math.max(...xValues)
+                const xValues = dataFiltered.map((d) => d[x])
+                xMin = min(xValues as Numeric[]) as number
+                xMax = max(xValues as Numeric[]) as number
 
-                const yValues = dataFiltered
-                    .map((d) => d[y])
-                    .filter((d) => typeof d === "number")
-                yMin = Math.min(...yValues)
-                yMax = Math.max(...yValues)
+                const yValues = dataFiltered.map((d) => d[y])
+                yMin = min(yValues as Numeric[]) as number
+                yMax = max(yValues as Numeric[]) as number
             }
 
             if (!warning && dataFiltered.length > width) {
                 console.log(
-                    `\x1b[90m/!\\ The number of data points (${formatNumber(data.length)}) data is longer than the width ${width}. Multiple "${y}" values are averaged for each "${x}". Increase the width or use a dot chart for a more accuracy.\x1b[0m`
+                    `\x1b[90m/!\\ The number of data points data is longer than the width (${Math.round(width / smallMultiplesPerRow)}) for some charts. While the axis labels are the actual min/max values, multiple "${y}" values are averaged for each "${x}". Increase the width or use a dot chart for more accuracy.\x1b[0m`
                 )
                 warning = true
             }
 
             const { chart, xLabels } = createLine(dataFiltered, x, y, c.color, {
-                width: width,
+                title: c.category,
+                width: Math.round(width / smallMultiplesPerRow),
                 height: height,
                 formatX: formatX,
                 formatY: formatY,
@@ -117,9 +114,25 @@ export default function logLineChart(
             throw new Error("No data to display.")
         }
 
-        let chartString = allCharts
-            .map((d) => d.map((j) => j.join("")).join("\n"))
-            .join("\n")
+        // Restructure the charts to make small multiples on multiple columns
+        const allChartsRows: string[][] = []
+        for (let i = 0; i < allCharts.length; i += smallMultiplesPerRow) {
+            const charts = allCharts.slice(i, i + smallMultiplesPerRow)
+            const combinedRows: string[][] = []
+            for (let j = 0; j < charts.length; j++) {
+                if (j === 0) {
+                    combinedRows.push(...charts[j])
+                } else {
+                    for (let k = 0; k < charts[j].length; k++) {
+                        combinedRows[k].push(" ".repeat(3), ...charts[j][k])
+                    }
+                }
+            }
+            allChartsRows.push(...combinedRows)
+            allChartsRows.push(" ".repeat(combinedRows[0].length).split(""))
+        }
+
+        let chartString = allChartsRows.map((d) => d.join("")).join("\n")
 
         for (let i = 0; i < allLabelsX.length; i++) {
             chartString = chartString
@@ -129,6 +142,13 @@ export default function logLineChart(
 
         console.log(`\n${chartString}\n`)
     } else {
+        if (!warning && data.length > width) {
+            console.log(
+                `\x1b[90m/!\\ The number of data points (${formatNumber(data.length)}) data is longer than the width (${width}). While the axis labels are the actual min/max values, multiple "${y}" values are averaged for each "${x}". Increase the width or use a dot chart for more accuracy.\x1b[0m`
+            )
+            warning = true
+        }
+
         const xValues = data.map((d) => d[x])
         const xMin = min(xValues as Numeric[]) as number
         const xMax = max(xValues as Numeric[]) as number
