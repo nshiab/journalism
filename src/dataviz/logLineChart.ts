@@ -2,7 +2,7 @@ import addLines from "./helpers/addLines.js"
 import prepChart from "./helpers/prepChart.js"
 
 /**
- * Generates and logs a line chart.
+ * Generates and logs a line chart. The data is expected to be sorted by the x-axis values.
  *
  * @example
  * Basic usage

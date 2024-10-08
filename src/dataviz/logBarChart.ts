@@ -1,7 +1,7 @@
 import makeBars from "./helpers/addBars.js"
 
 /**
- * Generates and logs a bar chart.
+ * Generates and logs a bar chart. The data is expected to be sorted.
  *
  * @example
  * ```typescript

@@ -54,4 +54,39 @@ describe("logDotChart", () => {
         // How to assert
         assert.strictEqual(true, true)
     })
+    it("should create a dot chart with few points (example from the docs)", async () => {
+        const data = [
+            { date: new Date("2023-01-01"), value: 10 },
+            { date: new Date("2023-02-01"), value: 20 },
+            { date: new Date("2023-03-01"), value: 30 },
+            { date: new Date("2023-04-01"), value: 40 },
+        ]
+
+        logDotChart(data, "date", "value", {
+            formatX: (d) => (d as Date).toISOString().slice(0, 10),
+        })
+
+        // How to assert
+        assert.strictEqual(true, true)
+    })
+    it("should create a dot chart with few points and small multiples (example from the docs)", async () => {
+        const data = [
+            { date: new Date("2023-01-01"), value: 10, category: "A" },
+            { date: new Date("2023-02-01"), value: 20, category: "A" },
+            { date: new Date("2023-03-01"), value: 30, category: "A" },
+            { date: new Date("2023-04-01"), value: 40, category: "A" },
+            { date: new Date("2023-01-01"), value: 15, category: "B" },
+            { date: new Date("2023-02-01"), value: 25, category: "B" },
+            { date: new Date("2023-03-01"), value: 35, category: "B" },
+            { date: new Date("2023-04-01"), value: 45, category: "B" },
+        ]
+
+        logDotChart(data, "date", "value", {
+            formatX: (d) => (d as Date).toISOString().slice(0, 10),
+            smallMultiples: "category",
+        })
+
+        // How to assert
+        assert.strictEqual(true, true)
+    })
 })
