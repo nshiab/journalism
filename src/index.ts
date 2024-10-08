@@ -40,7 +40,7 @@ import addZScore from "./statistics/addZScore.js"
 import addClusters from "./statistics/addClusters.js"
 import euclidianDistance from "./statistics/euclidianDistance.js"
 import logBarChart from "./dataviz/logBarChart.js"
-import logLineChart from "./dataviz/logDotChart.js"
+import logLineChart from "./dataviz/logLineChart.js"
 import logDotChart from "./dataviz/logDotChart.js"
 
 export {
