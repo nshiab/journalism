@@ -1,6 +1,6 @@
 {
   "name": "@nshiab/journalism",
-  "version": "1.17.4",
+  "version": "1.18.0",
   "exports": "./src/index.ts",
   "tasks": {
     "test": "mocha \"test/unit/**/*.test.ts\" --timeout 10000"
