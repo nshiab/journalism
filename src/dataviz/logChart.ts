@@ -7,7 +7,7 @@ import addLines from "./helpers/addLines.js"
 import { capitalize } from "../bundle.js"
 import makeBars from "./helpers/addBars.js"
 
-export default function logViz(
+export default function logChart(
     data: { [key: string]: unknown }[],
     type: "dot" | "barHorizontal" | "line",
     x: string,

@@ -1,42 +1,31 @@
-import formatNumber from "../../format/formatNumber.js"
-
 export default function getAxisX(
     data: { [key: string]: unknown }[],
     x: string,
     options: {
-        xLabels: string
+        xMin: number
+        xMax: number
         width: number
+        formatX: (d: unknown) => string
     }
 ) {
-    const xLabelFirst = data[0][options.xLabels]
-    const xLabelLast = data[data.length - 1][options.xLabels]
+    const xLabelFirst = options.formatX(options.xMin)
+    const xLabelLast = options.formatX(options.xMax)
 
     if (!xLabelFirst || !xLabelLast) {
         throw new Error(`The first or last ${x} is null or undefined.`)
     }
 
-    const xLabelFirstString =
-        typeof xLabelFirst === "number"
-            ? formatNumber(xLabelFirst)
-            : xLabelFirst.toString()
-    const xLabelLastString =
-        typeof xLabelLast === "number"
-            ? formatNumber(xLabelLast)
-            : xLabelLast.toString()
-
     options.width = Math.max(
         options.width,
-        xLabelFirstString.length + 3 + xLabelLastString.length
+        xLabelFirst.length + 3 + xLabelLast.length
     )
 
     const xAxis = []
     for (let i = 0; i < options.width; i++) {
-        if (i < xLabelFirstString.length) {
-            xAxis.push(xLabelFirstString[i])
-        } else if (i >= options.width - xLabelFirstString.length) {
-            xAxis.push(
-                xLabelLastString[i - (options.width - xLabelFirstString.length)]
-            )
+        if (i < xLabelFirst.length) {
+            xAxis.push(xLabelFirst[i])
+        } else if (i >= options.width - xLabelLast.length) {
+            xAxis.push(xLabelLast[i - (options.width - xLabelLast.length)])
         } else {
             xAxis.push(" ")
         }
@@ -48,5 +37,5 @@ export default function getAxisX(
         xTicks.push(greyDash)
     }
 
-    return { xAxis, xTicks, xLabelFirstString, xLabelLastString }
+    return { xAxis, xTicks, xLabels: [xLabelFirst, xLabelLast] }
 }

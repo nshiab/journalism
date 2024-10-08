@@ -1,23 +1,15 @@
-import formatNumber from "../../format/formatNumber.js"
-
 export default function getAxisY(
     data: { [key: string]: unknown }[],
     y: string,
     options: {
         height: number
-        yDecimals?: number
+        formatY: (d: unknown) => string
+        yMin: number
+        yMax: number
     }
 ) {
-    const yValues = data.map((d) => d[y]).filter((d) => typeof d === "number")
-    const yMin = Math.min(...yValues)
-    const yMax = Math.max(...yValues)
-
-    let yMinString = formatNumber(yMin, {
-        decimals: options.yDecimals,
-    })
-    let yMaxString = formatNumber(yMax, {
-        decimals: options.yDecimals,
-    })
+    let yMinString = options.formatY(options.yMin)
+    let yMaxString = options.formatY(options.yMax)
 
     const yTicksLength = Math.max(yMinString.length, yMaxString.length)
     if (yMinString.length < yTicksLength) {
@@ -43,5 +35,5 @@ export default function getAxisY(
     yAxis.push([...yPadding, "\x1b[90m└\x1b[0m"])
     yAxis.push([...yPadding, " "])
 
-    return { yAxis, yMin, yMax }
+    return { yAxis }
 }

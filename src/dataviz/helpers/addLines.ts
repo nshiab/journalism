@@ -3,23 +3,14 @@ export default function addLines(
     y: string,
     yMin: number,
     yMax: number,
+    color: string,
     chartData: string[][],
     options: {
-        categories?: string
-        colors?: { color: string; category: unknown }[]
         width: number
         height: number
     }
 ) {
-    if (data.length > options.width) {
-        console.log(
-            "\x1b[90m/!\\ The data is longer than the width. This is an approximation.\x1b[0m"
-        )
-    }
-
-    const categories = options.categories ?? null
-
-    const chartValues: { x: number; y: number; categories?: unknown }[] = []
+    const chartValues: { x: number; y: number }[] = []
     for (let i = 0; i < data.length; i++) {
         const xIndexRaw = Math.round((i / (data.length - 1)) * options.width)
         const xIndex = Math.min(xIndexRaw, options.width - 1)
@@ -32,59 +23,23 @@ export default function addLines(
         )
         const yIndex = Math.min(yIndexRaw, options.height - 1)
 
-        if (categories === null) {
-            chartValues.push({ x: xIndex, y: yIndex })
-        } else {
-            chartValues.push({
-                x: xIndex,
-                y: yIndex,
-                categories: data[i][categories],
-            })
-        }
+        chartValues.push({ x: xIndex, y: yIndex })
     }
 
-    const categoriesValues = Array.from(
-        new Set(chartValues.map((d) => d.categories))
-    ).filter((d) => d !== undefined)
-
-    const avgValues: { x: number; y: number | null; categorie?: unknown }[] = []
+    const avgValues: { x: number; y: number | null }[] = []
     for (let x = 0; x < options.width; x++) {
-        if (categoriesValues.length > 0) {
-            for (const c of categoriesValues) {
-                const values = chartValues
-                    .filter((d) => d.x === x && d.categories === c)
-                    .map((d) => d.y)
-                pushAvgValue(avgValues, values, x, { ...options, category: c })
-            }
-        } else {
-            const values = chartValues.filter((d) => d.x === x).map((d) => d.y)
-            pushAvgValue(avgValues, values, x, options)
-        }
+        const values = chartValues.filter((d) => d.x === x).map((d) => d.y)
+        pushAvgValue(avgValues, values, x, options)
     }
 
-    if (categoriesValues.length > 0 && options.colors) {
-        for (const c of categoriesValues) {
-            const color = options.colors.find((d) => d.category === c)?.color
-            if (!color) {
-                throw new Error(`The category ${c} is not in the colors.`)
-            }
-            drawLine(
-                avgValues.filter((d) => d.categorie === c),
-                chartData,
-                color,
-                options
-            )
-        }
-    } else {
-        drawLine(avgValues, chartData, "\x1b[34m", options)
-    }
+    drawLine(avgValues, chartData, color, options)
 }
 
 function pushAvgValue(
-    avgValues: { x: number; y: number | null; categorie?: unknown }[],
+    avgValues: { x: number; y: number | null }[],
     values: number[],
     x: number,
-    options: { height: number; category?: unknown }
+    options: { height: number }
 ) {
     if (values.length === 0) {
         avgValues.push({
@@ -98,7 +53,6 @@ function pushAvgValue(
                 Math.round(values.reduce((a, b) => a + b) / values.length),
                 options.height - 1
             ),
-            categorie: options.category,
         })
     }
 }
@@ -134,8 +88,6 @@ function draw(
     }
 }
 
-let warning = false
-
 function drawLine(
     avgValues: { x: number; y: number | null }[],
     chartData: string[][],
@@ -148,18 +100,6 @@ function drawLine(
         } else {
             const currY = avgValues[x].y
             const nextY = avgValues[x + 1].y
-
-            if (
-                typeof currY === "number" &&
-                chartData[options.height - currY - 1][x] !== " "
-            ) {
-                if (!warning) {
-                    console.log(
-                        "\x1b[90m/!\\ Some categories are overlapping.\x1b[0m"
-                    )
-                }
-                warning = true
-            }
 
             draw(chartData, currY, nextY, x, color, options)
         }
