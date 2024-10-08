@@ -160,7 +160,7 @@ export default function prepChart(
     } else {
         if (type === "line" && !warning && data.length > width) {
             console.log(
-                `\x1b[90m/!\\ The number of data points (${formatNumber(data.length)}) data is longer than the width (${width}). While the axis labels are the actual min/max values, multiple "${y}" values are averaged for each "${x}". Increase the width or use a dot chart for more accuracy.\x1b[0m`
+                `\x1b[90m/!\\ The number of data points (${formatNumber(data.length)}) is longer than the width (${width}). While the axis labels are the actual min/max values, multiple "${y}" values are averaged for each "${x}". Increase the width or use a dot chart for more accuracy.\x1b[0m`
             )
             warning = true
         }
