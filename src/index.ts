@@ -13,7 +13,6 @@ import getClosest from "./geo/getClosest.js"
 import getHumidex from "./weather/getHumidex.js"
 import getStatCanTable from "./web-scraping/getStatCanTable.js"
 import getHtmlTable from "./web-scraping/getHtmlTable.js"
-import savePlotChart from "./dataviz/savePlotChart.js"
 import arraysToData from "./format/arraysToData.js"
 import dataToArrays from "./format/dataToArrays.js"
 import updateDataDW from "./dataviz/updateDataDW.js"
@@ -40,6 +39,9 @@ import addMahalanobisDistance from "./statistics/addMahalanobisDistance.js"
 import addZScore from "./statistics/addZScore.js"
 import addClusters from "./statistics/addClusters.js"
 import euclidianDistance from "./statistics/euclidianDistance.js"
+import logBarChart from "./dataviz/logBarChart.js"
+import logLineChart from "./dataviz/logDotChart.js"
+import logDotChart from "./dataviz/logDotChart.js"
 
 export {
     formatDate,
@@ -72,7 +74,6 @@ export {
     // NODE ONLY
     getStatCanTable,
     getHtmlTable,
-    savePlotChart,
     updateDataDW,
     updateAnnotationsDW,
     updateNotesDW,
@@ -85,4 +86,7 @@ export {
     getGeoTiffDetails,
     getGeoTiffValues,
     createDirectory,
+    logBarChart,
+    logLineChart,
+    logDotChart,
 }
