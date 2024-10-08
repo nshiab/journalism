@@ -1,9 +1,20 @@
-import addLines from "./addLines.js"
 import getAxisX from "./getAxisX.js"
 import getAxisY from "./getAxisY.js"
 import getChartData from "./getChartData.js"
 
-export default function createLine(
+export default function drawChart(
+    drawFunction: (
+        data: { [key: string]: unknown }[],
+        y: string,
+        yMin: number,
+        yMax: number,
+        color: string,
+        chartData: string[][],
+        options: {
+            width: number
+            height: number
+        }
+    ) => void,
     data: { [key: string]: unknown }[],
     x: string,
     y: string,
@@ -19,7 +30,7 @@ export default function createLine(
         formatX: (d: unknown) => string
         formatY: (d: unknown) => string
     }
-) {
+): { chart: string[][]; xLabels: string[] } {
     const { xAxis, xTicks, xLabels, topFrame } = getAxisX(data, x, {
         xMin: options.xMin,
         xMax: options.xMax,
@@ -36,7 +47,7 @@ export default function createLine(
 
     const chartData = getChartData(options.height, options.width)
 
-    addLines(data, y, options.yMin, options.yMax, color, chartData, {
+    drawFunction(data, y, options.yMin, options.yMax, color, chartData, {
         width: options.width,
         height: options.height,
     })
@@ -59,7 +70,11 @@ export default function createLine(
     }
 
     if (options.title) {
-        chart.unshift([`${options.title}`.padEnd(chart[0].length, " ")])
+        chart.unshift([
+            `${options.title}`
+                .padEnd(chart[0].length, " ")
+                .replace(options.title, `\x1b[2m${options.title}\x1b[0m`),
+        ])
     }
 
     return { chart, xLabels }

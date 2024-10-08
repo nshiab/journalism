@@ -1,4 +1,4 @@
-import addLines from "./helpers/addLines.js"
+import addDots from "./helpers/addDots.js"
 import prepChart from "./helpers/prepChart.js"
 
 export default function logLineChart(
@@ -15,9 +15,9 @@ export default function logLineChart(
         height?: number
     } = {}
 ) {
-    console.log(
-        `\nLine chart: "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""}\n`
-    )
+    const title = `\nDot chart: "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""}`
 
-    prepChart(data, x, y, addLines, options)
+    console.log(`\x1b[1m${title}\x1b[0m`)
+
+    prepChart("dot", data, x, y, addDots, options)
 }
