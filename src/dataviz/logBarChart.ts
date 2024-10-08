@@ -1,5 +1,28 @@
 import makeBars from "./helpers/addBars.js"
 
+/**
+ * Generates and logs a bar chart.
+ *
+ * @example
+ * ```typescript
+ * const data = [
+ *   { category: 'A', value: 10 },
+ *   { category: 'B', value: 20 },
+ * ];
+ * logBarChart(data, 'category', 'value');
+ * ```
+ *
+ * @param data - An array of objects representing the data to be visualized.
+ * @param labels - The key in the data objects to be used for the labels.
+ * @param values - The key in the data objects to be used for the values.
+ * @param options - Optional configuration for the chart.
+ * @param options.formatLabels - A function to format the labels. Defaults to converting the label to a string.
+ * @param options.formatValues - A function to format the values. Defaults to converting the value to a string.
+ * @param options.width - The width of the chart. Defaults to 40.
+ *
+ * @category Dataviz
+ *
+ */
 export default function logBarChart(
     data: { [key: string]: unknown }[],
     labels: string,
