@@ -1,4 +1,4 @@
-import makeBars from "./helpers/addBars.js"
+import makeBars from "./helpers/makeBars.js"
 
 /**
  * Generates and logs a bar chart. The data is expected to be sorted.

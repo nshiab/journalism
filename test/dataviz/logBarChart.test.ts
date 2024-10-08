@@ -26,4 +26,14 @@ describe("logBarChart", () => {
         // How to assert
         assert.strictEqual(true, true)
     })
+    it("should create a bar chart (example from the doc)", async () => {
+        const data = [
+            { category: "A", value: 10 },
+            { category: "B", value: 20 },
+        ]
+
+        logBarChart(data, "category", "value")
+        // How to assert
+        assert.strictEqual(true, true)
+    })
 })
