@@ -105,6 +105,7 @@ export default function prepChart(
             }
 
             const { chart, xLabels } = drawChart(
+                type,
                 drawFunction,
                 dataFiltered,
                 x,
@@ -183,6 +184,7 @@ export default function prepChart(
         }
 
         const { chart, xLabels } = drawChart(
+            type,
             drawFunction,
             data,
             x,

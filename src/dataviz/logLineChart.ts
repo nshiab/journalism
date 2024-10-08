@@ -15,8 +15,7 @@ import prepChart from "./helpers/prepChart.js"
  * ]
  *
  * logLineChart(data, "date", "value", {
- *     formatX: (d) => (d as Date).toLocaleDateString(),
- *     formatY: (d) => "$" + (d as number).toString(),
+ *     formatX: (d) => d.toISOString().slice(0, 10),
  * })
  * ```
  *

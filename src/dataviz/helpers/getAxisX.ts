@@ -1,5 +1,5 @@
 export default function getAxisX(
-    data: { [key: string]: unknown }[],
+    type: "line" | "dot",
     x: string,
     options: {
         xMin: number
@@ -34,11 +34,12 @@ export default function getAxisX(
 
     const xTicks = []
     const greyDash = "\x1b[90m─\x1b[0m"
-    for (let i = 0; i < options.width; i++) {
+    const padding = type === "line" ? 1 : 0
+    for (let i = 0; i < options.width - padding; i++) {
         xTicks.push(greyDash)
     }
     const topFrame = []
-    for (let i = 0; i <= options.width; i++) {
+    for (let i = 0; i <= options.width - padding; i++) {
         if (i === 0) {
             topFrame.push("\x1b[90m┌\x1b[0m")
         } else {
