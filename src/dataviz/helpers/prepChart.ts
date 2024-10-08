@@ -99,12 +99,13 @@ export default function prepChart(
 
             if (type === "line" && !warning && dataFiltered.length > width) {
                 console.log(
-                    `\x1b[90m/!\\ The number of data points data is longer than the width (${Math.round(width / smallMultiplesPerRow)}) for some charts. While the axis labels are the actual min/max values, multiple "${y}" values are averaged for each "${x}". Increase the width or use a dot chart for more accuracy.\x1b[0m`
+                    `\x1b[90m/!\\ The number of data points is longer than the width (${Math.round(width / smallMultiplesPerRow)}) for some charts. While the axis labels are the actual min/max values, multiple "${y}" values are averaged for each "${x}". Increase the width or use a dot chart for more accuracy.\x1b[0m`
                 )
                 warning = true
             }
 
             const { chart, xLabels } = drawChart(
+                type,
                 drawFunction,
                 dataFiltered,
                 x,
@@ -150,10 +151,13 @@ export default function prepChart(
 
         let chartString = allChartsRows.map((d) => d.join("")).join("\n")
 
-        for (let i = 0; i < allLabelsX.length; i++) {
-            chartString = chartString
-                .replace(allLabelsX[i], `\x1b[90m${allLabelsX[i]}\x1b[0m`)
-                .replace(allLabelsX[i], `\x1b[90m${allLabelsX[i]}\x1b[0m`)
+        const allLabelsXUnique = Array.from(new Set(allLabelsX))
+        for (let i = 0; i < allLabelsXUnique.length; i++) {
+            const regex = new RegExp(allLabelsXUnique[i], "g")
+            chartString = chartString.replace(
+                regex,
+                `\x1b[90m${allLabelsXUnique[i]}\x1b[0m`
+            )
         }
 
         console.log(`\n${chartString}\n`)
@@ -183,6 +187,7 @@ export default function prepChart(
         }
 
         const { chart, xLabels } = drawChart(
+            type,
             drawFunction,
             data,
             x,
@@ -202,10 +207,12 @@ export default function prepChart(
 
         let chartString = chart.map((d) => d.join("")).join("\n")
 
-        for (let i = 0; i < xLabels.length; i++) {
+        const allLabelsXUnique = Array.from(new Set(xLabels))
+        for (let i = 0; i < allLabelsXUnique.length; i++) {
+            const regex = new RegExp(allLabelsXUnique[i], "g")
             chartString = chartString.replace(
-                xLabels[i],
-                `\x1b[90m${xLabels[i]}\x1b[0m`
+                regex,
+                `\x1b[90m${allLabelsXUnique[i]}\x1b[0m`
             )
         }
 

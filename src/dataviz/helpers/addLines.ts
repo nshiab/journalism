@@ -32,6 +32,8 @@ export default function addLines(
         pushAvgValue(avgValues, values, x, options)
     }
 
+    fillEmpty(avgValues)
+
     drawLine(avgValues, chartData, color, options)
 }
 
@@ -85,6 +87,17 @@ function draw(
         }
     } else if (typeof currY === "number") {
         chartData[options.height - currY - 1][x] = "•"
+    }
+}
+
+function fillEmpty(avgValues: { x: number; y: number | null }[]) {
+    let prevY = null
+    for (let x = 0; x < avgValues.length; x++) {
+        if (avgValues[x].y === null) {
+            avgValues[x].y = prevY
+        } else {
+            prevY = avgValues[x].y
+        }
     }
 }
 

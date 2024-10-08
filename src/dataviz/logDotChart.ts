@@ -2,7 +2,7 @@ import addDots from "./helpers/addDots.js"
 import prepChart from "./helpers/prepChart.js"
 
 /**
- * Generates and logs a dot chart.
+ * Generates and logs a dot chart. The data is expected to be sorted by the x-axis values.
  *
  * @example
  * Basic usage
@@ -15,7 +15,7 @@ import prepChart from "./helpers/prepChart.js"
  * ]
  *
  * logDotChart(data, "date", "value", {
- *     formatX: (d) => (d as Date).toLocaleDateString(),
+ *     formatX: (d) => (d as Date).toISOString().slice(0, 10),,
  *     formatY: (d) => "$" + (d as number).toString(),
  * })
  * ```
@@ -35,7 +35,7 @@ import prepChart from "./helpers/prepChart.js"
  * ]
  *
  * logDotChart(data, "date", "value", {
- *     formatX: (d) => (d as Date).toLocaleDateString(),
+ *     formatX: (d) => (d as Date).toISOString().slice(0, 10),
  *     formatY: (d) => "$" + (d as number).toString(),
  *     smallMultiples: "category",
  * })
