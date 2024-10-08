@@ -13,7 +13,6 @@ import getClosest from "./geo/getClosest.js"
 import getHumidex from "./weather/getHumidex.js"
 import getStatCanTable from "./web-scraping/getStatCanTable.js"
 import getHtmlTable from "./web-scraping/getHtmlTable.js"
-import savePlotChart from "./dataviz/savePlotChart.js"
 import arraysToData from "./format/arraysToData.js"
 import dataToArrays from "./format/dataToArrays.js"
 import updateDataDW from "./dataviz/updateDataDW.js"
@@ -75,7 +74,6 @@ export {
     // NODE ONLY
     getStatCanTable,
     getHtmlTable,
-    savePlotChart,
     updateDataDW,
     updateAnnotationsDW,
     updateNotesDW,
