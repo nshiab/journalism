@@ -40,6 +40,9 @@ import addMahalanobisDistance from "./statistics/addMahalanobisDistance.js"
 import addZScore from "./statistics/addZScore.js"
 import addClusters from "./statistics/addClusters.js"
 import euclidianDistance from "./statistics/euclidianDistance.js"
+import logBarChart from "./dataviz/logBarChart.js"
+import logLineChart from "./dataviz/logDotChart.js"
+import logDotChart from "./dataviz/logDotChart.js"
 
 export {
     formatDate,
@@ -85,4 +88,7 @@ export {
     getGeoTiffDetails,
     getGeoTiffValues,
     createDirectory,
+    logBarChart,
+    logLineChart,
+    logDotChart,
 }

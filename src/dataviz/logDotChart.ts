@@ -55,7 +55,7 @@ import prepChart from "./helpers/prepChart.js"
  *
  * @category Dataviz
  */
-export default function logLineChart(
+export default function logDotChart(
     data: { [key: string]: unknown }[],
     x: string,
     y: string,
