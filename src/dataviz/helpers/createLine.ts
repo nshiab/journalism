@@ -19,7 +19,7 @@ export default function createLine(
         formatY: (d: unknown) => string
     }
 ) {
-    const { xAxis, xTicks, xLabels } = getAxisX(data, x, {
+    const { xAxis, xTicks, xLabels, topFrame } = getAxisX(data, x, {
         xMin: options.xMin,
         xMax: options.xMax,
         formatX: options.formatX,
@@ -40,10 +40,21 @@ export default function createLine(
         height: options.height,
     })
 
-    const chart = [...chartData, xTicks, xAxis]
+    const chart = [topFrame, ...chartData, xTicks, xAxis]
     // We add the y-axis and y-ticks
     for (let i = 0; i < chart.length; i++) {
         chart[i].unshift(...yAxis[i])
+    }
+
+    // We close the frame
+    for (let i = 0; i < chart.length; i++) {
+        if (i === 0) {
+            chart[i].push("\x1b[90m┐\x1b[0m")
+        } else if (i > 0 && i < chart.length - 2) {
+            chart[i].push("\x1b[90m│\x1b[0m")
+        } else if (i === chart.length - 2) {
+            chart[i].push("\x1b[90m┘\x1b[0m")
+        }
     }
 
     return { chart, xLabels }

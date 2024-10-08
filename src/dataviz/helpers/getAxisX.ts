@@ -36,6 +36,14 @@ export default function getAxisX(
     for (let i = 0; i < options.width; i++) {
         xTicks.push(greyDash)
     }
+    const topFrame = []
+    for (let i = 0; i <= options.width; i++) {
+        if (i === 0) {
+            topFrame.push("\x1b[90m┌\x1b[0m")
+        } else {
+            topFrame.push(greyDash)
+        }
+    }
 
-    return { xAxis, xTicks, xLabels: [xLabelFirst, xLabelLast] }
+    return { xAxis, xTicks, topFrame, xLabels: [xLabelFirst, xLabelLast] }
 }

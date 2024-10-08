@@ -35,5 +35,8 @@ export default function getAxisY(
     yAxis.push([...yPadding, "\x1b[90m└\x1b[0m"])
     yAxis.push([...yPadding, " "])
 
+    // For the top frame
+    yAxis.unshift([...yPadding])
+
     return { yAxis }
 }
