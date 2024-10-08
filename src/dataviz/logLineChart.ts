@@ -15,9 +15,8 @@ export default function logLineChart(
         height?: number
     } = {}
 ) {
-    console.log(
-        `\nLine chart: "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""}\n`
-    )
+    const title = `\nLine chart: "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""}\n`
+    console.log(`\x1b[1m${title}\x1b[0m`)
 
-    prepChart(data, x, y, addLines, options)
+    prepChart("line", data, x, y, addLines, options)
 }

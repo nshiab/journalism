@@ -2,59 +2,67 @@ import formatNumber from "../../format/formatNumber.js"
 
 export default function makeBars(
     data: { [key: string]: unknown }[],
-    x: string,
-    y: string,
-    options: {
-        width?: number
-        xDecimals?: number
-    }
+    color: string,
+    labels: string,
+    values: string,
+    formatLabels: (d: unknown) => string,
+    formatValues: (d: unknown) => string,
+    width: number
 ) {
-    for (const d of data) {
-        if (typeof d[x] !== "number") {
-            throw new Error(`The value of ${x} is not a number.`)
-        } else if (typeof d[y] !== "string") {
-            throw new Error(`The value of ${y} is not a string.`)
-        }
-    }
-
     const chartData = []
 
-    const yValues = data.map((d) => d[y] as string) // tested above
-    const maxLength = Math.max(...yValues.map((d) => d.length))
-    const yValuesString = yValues.map((d) => d.padStart(maxLength, " "))
+    let labelsData = data.map((d) => formatLabels(d[labels]))
+    const maxLength = Math.max(...labelsData.map((d) => d.length))
+    labelsData = labelsData.map((d) => d.padStart(maxLength, " "))
 
-    const xMax = Math.max(...data.map((d) => d[x] as number)) // tested above
-    const xSum = data.reduce((acc, d) => acc + (d[x] as number), 0)
+    const valuesData = data.map((d) => {
+        if (typeof d[values] === "number") {
+            return d[values] as number
+        } else {
+            throw new Error(`${d[values]} is not a number`)
+        }
+    })
+    const maxVal = Math.max(...valuesData)
+    const sumVal = valuesData.reduce((acc, d) => acc + d, 0)
 
-    for (let i = 0; i < yValues.length; i++) {
+    const grey = "\x1b[90m"
+    const reset = "\x1b[0m"
+
+    for (let i = 0; i < labelsData.length; i++) {
         if (i === 0) {
-            chartData.push(" ".repeat(maxLength) + " ┌")
+            chartData.push(" ".repeat(maxLength) + grey + " ┌" + reset)
         }
 
-        const xValue = data[i][x] as number
-        const xPerc = formatNumber((xValue / xSum) * 100, {
-            decimals: 2,
-            suffix: "%",
-        })
-        const nbCharacters = Math.round((xValue / xMax) * (options.width ?? 75))
-
+        const nbCharacters = Math.round((valuesData[i] / maxVal) * width)
         chartData.push(
-            yValuesString[i] +
+            labelsData[i] +
+                grey +
                 " ┤" +
-                "\x1b[34m" +
+                reset +
+                color +
                 "█".repeat(nbCharacters) +
-                "\x1b[0m" +
+                reset +
                 " " +
-                formatNumber(xValue, { decimals: options.xDecimals }) +
-                " | " +
-                xPerc
+                formatValues(valuesData[i]) +
+                " " +
+                grey +
+                formatNumber((valuesData[i] / sumVal) * 100, {
+                    decimals: 2,
+                    suffix: "%",
+                }) +
+                reset
         )
-        if (i !== yValues.length - 1) {
-            chartData.push(" ".repeat(maxLength) + " │")
-        }
-        if (i === yValues.length - 1) {
-            chartData.push(" ".repeat(maxLength) + " └")
+        if (i === labelsData.length - 1) {
+            chartData.push(" ".repeat(maxLength) + grey + " └" + reset)
+        } else {
+            chartData.push(" ".repeat(maxLength) + grey + " │" + reset)
         }
     }
+
+    const total = `Total "${values}": ${formatValues(sumVal)}`
+    console.log(
+        `\n${" ".repeat(Math.round(maxLength + 1 + width / 2 - total.length / 2))}${grey}${total}${reset}`
+    )
+
     return chartData
 }
