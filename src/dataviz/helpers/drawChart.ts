@@ -3,6 +3,7 @@ import getAxisY from "./getAxisY.js"
 import getChartData from "./getChartData.js"
 
 export default function drawChart(
+    type: "line" | "dot",
     drawFunction: (
         data: { [key: string]: unknown }[],
         y: string,
@@ -31,7 +32,7 @@ export default function drawChart(
         formatY: (d: unknown) => string
     }
 ): { chart: string[][]; xLabels: string[] } {
-    const { xAxis, xTicks, xLabels, topFrame } = getAxisX(data, x, {
+    const { xAxis, xTicks, xLabels, topFrame } = getAxisX(type, x, {
         xMin: options.xMin,
         xMax: options.xMax,
         formatX: options.formatX,
@@ -45,7 +46,7 @@ export default function drawChart(
         yMax: options.yMax,
     })
 
-    const chartData = getChartData(options.height, options.width)
+    const chartData = getChartData(type, options.height, options.width)
 
     drawFunction(data, y, options.yMin, options.yMax, color, chartData, {
         width: options.width,
