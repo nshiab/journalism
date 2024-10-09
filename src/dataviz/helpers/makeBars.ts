@@ -6,7 +6,7 @@ export default function makeBars(
     labels: string,
     values: string,
     formatLabels: (d: unknown) => string,
-    formatValues: (d: unknown) => string,
+    formatValues: (d: number) => string,
     width: number
 ) {
     const chartData = []

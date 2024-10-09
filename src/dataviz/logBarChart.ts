@@ -1,3 +1,4 @@
+import formatNumber from "../format/formatNumber.js"
 import makeBars from "./helpers/makeBars.js"
 
 /**
@@ -29,7 +30,7 @@ export default function logBarChart(
     values: string,
     options: {
         formatLabels?: (d: unknown) => string
-        formatValues?: (d: unknown) => string
+        formatValues?: (d: number) => string
         width?: number
     } = {}
 ) {
@@ -43,7 +44,7 @@ export default function logBarChart(
     const formatValues =
         options.formatValues ??
         function (d) {
-            return String(d)
+            return formatNumber(d)
         }
     const width = options.width ?? 40
 
