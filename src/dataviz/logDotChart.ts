@@ -52,6 +52,7 @@ import prepChart from "./helpers/prepChart.js"
  * @param options.smallMultiplesPerRow - The number of small multiples per row.
  * @param options.width - The width of the chart.
  * @param options.height - The height of the chart.
+ * @param options.title - The title of the chart.
  *
  * @category Dataviz
  */
@@ -67,11 +68,16 @@ export default function logDotChart(
         smallMultiplesPerRow?: number
         width?: number
         height?: number
+        title?: number
     } = {}
 ) {
-    console.log(
-        `\nDot chart of "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""}:`
-    )
+    if (options.title) {
+        console.log(`\n${options.title}`)
+    } else {
+        console.log(
+            `\nDot chart of "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""}:`
+        )
+    }
 
     prepChart("dot", data, x, y, addDots, options)
 }

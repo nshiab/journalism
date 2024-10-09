@@ -20,6 +20,9 @@ import makeBars from "./helpers/makeBars.js"
  * @param options.formatLabels - A function to format the labels. Defaults to converting the label to a string.
  * @param options.formatValues - A function to format the values. Defaults to converting the value to a string.
  * @param options.width - The width of the chart. Defaults to 40.
+ * @param options.title - The title of the chart.
+ * @param options.totalLabel - The label for the total value.
+ * @param options.compact - Whether to use a compact format for the chart. Defaults to false.
  *
  * @category Dataviz
  *
@@ -32,9 +35,16 @@ export default function logBarChart(
         formatLabels?: (d: unknown) => string
         formatValues?: (d: number) => string
         width?: number
+        title?: string
+        totalLabel?: string
+        compact?: boolean
     } = {}
 ) {
-    console.log(`\nBar chart of "${values}" per "${labels}":`)
+    if (options.title) {
+        console.log(`\n${options.title}`)
+    } else {
+        console.log(`\nBar chart of "${values}" per "${labels}":`)
+    }
 
     const formatLabels =
         options.formatLabels ??
@@ -55,7 +65,9 @@ export default function logBarChart(
         values,
         formatLabels,
         formatValues,
-        width
+        width,
+        options.compact ?? false,
+        options.totalLabel
     )
     console.log(chartData.join("\n"))
 }

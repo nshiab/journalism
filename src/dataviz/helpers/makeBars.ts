@@ -7,7 +7,9 @@ export default function makeBars(
     values: string,
     formatLabels: (d: unknown) => string,
     formatValues: (d: number) => string,
-    width: number
+    width: number,
+    compact: boolean,
+    totalLabel?: string
 ) {
     const chartData = []
 
@@ -54,12 +56,14 @@ export default function makeBars(
         )
         if (i === labelsData.length - 1) {
             chartData.push(" ".repeat(maxLength) + grey + " └" + reset)
-        } else {
+        } else if (!compact) {
             chartData.push(" ".repeat(maxLength) + grey + " │" + reset)
         }
     }
 
-    const total = `Total "${values}": ${formatValues(sumVal)}`
+    const total = totalLabel
+        ? `${totalLabel}: ${formatValues(sumVal)}`
+        : `Total "${values}": ${formatValues(sumVal)}`
     console.log(
         `\n${" ".repeat(Math.round(maxLength + 1 + width / 2 - total.length / 2))}${grey}${total}${reset}`
     )
