@@ -33,8 +33,7 @@ export default function logBarChart(
         width?: number
     } = {}
 ) {
-    const title = `\nBar chart: "${values}" per "${labels}"`
-    console.log(`\x1b[1m${title}\x1b[0m`)
+    console.log(`\nBar chart of "${values}" per "${labels}":`)
 
     const formatLabels =
         options.formatLabels ??

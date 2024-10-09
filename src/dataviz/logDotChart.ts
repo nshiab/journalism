@@ -69,9 +69,9 @@ export default function logDotChart(
         height?: number
     } = {}
 ) {
-    const title = `\nDot chart: "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""}`
-
-    console.log(`\x1b[1m${title}\x1b[0m`)
+    console.log(
+        `\nDot chart of "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""}:`
+    )
 
     prepChart("dot", data, x, y, addDots, options)
 }
