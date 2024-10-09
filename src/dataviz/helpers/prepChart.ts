@@ -1,5 +1,4 @@
 import { max, min, Numeric } from "d3-array"
-import formatNumber from "../../format/formatNumber.js"
 import getColors from "./getColors.js"
 import drawChart from "./drawChart.js"
 
@@ -45,8 +44,6 @@ export default function prepChart(
     const smallMultiplesPerRow = options.smallMultiplesPerRow ?? 2
     const smallMultiples = options.smallMultiples ?? null
     const fixedScales = options.fixedScales ?? false
-
-    let warning = false
 
     if (typeof smallMultiples === "string") {
         const categories = Array.from(
@@ -95,13 +92,6 @@ export default function prepChart(
                 const yValues = dataFiltered.map((d) => d[y])
                 yMin = min(yValues as Numeric[]) as number
                 yMax = max(yValues as Numeric[]) as number
-            }
-
-            if (type === "line" && !warning && dataFiltered.length > width) {
-                console.log(
-                    `\x1b[90m/!\\ The number of data points is longer than the width (${Math.round(width / smallMultiplesPerRow)}) for some charts. While the axis labels are the actual min/max values, multiple "${y}" values are averaged for each "${x}". Increase the width or use a dot chart for more accuracy.\x1b[0m`
-                )
-                warning = true
             }
 
             const { chart, xLabels } = drawChart(
@@ -162,13 +152,6 @@ export default function prepChart(
 
         console.log(`\n${chartString}\n`)
     } else {
-        if (type === "line" && !warning && data.length > width) {
-            console.log(
-                `\x1b[90m/!\\ The number of data points (${formatNumber(data.length)}) is longer than the width (${width}). While the axis labels are the actual min/max values, multiple "${y}" values are averaged for each "${x}". Increase the width or use a dot chart for more accuracy.\x1b[0m`
-            )
-            warning = true
-        }
-
         const xValues = data.map((d) => d[x])
         const xMin = min(xValues as Numeric[]) as number
         const xMax = max(xValues as Numeric[]) as number

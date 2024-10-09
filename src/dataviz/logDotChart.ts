@@ -2,7 +2,7 @@ import addDots from "./helpers/addDots.js"
 import prepChart from "./helpers/prepChart.js"
 
 /**
- * Generates and logs a dot chart. The data is expected to be sorted by the x-axis values.
+ * Generates and logs a dot chart. The data is expected to be sorted by the x-axis values. Points might overlap.
  *
  * @example
  * Basic usage

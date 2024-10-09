@@ -2,7 +2,7 @@ import addLines from "./helpers/addLines.js"
 import prepChart from "./helpers/prepChart.js"
 
 /**
- * Generates and logs a line chart. The data is expected to be sorted by the x-axis values.
+ * Generates and logs a line chart. The data is expected to be sorted by the x-axis values. The line is an averaged approximation of the data when the width is smaller than the number of data points.
  *
  * @example
  * Basic usage
