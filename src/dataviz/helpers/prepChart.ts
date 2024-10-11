@@ -199,6 +199,6 @@ export default function prepChart(
             )
         }
 
-        console.log(`${chartString}\n`)
+        console.log(`${chartString}`)
     }
 }
