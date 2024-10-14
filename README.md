@@ -1,22 +1,19 @@
 # The Journalism Library
 
-> [!WARNING]\
-> Starting with version 1.19.0 (October 2024), the library will no longer be
-> updated on NPM. Instead, it will be available on
-> [JSR](https://jsr.io/@nshiab/journalism). This is part of migrating the
-> development of the library to Deno, rather than Node.js. You will still be
-> able to install and use it with Node.js, Bun, and Deno. For more information,
-> check the [GitHub repository](https://github.com/nshiab/journalism).
-
 A collection of TypeScript functions for journalistic projects.
 
-The library is available on [NPM](https://www.npmjs.com/package/journalism) and
-[JSR](https://jsr.io/@nshiab/journalism).
+The library is available on [JSR](https://jsr.io/@nshiab/journalism) with its
+[documentation](https://jsr.io/@nshiab/journalism/doc).
 
-The documentation can be found on [Github](https://nshiab.github.io/journalism/)
-and [JSR](https://jsr.io/@nshiab/journalism/doc).
+The library is maintained by [Nael Shiab](http://naelshiab.com/), computational
+journalist and senior data producer for [CBC News](https://www.cbc.ca/news).
 
-To install, run the relevant command in your terminal
+You might also find the
+[simple-data-analysis library](https://github.com/nshiab/simple-data-analysis)
+and [Code Like a Journalist](https://github.com/nshiab/code-like-a-journalist)
+interesting.
+
+To install the library, you can use the following commands:
 
 ```bash
 # DENO
@@ -29,19 +26,11 @@ npx jsr add journalism
 npx jsr add journalism
 ```
 
-If you wish to contribute, create an issue explaining what you would like to
-add, create a branch from the issue, make sure to add tests, import your
-function in index.ts and then create a pull request. To run a specific test, you
-can use a command like this one
-`npx mocha --require ts-node/register ./test/finance/adjustToInflation.test.ts --timeout 10000 -r dotenv/config`.
-To run all tests, including building the library and generating the docs (in
-./test-docs), run `npm run all-tests`.
+If you run your code in a browser, use the `web` entry point:
 
-You might also find
-[simple-data-analysis](https://github.com/nshiab/simple-data-analysis) and
-[Code Like a Journalist](https://github.com/nshiab/code-like-a-journalist)
-interesting.
+```js
+import { formatNumber } from "@nshiab/journalism/web";
+```
 
-This repository is maintained by [Nael Shiab](http://naelshiab.com/),
-computational journalist and senior data producer for
-[CBC News](https://www.cbc.ca/news).
+If you wish to contribute, please check the
+[guidelines](https://github.com/nshiab/journalism/blob/main/CONTRIBUTING.md).
