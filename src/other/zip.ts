@@ -1,5 +1,5 @@
-import AdmZip from "adm-zip"
-import createDirectory from "./createDirectory.js"
+import AdmZip from "npm:adm-zip@0.5";
+import createDirectory from "./createDirectory.ts";
 
 /**
  * Compresses files or a folder into a zip archive.
@@ -18,15 +18,15 @@ import createDirectory from "./createDirectory.js"
  * @param zipFile - The destination path for the created zip file.
  */
 export default function zip(files: string | string[], zipFile: string) {
-    const z = new AdmZip()
-    if (Array.isArray(files)) {
-        for (const file of files) {
-            z.addLocalFile(file)
-        }
-    } else {
-        z.addLocalFolder(files)
+  const z = new AdmZip();
+  if (Array.isArray(files)) {
+    for (const file of files) {
+      z.addLocalFile(file);
     }
+  } else {
+    z.addLocalFolder(files);
+  }
 
-    createDirectory(zipFile)
-    z.writeZip(zipFile)
+  createDirectory(zipFile);
+  z.writeZip(zipFile);
 }

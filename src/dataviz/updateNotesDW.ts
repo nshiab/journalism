@@ -1,8 +1,7 @@
-import process from "node:process"
+import process from "node:process";
 
 /**
  * Updates notes field for a specified Datawrapper chart, table or map. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
- *
  *
  * @example
  * Basic usage
@@ -28,42 +27,43 @@ import process from "node:process"
  * @category Dataviz
  */
 export default async function updateNotesDW(
-    chartId: string,
-    note: string,
-    options: { apiKey?: string; returnResponse?: boolean } = {}
+  chartId: string,
+  note: string,
+  options: { apiKey?: string; returnResponse?: boolean } = {},
 ): Promise<void | Response> {
-    const envVar = options.apiKey ?? "DATAWRAPPER_KEY"
-    const apiKey = process.env[envVar]
-    if (apiKey === undefined || apiKey === "") {
-        throw new Error(`process.env.${envVar} is undefined or ''.`)
-    }
+  const envVar = options.apiKey ?? "DATAWRAPPER_KEY";
+  const apiKey = process.env[envVar];
+  if (apiKey === undefined || apiKey === "") {
+    throw new Error(`process.env.${envVar} is undefined or ''.`);
+  }
 
-    const response = await fetch(
-        `https://api.datawrapper.de/v3/charts/${chartId}`,
-        {
-            method: "PATCH",
-            headers: {
-                Authorization: `Bearer ${apiKey}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                metadata: {
-                    annotate: {
-                        notes: note,
-                    },
-                },
-            }),
-        }
-    )
+  const response = await fetch(
+    `https://api.datawrapper.de/v3/charts/${chartId}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        metadata: {
+          annotate: {
+            notes: note,
+          },
+        },
+      }),
+    },
+  );
 
-    // if returning a response, do it before the response.status checks
-    if (options.returnResponse === true) {
-        return response
-    }
+  await response.json();
+  // if returning a response, do it before the response.status checks
+  if (options.returnResponse === true) {
+    return response;
+  }
 
-    if (response.status !== 200) {
-        throw new Error(
-            `updateNotesDW ${chartId}: Upstream HTTP ${response.status} - ${response.statusText}`
-        )
-    }
+  if (response.status !== 200) {
+    throw new Error(
+      `updateNotesDW ${chartId}: Upstream HTTP ${response.status} - ${response.statusText}`,
+    );
+  }
 }

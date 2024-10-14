@@ -47,34 +47,33 @@
  */
 
 export default function addZScore(
-    data: Record<string, unknown>[],
-    variable: string,
-    options: { newKey?: string } = {}
+  data: Record<string, unknown>[],
+  variable: string,
+  options: { newKey?: string } = {},
 ): Record<string, unknown>[] {
-    // Average
-    let sum = 0
-    for (let i = 0; i < data.length; i++) {
-        const val = data[i][variable]
-        if (typeof val !== "number") {
-            throw new Error(`This is not a number: ${data[i][variable]}`)
-        }
-        sum += val
+  // Average
+  let sum = 0;
+  for (let i = 0; i < data.length; i++) {
+    const val = data[i][variable];
+    if (typeof val !== "number") {
+      throw new Error(`This is not a number: ${data[i][variable]}`);
     }
-    const mean = sum / data.length
+    sum += val;
+  }
+  const mean = sum / data.length;
 
-    // Standard deviation
-    const sqdDistFromMean = data
-        .map((d) => Math.pow((d[variable] as number) - mean, 2)) // we checked the type above
-        .reduce((acc, curr) => (acc += curr), 0)
+  // Standard deviation
+  const sqdDistFromMean = data
+    .map((d) => Math.pow((d[variable] as number) - mean, 2)) // we checked the type above
+    .reduce((acc, curr) => (acc += curr), 0);
 
-    const stdDev = Math.sqrt(sqdDistFromMean / data.length)
+  const stdDev = Math.sqrt(sqdDistFromMean / data.length);
 
-    // Z-Score
-    const newKey =
-        typeof options.newKey === "string" ? options.newKey : "zScore"
-    for (let i = 0; i < data.length; i++) {
-        data[i][newKey] = ((data[i][variable] as number) - mean) / stdDev // we checked the type above
-    }
+  // Z-Score
+  const newKey = typeof options.newKey === "string" ? options.newKey : "zScore";
+  for (let i = 0; i < data.length; i++) {
+    data[i][newKey] = ((data[i][variable] as number) - mean) / stdDev; // we checked the type above
+  }
 
-    return data
+  return data;
 }

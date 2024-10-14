@@ -1,10 +1,8 @@
-import assert from "assert"
-import camelCase from "../../src/format/camelCase.js"
+import { assertEquals } from "jsr:@std/assert";
+import camelCase from "../../src/format/camelCase.ts";
 
-describe("camelCase", () => {
-    it("should format a string to camel case", () => {
-        const string = camelCase("Journalism  _ % IS**@ aWeSoMe.")
+Deno.test("should format a string to camel case", () => {
+  const string = camelCase("Journalism  _ % IS**@ aWeSoMe.");
 
-        assert.deepStrictEqual(string, "journalismIsAwesome")
-    })
-})
+  assertEquals(string, "journalismIsAwesome");
+});

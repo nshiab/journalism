@@ -1,5 +1,5 @@
-import AdmZip from "adm-zip"
-import { unlinkSync } from "node:fs"
+import AdmZip from "npm:adm-zip@0.5";
+import { unlinkSync } from "node:fs";
 
 /**
  * Unzips a given zipped file to a specified output directory.
@@ -16,13 +16,13 @@ import { unlinkSync } from "node:fs"
  * @param options.deleteZippedFile - If true, the zipped file will be deleted after extraction.
  */
 export default function unzip(
-    zippedFile: string,
-    output: string,
-    options: { deleteZippedFile?: boolean } = {}
+  zippedFile: string,
+  output: string,
+  options: { deleteZippedFile?: boolean } = {},
 ) {
-    const zip = new AdmZip(zippedFile)
-    zip.extractAllTo(output, true)
-    if (options.deleteZippedFile) {
-        unlinkSync(zippedFile)
-    }
+  const zip = new AdmZip(zippedFile);
+  zip.extractAllTo(output, true);
+  if (options.deleteZippedFile) {
+    unlinkSync(zippedFile);
+  }
 }

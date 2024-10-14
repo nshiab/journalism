@@ -1,14 +1,32 @@
 {
   "name": "@nshiab/journalism",
-  "version": "1.18.11",
-  "exports": "./src/index.ts",
-  "tasks": {
-    "test": "mocha \"test/unit/**/*.test.ts\" --timeout 10000"
+  "version": "1.19.0",
+  "exports": {
+    ".": "./src/index.ts",
+    "./web": "./src/web.ts"
   },
-  "nodeModuleDir": "auto",
-  "compilerOptions": {
-    "lib": [
-      "dom"
+  "tasks": {
+    "all-tests": "deno install && deno fmt --check && deno lint && deno check src/index.ts && deno publish --allow-dirty --dry-run && deno test -A --fail-fast",
+    "test-coverage": "deno test -A --fail-fast --coverage=cov_profile && deno coverage cov_profile",
+    "patch-no-tests": "deno run -A src/incrementVersion.ts patch",
+    "patch": "deno task all-tests && deno run -A src/incrementVersion.ts patch",
+    "minor": "deno task all-tests && deno run -A src/incrementVersion.ts patch",
+    "major": "deno-task all-testes && deno run -A src/incrementVersion.ts patch"
+  },
+  "publish": {
+    "exclude": [
+      "test",
+      ".github"
+    ]
+  },
+  "nodeModulesDir": "auto",
+  "imports": {
+    "@std/assert": "jsr:@std/assert@^1.0.6",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.2"
+  },
+  "fmt": {
+    "exclude": [
+      "test/output"
     ]
   }
 }

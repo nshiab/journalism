@@ -17,23 +17,22 @@
  */
 
 export default function getHumidex(
-    temperature: number,
-    humidity: number
+  temperature: number,
+  humidity: number,
 ): number {
-    if (humidity < 0 || humidity > 100) {
-        throw new Error("humidity must be between 0 and 100")
-    }
+  if (humidity < 0 || humidity > 100) {
+    throw new Error("humidity must be between 0 and 100");
+  }
 
-    const p =
-        (6.112 *
-            Math.pow(10, (7.5 * temperature) / (237.7 + temperature)) *
-            humidity) /
-        100
+  const p = (6.112 *
+    Math.pow(10, (7.5 * temperature) / (237.7 + temperature)) *
+    humidity) /
+    100;
 
-    const humidex = temperature + (5 / 9) * (p - 10)
+  const humidex = temperature + (5 / 9) * (p - 10);
 
-    const humidexRounded = Math.round(humidex)
+  const humidexRounded = Math.round(humidex);
 
-    if (humidexRounded < temperature) return temperature
-    return humidexRounded
+  if (humidexRounded < temperature) return temperature;
+  return humidexRounded;
 }

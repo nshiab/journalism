@@ -18,17 +18,17 @@
  */
 
 export default function adjustToInflation(
-    amount: number,
-    amountCPI: number,
-    targetCPI: number,
-    options: {
-        decimals?: number
-    } = {}
+  amount: number,
+  amountCPI: number,
+  targetCPI: number,
+  options: {
+    decimals?: number;
+  } = {},
 ): number {
-    const inflation = (targetCPI - amountCPI) / amountCPI
-    const adjustedAmount = amount + amount * inflation
+  const inflation = (targetCPI - amountCPI) / amountCPI;
+  const adjustedAmount = amount + amount * inflation;
 
-    return typeof options.decimals === "number"
-        ? parseFloat(adjustedAmount.toFixed(options.decimals))
-        : adjustedAmount
+  return typeof options.decimals === "number"
+    ? parseFloat(adjustedAmount.toFixed(options.decimals))
+    : adjustedAmount;
 }

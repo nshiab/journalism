@@ -46,96 +46,96 @@
  * @category Statistics
  */
 export default function addClusters(
-    data: { [key: string]: unknown }[],
-    minDistance: number,
-    minNeighbours: number,
-    distance: (
-        a: { [key: string]: unknown },
-        b: { [key: string]: unknown }
-    ) => number,
-    options: { reset?: boolean } = {}
+  data: { [key: string]: unknown }[],
+  minDistance: number,
+  minNeighbours: number,
+  distance: (
+    a: { [key: string]: unknown },
+    b: { [key: string]: unknown },
+  ) => number,
+  options: { reset?: boolean } = {},
 ): void {
-    if (options.reset) {
-        data.forEach((d) => {
-            d.clusterId = undefined
-            d.clusterType = undefined
-        })
+  if (options.reset) {
+    data.forEach((d) => {
+      d.clusterId = undefined;
+      d.clusterType = undefined;
+    });
+  }
+
+  let clusterId = 0;
+
+  for (const point of data) {
+    // Skip points that are already assigned to a cluster.
+    if (point.clusterId !== undefined) continue;
+
+    // Find the neighbours of the current point.
+    const neighbours = getNeighbours(point);
+
+    // If the point has less than minPts neighbours, it's noise or a border point.
+    if (neighbours.length < minNeighbours) {
+      point.clusterId = null;
+      // We mark the point as noise initially. We double-check later if it's a border point.
+      point.clusterType = "noise";
+    } else {
+      // We know that the point is a core point, so we assign it to a new cluster and we look for more points to add to the cluster.
+      clusterId++;
+      const clusterLabel = `cluster${clusterId}`;
+      point.clusterId = clusterLabel;
+      point.clusterType = "core";
+      expandCluster(neighbours, clusterLabel);
     }
+  }
 
-    let clusterId = 0
+  // Assign border points to a cluster if they are reachable from a core point.
+  for (const point of data) {
+    if (point.clusterId === null) {
+      const neighbours = getNeighbours(point);
+      const clusterNeighbours = neighbours.find(
+        (n) => n.clusterType === "core",
+      );
+      if (clusterNeighbours) {
+        point.clusterId = clusterNeighbours.clusterId;
+        point.clusterType = "border";
+      }
+    }
+  }
 
-    for (const point of data) {
-        // Skip points that are already assigned to a cluster.
-        if (point.clusterId !== undefined) continue
+  // Find the neighbours of a point.
+  function getNeighbours(point: {
+    [key: string]: unknown;
+  }): { [key: string]: unknown }[] {
+    return data.filter((p) => distance(point, p) <= minDistance);
+  }
 
-        // Find the neighbours of the current point.
-        const neighbours = getNeighbours(point)
+  // Add a point and its neighbours to the same cluster.
+  function expandCluster(
+    neighbours: { [key: string]: unknown }[],
+    clusterLabel: string,
+  ): void {
+    for (let i = 0; i < neighbours.length; i++) {
+      const neighbour = neighbours[i];
 
-        // If the point has less than minPts neighbours, it's noise or a border point.
-        if (neighbours.length < minNeighbours) {
-            point.clusterId = null
-            // We mark the point as noise initially. We double-check later if it's a border point.
-            point.clusterType = "noise"
+      if (neighbour.clusterId === undefined) {
+        // If the neighbour is not assigned to a cluster, we add it to the cluster.
+        neighbour.clusterId = clusterLabel;
+
+        const newNeighbours = getNeighbours(neighbour);
+
+        // If the neighbour is a core point, we add its neighbours to the list of points to be checked.
+        if (newNeighbours.length >= minNeighbours) {
+          neighbour.clusterType = "core";
+          neighbours.push(
+            ...newNeighbours.filter((n) => !neighbours.includes(n)),
+          );
         } else {
-            // We know that the point is a core point, so we assign it to a new cluster and we look for more points to add to the cluster.
-            clusterId++
-            const clusterLabel = `cluster${clusterId}`
-            point.clusterId = clusterLabel
-            point.clusterType = "core"
-            expandCluster(neighbours, clusterLabel)
+          // If not core, it's a border point
+          neighbour.clusterType = "border";
         }
+      } else if (neighbour.clusterId === null) {
+        // If the neighbour is a border point, we add it to the cluster.
+        neighbour.clusterId = clusterLabel;
+        neighbour.clusterType = "border";
+      }
     }
-
-    // Assign border points to a cluster if they are reachable from a core point.
-    for (const point of data) {
-        if (point.clusterId === null) {
-            const neighbours = getNeighbours(point)
-            const clusterNeighbours = neighbours.find(
-                (n) => n.clusterType === "core"
-            )
-            if (clusterNeighbours) {
-                point.clusterId = clusterNeighbours.clusterId
-                point.clusterType = "border"
-            }
-        }
-    }
-
-    // Find the neighbours of a point.
-    function getNeighbours(point: {
-        [key: string]: unknown
-    }): { [key: string]: unknown }[] {
-        return data.filter((p) => distance(point, p) <= minDistance)
-    }
-
-    // Add a point and its neighbours to the same cluster.
-    function expandCluster(
-        neighbours: { [key: string]: unknown }[],
-        clusterLabel: string
-    ): void {
-        for (let i = 0; i < neighbours.length; i++) {
-            const neighbour = neighbours[i]
-
-            if (neighbour.clusterId === undefined) {
-                // If the neighbour is not assigned to a cluster, we add it to the cluster.
-                neighbour.clusterId = clusterLabel
-
-                const newNeighbours = getNeighbours(neighbour)
-
-                // If the neighbour is a core point, we add its neighbours to the list of points to be checked.
-                if (newNeighbours.length >= minNeighbours) {
-                    neighbour.clusterType = "core"
-                    neighbours.push(
-                        ...newNeighbours.filter((n) => !neighbours.includes(n))
-                    )
-                } else {
-                    // If not core, it's a border point
-                    neighbour.clusterType = "border"
-                }
-            } else if (neighbour.clusterId === null) {
-                // If the neighbour is a border point, we add it to the cluster.
-                neighbour.clusterId = clusterLabel
-                neighbour.clusterType = "border"
-            }
-        }
-    }
+  }
 }

@@ -1,5 +1,5 @@
-import { minIndex } from "d3-array"
-import distance from "./distance.js"
+import { minIndex } from "npm:d3-array@3";
+import distance from "./distance.ts";
 
 /**
  * Return the closest item of a list based on longitude and latitude. The options (last parameter) are optional. If `addDistance` is true and `geoItems` have a `properties` key, the distance will be added to the properties.
@@ -36,45 +36,45 @@ import distance from "./distance.js"
  */
 
 export default function getClosest(
-    lon: number,
-    lat: number,
-    geoItems: Array<unknown>,
-    getItemLon: (d: unknown) => number,
-    getItemLat: (d: unknown) => number,
-    options: {
-        addDistance?: boolean
-        decimals?: number
-    } = {}
+  lon: number,
+  lat: number,
+  geoItems: Array<unknown>,
+  getItemLon: (d: unknown) => number,
+  getItemLat: (d: unknown) => number,
+  options: {
+    addDistance?: boolean;
+    decimals?: number;
+  } = {},
 ): {
-    properties?:
-        | {
-              distance?: number | undefined
-          }
-        | undefined
-    distance?: number | undefined
+  properties?:
+    | {
+      distance?: number | undefined;
+    }
+    | undefined;
+  distance?: number | undefined;
 } {
-    const distances = []
+  const distances = [];
 
-    for (let i = 0; i < geoItems.length; i++) {
-        const item = geoItems[i]
-        distances[i] = distance(lon, lat, getItemLon(item), getItemLat(item), {
-            decimals: options.decimals,
-        })
+  for (let i = 0; i < geoItems.length; i++) {
+    const item = geoItems[i];
+    distances[i] = distance(lon, lat, getItemLon(item), getItemLat(item), {
+      decimals: options.decimals,
+    });
+  }
+
+  const distanceMinIndex = minIndex(distances);
+  const closest = geoItems[distanceMinIndex] as {
+    properties?: { distance?: number };
+    distance?: number;
+  };
+
+  if (options.addDistance) {
+    if (typeof closest.properties === "object") {
+      closest.properties.distance = distances[distanceMinIndex];
+    } else {
+      closest.distance = distances[distanceMinIndex];
     }
+  }
 
-    const distanceMinIndex = minIndex(distances)
-    const closest = geoItems[distanceMinIndex] as {
-        properties?: { distance?: number }
-        distance?: number
-    }
-
-    if (options.addDistance) {
-        if (typeof closest.properties === "object") {
-            closest.properties.distance = distances[distanceMinIndex]
-        } else {
-            closest.distance = distances[distanceMinIndex]
-        }
-    }
-
-    return closest
+  return closest;
 }

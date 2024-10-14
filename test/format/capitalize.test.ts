@@ -1,10 +1,8 @@
-import assert from "assert"
-import capitalize from "../../src/format/capitalize.js"
+import { assertEquals } from "jsr:@std/assert";
+import capitalize from "../../src/format/capitalize.ts";
 
-describe("capitalize", () => {
-    it("should capitalize the first character of a string", () => {
-        const string = capitalize("journalism")
+Deno.test("should capitalize the first character of a string", () => {
+  const string = capitalize("journalism");
 
-        assert.deepStrictEqual(string, "Journalism")
-    })
-})
+  assertEquals(string, "Journalism");
+});

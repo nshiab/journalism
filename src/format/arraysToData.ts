@@ -1,7 +1,6 @@
 /**
  * Converts an object containing arrays into an array of objects, where each object corresponds to an index in the arrays.
  *
- *
  * @example
  * Basic usage
  * ```ts
@@ -25,19 +24,19 @@
  */
 
 export default function arraysToData(data: {
-    [key: string]: unknown[]
+  [key: string]: unknown[];
 }): { [key: string]: unknown }[] {
-    const keys = Object.keys(data)
-    const nbItems = data[keys[0]].length
+  const keys = Object.keys(data);
+  const nbItems = data[keys[0]].length;
 
-    const newData = []
-    for (let i = 0; i < nbItems; i++) {
-        const newItem: { [key: string]: unknown } = {}
-        for (const key of keys) {
-            newItem[key] = data[key][i]
-        }
-        newData.push(newItem)
+  const newData = [];
+  for (let i = 0; i < nbItems; i++) {
+    const newItem: { [key: string]: unknown } = {};
+    for (const key of keys) {
+      newItem[key] = data[key][i];
     }
+    newData.push(newItem);
+  }
 
-    return newData
+  return newData;
 }

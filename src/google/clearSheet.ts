@@ -1,4 +1,4 @@
-import logToSheet from "./helpers/logToSheet.js"
+import logToSheet from "./helpers/logToSheet.ts";
 
 /**
  * Removes all rows from a sheet.
@@ -23,9 +23,9 @@ import logToSheet from "./helpers/logToSheet.js"
  * @category Google
  */
 export default async function clearSheet(
-    sheetUrl: string,
-    options: { apiEmail?: string; apiKey?: string } = {}
+  sheetUrl: string,
+  options: { apiEmail?: string; apiKey?: string } = {},
 ) {
-    const sheet = await logToSheet(sheetUrl, options)
-    await sheet.clear()
+  const sheet = await logToSheet(sheetUrl, options);
+  await sheet.clear();
 }

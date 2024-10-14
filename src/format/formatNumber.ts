@@ -1,4 +1,4 @@
-import round from "./round.js"
+import round from "./round.ts";
 
 /**
  * Format a number with a specific style.
@@ -24,91 +24,91 @@ import round from "./round.js"
  */
 
 export default function formatNumber(
-    number: number,
-    options: {
-        style?: "cbc" | "rc"
-        sign?: boolean
-        round?: boolean
-        decimals?: number
-        significantDigits?: number
-        fixed?: boolean
-        nearestInteger?: number
-        prefix?: string
-        suffix?: string
-    } = {}
+  number: number,
+  options: {
+    style?: "cbc" | "rc";
+    sign?: boolean;
+    round?: boolean;
+    decimals?: number;
+    significantDigits?: number;
+    fixed?: boolean;
+    nearestInteger?: number;
+    prefix?: string;
+    suffix?: string;
+  } = {},
 ): string {
-    if (typeof number !== "number") {
-        throw new Error("Not a number")
-    }
+  if (typeof number !== "number") {
+    throw new Error("Not a number");
+  }
 
-    const mergedOptions: {
-        style: "cbc" | "rc"
-        sign: boolean
-        round: boolean
-        decimals?: number
-        nearestInteger?: number
-        significantDigits?: number
-        fixed: boolean
-        prefix: string
-        suffix: string
-    } = {
-        style: "cbc",
-        sign: false,
-        round: false,
-        fixed: false,
-        prefix: "",
-        suffix: "",
-        ...options,
-    }
+  const mergedOptions: {
+    style: "cbc" | "rc";
+    sign: boolean;
+    round: boolean;
+    decimals?: number;
+    nearestInteger?: number;
+    significantDigits?: number;
+    fixed: boolean;
+    prefix: string;
+    suffix: string;
+  } = {
+    style: "cbc",
+    sign: false,
+    round: false,
+    fixed: false,
+    prefix: "",
+    suffix: "",
+    ...options,
+  };
 
-    if (
-        mergedOptions.round ||
-        typeof mergedOptions.decimals === "number" ||
-        typeof mergedOptions.nearestInteger === "number" ||
-        typeof mergedOptions.significantDigits === "number"
-    ) {
-        number = round(number, {
-            decimals: mergedOptions.decimals,
-            nearestInteger: mergedOptions.nearestInteger,
-            significantDigits: mergedOptions.significantDigits,
-        })
-    }
+  if (
+    mergedOptions.round ||
+    typeof mergedOptions.decimals === "number" ||
+    typeof mergedOptions.nearestInteger === "number" ||
+    typeof mergedOptions.significantDigits === "number"
+  ) {
+    number = round(number, {
+      decimals: mergedOptions.decimals,
+      nearestInteger: mergedOptions.nearestInteger,
+      significantDigits: mergedOptions.significantDigits,
+    });
+  }
 
-    const regex = /\B(?=(\d{3})+(?!\d))/g
-    const [integers, decimals] = mergedOptions.fixed
-        ? number.toFixed(mergedOptions.decimals).split(".")
-        : number.toString().split(".")
+  const regex = /\B(?=(\d{3})+(?!\d))/g;
+  const [integers, decimals] = mergedOptions.fixed
+    ? number.toFixed(mergedOptions.decimals).split(".")
+    : number.toString().split(".");
 
-    let formattedNumber = ""
+  let formattedNumber = "";
 
-    if (mergedOptions.style === "cbc") {
-        const formattedIntegers = integers.replace(regex, ",")
-        if (decimals) {
-            formattedNumber = `${formattedIntegers}.${decimals}`
-        } else {
-            formattedNumber = formattedIntegers
-        }
-    } else if (mergedOptions.style === "rc") {
-        const string = mergedOptions.fixed
-            ? number.toFixed(mergedOptions.decimals)
-            : number.toString()
-        if (string.length === 4) {
-            formattedNumber = string.replace(".", ",")
-        } else {
-            const formattedIntegers = integers.replace(regex, " ")
-            if (decimals) {
-                formattedNumber = `${formattedIntegers},${decimals}`
-            } else {
-                formattedNumber = formattedIntegers
-            }
-        }
+  if (mergedOptions.style === "cbc") {
+    const formattedIntegers = integers.replace(regex, ",");
+    if (decimals) {
+      formattedNumber = `${formattedIntegers}.${decimals}`;
     } else {
-        throw new Error("Unknown style")
+      formattedNumber = formattedIntegers;
     }
-
-    if (mergedOptions.sign && number > 0) {
-        formattedNumber = `+${formattedNumber}`
+  } else if (mergedOptions.style === "rc") {
+    const string = mergedOptions.fixed
+      ? number.toFixed(mergedOptions.decimals)
+      : number.toString();
+    if (string.length === 4) {
+      formattedNumber = string.replace(".", ",");
+    } else {
+      const formattedIntegers = integers.replace(regex, " ");
+      if (decimals) {
+        formattedNumber = `${formattedIntegers},${decimals}`;
+      } else {
+        formattedNumber = formattedIntegers;
+      }
     }
+  } else {
+    throw new Error("Unknown style");
+  }
 
-    return `${mergedOptions.prefix}${formattedNumber}${mergedOptions.suffix}`
+  if (mergedOptions.sign && number > 0) {
+    formattedNumber = `+${formattedNumber}`;
+  }
+
+  return `${mergedOptions.prefix}${formattedNumber}${mergedOptions.suffix}`;
 }
