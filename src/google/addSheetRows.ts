@@ -1,4 +1,4 @@
-import logToSheet from "./helpers/logToSheet.js"
+import logToSheet from "./helpers/logToSheet.ts";
 
 /**
  * Appends rows to a Google Sheet.
@@ -32,20 +32,20 @@ import logToSheet from "./helpers/logToSheet.js"
  * @category Google
  */
 export default async function addSheetRows(
-    data: { [key: string]: string | number | boolean | Date }[],
-    sheetUrl: string,
-    options: {
-        headerIndex?: number
-        raw?: boolean
-        apiEmail?: string
-        apiKey?: string
-    } = {}
+  data: { [key: string]: string | number | boolean | Date }[],
+  sheetUrl: string,
+  options: {
+    headerIndex?: number;
+    raw?: boolean;
+    apiEmail?: string;
+    apiKey?: string;
+  } = {},
 ) {
-    const sheet = await logToSheet(sheetUrl, options)
-    const headerRow = Object.keys(data[0])
-    await sheet.setHeaderRow(
-        headerRow,
-        typeof options.headerIndex === "number" ? options.headerIndex + 1 : 1
-    )
-    await sheet.addRows(data, { raw: options.raw })
+  const sheet = await logToSheet(sheetUrl, options);
+  const headerRow = Object.keys(data[0]);
+  await sheet.setHeaderRow(
+    headerRow,
+    typeof options.headerIndex === "number" ? options.headerIndex + 1 : 1,
+  );
+  await sheet.addRows(data, { raw: options.raw });
 }

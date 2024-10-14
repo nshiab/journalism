@@ -1,92 +1,92 @@
-import formatDate from "./format/formatDate.js"
-import formatNumber from "./format/formatNumber.js"
-import round from "./format/round.js"
-import prettyDuration from "./format/prettyDuration.js"
-import geoTo3D from "./geo/geoTo3D.js"
-import distance from "./geo/distance.js"
-import styledLayerDescriptor from "./geo/styledLayerDescriptor.js"
-import adjustToInflation from "./finance/adjustToInflation.js"
-import mortgagePayments from "./finance/mortgagePayments.js"
-import mortgageInsurancePremium from "./finance/mortgageInsurancePremium.js"
-import mortgageMaxAmount from "./finance/mortgageMaxAmount.js"
-import getClosest from "./geo/getClosest.js"
-import getHumidex from "./weather/getHumidex.js"
-import getStatCanTable from "./web-scraping/getStatCanTable.js"
-import getHtmlTable from "./web-scraping/getHtmlTable.js"
-import arraysToData from "./format/arraysToData.js"
-import dataToArrays from "./format/dataToArrays.js"
-import updateDataDW from "./dataviz/updateDataDW.js"
-import updateAnnotationsDW from "./dataviz/updateAnnotationsDW.js"
-import updateNotesDW from "./dataviz/updateNotesDW.js"
-import publishChartDW from "./dataviz/publishChartDW.js"
-import dataAsCsv from "./format/dataAsCsv.js"
-import capitalize from "./format/capitalize.js"
-import camelCase from "./format/camelCase.js"
-import downloadFile from "./web-scraping/downloadFile.js"
-import unzip from "./other/unzip.js"
-import zip from "./other/zip.js"
-import overwriteSheetData from "./google/overwriteSheetData.js"
-import getSheetData from "./google/getSheetData.js"
-import getGeoTiffDetails from "./geo/getGeoTiffDetails.js"
-import getGeoTiffValues from "./geo/getGeoTiffValues.js"
-import createDirectory from "./other/createDirectory.js"
-import getId from "./other/getId.js"
-import getSeason from "./weather/getSeason.js"
-import getCovarianceMatrix from "./statistics/getCovarianceMatrix.js"
-import invertMatrix from "./statistics/invertMatrix.js"
-import getMahalanobisDistance from "./statistics/getMahalanobisDistance.js"
-import addMahalanobisDistance from "./statistics/addMahalanobisDistance.js"
-import addZScore from "./statistics/addZScore.js"
-import addClusters from "./statistics/addClusters.js"
-import euclidianDistance from "./statistics/euclidianDistance.js"
-import logBarChart from "./dataviz/logBarChart.js"
-import logLineChart from "./dataviz/logLineChart.js"
-import logDotChart from "./dataviz/logDotChart.js"
+import formatDate from "./format/formatDate.ts";
+import formatNumber from "./format/formatNumber.ts";
+import round from "./format/round.ts";
+import prettyDuration from "./format/prettyDuration.ts";
+import geoTo3D from "./geo/geoTo3D.ts";
+import distance from "./geo/distance.ts";
+import styledLayerDescriptor from "./geo/styledLayerDescriptor.ts";
+import adjustToInflation from "./finance/adjustToInflation.ts";
+import mortgagePayments from "./finance/mortgagePayments.ts";
+import mortgageInsurancePremium from "./finance/mortgageInsurancePremium.ts";
+import mortgageMaxAmount from "./finance/mortgageMaxAmount.ts";
+import getClosest from "./geo/getClosest.ts";
+import getHumidex from "./weather/getHumidex.ts";
+import getStatCanTable from "./web-scraping/getStatCanTable.ts";
+import getHtmlTable from "./web-scraping/getHtmlTable.ts";
+import arraysToData from "./format/arraysToData.ts";
+import dataToArrays from "./format/dataToArrays.ts";
+import updateDataDW from "./dataviz/updateDataDW.ts";
+import updateAnnotationsDW from "./dataviz/updateAnnotationsDW.ts";
+import updateNotesDW from "./dataviz/updateNotesDW.ts";
+import publishChartDW from "./dataviz/publishChartDW.ts";
+import dataAsCsv from "./format/dataAsCsv.ts";
+import capitalize from "./format/capitalize.ts";
+import camelCase from "./format/camelCase.ts";
+import downloadFile from "./web-scraping/downloadFile.ts";
+import unzip from "./other/unzip.ts";
+import zip from "./other/zip.ts";
+import overwriteSheetData from "./google/overwriteSheetData.ts";
+import getSheetData from "./google/getSheetData.ts";
+import getGeoTiffDetails from "./geo/getGeoTiffDetails.ts";
+import getGeoTiffValues from "./geo/getGeoTiffValues.ts";
+import createDirectory from "./other/createDirectory.ts";
+import getId from "./other/getId.ts";
+import getSeason from "./weather/getSeason.ts";
+import getCovarianceMatrix from "./statistics/getCovarianceMatrix.ts";
+import invertMatrix from "./statistics/invertMatrix.ts";
+import getMahalanobisDistance from "./statistics/getMahalanobisDistance.ts";
+import addMahalanobisDistance from "./statistics/addMahalanobisDistance.ts";
+import addZScore from "./statistics/addZScore.ts";
+import addClusters from "./statistics/addClusters.ts";
+import euclidianDistance from "./statistics/euclidianDistance.ts";
+import logBarChart from "./dataviz/logBarChart.ts";
+import logLineChart from "./dataviz/logLineChart.ts";
+import logDotChart from "./dataviz/logDotChart.ts";
 
 export {
-    formatDate,
-    formatNumber,
-    round,
-    prettyDuration,
-    geoTo3D,
-    distance,
-    styledLayerDescriptor,
-    adjustToInflation,
-    mortgagePayments,
-    mortgageInsurancePremium,
-    mortgageMaxAmount,
-    getClosest,
-    getHumidex,
-    arraysToData,
-    dataToArrays,
-    dataAsCsv,
-    capitalize,
-    camelCase,
-    getId,
-    getSeason,
-    getCovarianceMatrix,
-    invertMatrix,
-    getMahalanobisDistance,
-    addMahalanobisDistance,
-    addZScore,
-    addClusters,
-    euclidianDistance,
-    // NODE ONLY
-    getStatCanTable,
-    getHtmlTable,
-    updateDataDW,
-    updateAnnotationsDW,
-    updateNotesDW,
-    publishChartDW,
-    downloadFile,
-    unzip,
-    zip,
-    overwriteSheetData,
-    getSheetData,
-    getGeoTiffDetails,
-    getGeoTiffValues,
-    createDirectory,
-    logBarChart,
-    logLineChart,
-    logDotChart,
-}
+  addClusters,
+  addMahalanobisDistance,
+  addZScore,
+  adjustToInflation,
+  arraysToData,
+  camelCase,
+  capitalize,
+  createDirectory,
+  dataAsCsv,
+  dataToArrays,
+  distance,
+  downloadFile,
+  euclidianDistance,
+  formatDate,
+  formatNumber,
+  geoTo3D,
+  getClosest,
+  getCovarianceMatrix,
+  getGeoTiffDetails,
+  getGeoTiffValues,
+  getHtmlTable,
+  getHumidex,
+  getId,
+  getMahalanobisDistance,
+  getSeason,
+  getSheetData,
+  // NODE ONLY
+  getStatCanTable,
+  invertMatrix,
+  logBarChart,
+  logDotChart,
+  logLineChart,
+  mortgageInsurancePremium,
+  mortgageMaxAmount,
+  mortgagePayments,
+  overwriteSheetData,
+  prettyDuration,
+  publishChartDW,
+  round,
+  styledLayerDescriptor,
+  unzip,
+  updateAnnotationsDW,
+  updateDataDW,
+  updateNotesDW,
+  zip,
+};

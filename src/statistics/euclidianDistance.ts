@@ -19,17 +19,17 @@
  * @category Statistics
  */
 export default function euclideanDistance(
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
 ): number {
-    // Calculate the differences
-    const dx = x2 - x1
-    const dy = y2 - y1
+  // Calculate the differences
+  const dx = x2 - x1;
+  const dy = y2 - y1;
 
-    // Use the Pythagorean theorem to calculate the distance
-    const distance = Math.sqrt(dx * dx + dy * dy)
+  // Use the Pythagorean theorem to calculate the distance
+  const distance = Math.sqrt(dx * dx + dy * dy);
 
-    return distance
+  return distance;
 }

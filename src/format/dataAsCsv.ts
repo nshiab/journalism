@@ -1,4 +1,4 @@
-import { csvFormat } from "d3-dsv"
+import { csvFormat } from "npm:d3-dsv@3";
 
 /**
  * Convert an array of objects into CSV format.
@@ -20,7 +20,7 @@ import { csvFormat } from "d3-dsv"
  * @category Formatting
  */
 export default function dataAsCsv(
-    arrayOfObjects: { [key: string]: unknown }[]
+  arrayOfObjects: { [key: string]: unknown }[],
 ): string {
-    return csvFormat(arrayOfObjects)
+  return csvFormat(arrayOfObjects);
 }

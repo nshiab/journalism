@@ -1,8 +1,8 @@
-import noScientificNotation from "../format/helpers/noScientificNotation.js"
+import noScientificNotation from "../format/helpers/noScientificNotation.ts";
 
 /**
  * Returns the OpenGIS Styled Layer Descriptor encoded for an URL. The required parameters are the layer and the color scale.
- * 
+ *
  * @example
  * Basic usage
  * ```ts
@@ -22,27 +22,32 @@ import noScientificNotation from "../format/helpers/noScientificNotation.js"
  * // The sdl can now be used in a WMS request as SLD_BODY
  * const url = `https://geo.weather.gc.ca/geomet?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX=-90,-180,90,180&CRS=EPSG:4326&WIDTH=2400&HEIGHT=1200&LAYERS=GDPS.ETA_TT&FORMAT=image/jpeg&SLD_BODY=${sld}`
  * ```
- * 
+ *
  * @param layer The name of the layer.
  * @param colorScale An array of objects containing color and value properties.
- * 
+ *
  * @category Geo
  */
 export default function styledLayerDescriptor(
-    layer: string,
-    colorScale: { color: string; value: number }[]
+  layer: string,
+  colorScale: { color: string; value: number }[],
 ): string {
-    // Color map entrie need to be in ascending order.
-    colorScale.sort((a, b) => (a.value < b.value ? -1 : 1))
+  // Color map entrie need to be in ascending order.
+  colorScale.sort((a, b) => (a.value < b.value ? -1 : 1));
 
-    const xml = `<?xml version="1.0" encoding="UTF-8"?><StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd"><NamedLayer><se:Name>${layer}</se:Name><UserStyle><Title>Custom style</Title><se:FeatureTypeStyle><se:Rule><se:RasterSymbolizer><se:Opacity>1.0</se:Opacity><ColorMap>${colorScale
+  const xml =
+    `<?xml version="1.0" encoding="UTF-8"?><StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd"><NamedLayer><se:Name>${layer}</se:Name><UserStyle><Title>Custom style</Title><se:FeatureTypeStyle><se:Rule><se:RasterSymbolizer><se:Opacity>1.0</se:Opacity><ColorMap>${
+      colorScale
         .map(
-            (item) =>
-                `<ColorMapEntry color="${item.color}" quantity="${noScientificNotation(item.value)}"/>`
+          (item) =>
+            `<ColorMapEntry color="${item.color}" quantity="${
+              noScientificNotation(item.value)
+            }"/>`,
         )
         .join(
-            ""
-        )}</ColorMap></se:RasterSymbolizer></se:Rule></se:FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>`
+          "",
+        )
+    }</ColorMap></se:RasterSymbolizer></se:Rule></se:FeatureTypeStyle></UserStyle></NamedLayer></StyledLayerDescriptor>`;
 
-    return encodeURIComponent(xml)
+  return encodeURIComponent(xml);
 }

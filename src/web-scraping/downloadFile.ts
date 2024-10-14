@@ -1,6 +1,6 @@
-import { createWriteStream } from "node:fs"
-import { Readable } from "node:stream"
-import { finished } from "node:stream/promises"
+import { createWriteStream } from "node:fs";
+import { Readable } from "node:stream";
+import { finished } from "node:stream/promises";
 
 /**
  * Downloads a file.
@@ -18,11 +18,11 @@ import { finished } from "node:stream/promises"
  */
 
 export default async function downloadFile(url: string, filePath: string) {
-    const res = await fetch(url)
-    const fileStream = createWriteStream(filePath, { flags: "w" })
-    if (res.body === null) {
-        throw new Error("Response body is null")
-    }
-    //@ts-expect-error No sure why
-    await finished(Readable.fromWeb(res.body).pipe(fileStream))
+  const res = await fetch(url);
+  const fileStream = createWriteStream(filePath, { flags: "w" });
+  if (res.body === null) {
+    throw new Error("Response body is null");
+  }
+  //@ts-expect-error No sure why
+  await finished(Readable.fromWeb(res.body).pipe(fileStream));
 }

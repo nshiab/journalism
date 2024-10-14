@@ -1,4 +1,4 @@
-import { mkdirSync, existsSync } from "node:fs"
+import { existsSync, mkdirSync } from "node:fs";
 
 /**
  * Creates folders recursively if they don't exist.
@@ -17,20 +17,20 @@ import { mkdirSync, existsSync } from "node:fs"
  */
 
 export default function createDirectory(path: string) {
-    // For windows?
-    if (path.includes("\\")) {
-        path = path
-            .split("\\")
-            .filter((d) => (d.startsWith(".") ? true : !d.includes(".")))
-            .join("\\")
-    } else {
-        path = path
-            .split("/")
-            .filter((d) => (d.startsWith(".") ? true : !d.includes(".")))
-            .join("/")
-    }
+  // For windows?
+  if (path.includes("\\")) {
+    path = path
+      .split("\\")
+      .filter((d) => (d.startsWith(".") ? true : !d.includes(".")))
+      .join("\\");
+  } else {
+    path = path
+      .split("/")
+      .filter((d) => (d.startsWith(".") ? true : !d.includes(".")))
+      .join("/");
+  }
 
-    if (path !== "" && !existsSync(path)) {
-        mkdirSync(path, { recursive: true })
-    }
+  if (path !== "" && !existsSync(path)) {
+    mkdirSync(path, { recursive: true });
+  }
 }

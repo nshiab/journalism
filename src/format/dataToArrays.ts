@@ -24,15 +24,15 @@
  */
 
 export default function dataToArrays(data: { [key: string]: unknown }[]): {
-    [key: string]: unknown[]
+  [key: string]: unknown[];
 } {
-    const newData: { [key: string]: unknown[] } = {}
+  const newData: { [key: string]: unknown[] } = {};
 
-    const keys = Object.keys(data[0])
+  const keys = Object.keys(data[0]);
 
-    for (const key of keys) {
-        newData[key] = data.map((d) => d[key])
-    }
+  for (const key of keys) {
+    newData[key] = data.map((d) => d[key]);
+  }
 
-    return newData
+  return newData;
 }

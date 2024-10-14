@@ -1,5 +1,5 @@
-import formatNumber from "../format/formatNumber.js"
-import makeBars from "./helpers/makeBars.js"
+import formatNumber from "../format/formatNumber.ts";
+import makeBars from "./helpers/makeBars.ts";
 
 /**
  * Generates and logs a bar chart. The data is expected to be sorted.
@@ -25,49 +25,46 @@ import makeBars from "./helpers/makeBars.js"
  * @param options.compact - Whether to use a compact format for the chart. Defaults to false.
  *
  * @category Dataviz
- *
  */
 export default function logBarChart(
-    data: { [key: string]: unknown }[],
-    labels: string,
-    values: string,
-    options: {
-        formatLabels?: (d: unknown) => string
-        formatValues?: (d: number) => string
-        width?: number
-        title?: string
-        totalLabel?: string
-        compact?: boolean
-    } = {}
+  data: { [key: string]: unknown }[],
+  labels: string,
+  values: string,
+  options: {
+    formatLabels?: (d: unknown) => string;
+    formatValues?: (d: number) => string;
+    width?: number;
+    title?: string;
+    totalLabel?: string;
+    compact?: boolean;
+  } = {},
 ) {
-    if (options.title) {
-        console.log(`\n${options.title}`)
-    } else {
-        console.log(`\nBar chart of "${values}" per "${labels}":`)
-    }
+  if (options.title) {
+    console.log(`\n${options.title}`);
+  } else {
+    console.log(`\nBar chart of "${values}" per "${labels}":`);
+  }
 
-    const formatLabels =
-        options.formatLabels ??
-        function (d) {
-            return String(d)
-        }
-    const formatValues =
-        options.formatValues ??
-        function (d) {
-            return formatNumber(d)
-        }
-    const width = options.width ?? 40
+  const formatLabels = options.formatLabels ??
+    function (d) {
+      return String(d);
+    };
+  const formatValues = options.formatValues ??
+    function (d) {
+      return formatNumber(d);
+    };
+  const width = options.width ?? 40;
 
-    const chartData = makeBars(
-        data,
-        "\x1b[38;5;55m", // Darker purple color
-        labels,
-        values,
-        formatLabels,
-        formatValues,
-        width,
-        options.compact ?? false,
-        options.totalLabel
-    )
-    console.log(chartData.join("\n"))
+  const chartData = makeBars(
+    data,
+    "\x1b[38;5;55m", // Darker purple color
+    labels,
+    values,
+    formatLabels,
+    formatValues,
+    width,
+    options.compact ?? false,
+    options.totalLabel,
+  );
+  console.log(chartData.join("\n"));
 }

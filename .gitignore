@@ -1,7 +1,5 @@
 node_modules
-dist/
 test/output/
 .DS_Store
-bundleSizeMin.html
-test-docs
 .env
+cov_profile

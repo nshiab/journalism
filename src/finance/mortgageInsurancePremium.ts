@@ -15,23 +15,23 @@
  */
 
 export default function mortgageInsurancePremium(
-    purchasePrice: number,
-    downPayment: number
+  purchasePrice: number,
+  downPayment: number,
 ) {
-    const downPaymentPerc = downPayment / purchasePrice
-    const mortgageAmount = purchasePrice - downPayment
+  const downPaymentPerc = downPayment / purchasePrice;
+  const mortgageAmount = purchasePrice - downPayment;
 
-    if (downPaymentPerc < 0.05) {
-        throw new Error(
-            `The down payment must be more than 5% of the purchase price (downPaymentPerc=${downPaymentPerc}).`
-        )
-    } else if (downPaymentPerc < 0.1) {
-        return Math.round(mortgageAmount * 0.04)
-    } else if (downPaymentPerc < 0.15) {
-        return Math.round(mortgageAmount * 0.031)
-    } else if (downPaymentPerc < 0.2) {
-        return Math.round(mortgageAmount * 0.028)
-    } else {
-        return 0
-    }
+  if (downPaymentPerc < 0.05) {
+    throw new Error(
+      `The down payment must be more than 5% of the purchase price (downPaymentPerc=${downPaymentPerc}).`,
+    );
+  } else if (downPaymentPerc < 0.1) {
+    return Math.round(mortgageAmount * 0.04);
+  } else if (downPaymentPerc < 0.15) {
+    return Math.round(mortgageAmount * 0.031);
+  } else if (downPaymentPerc < 0.2) {
+    return Math.round(mortgageAmount * 0.028);
+  } else {
+    return 0;
+  }
 }

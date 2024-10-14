@@ -1,5 +1,5 @@
-import formatDate from "../format/formatDate.js"
-import logToSheet from "./helpers/logToSheet.js"
+import formatDate from "../format/formatDate.ts";
+import logToSheet from "./helpers/logToSheet.ts";
 
 /**
  * Clears a Google Sheet and populates it with new data.
@@ -49,60 +49,60 @@ import logToSheet from "./helpers/logToSheet.js"
  * @category Google
  */
 export default async function overwriteSheetData(
-    data: { [key: string]: string | number | boolean | Date }[],
-    sheetUrl: string,
-    options: {
-        prepend?: string
-        lastUpdate?: boolean
-        timeZone?:
-            | "Canada/Atlantic"
-            | "Canada/Central"
-            | "Canada/Eastern"
-            | "Canada/Mountain"
-            | "Canada/Newfoundland"
-            | "Canada/Pacific"
-            | "Canada/Saskatchewan"
-            | "Canada/Yukon"
-        raw?: boolean
-        apiEmail?: string
-        apiKey?: string
-    } = {}
+  data: { [key: string]: string | number | boolean | Date }[],
+  sheetUrl: string,
+  options: {
+    prepend?: string;
+    lastUpdate?: boolean;
+    timeZone?:
+      | "Canada/Atlantic"
+      | "Canada/Central"
+      | "Canada/Eastern"
+      | "Canada/Mountain"
+      | "Canada/Newfoundland"
+      | "Canada/Pacific"
+      | "Canada/Saskatchewan"
+      | "Canada/Yukon";
+    raw?: boolean;
+    apiEmail?: string;
+    apiKey?: string;
+  } = {},
 ) {
-    const sheet = await logToSheet(sheetUrl, options)
-    await sheet.clear()
+  const sheet = await logToSheet(sheetUrl, options);
+  await sheet.clear();
 
-    let startIndex = 1
+  let startIndex = 1;
 
-    if (typeof options.prepend === "string" || options.lastUpdate) {
-        await sheet.loadCells("A1:B2")
+  if (typeof options.prepend === "string" || options.lastUpdate) {
+    await sheet.loadCells("A1:B2");
+  }
+  if (typeof options.prepend === "string") {
+    const cellPrepend = sheet.getCellByA1(`A${startIndex}`);
+    cellPrepend.value = options.prepend;
+    startIndex += 1;
+  }
+
+  if (options.lastUpdate) {
+    const cellLastUpdate = sheet.getCellByA1(`A${startIndex}`);
+    cellLastUpdate.value = "Last update:";
+    const cellDate = sheet.getCellByA1(`B${startIndex}`);
+    if (typeof options.timeZone === "string") {
+      cellDate.value = formatDate(new Date(), "YYYY-MM-DD HH:MM:SS TZ", {
+        timeZone: options.timeZone,
+      });
+    } else {
+      cellDate.value = formatDate(new Date(), "YYYY-MM-DD HH:MM:SS TZ", {
+        utc: true,
+      });
     }
-    if (typeof options.prepend === "string") {
-        const cellPrepend = sheet.getCellByA1(`A${startIndex}`)
-        cellPrepend.value = options.prepend
-        startIndex += 1
-    }
+    startIndex += 1;
+  }
 
-    if (options.lastUpdate) {
-        const cellLastUpdate = sheet.getCellByA1(`A${startIndex}`)
-        cellLastUpdate.value = "Last update:"
-        const cellDate = sheet.getCellByA1(`B${startIndex}`)
-        if (typeof options.timeZone === "string") {
-            cellDate.value = formatDate(new Date(), "YYYY-MM-DD HH:MM:SS TZ", {
-                timeZone: options.timeZone,
-            })
-        } else {
-            cellDate.value = formatDate(new Date(), "YYYY-MM-DD HH:MM:SS TZ", {
-                utc: true,
-            })
-        }
-        startIndex += 1
-    }
+  if (typeof options.prepend === "string" || options.lastUpdate) {
+    await sheet.saveUpdatedCells();
+  }
 
-    if (typeof options.prepend === "string" || options.lastUpdate) {
-        await sheet.saveUpdatedCells()
-    }
-
-    const headerRow = Object.keys(data[0])
-    await sheet.setHeaderRow(headerRow, startIndex)
-    await sheet.addRows(data, { raw: options.raw })
+  const headerRow = Object.keys(data[0]);
+  await sheet.setHeaderRow(headerRow, startIndex);
+  await sheet.addRows(data, { raw: options.raw });
 }

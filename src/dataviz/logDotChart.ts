@@ -1,5 +1,5 @@
-import addDots from "./helpers/addDots.js"
-import prepChart from "./helpers/prepChart.js"
+import addDots from "./helpers/addDots.ts";
+import prepChart from "./helpers/prepChart.ts";
 
 /**
  * Generates and logs a dot chart. The data is expected to be sorted by the x-axis values. Points might overlap.
@@ -57,27 +57,29 @@ import prepChart from "./helpers/prepChart.js"
  * @category Dataviz
  */
 export default function logDotChart(
-    data: { [key: string]: unknown }[],
-    x: string,
-    y: string,
-    options: {
-        formatX?: (d: unknown) => string
-        formatY?: (d: unknown) => string
-        smallMultiples?: string
-        fixedScales?: boolean
-        smallMultiplesPerRow?: number
-        width?: number
-        height?: number
-        title?: number
-    } = {}
+  data: { [key: string]: unknown }[],
+  x: string,
+  y: string,
+  options: {
+    formatX?: (d: unknown) => string;
+    formatY?: (d: unknown) => string;
+    smallMultiples?: string;
+    fixedScales?: boolean;
+    smallMultiplesPerRow?: number;
+    width?: number;
+    height?: number;
+    title?: number;
+  } = {},
 ) {
-    if (options.title) {
-        console.log(`\n${options.title}`)
-    } else {
-        console.log(
-            `\nDot chart of "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""}:`
-        )
-    }
+  if (options.title) {
+    console.log(`\n${options.title}`);
+  } else {
+    console.log(
+      `\nDot chart of "${y}" over "${x}"${
+        options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""
+      }:`,
+    );
+  }
 
-    prepChart("dot", data, x, y, addDots, options)
+  prepChart("dot", data, x, y, addDots, options);
 }

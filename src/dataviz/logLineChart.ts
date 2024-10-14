@@ -1,5 +1,5 @@
-import addLines from "./helpers/addLines.js"
-import prepChart from "./helpers/prepChart.js"
+import addLines from "./helpers/addLines.ts";
+import prepChart from "./helpers/prepChart.ts";
 
 /**
  * Generates and logs a line chart. The data is expected to be sorted by the x-axis values. The line is an averaged approximation of the data when the width is smaller than the number of data points.
@@ -56,27 +56,29 @@ import prepChart from "./helpers/prepChart.js"
  * @category Dataviz
  */
 export default function logLineChart(
-    data: { [key: string]: unknown }[],
-    x: string,
-    y: string,
-    options: {
-        formatX?: (d: unknown) => string
-        formatY?: (d: unknown) => string
-        smallMultiples?: string
-        fixedScales?: boolean
-        smallMultiplesPerRow?: number
-        width?: number
-        height?: number
-        title?: string
-    } = {}
+  data: { [key: string]: unknown }[],
+  x: string,
+  y: string,
+  options: {
+    formatX?: (d: unknown) => string;
+    formatY?: (d: unknown) => string;
+    smallMultiples?: string;
+    fixedScales?: boolean;
+    smallMultiplesPerRow?: number;
+    width?: number;
+    height?: number;
+    title?: string;
+  } = {},
 ) {
-    if (options.title) {
-        console.log(`\n${options.title}`)
-    } else {
-        console.log(
-            `\nLine chart of "${y}" over "${x}"${options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""}:`
-        )
-    }
+  if (options.title) {
+    console.log(`\n${options.title}`);
+  } else {
+    console.log(
+      `\nLine chart of "${y}" over "${x}"${
+        options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""
+      }:`,
+    );
+  }
 
-    prepChart("line", data, x, y, addLines, options)
+  prepChart("line", data, x, y, addLines, options);
 }

@@ -1,14 +1,14 @@
 [
-	{"nameEnglish":"Quebec","burntArea":5024737.0},
-	{"nameEnglish":"Northwest Territories","burntArea":4253907.0},
-	{"nameEnglish":"Alberta","burntArea":3214444.0},
-	{"nameEnglish":"British Columbia","burntArea":2856625.0},
-	{"nameEnglish":"Saskatchewan","burntArea":1801903.0},
-	{"nameEnglish":"Ontario","burntArea":441581.0},
-	{"nameEnglish":"Yukon","burntArea":395461.0},
-	{"nameEnglish":"Manitoba","burntArea":199200.0},
-	{"nameEnglish":"Nova Scotia","burntArea":25017.0},
-	{"nameEnglish":"Newfoundland and Labrador","burntArea":21833.0},
-	{"nameEnglish":"Nunavut","burntArea":2700.0},
-	{"nameEnglish":"New Brunswick","burntArea":854.0}
+  { "nameEnglish": "Quebec", "burntArea": 5024737.0 },
+  { "nameEnglish": "Northwest Territories", "burntArea": 4253907.0 },
+  { "nameEnglish": "Alberta", "burntArea": 3214444.0 },
+  { "nameEnglish": "British Columbia", "burntArea": 2856625.0 },
+  { "nameEnglish": "Saskatchewan", "burntArea": 1801903.0 },
+  { "nameEnglish": "Ontario", "burntArea": 441581.0 },
+  { "nameEnglish": "Yukon", "burntArea": 395461.0 },
+  { "nameEnglish": "Manitoba", "burntArea": 199200.0 },
+  { "nameEnglish": "Nova Scotia", "burntArea": 25017.0 },
+  { "nameEnglish": "Newfoundland and Labrador", "burntArea": 21833.0 },
+  { "nameEnglish": "Nunavut", "burntArea": 2700.0 },
+  { "nameEnglish": "New Brunswick", "burntArea": 854.0 }
 ]

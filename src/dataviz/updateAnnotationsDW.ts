@@ -1,4 +1,4 @@
-import process from "node:process"
+import process from "node:process";
 
 /**
  * Updates annotations on a chart. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
@@ -44,118 +44,119 @@ import process from "node:process"
  * @category Dataviz
  */
 export default async function updateAnnotationsDW(
-    chartId: string,
-    annotations: {
-        x: string
-        y: string
-        text: string
-        bg?: boolean
-        dx?: number
-        dy?: number
-        bold?: boolean
-        size?: number
-        align?: "tl" | "tc" | "tr" | "ml" | "mc" | "mr" | "bl" | "bc" | "br"
-        color?: string
-        width?: number
-        italic?: boolean
-        underline?: boolean
-        showMobile?: boolean
-        showDesktop?: boolean
-        mobileFallback?: boolean
-        connectorLine?: {
-            type?: "straight" | "curveRight" | "curveLeft"
-            circle?: boolean
-            stroke?: 1 | 2 | 3
-            enabled?: boolean
-            arrowHead?: "lines" | "triangle" | false
-            circleStyle?: string
-            circleRadius?: number
-            inheritColor?: boolean
-            targetPadding?: number
-        }
-    }[],
-    options: { apiKey?: string; returnResponse?: boolean } = {}
+  chartId: string,
+  annotations: {
+    x: string;
+    y: string;
+    text: string;
+    bg?: boolean;
+    dx?: number;
+    dy?: number;
+    bold?: boolean;
+    size?: number;
+    align?: "tl" | "tc" | "tr" | "ml" | "mc" | "mr" | "bl" | "bc" | "br";
+    color?: string;
+    width?: number;
+    italic?: boolean;
+    underline?: boolean;
+    showMobile?: boolean;
+    showDesktop?: boolean;
+    mobileFallback?: boolean;
+    connectorLine?: {
+      type?: "straight" | "curveRight" | "curveLeft";
+      circle?: boolean;
+      stroke?: 1 | 2 | 3;
+      enabled?: boolean;
+      arrowHead?: "lines" | "triangle" | false;
+      circleStyle?: string;
+      circleRadius?: number;
+      inheritColor?: boolean;
+      targetPadding?: number;
+    };
+  }[],
+  options: { apiKey?: string; returnResponse?: boolean } = {},
 ): Promise<void | Response> {
-    const envVar = options.apiKey ?? "DATAWRAPPER_KEY"
-    const apiKey = process.env[envVar]
-    if (apiKey === undefined || apiKey === "") {
-        throw new Error(`process.env.${envVar} is undefined or ''.`)
+  const envVar = options.apiKey ?? "DATAWRAPPER_KEY";
+  const apiKey = process.env[envVar];
+  if (apiKey === undefined || apiKey === "") {
+    throw new Error(`process.env.${envVar} is undefined or ''.`);
+  }
+
+  // We set defaults as non-nested objects
+  const defaultsWithoutConnectorLine = {
+    bg: false,
+    dx: 0,
+    dy: 0,
+    bold: false,
+    size: 12,
+    align: "mr",
+    color: "#8C8C8C",
+    width: 20,
+    italic: false,
+    underline: false,
+    showMobile: true,
+    showDesktop: true,
+    mobileFallback: false,
+  };
+  const defaultConnectorLine = {
+    type: "straight",
+    circle: false,
+    stroke: 1,
+    enabled: false,
+    arrowHead: "lines",
+    circleStyle: "solid",
+    circleRadius: 10,
+    inheritColor: false,
+    targetPadding: 4,
+  };
+
+  // We map over annotations to add defaults.
+  const annotationsWithDefaults = annotations.map((annotation) => {
+    // We check for mandatory values.
+    if (!annotation.x || !annotation.y || !annotation.text) {
+      throw new Error(
+        "Missing x, y, or text for at least one annotation.",
+      );
     }
 
-    // We set defaults as non-nested objects
-    const defaultsWithoutConnectorLine = {
-        bg: false,
-        dx: 0,
-        dy: 0,
-        bold: false,
-        size: 12,
-        align: "mr",
-        color: "#8C8C8C",
-        width: 20,
-        italic: false,
-        underline: false,
-        showMobile: true,
-        showDesktop: true,
-        mobileFallback: false,
-    }
-    const defaultConnectorLine = {
-        type: "straight",
-        circle: false,
-        stroke: 1,
-        enabled: false,
-        arrowHead: "lines",
-        circleStyle: "solid",
-        circleRadius: 10,
-        inheritColor: false,
-        targetPadding: 4,
-    }
+    // We extract the connectorLine from the rest
+    const { connectorLine, ...rest } = annotation;
 
-    // We map over annotations to add defaults.
-    const annotationsWithDefaults = annotations.map((annotation) => {
-        // We check for mandatory values.
-        if (!annotation.x || !annotation.y || !annotation.text) {
-            throw new Error(
-                "Missing x, y, or text for at least one annotation."
-            )
-        }
+    // We create the nested object required for the DW API. We pass the defaults first, then we overwrite them with any value passed by the user.
+    return {
+      ...defaultsWithoutConnectorLine,
+      ...rest,
+      connectorLine: { ...defaultConnectorLine, ...connectorLine },
+    };
+  });
 
-        // We extract the connectorLine from the rest
-        const { connectorLine, ...rest } = annotation
+  const response = await fetch(
+    `https://api.datawrapper.de/v3/charts/${chartId}`,
+    {
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        metadata: {
+          visualize: {
+            "text-annotations": annotationsWithDefaults,
+          },
+        },
+      }),
+    },
+  );
+  await response.json();
 
-        // We create the nested object required for the DW API. We pass the defaults first, then we overwrite them with any value passed by the user.
-        return {
-            ...defaultsWithoutConnectorLine,
-            ...rest,
-            connectorLine: { ...defaultConnectorLine, ...connectorLine },
-        }
-    })
+  // if returning a response, do it before the response.status checks
+  if (options.returnResponse === true) {
+    return response;
+  }
 
-    const response = await fetch(
-        `https://api.datawrapper.de/v3/charts/${chartId}`,
-        {
-            method: "PATCH",
-            headers: {
-                Authorization: `Bearer ${apiKey}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                metadata: {
-                    visualize: {
-                        "text-annotations": annotationsWithDefaults,
-                    },
-                },
-            }),
-        }
-    )
-
-    // if returning a response, do it before the response.status checks
-    if (options.returnResponse === true) {
-        return response
-    }
-
-    if (response.status !== 200) {
-        throw new Error(
-            `updateAnnotationsDW ${chartId}: Upstream HTTP ${response.status} - ${response.statusText}`
-        )
-    }
+  if (response.status !== 200) {
+    throw new Error(
+      `updateAnnotationsDW ${chartId}: Upstream HTTP ${response.status} - ${response.statusText}`,
+    );
+  }
 }
