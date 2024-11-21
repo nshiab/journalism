@@ -42,6 +42,7 @@ import euclidianDistance from "./statistics/euclidianDistance.ts";
 import logBarChart from "./dataviz/logBarChart.ts";
 import logLineChart from "./dataviz/logLineChart.ts";
 import logDotChart from "./dataviz/logDotChart.ts";
+import rewind from "./geo/rewind.ts";
 
 export {
   addClusters,
@@ -70,7 +71,6 @@ export {
   getMahalanobisDistance,
   getSeason,
   getSheetData,
-  // NODE ONLY
   getStatCanTable,
   invertMatrix,
   logBarChart,
@@ -82,6 +82,7 @@ export {
   overwriteSheetData,
   prettyDuration,
   publishChartDW,
+  rewind,
   round,
   styledLayerDescriptor,
   unzip,
