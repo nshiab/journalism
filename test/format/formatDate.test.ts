@@ -1,8 +1,6 @@
 import { assertEquals } from "jsr:@std/assert";
 import formatDate from "../../src/format/formatDate.ts";
 
-Deno.env.set("TZ", "America/Toronto");
-
 const unix = 1672531200000;
 const date = new Date("2023-01-01T01:35:00.000Z");
 const datePM = new Date("2023-01-01T15:35:00.000Z");
