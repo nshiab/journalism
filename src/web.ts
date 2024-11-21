@@ -25,6 +25,7 @@ import addMahalanobisDistance from "./statistics/addMahalanobisDistance.ts";
 import addClusters from "./statistics/addClusters.ts";
 import addZScore from "./statistics/addZScore.ts";
 import euclideanDistance from "./statistics/euclidianDistance.ts";
+import rewind from "./geo/rewind.ts";
 
 export {
   addClusters,
@@ -52,6 +53,7 @@ export {
   mortgageMaxAmount,
   mortgagePayments,
   prettyDuration,
+  rewind,
   round,
   styledLayerDescriptor,
 };

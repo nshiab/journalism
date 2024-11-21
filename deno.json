@@ -6,7 +6,7 @@
     "./web": "./src/web.ts"
   },
   "tasks": {
-    "all-tests": "deno install && deno fmt --check && deno lint && deno check src/index.ts && deno publish --allow-dirty --dry-run && deno test -A --fail-fast",
+    "all-tests": "deno install && deno fmt --check && deno lint && deno check src/index.ts && deno publish --allow-dirty --dry-run && TZ=America/Toronto deno test -A --fail-fast",
     "test-coverage": "deno test -A --fail-fast --coverage=cov_profile && deno coverage cov_profile",
     "patch-no-tests": "deno run -A src/incrementVersion.ts patch",
     "patch": "deno task all-tests && deno run -A src/incrementVersion.ts patch",
@@ -22,7 +22,17 @@
   "nodeModulesDir": "auto",
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.6",
-    "@std/dotenv": "jsr:@std/dotenv@^0.225.2"
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.2",
+    "@types/d3-geo": "npm:@types/d3-geo@^3.1.0",
+    "adm-zip": "npm:adm-zip@^0.5.16",
+    "cheerio": "npm:cheerio@^1.0.0",
+    "d3-array": "npm:d3-array@^3.2.4",
+    "d3-dsv": "npm:d3-dsv@^3.0.1",
+    "d3-geo": "npm:d3-geo@^3.1.1",
+    "date-fns-tz": "npm:date-fns-tz@^3.2.0",
+    "geotiff": "npm:geotiff@^2.1.3",
+    "google-auth-library": "npm:google-auth-library@^9.15.0",
+    "google-spreadsheet": "npm:google-spreadsheet@^4.1.4"
   },
   "fmt": {
     "exclude": [
