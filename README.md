@@ -23,7 +23,7 @@ deno install jsr:@nshiab/journalism
 npx jsr add journalism
 
 # BUN
-npx jsr add journalism
+bunx jsr add journalism
 ```
 
 If you run your code in a browser, use the `web` entry point:
