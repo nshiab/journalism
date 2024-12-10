@@ -43,6 +43,7 @@ import logBarChart from "./dataviz/logBarChart.ts";
 import logLineChart from "./dataviz/logLineChart.ts";
 import logDotChart from "./dataviz/logDotChart.ts";
 import rewind from "./geo/rewind.ts";
+import saveChart from "./dataviz/saveChart.ts";
 
 export {
   addClusters,
@@ -84,6 +85,7 @@ export {
   publishChartDW,
   rewind,
   round,
+  saveChart,
   styledLayerDescriptor,
   unzip,
   updateAnnotationsDW,
