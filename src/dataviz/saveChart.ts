@@ -20,7 +20,7 @@ import type { Data } from "@observablehq/plot";
  *     ],
  *   });
  *
- * const path = "test/output/chart.png";
+ * const path = "output/chart.png";
  *
  * await saveChart(data, chart, path);
  * ```
