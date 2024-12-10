@@ -39,5 +39,11 @@ export default async function logToSheet(
   // @ts-expect-error sheetId is a string, but indexes are number?
   const sheet = spreadsheet.sheetsById[sheetId];
 
+  if (sheet === undefined) {
+    throw new Error(
+      `Sheet with ID ${sheetId} not found. Make sure the sheet URL ends with just one gid=ID.`,
+    );
+  }
+
   return sheet as GoogleSpreadsheetWorksheet;
 }
