@@ -1,3 +1,4 @@
+import cleanData from "./helpers/cleanData.ts";
 import logToSheet from "./helpers/logToSheet.ts";
 
 /**
@@ -32,7 +33,7 @@ import logToSheet from "./helpers/logToSheet.ts";
  * @category Google
  */
 export default async function addSheetRows(
-  data: { [key: string]: string | number | boolean | Date }[],
+  data: { [key: string]: string | number | boolean | Date | null }[],
   sheetUrl: string,
   options: {
     headerIndex?: number;
@@ -47,5 +48,5 @@ export default async function addSheetRows(
     headerRow,
     typeof options.headerIndex === "number" ? options.headerIndex + 1 : 1,
   );
-  await sheet.addRows(data, { raw: options.raw });
+  await sheet.addRows(cleanData(data), { raw: options.raw });
 }
