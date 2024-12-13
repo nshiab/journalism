@@ -3,7 +3,7 @@ import type { Data } from "@observablehq/plot";
 import { writeFileSync } from "node:fs";
 
 /**
- * Saves an [Observable Plot](https://github.com/observablehq/plot) chart as an image file (`.png` or `.jpeg`). You can also save a SVG file (`.svg`), but only the main SVG element will be saved, not the other HTML elements (legend, title, etc.).
+ * Saves an [Observable Plot](https://github.com/observablehq/plot) chart as an image file (`.png` or `.jpeg`). You can also save a SVG file (`.svg`), but only svg elements will be saved and the layout between them might be inconsistent.
  *
  * @example
  * Basic usage:
@@ -100,21 +100,27 @@ export default async function saveChart(
       path,
     });
   } else if (extension === "svg") {
-    if (await page.locator("#chart > figure > svg").isVisible()) {
-      const svg = await page.locator("#chart > figure > svg").evaluate((node) =>
-        node.outerHTML
-      );
+    const all = await page.locator("svg").all();
+    if (all.length === 1) {
+      const svg = await all[0].evaluate((node) => node.outerHTML);
       writeFileSync(
         path,
-        svg.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"'),
+        svg.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"')
+          .replaceAll("xlink:href", "href"),
       );
     } else {
-      const svg = await page.locator("#chart > svg").evaluate((node) =>
-        node.outerHTML
-      );
+      let svg = "<svg>";
+      for (const s of all) {
+        svg += await s.evaluate((s) => s.outerHTML);
+      }
+      svg += "</svg>";
       writeFileSync(
         path,
-        svg.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"'),
+        svg.replaceAll("<svg", '<svg xmlns="http://www.w3.org/2000/svg"')
+          .replaceAll(
+            "xlink:href",
+            "href",
+          ),
       );
     }
   } else {

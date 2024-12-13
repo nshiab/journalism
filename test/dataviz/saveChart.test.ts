@@ -53,6 +53,26 @@ Deno.test("should save an Observable chart as svg", async () => {
   assertEquals(true, true);
 });
 
+Deno.test("should save an Observable chart as svg with facets", async () => {
+  const data = JSON.parse(
+    readFileSync("test/data/temperatures.json", "utf-8"),
+  ).map((d: { time: string }) => ({ ...d, time: new Date(d.time) }));
+
+  await saveChart(data, (data: Data) =>
+    plot({
+      title: "My chart",
+      color: { legend: true, type: "diverging" },
+      facet: { data: data, y: "city" },
+      marginRight: 100,
+      marks: [
+        dot(data, { x: "time", y: "t", fill: "t", facet: "auto" }),
+      ],
+    }), `test/output/temperaturesFacet.svg`);
+
+  // How to assert
+  assertEquals(true, true);
+});
+
 Deno.test("should save an Observable map as png", async () => {
   const data = rewind(JSON.parse(
     readFileSync("test/data/CanadianProvincesAndTerritories.json", "utf-8"),
