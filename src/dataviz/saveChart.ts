@@ -51,6 +51,8 @@ export default async function saveChart(
   const d3Path = resolve(__dirname, "./imports/d3@7.js");
   const plotPath = resolve(__dirname, "./imports/plot@0.6.js");
 
+  console.log({ d3Path, plotPath });
+
   await page.addScriptTag({
     content: readFileSync(
       d3Path,
