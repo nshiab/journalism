@@ -46,8 +46,13 @@ export default async function saveChart(
   });
   const page = await context.newPage();
 
+  console.log(JSON.stringify(import.meta));
+
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
+
+  console.log({ __filename, __dirname });
+
   const d3Path = resolve(__dirname, "./imports/d3@7.js");
   const plotPath = resolve(__dirname, "./imports/plot@0.6.js");
 
