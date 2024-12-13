@@ -2,7 +2,7 @@ import { chromium } from "playwright-chromium";
 import type { Data } from "@observablehq/plot";
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { dirname } from "node:path";
 
 /**
  * Saves an [Observable Plot](https://github.com/observablehq/plot) chart as an image file (`.png` or `.jpeg`). You can also save a SVG file (`.svg`), but only the main SVG element will be saved, not the other HTML elements (legend, title, etc.).
