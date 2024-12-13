@@ -1,8 +1,9 @@
 import { chromium } from "playwright-chromium";
 import type { Data } from "@observablehq/plot";
+import { readFileSync, writeFileSync } from "node:fs";
 
 /**
- * Saves an [Observable Plot](https://github.com/observablehq/plot) chart as an image file (`.png` or `.jpeg`).
+ * Saves an [Observable Plot](https://github.com/observablehq/plot) chart as an image file (`.png` or `.jpeg`). You can also save a SVG file (`.svg`), but only the main SVG element will be saved, not the other HTML elements (legend, title, etc.).
  *
  * @example
  * Basic usage:
@@ -42,11 +43,18 @@ export default async function saveChart(
     deviceScaleFactor: 2,
   });
   const page = await context.newPage();
+
   await page.addScriptTag({
-    url: `https://cdn.jsdelivr.net/npm/d3@latest`,
+    content: readFileSync(
+      `${import.meta.dirname}/imports/d3@7.js`,
+      "utf-8",
+    ),
   });
   await page.addScriptTag({
-    url: `https://cdn.jsdelivr.net/npm/@observablehq/plot@latest`,
+    content: readFileSync(
+      `${import.meta.dirname}/imports/plot@0.6.js`,
+      "utf-8",
+    ),
   });
   await page.addScriptTag({
     content: `
@@ -74,9 +82,34 @@ export default async function saveChart(
     data,
   );
 
-  await page.locator("#chart").screenshot({
-    path,
-  });
+  const pathSplit = path.split(".");
+  const extension = pathSplit[pathSplit.length - 1].toLowerCase();
+
+  if (extension === "jpeg" || extension === "png") {
+    await page.locator("#chart").screenshot({
+      path,
+    });
+  } else if (extension === "svg") {
+    if (await page.locator("#chart > figure > svg").isVisible()) {
+      const svg = await page.locator("#chart > figure > svg").evaluate((node) =>
+        node.outerHTML
+      );
+      writeFileSync(
+        path,
+        svg.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"'),
+      );
+    } else {
+      const svg = await page.locator("#chart > svg").evaluate((node) =>
+        node.outerHTML
+      );
+      writeFileSync(
+        path,
+        svg.replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"'),
+      );
+    }
+  } else {
+    throw new Error("Unsupported file extension. Use .jpeg, .png, or .svg");
+  }
 
   await context.close();
   await browser.close();
