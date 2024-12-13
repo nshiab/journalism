@@ -1,6 +1,8 @@
 import { chromium } from "playwright-chromium";
 import type { Data } from "@observablehq/plot";
 import { readFileSync, writeFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 
 /**
  * Saves an [Observable Plot](https://github.com/observablehq/plot) chart as an image file (`.png` or `.jpeg`). You can also save a SVG file (`.svg`), but only the main SVG element will be saved, not the other HTML elements (legend, title, etc.).
@@ -44,15 +46,18 @@ export default async function saveChart(
   });
   const page = await context.newPage();
 
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+
   await page.addScriptTag({
     content: readFileSync(
-      `${import.meta.dirname}/imports/d3@7.js`,
+      `${__dirname}/imports/d3@7.js`,
       "utf-8",
     ),
   });
   await page.addScriptTag({
     content: readFileSync(
-      `${import.meta.dirname}/imports/plot@0.6.js`,
+      `${__dirname}/imports/plot@0.6.js`,
       "utf-8",
     ),
   });
