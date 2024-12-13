@@ -38,9 +38,11 @@
   },
   "fmt": {
     "exclude": [
-      "test/output"
+      "test/output",
+      "src/dataviz/imports"
     ]
   },
+  "lint": { "exclude": ["src/dataviz/imports"] },
   "compilerOptions": {
     "lib": [
       "dom",
