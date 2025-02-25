@@ -76,6 +76,12 @@ export default function prepChart(
       }
     }
 
+    if (data.length > Math.round(width / smallMultiplesPerRow)) {
+      console.log(
+        "\x1b[2m\n/!\\ Number of values greater than width. Averaged values displayed.\x1b[0m",
+      );
+    }
+
     const allCharts = colors?.map((c) => {
       const dataFiltered = data.filter(
         (d) => d[smallMultiples] === c.category,
@@ -165,6 +171,12 @@ export default function prepChart(
       yMax === undefined
     ) {
       throw new Error("The min or max value is undefined.");
+    }
+
+    if (data.length > width) {
+      console.log(
+        "\x1b[2m\n/!\\ Number of values greater than width. Averaged values displayed.\x1b[0m",
+      );
     }
 
     const { chart, xLabels } = drawChart(
