@@ -77,9 +77,15 @@ export default function prepChart(
     }
 
     if (data.length > Math.round(width / smallMultiplesPerRow)) {
-      console.log(
-        "\x1b[2m\n/!\\ Number of values greater than width. Averaged values displayed.\x1b[0m",
-      );
+      if (type === "line") {
+        console.log(
+          "\x1b[2m\n/!\\ Number of values greater than width. Averaged values displayed.\x1b[0m",
+        );
+      } else if (type === "dot") {
+        console.log(
+          "\x1b[2m\n/!\\ Number of values greater than width. Dots might overlap.\x1b[0m",
+        );
+      }
     }
 
     const allCharts = colors?.map((c) => {
@@ -174,9 +180,15 @@ export default function prepChart(
     }
 
     if (data.length > width) {
-      console.log(
-        "\x1b[2m\n/!\\ Number of values greater than width. Averaged values displayed.\x1b[0m",
-      );
+      if (type === "line") {
+        console.log(
+          "\x1b[2m\n/!\\ Number of values greater than width. Averaged values displayed.\x1b[0m",
+        );
+      } else if (type === "dot") {
+        console.log(
+          "\x1b[2m\n/!\\ Number of values greater than width. Dots might overlap.\x1b[0m",
+        );
+      }
     }
 
     const { chart, xLabels } = drawChart(
