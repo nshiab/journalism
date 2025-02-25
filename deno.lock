@@ -5,7 +5,7 @@
     "jsr:@std/assert@^1.0.11": "1.0.11",
     "jsr:@std/dotenv@~0.225.3": "0.225.3",
     "jsr:@std/internal@^1.0.5": "1.0.5",
-    "npm:@observablehq/plot@~0.6.16": "0.6.16",
+    "npm:@observablehq/plot@~0.6.17": "0.6.17",
     "npm:@types/d3-geo@*": "3.1.0",
     "npm:@types/d3-geo@3": "3.1.0",
     "npm:@types/d3-geo@^3.1.0": "3.1.0",
@@ -46,8 +46,8 @@
     }
   },
   "npm": {
-    "@observablehq/plot@0.6.16": {
-      "integrity": "sha512-LRi9Rn93yUx90MIo2Md7+vazxO3Wiat14but2ttCER0xVS+jnfoUjuCGoz6H7bz/lgI9CFcW0HWlvWjMFjAv8g==",
+    "@observablehq/plot@0.6.17": {
+      "integrity": "sha512-/qaXP/7mc4MUS0s4cPPFASDRjtsWp85/TbfsciqDgU1HwYixbSbbytNuInD8AcTYC3xaxACgVX06agdfQy9W+g==",
       "dependencies": [
         "d3",
         "interval-tree-1d",
@@ -702,7 +702,7 @@
     "dependencies": [
       "jsr:@std/assert@^1.0.11",
       "jsr:@std/dotenv@~0.225.3",
-      "npm:@observablehq/plot@~0.6.16",
+      "npm:@observablehq/plot@~0.6.17",
       "npm:@types/d3-geo@^3.1.0",
       "npm:adm-zip@~0.5.16",
       "npm:cheerio@1",
