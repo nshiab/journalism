@@ -170,7 +170,31 @@ Deno.test("should save an Observable map as png", async () => {
   // How to assert
   assertEquals(true, true);
 });
+Deno.test("should save an Observable dark map as png", async () => {
+  const data = rewind(JSON.parse(
+    readFileSync("test/data/CanadianProvincesAndTerritories.json", "utf-8"),
+  )) as unknown as Data;
 
+  await saveChart(
+    data,
+    (data: Data) =>
+      plot({
+        projection: {
+          type: "conic-conformal",
+          rotate: [100, -60],
+          domain: data,
+        },
+        marks: [
+          geo(data, { stroke: "black", fill: "lightblue" }),
+        ],
+      }),
+    `test/output/map-dark.png`,
+    { dark: true },
+  );
+
+  // How to assert
+  assertEquals(true, true);
+});
 Deno.test("should save an Observable map as jpeg", async () => {
   const data = rewind(JSON.parse(
     readFileSync("test/data/CanadianProvincesAndTerritories.json", "utf-8"),
