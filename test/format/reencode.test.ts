@@ -1,7 +1,7 @@
 import { assertEquals } from "jsr:@std/assert";
 import reencode from "../../src/format/reencode.ts";
 
-Deno.test("should return an array of objects", async () => {
+Deno.test("should reencode to utf-8", async () => {
   await reencode(
     "test/data/data.csv",
     "test/output/data_windows-1252.csv",
@@ -12,7 +12,7 @@ Deno.test("should return an array of objects", async () => {
   // How to assert?
   assertEquals(true, true);
 });
-Deno.test("should return an array of objects", async () => {
+Deno.test("should reencode to windows-1252", async () => {
   await reencode(
     "test/output/data_windows-1252.csv",
     "test/output/data_utf-8.csv",
