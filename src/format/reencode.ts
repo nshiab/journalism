@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import { pipeline } from "node:stream/promises";
-import iconv from "npm:iconv-lite";
+import iconv from "npm:iconv-lite@0.6";
 
 /**
  * Converts a file from one character encoding to another. Optimized for large CSV files.

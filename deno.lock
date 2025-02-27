@@ -29,6 +29,7 @@
     "npm:google-spreadsheet@4": "4.1.4_google-auth-library@9.14.2",
     "npm:google-spreadsheet@^4.1.4": "4.1.4_google-auth-library@9.14.2",
     "npm:iconv-lite@*": "0.6.3",
+    "npm:iconv-lite@0.6": "0.6.3",
     "npm:iconv-lite@~0.6.3": "0.6.3",
     "npm:playwright-chromium@^1.50.1": "1.50.1",
     "npm:playwright@*": "1.48.2"
