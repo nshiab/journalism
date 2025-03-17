@@ -27,7 +27,7 @@ export default async function getYahooFinanceData(
   startDate: Date,
   endDate: Date,
   variable: "open" | "high" | "low" | "close" | "adjclose" | "volume",
-) {
+): Promise<{ timestamp: number; value: number }[]> {
   const period1 = startDate.getTime() / 1000;
   const period2 = endDate.getTime() / 1000;
 
