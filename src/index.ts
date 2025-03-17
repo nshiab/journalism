@@ -45,6 +45,7 @@ import logDotChart from "./dataviz/logDotChart.ts";
 import rewind from "./geo/rewind.ts";
 import saveChart from "./dataviz/saveChart.ts";
 import reencode from "./format/reencode.ts";
+import getYahooFinanceData from "./finance/getYahooFinanceData.ts";
 
 export {
   addClusters,
@@ -74,6 +75,7 @@ export {
   getSeason,
   getSheetData,
   getStatCanTable,
+  getYahooFinanceData,
   invertMatrix,
   logBarChart,
   logDotChart,
