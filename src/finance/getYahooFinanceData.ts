@@ -12,6 +12,7 @@ import arraysToData from "../format/arraysToData.ts";
  *   new Date("2025-03-01"),
  *   new Date("2025-03-15"),
  *   "adjclose",
+ *   "1d"
  * );
  * ```
  *
