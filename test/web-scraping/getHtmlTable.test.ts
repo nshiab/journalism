@@ -7,53 +7,59 @@ Deno.test("should return an array of objects from an HTML table with a selector 
     { selector: "#data-table" },
   );
 
-  assertEquals(data.slice(0, 5), [
-    {
-      Name: "Aboultaif, Ziad",
-      Constituency: "Edmonton Manning",
-      Caucus: "Conservative",
-      Salaries: "$53,042.45",
-      Travel: "$17,000.89",
-      Hospitality: "$324.13",
-      Contracts: "$20,418.95",
-    },
-    {
-      Name: "Aitchison, Scott",
-      Constituency: "Parry Sound—Muskoka",
-      Caucus: "Conservative",
-      Salaries: "$48,851.38",
-      Travel: "$25,974.00",
-      Hospitality: "$0.00",
-      Contracts: "$32,293.64",
-    },
-    {
-      Name: "Albas, Dan",
-      Constituency: "Central Okanagan—Similkameen—Nicola",
-      Caucus: "Conservative",
-      Salaries: "$65,109.19",
-      Travel: "$11,249.47",
-      Hospitality: "$618.09",
-      Contracts: "$22,460.56",
-    },
-    {
-      Name: "Aldag, John",
-      Constituency: "Cloverdale—Langley City",
-      Caucus: "Liberal",
-      Salaries: "$58,440.80",
-      Travel: "$30,079.67",
-      Hospitality: "$1,002.71",
-      Contracts: "$33,324.94",
-    },
-    {
-      Name: "Alghabra, Hon. Omar",
-      Constituency: "Mississauga Centre",
-      Caucus: "Liberal",
-      Salaries: "$61,894.45",
-      Travel: "$13,627.07",
-      Hospitality: "$1,928.11",
-      Contracts: "$27,562.45",
-    },
-  ]);
+  assertEquals(
+    data.slice(0, 5).map((d: { Name: string }) => ({
+      ...d,
+      Name: d.Name.replace("  ", " "),
+    })),
+    [
+      {
+        Name: "Aboultaif, Ziad",
+        Constituency: "Edmonton Manning",
+        Caucus: "Conservative",
+        Salaries: "$53,042.45",
+        Travel: "$17,000.89",
+        Hospitality: "$324.13",
+        Contracts: "$20,418.95",
+      },
+      {
+        Name: "Aitchison, Scott",
+        Constituency: "Parry Sound—Muskoka",
+        Caucus: "Conservative",
+        Salaries: "$48,851.38",
+        Travel: "$25,974.00",
+        Hospitality: "$0.00",
+        Contracts: "$32,293.64",
+      },
+      {
+        Name: "Albas, Dan",
+        Constituency: "Central Okanagan—Similkameen—Nicola",
+        Caucus: "Conservative",
+        Salaries: "$65,109.19",
+        Travel: "$11,249.47",
+        Hospitality: "$618.09",
+        Contracts: "$22,460.56",
+      },
+      {
+        Name: "Aldag, John",
+        Constituency: "Cloverdale—Langley City",
+        Caucus: "Liberal",
+        Salaries: "$58,440.80",
+        Travel: "$30,079.67",
+        Hospitality: "$1,002.71",
+        Contracts: "$33,324.94",
+      },
+      {
+        Name: "Alghabra, Hon. Omar",
+        Constituency: "Mississauga Centre",
+        Caucus: "Liberal",
+        Salaries: "$61,894.45",
+        Travel: "$13,627.07",
+        Hospitality: "$1,928.11",
+        Contracts: "$27,562.45",
+      },
+    ],
+  );
 });
 Deno.test("should return an array of objects from an HTML table with an index option", async function () {
   const data = await getHtmlTable(

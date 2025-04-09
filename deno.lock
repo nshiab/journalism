@@ -1,10 +1,10 @@
 {
   "version": "4",
   "specifiers": {
-    "jsr:@std/assert@*": "1.0.11",
-    "jsr:@std/assert@^1.0.11": "1.0.11",
+    "jsr:@std/assert@*": "1.0.12",
+    "jsr:@std/assert@^1.0.12": "1.0.12",
     "jsr:@std/dotenv@~0.225.3": "0.225.3",
-    "jsr:@std/internal@^1.0.5": "1.0.5",
+    "jsr:@std/internal@^1.0.6": "1.0.6",
     "npm:@observablehq/plot@~0.6.17": "0.6.17",
     "npm:@types/d3-geo@*": "3.1.0",
     "npm:@types/d3-geo@3": "3.1.0",
@@ -31,12 +31,12 @@
     "npm:iconv-lite@*": "0.6.3",
     "npm:iconv-lite@0.6": "0.6.3",
     "npm:iconv-lite@~0.6.3": "0.6.3",
-    "npm:playwright-chromium@^1.50.1": "1.50.1",
+    "npm:playwright-chromium@^1.51.1": "1.51.1",
     "npm:playwright@*": "1.48.2"
   },
   "jsr": {
-    "@std/assert@1.0.11": {
-      "integrity": "2461ef3c368fe88bc60e186e7744a93112f16fd110022e113a0849e94d1c83c1",
+    "@std/assert@1.0.12": {
+      "integrity": "08009f0926dda9cbd8bef3a35d3b6a4b964b0ab5c3e140a4e0351fbf34af5b9a",
       "dependencies": [
         "jsr:@std/internal"
       ]
@@ -44,8 +44,8 @@
     "@std/dotenv@0.225.3": {
       "integrity": "a95e5b812c27b0854c52acbae215856d9cce9d4bbf774d938c51d212711e8d4a"
     },
-    "@std/internal@1.0.5": {
-      "integrity": "54a546004f769c1ac9e025abd15a76b6671ddc9687e2313b67376125650dc7ba"
+    "@std/internal@1.0.6": {
+      "integrity": "9533b128f230f73bd209408bb07a4b12f8d4255ab2a4d22a1fd6d87304aca9a4"
     }
   },
   "npm": {
@@ -623,17 +623,17 @@
         "entities"
       ]
     },
-    "playwright-chromium@1.50.1": {
-      "integrity": "sha512-0IKyCdwS5dDoGE3EqqfYtX24qF6+ef1UI6OLn2VUi2aHOgsI/KnESRm6/Ws0W78SrwhLi6lLlAL6fQISoO1cfw==",
+    "playwright-chromium@1.51.1": {
+      "integrity": "sha512-IQpN8lgv/fx++WRxT8ITZylDwYAamd3Fv5H9g2AWsicp0N829L1oXHziK/6l9h/TMxioSTqc4ifPiZLS8nITxw==",
       "dependencies": [
-        "playwright-core@1.50.1"
+        "playwright-core@1.51.1"
       ]
     },
     "playwright-core@1.48.2": {
       "integrity": "sha512-sjjw+qrLFlriJo64du+EK0kJgZzoQPsabGF4lBvsid+3CNIZIYLgnMj9V6JY5VhM2Peh20DJWIVpVljLLnlawA=="
     },
-    "playwright-core@1.50.1": {
-      "integrity": "sha512-ra9fsNWayuYumt+NiM069M6OkcRb1FZSK8bgi66AtpFoWkg2+y0bJSNmkFrWhMbEBbVKC/EruAHH3g0zmtwGmQ=="
+    "playwright-core@1.51.1": {
+      "integrity": "sha512-/crRMj8+j/Nq5s8QcvegseuyeZPxpQCZb6HNk3Sos3BlZyAknRjoyJPFWkpNn8v0+P3WiwqFF8P+zQo4eqiNuw=="
     },
     "playwright@1.48.2": {
       "integrity": "sha512-NjYvYgp4BPmiwfe31j4gHLa3J7bD2WiBz8Lk2RoSsmX38SVIARZ18VYjxLjAcDsAhA+F4iSEXTSGgjua0rrlgQ==",
@@ -703,7 +703,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@std/assert@^1.0.11",
+      "jsr:@std/assert@^1.0.12",
       "jsr:@std/dotenv@~0.225.3",
       "npm:@observablehq/plot@~0.6.17",
       "npm:@types/d3-geo@^3.1.0",
@@ -717,7 +717,7 @@
       "npm:google-auth-library@^9.15.1",
       "npm:google-spreadsheet@^4.1.4",
       "npm:iconv-lite@~0.6.3",
-      "npm:playwright-chromium@^1.50.1"
+      "npm:playwright-chromium@^1.51.1"
     ]
   }
 }
