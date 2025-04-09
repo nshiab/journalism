@@ -8,7 +8,10 @@ Deno.test("should return an array of objects from an HTML table with a selector 
   );
 
   assertEquals(
-    data.slice(0, 5).map((d) => ({ ...d, Name: d.Name.replace("  ", " ") })),
+    data.slice(0, 5).map((d: { Name: string }) => ({
+      ...d,
+      Name: d.Name.replace("  ", " "),
+    })),
     [
       {
         Name: "Aboultaif, Ziad",
