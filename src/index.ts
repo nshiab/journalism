@@ -46,6 +46,7 @@ import rewind from "./geo/rewind.ts";
 import saveChart from "./dataviz/saveChart.ts";
 import reencode from "./format/reencode.ts";
 import getYahooFinanceData from "./finance/getYahooFinanceData.ts";
+import sleep from "./other/sleep.ts";
 
 export {
   addClusters,
@@ -90,6 +91,7 @@ export {
   rewind,
   round,
   saveChart,
+  sleep,
   styledLayerDescriptor,
   unzip,
   updateAnnotationsDW,

@@ -26,6 +26,7 @@ import addClusters from "./statistics/addClusters.ts";
 import addZScore from "./statistics/addZScore.ts";
 import euclideanDistance from "./statistics/euclidianDistance.ts";
 import rewind from "./geo/rewind.ts";
+import sleep from "./other/sleep.ts";
 
 export {
   addClusters,
@@ -55,5 +56,6 @@ export {
   prettyDuration,
   rewind,
   round,
+  sleep,
   styledLayerDescriptor,
 };
