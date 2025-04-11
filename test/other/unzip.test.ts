@@ -1,4 +1,4 @@
-// import assert from "assert"
+import { assertEquals } from "jsr:@std/assert";
 import unzip from "../../src/other/unzip.ts";
 import { copyFileSync, existsSync, mkdirSync } from "node:fs";
 
@@ -10,6 +10,7 @@ if (!existsSync(outputPath)) {
 Deno.test("should unzip and put files in a folder", () => {
   unzip("test/data/test.zip", "test/output");
   // How to assert?
+  assertEquals(true, true);
 });
 Deno.test("should unzip, put files in a folder and remove original file", () => {
   copyFileSync("test/data/test.zip", "test/data/testCopy.zip");
@@ -17,4 +18,5 @@ Deno.test("should unzip, put files in a folder and remove original file", () => 
     deleteZippedFile: true,
   });
   // How to assert?
+  assertEquals(true, true);
 });

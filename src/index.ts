@@ -47,6 +47,7 @@ import saveChart from "./dataviz/saveChart.ts";
 import reencode from "./format/reencode.ts";
 import getYahooFinanceData from "./finance/getYahooFinanceData.ts";
 import sleep from "./other/sleep.ts";
+import DurationTracker from "./other/DurationTracker.ts";
 
 export {
   addClusters,
@@ -61,6 +62,7 @@ export {
   dataToArrays,
   distance,
   downloadFile,
+  DurationTracker,
   euclidianDistance,
   formatDate,
   formatNumber,
