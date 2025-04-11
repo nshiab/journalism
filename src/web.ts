@@ -27,6 +27,7 @@ import addZScore from "./statistics/addZScore.ts";
 import euclideanDistance from "./statistics/euclidianDistance.ts";
 import rewind from "./geo/rewind.ts";
 import sleep from "./other/sleep.ts";
+import DurationTracker from "./other/DurationTracker.ts";
 
 export {
   addClusters,
@@ -39,6 +40,7 @@ export {
   dataAsCsv,
   dataToArrays,
   distance,
+  DurationTracker,
   euclideanDistance,
   formatDate,
   formatNumber,
