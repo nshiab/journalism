@@ -37,6 +37,7 @@ if (incrementType === "major") {
 
 data.version = versionParts.join(".");
 writeFileSync(filePath, JSON.stringify(data, null, 2));
+execSync("deno fmt");
 
 execSync("git add -A");
 execSync(`git commit -m "v${data.version}"`);
