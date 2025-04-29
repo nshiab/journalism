@@ -254,11 +254,6 @@ export default async function askAI(
   }
 
   if (options.verbose) {
-    console.log(
-      "\nPrompt:",
-      prompt.length > 50 ? `${prompt.slice(0, 50)}...` : prompt,
-    );
-
     const pricing = [
       { model: "gemini-2.0-flash", input: 0.10, output: 0.40 },
       { model: "gemini-2.0-flash-lite", input: 0.075, output: 0.30 },
