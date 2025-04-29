@@ -97,7 +97,7 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  * Usage with a PDF file:
  * ```ts
  * const pdfExtraction = await askAI(
- *   `This is a Supreme Court decision. Summarize the merits of the case in the document. Provide a list of objects with a date and a brief summary for each important event, sorted chronologically.`,
+ *   `This is a Supreme Court decision. Provide a list of objects with a date and a brief summary for each important event of the case's merits, sorted chronologically.`,
  *   {
  *     model: "gemini-2.0-flash",
  *     pdf: "./decision.pdf",
