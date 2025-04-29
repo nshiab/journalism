@@ -110,6 +110,18 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  *
  * @param prompt - The input string to guide the AI's response.
  * @param options - Configuration options for the AI request.
+ *   @param options.model - The model to use. Defaults to the `AI_MODEL` environment variable.
+ *   @param options.apiKey - The API key. Defaults to the `AI_KEY` environment variable.
+ *   @param options.vertex - Whether to use Vertex AI. Defaults to `false`. If a `AI_PROJECT` and `AI_LOCATION` are set in the environment, it will automatically switch to true.
+ *   @param options.project - The Google Cloud project ID. Defaults to the `AI_PROJECT` environment variable.
+ *   @param options.location - The Google Cloud location. Defaults to the `AI_LOCATION` environment variable.
+ *   @param options.HTMLFrom - The URL to scrape HTML content from. The HTML content is automatically added at the end of the prompt.
+ *   @param options.image - The path to the image file. Must be a JPEG file.
+ *   @param options.video - The path to the video file. Must be an MP4 file.
+ *   @param options.audio - The path to the audio file. Must be an MP3 file.
+ *   @param options.pdf - The path to the PDF file.
+ *   @param options.returnJson - Whether to return the response as JSON. Defaults to `false`.
+ *   @param options.verbose - Whether to log additional information. Defaults to `false`. Note that prices are rough estimates.
  */
 export default async function askAI(
   prompt: string,
