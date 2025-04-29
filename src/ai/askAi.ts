@@ -3,10 +3,118 @@ import fs from "node:fs/promises";
 import { GoogleGenAI } from "@google/genai";
 import { formatNumber, prettyDuration } from "@nshiab/journalism";
 
+/**
+ * Sends a prompt and optionally a file to an LLM. Currently supports Google Gemini AI.
+ *
+ * The function retrieves credentials from environment variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`) or accepts them as options. Options take precedence over environment variables.
+ *
+ * The temperature is set to 0 to ensure reproducible results.
+ *
+ * @example
+ * Basic usage with credentials and model in .env:
+ * ```ts
+ * await askAI("What is the capital of France?");
+ * ```
+ *
+ * @example
+ * Usage with API credentials and model passed as options:
+ * ```ts
+ * await askAI("What is the capital of France?", {
+ *   apiKey: "your_api_key",
+ *   model: "gemini-2.0-flash",
+ * });
+ * ```
+ *
+ * @example
+ * Usage with Vertex AI credentials passed as options:
+ * ```ts
+ * await askAI("What is the capital of France?", {
+ *   vertex: true,
+ *   project: "your_project_id",
+ *   location: "us-central1",
+ * });
+ * ```
+ *
+ * @example
+ * Usage with HTML content to scrape data:
+ * ```ts
+ * const executiveOrders = await askAI(
+ *   `Here's the page showing presidential executive orders. Extract the executive order names, dates (yyyy-mm-dd), and URLs as an array of objects. Also categorize each executive order based on its name.`,
+ *   {
+ *     HTMLFrom: "https://www.whitehouse.gov/presidential-actions/executive-orders/",
+ *     returnJson: true,
+ *     verbose: true,
+ *   },
+ * );
+ * console.table(executiveOrders);
+ * ```
+ *
+ * @example
+ * Usage with an image:
+ * ```ts
+ * const obj = await askAI(
+ *   `Based on the image I send you, return an object with the following properties:
+ *   - name: the person in the image if it's a human and recognizable,
+ *   - description: a very short description of the image,
+ *   - isPolitician: true if it's a politician, false otherwise.
+ *   Return just the object.`,
+ *   {
+ *     image: `./your_image.jpg`,
+ *     verbose: true,
+ *     returnJson: true,
+ *   },
+ * );
+ * console.log(obj);
+ * ```
+ *
+ * @example
+ * Usage with an audio file:
+ * ```ts
+ * const audioResponse = await askAI(
+ *   `Return an object with the name of the person speaking and an approximate date of the speech if recognizable.`,
+ *   {
+ *     audio: "./speech.mp3",
+ *     returnJson: true,
+ *   },
+ * );
+ * ```
+ *
+ * @example
+ * Usage with a video file:
+ * ```ts
+ * const videoTranscript = await askAI(
+ *   `Return an array of objects, each containing the following keys: name, timestamp, main emotion, and transcript. Create a new object each time a new person speaks.`,
+ *   {
+ *     video: "./your_video.mp4",
+ *     returnJson: true,
+ *     verbose: true,
+ *   },
+ * );
+ * console.table(videoTranscript);
+ * ```
+ *
+ * @example
+ * Usage with a PDF file:
+ * ```ts
+ * const pdfExtraction = await askAI(
+ *   `This is a Supreme Court decision. Summarize the merits of the case in the document. Provide a list of objects with a date and a brief summary for each important event, sorted chronologically.`,
+ *   {
+ *     model: "gemini-2.0-flash",
+ *     pdf: "./decision.pdf",
+ *     returnJson: true,
+ *     verbose: true,
+ *   },
+ * );
+ * console.table(pdfExtraction);
+ * ```
+ *
+ * @param prompt - The input string to guide the AI's response.
+ * @param options - Configuration options for the AI request.
+ */
 export default async function askAI(
   prompt: string,
-  model: "gemini-2.0-flash" | "gemini-2.0-flash-lite" | string,
   options: {
+    model?: string;
     apiKey?: string;
     vertex?: boolean;
     project?: string;
@@ -23,7 +131,15 @@ export default async function askAI(
   const start = Date.now();
   let client;
 
-  if (process.env.AI_PROJECT && process.env.AI_LOCATION) {
+  // Initialize the GoogleGenAI client based on options or environment variables
+  if (options.vertex || options.apiKey || options.project || options.location) {
+    client = new GoogleGenAI({
+      apiKey: options.apiKey,
+      vertexai: options.vertex,
+      project: options.project,
+      location: options.location,
+    });
+  } else if (process.env.AI_PROJECT && process.env.AI_LOCATION) {
     client = new GoogleGenAI({
       vertexai: true,
       project: process.env.AI_PROJECT,
@@ -33,13 +149,19 @@ export default async function askAI(
     client = new GoogleGenAI({
       apiKey: process.env.AI_KEY,
     });
-  } else {
-    client = new GoogleGenAI({
-      apiKey: options.apiKey,
-      vertexai: options.vertex,
-      project: options.project,
-      location: options.location,
-    });
+  }
+
+  if (!client) {
+    throw new Error(
+      "No API key or project/location found. Please set AI_KEY, AI_PROJECT, and AI_LOCATION in your environment variables or pass them as options.",
+    );
+  }
+
+  const model = options.model ?? process.env.AI_MODEL;
+  if (!model) {
+    throw new Error(
+      "Model not specified. Use the AI_MODEL environment variable or pass it as an option.",
+    );
   }
 
   let response;
@@ -61,10 +183,7 @@ export default async function askAI(
     response = await client.models.generateContent({
       model,
       contents: [prompt, {
-        inlineData: {
-          data: base64Audio,
-          mimeType: "audio/mp3",
-        },
+        inlineData: { data: base64Audio, mimeType: "audio/mp3" },
       }],
       config: {
         temperature: 0,
@@ -78,10 +197,7 @@ export default async function askAI(
     response = await client.models.generateContent({
       model,
       contents: [prompt, {
-        inlineData: {
-          data: base64Video,
-          mimeType: "video/mp4",
-        },
+        inlineData: { data: base64Video, mimeType: "video/mp4" },
       }],
       config: {
         temperature: 0,
@@ -93,10 +209,7 @@ export default async function askAI(
     response = await client.models.generateContent({
       model,
       contents: [prompt, {
-        inlineData: {
-          data: base64Pdf,
-          mimeType: "application/pdf",
-        },
+        inlineData: { data: base64Pdf, mimeType: "application/pdf" },
       }],
       config: {
         temperature: 0,
@@ -110,10 +223,7 @@ export default async function askAI(
     response = await client.models.generateContent({
       model,
       contents: [prompt, {
-        inlineData: {
-          data: base64Image,
-          mimeType: "image/jpeg",
-        },
+        inlineData: { data: base64Image, mimeType: "image/jpeg" },
       }],
       config: {
         temperature: 0,
@@ -133,55 +243,49 @@ export default async function askAI(
 
   if (options.verbose) {
     console.log(
-      "\nPrompt: ",
+      "\nPrompt:",
       prompt.length > 50 ? `${prompt.slice(0, 50)}...` : prompt,
     );
 
-    const pricing = [{
-      model: "gemini-2.0-flash",
-      input: 0.10,
-      output: 0.40,
-    }, {
-      model: "gemini-2.0-flash-lite",
-      input: 0.075,
-      output: 0.30,
-    }];
+    const pricing = [
+      { model: "gemini-2.0-flash", input: 0.10, output: 0.40 },
+      { model: "gemini-2.0-flash-lite", input: 0.075, output: 0.30 },
+    ];
     const modelPricing = pricing.find((p) => p.model === model);
     if (!modelPricing) {
-      console.log("Model not found in pricing list.");
+      console.log(`Model ${model} not found in pricing list.`);
     } else {
       const promptTokenCount = response.usageMetadata?.promptTokenCount ?? 0;
-      const promptTokenCountCost = promptTokenCount / 1_000_000 *
+      const promptTokenCost = (promptTokenCount / 1_000_000) *
         modelPricing.input;
-      console.log(
-        "Input tokens:",
-        promptTokenCount,
-      );
-      const candidatesTokenCount =
-        response.usageMetadata?.candidatesTokenCount ??
-          0;
-      const candidatesTokenCountCost = candidatesTokenCount / 1_000_000 *
+      console.log("Input tokens:", promptTokenCount);
+
+      const outputTokenCount = response.usageMetadata?.candidatesTokenCount ??
+        0;
+      const outputTokenCost = (outputTokenCount / 1_000_000) *
         modelPricing.output;
+      console.log("Output tokens:", outputTokenCount);
+
+      const estimatedCost = promptTokenCost + outputTokenCost;
       console.log(
-        "Output tokens:",
-        response.usageMetadata?.candidatesTokenCount,
-      );
-      const estimatedCost = promptTokenCountCost + candidatesTokenCountCost;
-      console.log(
-        "Estimated cost:",
-        formatNumber(
-          estimatedCost,
-          { prefix: "$", significantDigits: 1, suffix: " USD" },
-        ),
+        `Estimated cost for ${model}:`,
+        formatNumber(estimatedCost, {
+          prefix: "$",
+          significantDigits: 1,
+          suffix: " USD",
+        }),
       );
     }
-    console.log(
-      "Execution time: ",
-      prettyDuration(start),
-    );
+    console.log("Execution time:", prettyDuration(start));
   }
 
-  return options.returnJson && response.text
-    ? JSON.parse(response.text)
-    : response.text;
+  if (!response.text) {
+    throw new Error(
+      "Response text is undefined. Please check the model and input.",
+    );
+  } else if (options.returnJson) {
+    return JSON.parse(response.text);
+  } else {
+    return response.text;
+  }
 }

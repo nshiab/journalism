@@ -48,7 +48,7 @@ import reencode from "./format/reencode.ts";
 import getYahooFinanceData from "./finance/getYahooFinanceData.ts";
 import sleep from "./other/sleep.ts";
 import DurationTracker from "./other/DurationTracker.ts";
-import askAI from "./ai/askAi.ts";
+import askAI from "./ai/askAI.ts";
 
 export {
   addClusters,
