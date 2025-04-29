@@ -260,12 +260,12 @@ export default async function askAI(
     ];
     const modelPricing = pricing.find((p) => p.model === model);
     if (!modelPricing) {
-      console.log(`Model ${model} not found in pricing list.`);
+      console.log(`\nModel ${model} not found in pricing list.`);
     } else {
       const promptTokenCount = response.usageMetadata?.promptTokenCount ?? 0;
       const promptTokenCost = (promptTokenCount / 1_000_000) *
         modelPricing.input;
-      console.log("Input tokens:", promptTokenCount);
+      console.log("\nInput tokens:", promptTokenCount);
 
       const outputTokenCount = response.usageMetadata?.candidatesTokenCount ??
         0;
