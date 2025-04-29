@@ -6,7 +6,7 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
 /**
  * Sends a prompt and optionally a file to an LLM. Currently supports Google Gemini AI.
  *
- * The function retrieves credentials from environment variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`) or accepts them as options. Options take precedence over environment variables.
+ * The function retrieves credentials and the model from environment variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`, `AI_MODEL`) or accepts them as options. Options take precedence over environment variables.
  *
  * The temperature is set to 0 to ensure reproducible results.
  *
