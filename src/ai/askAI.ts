@@ -172,7 +172,7 @@ export default async function askAI(
     verbose?: boolean;
     cache?: boolean;
   } = {},
-) {
+): Promise<unknown> {
   const start = Date.now();
   let client;
 
