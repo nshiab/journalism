@@ -1,7 +1,9 @@
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import process from "node:process";
 import fs from "node:fs/promises";
-import { GoogleGenAI } from "@google/genai";
+import { type ContentListUnion, GoogleGenAI } from "@google/genai";
 import { formatNumber, prettyDuration } from "@nshiab/journalism";
+import crypto from "node:crypto";
 
 /**
  * Sends a prompt and optionally a file to an LLM. Currently supports Google Gemini AI.
@@ -10,10 +12,18 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  *
  * The temperature is set to 0 to ensure reproducible results.
  *
+ * To save resources and time, you can cache the response. When `cache` is set to `true`, the function saves the response in a local hidden folder called `.journalism`. If the same request is made again in the future, it will return the cached response instead of making a new request.
+ *
  * @example
  * Basic usage with credentials and model in .env:
  * ```ts
  * await askAI("What is the capital of France?");
+ * ```
+ *
+ * @example
+ * Basic usage with cache:
+ * ```ts
+ * await askAI("What is the capital of France?", { cache: true });
  * ```
  *
  * @example
@@ -41,6 +51,7 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  * const executiveOrders = await askAI(
  *   `Here's the page showing presidential executive orders. Extract the executive order names, dates (yyyy-mm-dd), and URLs as an array of objects. Also categorize each executive order based on its name.`,
  *   {
+ *     // Can also be an array of URLs.
  *     HTMLFrom: "https://www.whitehouse.gov/presidential-actions/executive-orders/",
  *     returnJson: true,
  *   },
@@ -58,6 +69,7 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  *   - isPolitician: true if it's a politician, false otherwise.
  *   Return just the object.`,
  *   {
+ *     // Can also be an array of images.
  *     image: `./your_image.jpg`,
  *     returnJson: true,
  *   },
@@ -71,6 +83,7 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  * const audioResponse = await askAI(
  *   `Return an object with the name of the person speaking and an approximate date of the speech if recognizable.`,
  *   {
+ *     // Can also be an array of audio files.
  *     audio: "./speech.mp3",
  *     returnJson: true,
  *   },
@@ -83,6 +96,7 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  * const videoTranscript = await askAI(
  *   `Return an array of objects, each containing the following keys: name, timestamp, main emotion, and transcript. Create a new object each time a new person speaks.`,
  *   {
+ *     // Can also be an array of video files.
  *     video: "./your_video.mp4",
  *     returnJson: true,
  *   },
@@ -96,6 +110,7 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  * const pdfExtraction = await askAI(
  *   `This is a Supreme Court decision. Provide a list of objects with a date and a brief summary for each important event of the case's merits, sorted chronologically.`,
  *   {
+ *     // Can also be an array of PDF files.
  *     pdf: "./decision.pdf",
  *     returnJson: true,
  *   },
@@ -103,11 +118,33 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  * console.table(pdfExtraction);
  * ```
  *
+ * @example
+ * Usage with multiple file formats:
+ * ```ts
+ * const allFiles = await askAI(
+ *   `Give me a short description of each thing I give you.`,
+ *   {
+ *     // Can also be an array of URLs.
+ *     HTMLFrom: "https://example.com",
+ *     // Can also be an array of audio files.
+ *     audio: "speech.mp3",
+ *     // Can also be an array of images.
+ *     image: "cat.png",
+ *     // Can also be an array of video files.
+ *     video: "something.mp4",
+ *     // Can also be an array of PDF files.
+ *     pdf: "decision.pdf",
+ *     returnJson: true,
+ *   },
+ * );
+ * ```
+ *
  * @param prompt - The input string to guide the AI's response.
  * @param options - Configuration options for the AI request.
+ *   @param options.cache - Whether to cache the response in a local folder `.journalism`. Defaults to `false`.
  *   @param options.model - The model to use. Defaults to the `AI_MODEL` environment variable.
  *   @param options.apiKey - The API key. Defaults to the `AI_KEY` environment variable.
- *   @param options.vertex - Whether to use Vertex AI. Defaults to `false`. If a `AI_PROJECT` and `AI_LOCATION` are set in the environment, it will automatically switch to true.
+ *   @param options.vertex - Whether to use Vertex AI. Defaults to `false`. If `AI_PROJECT` and `AI_LOCATION` are set in the environment, it will automatically switch to true.
  *   @param options.project - The Google Cloud project ID. Defaults to the `AI_PROJECT` environment variable.
  *   @param options.location - The Google Cloud location. Defaults to the `AI_LOCATION` environment variable.
  *   @param options.HTMLFrom - The URL to scrape HTML content from. The HTML content is automatically added at the end of the prompt.
@@ -126,19 +163,19 @@ export default async function askAI(
     vertex?: boolean;
     project?: string;
     location?: string;
-    HTMLFrom?: string;
-    image?: string;
-    video?: string;
-    audio?: string;
-    pdf?: string;
+    HTMLFrom?: string | string[];
+    image?: string | string[];
+    video?: string | string[];
+    audio?: string | string[];
+    pdf?: string | string[];
     returnJson?: boolean;
     verbose?: boolean;
+    cache?: boolean;
   } = {},
 ) {
   const start = Date.now();
   let client;
 
-  // Initialize the GoogleGenAI client based on options or environment variables
   if (options.vertex || options.apiKey || options.project || options.location) {
     client = new GoogleGenAI({
       apiKey: options.apiKey,
@@ -171,82 +208,117 @@ export default async function askAI(
     );
   }
 
-  let response;
+  const contents: ContentListUnion = [];
   if (options.HTMLFrom) {
-    const res = await fetch(options.HTMLFrom);
-    const html = await res.text();
-    response = await client.models.generateContent({
-      model,
-      contents: [`${prompt}\nHere's the HTML code:\n${html}`],
-      config: {
-        temperature: 0,
-        responseMimeType: options.returnJson ? "application/json" : undefined,
-      },
-    });
-  } else if (options.audio) {
-    const base64Audio = await fs.readFile(options.audio, {
-      encoding: "base64",
-    });
-    response = await client.models.generateContent({
-      model,
-      contents: [prompt, {
-        inlineData: { data: base64Audio, mimeType: "audio/mp3" },
-      }],
-      config: {
-        temperature: 0,
-        responseMimeType: options.returnJson ? "application/json" : undefined,
-      },
-    });
-  } else if (options.video) {
-    const base64Video = await fs.readFile(options.video, {
-      encoding: "base64",
-    });
-    response = await client.models.generateContent({
-      model,
-      contents: [prompt, {
-        inlineData: { data: base64Video, mimeType: "video/mp4" },
-      }],
-      config: {
-        temperature: 0,
-        responseMimeType: options.returnJson ? "application/json" : undefined,
-      },
-    });
-  } else if (options.pdf) {
-    const base64Pdf = await fs.readFile(options.pdf, { encoding: "base64" });
-    response = await client.models.generateContent({
-      model,
-      contents: [prompt, {
-        inlineData: { data: base64Pdf, mimeType: "application/pdf" },
-      }],
-      config: {
-        temperature: 0,
-        responseMimeType: options.returnJson ? "application/json" : undefined,
-      },
-    });
-  } else if (options.image) {
-    const base64Image = await fs.readFile(options.image, {
-      encoding: "base64",
-    });
-    response = await client.models.generateContent({
-      model,
-      contents: [prompt, {
-        inlineData: { data: base64Image, mimeType: "image/jpeg" },
-      }],
-      config: {
-        temperature: 0,
-        responseMimeType: options.returnJson ? "application/json" : undefined,
-      },
-    });
+    const urls = Array.isArray(options.HTMLFrom)
+      ? options.HTMLFrom
+      : [options.HTMLFrom];
+
+    let promptWithHTML = prompt;
+    for (const url of urls) {
+      const res = await fetch(url);
+      const html = await res.text();
+      promptWithHTML += `\n\nHTML content from ${url}:\n${html}`;
+    }
+    contents.push(promptWithHTML);
   } else {
-    response = await client.models.generateContent({
-      model,
-      contents: prompt,
-      config: {
-        temperature: 0,
-        responseMimeType: options.returnJson ? "application/json" : undefined,
-      },
-    });
+    contents.push(prompt);
   }
+
+  if (options.audio) {
+    const audioFiles = Array.isArray(options.audio)
+      ? options.audio
+      : [options.audio];
+    for (const audioFile of audioFiles) {
+      const base64Audio = await fs.readFile(audioFile, {
+        encoding: "base64",
+      });
+      contents.push({
+        inlineData: { data: base64Audio, mimeType: "audio/mp3" },
+      });
+    }
+  }
+
+  if (options.video) {
+    const videoFiles = Array.isArray(options.video)
+      ? options.video
+      : [options.video];
+    for (const videoFile of videoFiles) {
+      const base64Video = await fs.readFile(videoFile, {
+        encoding: "base64",
+      });
+      contents.push({
+        inlineData: { data: base64Video, mimeType: "video/mp4" },
+      });
+    }
+  }
+
+  if (options.pdf) {
+    const pdfFiles = Array.isArray(options.pdf) ? options.pdf : [options.pdf];
+    for (const pdfFile of pdfFiles) {
+      const base64Pdf = await fs.readFile(pdfFile, { encoding: "base64" });
+      contents.push({
+        inlineData: { data: base64Pdf, mimeType: "application/pdf" },
+      });
+    }
+  }
+
+  if (options.image) {
+    const imageFiles = Array.isArray(options.image)
+      ? options.image
+      : [options.image];
+    for (const imageFile of imageFiles) {
+      const base64Image = await fs.readFile(imageFile, {
+        encoding: "base64",
+      });
+      contents.push({
+        inlineData: { data: base64Image, mimeType: "image/jpeg" },
+      });
+    }
+  }
+
+  const params = {
+    model,
+    contents,
+    config: {
+      temperature: 0,
+      responseMimeType: options.returnJson ? "application/json" : undefined,
+    },
+  };
+
+  let cacheFileJSON;
+  let cacheFileText;
+  if (options.cache) {
+    const cachePath = "./.journalism";
+    if (!existsSync(cachePath)) {
+      mkdirSync(cachePath);
+    }
+    const hash = crypto
+      .createHash("sha256")
+      .update(JSON.stringify(params))
+      .digest("hex");
+    cacheFileJSON = `${cachePath}/${hash}.json`;
+    cacheFileText = `${cachePath}/${hash}.txt`;
+    if (existsSync(cacheFileJSON)) {
+      const cachedResponse = JSON.parse(readFileSync(cacheFileJSON, "utf-8"));
+      if (options.verbose) {
+        console.log("\nReturning cached JSON response.");
+      }
+      return cachedResponse;
+    } else if (existsSync(cacheFileText)) {
+      const cachedResponse = readFileSync(cacheFileText, "utf-8");
+      if (options.verbose) {
+        console.log("\nReturning cached text response.");
+      }
+      return cachedResponse;
+    } else {
+      if (options.verbose) {
+        console.log("\nCache missed. Generating new response...");
+      }
+    }
+  }
+
+  const response = await client.models.generateContent(params);
 
   if (options.verbose) {
     const pricing = [
@@ -255,12 +327,17 @@ export default async function askAI(
     ];
     const modelPricing = pricing.find((p) => p.model === model);
     if (!modelPricing) {
-      console.log(`\nModel ${model} not found in pricing list.`);
+      console.log(
+        `${options.cache ? "" : "\n"}Model ${model} not found in pricing list.`,
+      );
     } else {
       const promptTokenCount = response.usageMetadata?.promptTokenCount ?? 0;
       const promptTokenCost = (promptTokenCount / 1_000_000) *
         modelPricing.input;
-      console.log("\nInput tokens:", promptTokenCount);
+      console.log(
+        `${options.cache ? "" : "\n"}Input tokens:`,
+        promptTokenCount,
+      );
 
       const outputTokenCount = response.usageMetadata?.candidatesTokenCount ??
         0;
@@ -286,8 +363,14 @@ export default async function askAI(
       "Response text is undefined. Please check the model and input.",
     );
   } else if (options.returnJson) {
+    if (options.cache && cacheFileJSON) {
+      writeFileSync(cacheFileJSON, response.text);
+    }
     return JSON.parse(response.text);
   } else {
+    if (options.cache && cacheFileText) {
+      writeFileSync(cacheFileText, response.text);
+    }
     return response.text;
   }
 }

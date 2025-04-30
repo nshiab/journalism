@@ -3,3 +3,4 @@ test/output/
 .DS_Store
 .env
 cov_profile
+.journalism
