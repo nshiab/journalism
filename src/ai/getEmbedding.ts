@@ -2,6 +2,26 @@ import process from "node:process";
 import { GoogleGenAI } from "@google/genai";
 import prettyDuration from "../format/prettyDuration.ts";
 
+/**
+ * Generates an embedding for the given text using the GoogleGenAI client.
+ *
+ * The function retrieves credentials and the model from environment variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`, `AI_EMBEDDINGS_MODEL`) or accepts them as options. Options take precedence over environment variables.
+ *
+ * @example
+ * Basic usage
+ * ```ts
+ * await getEmbedding("Hello world!")
+ * ```
+ *
+ * @param text - The input text to generate the embedding for.
+ * @param options - Configuration options for the embedding generation.
+ *   @param options.model - The model to use for embedding generation. Defaults to the `AI_EMBEDDINGS_MODEL` environment variable.
+ *   @param options.apiKey - The API key for authentication. Can also be set via the `AI_KEY` environment variable.
+ *   @param options.vertex - Whether to use Vertex AI. Defaults to `false`.
+ *   @param options.project - The Google Cloud project ID. Can also be set via the `AI_PROJECT` environment variable.
+ *   @param options.location - The location of the Google Cloud project. Can also be set via the `AI_LOCATION` environment variable.
+ *   @param options.verbose - If `true`, logs additional information such as execution time and truncated input text.
+ */
 export default async function getEmbedding(text: string, options: {
   model?: string;
   apiKey?: string;

@@ -49,6 +49,7 @@ import getYahooFinanceData from "./finance/getYahooFinanceData.ts";
 import sleep from "./other/sleep.ts";
 import DurationTracker from "./other/DurationTracker.ts";
 import askAI from "./ai/askAI.ts";
+import getEmbedding from "./ai/getEmbedding.ts";
 
 export {
   addClusters,
@@ -71,6 +72,7 @@ export {
   geoTo3D,
   getClosest,
   getCovarianceMatrix,
+  getEmbedding,
   getGeoTiffDetails,
   getGeoTiffValues,
   getHtmlTable,
