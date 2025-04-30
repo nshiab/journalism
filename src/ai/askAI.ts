@@ -12,7 +12,7 @@ import crypto from "node:crypto";
  *
  * The temperature is set to 0 to ensure reproducible results.
  *
- * To save resources and time, you can cache the response. When `cache` is set to `true`, the function saves the response in a local hidden folder called `.journalism`. If the same request is made again in the future, it will return the cached response instead of making a new request.
+ * To save resources and time, you can cache the response. When `cache` is set to `true`, the function saves the response in a local hidden folder called `.journalism`. If the same request is made again in the future, it will return the cached response instead of making a new request. Don't forget to add `.journalism` to your `.gitignore` file!
  *
  * @example
  * Basic usage with credentials and model in .env:
@@ -23,6 +23,7 @@ import crypto from "node:crypto";
  * @example
  * Basic usage with cache:
  * ```ts
+ * // Don't forget to add .journalism to your .gitignore file!
  * await askAI("What is the capital of France?", { cache: true });
  * ```
  *
