@@ -43,7 +43,6 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  *   {
  *     HTMLFrom: "https://www.whitehouse.gov/presidential-actions/executive-orders/",
  *     returnJson: true,
- *     verbose: true,
  *   },
  * );
  * console.table(executiveOrders);
@@ -60,7 +59,6 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  *   Return just the object.`,
  *   {
  *     image: `./your_image.jpg`,
- *     verbose: true,
  *     returnJson: true,
  *   },
  * );
@@ -87,7 +85,6 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  *   {
  *     video: "./your_video.mp4",
  *     returnJson: true,
- *     verbose: true,
  *   },
  * );
  * console.table(videoTranscript);
@@ -99,10 +96,8 @@ import { formatNumber, prettyDuration } from "@nshiab/journalism";
  * const pdfExtraction = await askAI(
  *   `This is a Supreme Court decision. Provide a list of objects with a date and a brief summary for each important event of the case's merits, sorted chronologically.`,
  *   {
- *     model: "gemini-2.0-flash",
  *     pdf: "./decision.pdf",
  *     returnJson: true,
- *     verbose: true,
  *   },
  * );
  * console.table(pdfExtraction);
