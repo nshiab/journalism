@@ -323,11 +323,17 @@ export default async function askAI(
       if (options.verbose) {
         console.log("\nReturning cached JSON response.");
       }
+      if (options.test) {
+        options.test(cachedResponse);
+      }
       return cachedResponse;
     } else if (existsSync(cacheFileText)) {
       const cachedResponse = readFileSync(cacheFileText, "utf-8");
       if (options.verbose) {
         console.log("\nReturning cached text response.");
+      }
+      if (options.test) {
+        options.test(cachedResponse);
       }
       return cachedResponse;
     } else {
