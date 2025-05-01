@@ -1,6 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import process from "node:process";
-import fs from "node:fs/promises";
 import { type ContentListUnion, GoogleGenAI } from "@google/genai";
 import { formatNumber, prettyDuration } from "@nshiab/journalism";
 import crypto from "node:crypto";
@@ -249,7 +248,7 @@ export default async function askAI(
       ? options.audio
       : [options.audio];
     for (const audioFile of audioFiles) {
-      const base64Audio = await fs.readFile(audioFile, {
+      const base64Audio = readFileSync(audioFile, {
         encoding: "base64",
       });
       contents.push({
@@ -263,7 +262,7 @@ export default async function askAI(
       ? options.video
       : [options.video];
     for (const videoFile of videoFiles) {
-      const base64Video = await fs.readFile(videoFile, {
+      const base64Video = readFileSync(videoFile, {
         encoding: "base64",
       });
       contents.push({
@@ -275,7 +274,7 @@ export default async function askAI(
   if (options.pdf) {
     const pdfFiles = Array.isArray(options.pdf) ? options.pdf : [options.pdf];
     for (const pdfFile of pdfFiles) {
-      const base64Pdf = await fs.readFile(pdfFile, { encoding: "base64" });
+      const base64Pdf = readFileSync(pdfFile, { encoding: "base64" });
       contents.push({
         inlineData: { data: base64Pdf, mimeType: "application/pdf" },
       });
@@ -287,7 +286,7 @@ export default async function askAI(
       ? options.image
       : [options.image];
     for (const imageFile of imageFiles) {
-      const base64Image = await fs.readFile(imageFile, {
+      const base64Image = readFileSync(imageFile, {
         encoding: "base64",
       });
       contents.push({
