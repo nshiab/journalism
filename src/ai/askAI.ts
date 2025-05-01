@@ -398,4 +398,6 @@ export default async function askAI(
   } else if (options.cache && cacheFileText) {
     writeFileSync(cacheFileText, response.text);
   }
+
+  return returnedResponse;
 }
