@@ -11,7 +11,7 @@ import crypto from "node:crypto";
  *
  * The temperature is set to 0 to ensure reproducible results.
  *
- * To save resources and time, you can cache the response. When `cache` is set to `true`, the function saves the response in a local hidden folder called `.journalism`. If the same request is made again in the future, it will return the cached response instead of making a new request. Don't forget to add `.journalism` to your `.gitignore` file!
+ * To save resources and time, you can cache the response. When `cache` is set to `true`, the function saves the response in a local hidden folder called `.journalism-cache`. If the same request is made again in the future, it will return the cached response instead of making a new request. Don't forget to add `.journalism-cache` to your `.gitignore` file!
  *
  * @example
  * Basic usage with credentials and model in .env:
@@ -22,7 +22,7 @@ import crypto from "node:crypto";
  * @example
  * Basic usage with cache:
  * ```ts
- * // Don't forget to add .journalism to your .gitignore file!
+ * // Don't forget to add .journalism-cache to your .gitignore file!
  * await askAI("What is the capital of France?", { cache: true });
  * ```
  *
@@ -157,7 +157,7 @@ import crypto from "node:crypto";
  *
  * @param prompt - The input string to guide the AI's response.
  * @param options - Configuration options for the AI request.
- *   @param options.cache - Whether to cache the response in a local folder `.journalism`. Defaults to `false`.
+ *   @param options.cache - Whether to cache the response in a local folder `.journalism-cache`. Defaults to `false`.
  *   @param options.test - A function to test the response. It receives the response as an argument.
  *   @param options.model - The model to use. Defaults to the `AI_MODEL` environment variable.
  *   @param options.apiKey - The API key. Defaults to the `AI_KEY` environment variable.
@@ -307,7 +307,7 @@ export default async function askAI(
   let cacheFileJSON;
   let cacheFileText;
   if (options.cache) {
-    const cachePath = "./.journalism";
+    const cachePath = "./.journalism-cache";
     if (!existsSync(cachePath)) {
       mkdirSync(cachePath);
     }
@@ -315,8 +315,8 @@ export default async function askAI(
       .createHash("sha256")
       .update(JSON.stringify(params))
       .digest("hex");
-    cacheFileJSON = `${cachePath}/${hash}.json`;
-    cacheFileText = `${cachePath}/${hash}.txt`;
+    cacheFileJSON = `${cachePath}/askAI-${hash}.json`;
+    cacheFileText = `${cachePath}/askAI${hash}.txt`;
     if (existsSync(cacheFileJSON)) {
       const cachedResponse = JSON.parse(readFileSync(cacheFileJSON, "utf-8"));
       if (options.verbose) {

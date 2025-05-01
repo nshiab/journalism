@@ -5,8 +5,8 @@ import { existsSync, rmSync } from "node:fs";
 
 const aiKey = Deno.env.get("AI_KEY");
 if (typeof aiKey === "string" && aiKey !== "") {
-  if (existsSync("./.journalism")) {
-    rmSync("./.journalism", { recursive: true });
+  if (existsSync("./.journalism-cache")) {
+    rmSync("./.journalism-cache", { recursive: true });
   }
 
   Deno.test("should use a simple prompt", async () => {
