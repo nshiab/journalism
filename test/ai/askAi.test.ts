@@ -16,6 +16,29 @@ if (typeof aiKey === "string" && aiKey !== "") {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
+  Deno.test("should use a simple prompt with a test", async () => {
+    const result = await askAI("Give me a list of 3 countries in Europe.", {
+      returnJson: true,
+      test: (response: unknown) => {
+        if (!Array.isArray(response)) {
+          throw new Error(
+            `Response is not an array: ${JSON.stringify(response)}`,
+          );
+        }
+        if (response.length !== 3) {
+          throw new Error(
+            `Response does not contain three items: ${
+              JSON.stringify(response)
+            }`,
+          );
+        }
+      },
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
   Deno.test("should use a simple prompt with cache", async () => {
     const result = await askAI("What is the capital of France?", {
       cache: true,
