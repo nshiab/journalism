@@ -140,9 +140,26 @@ import crypto from "node:crypto";
  * );
  * ```
  *
+ * @example
+ * Usage with a test function:
+ * ```ts
+ * const testedResponse = await askAI(`Give me a list of three countries in Europe.`, {
+ *   returnJson: true,
+ *   test: (response) => {
+ *     if (!Array.isArray(response)) {
+ *       throw new Error("Response is not an array.");
+ *     }
+ *     if (response.length !== 3) {
+ *       throw new Error("Response does not contain three items.");
+ *     }
+ *   },
+ * });
+ * ```
+ *
  * @param prompt - The input string to guide the AI's response.
  * @param options - Configuration options for the AI request.
  *   @param options.cache - Whether to cache the response in a local folder `.journalism`. Defaults to `false`.
+ *   @param options.test - A function to test the response. It receives the response as an argument.
  *   @param options.model - The model to use. Defaults to the `AI_MODEL` environment variable.
  *   @param options.apiKey - The API key. Defaults to the `AI_KEY` environment variable.
  *   @param options.vertex - Whether to use Vertex AI. Defaults to `false`. If `AI_PROJECT` and `AI_LOCATION` are set in the environment, it will automatically switch to true.
@@ -172,6 +189,7 @@ export default async function askAI(
     returnJson?: boolean;
     verbose?: boolean;
     cache?: boolean;
+    test?: (response: unknown) => void;
   } = {},
 ): Promise<unknown> {
   const start = Date.now();
@@ -359,19 +377,25 @@ export default async function askAI(
     console.log("Execution time:", prettyDuration(start));
   }
 
+  let returnedResponse;
+
   if (!response.text) {
     throw new Error(
       "Response text is undefined. Please check the model and input.",
     );
   } else if (options.returnJson) {
-    if (options.cache && cacheFileJSON) {
-      writeFileSync(cacheFileJSON, response.text);
-    }
-    return JSON.parse(response.text);
+    returnedResponse = JSON.parse(response.text);
   } else {
-    if (options.cache && cacheFileText) {
-      writeFileSync(cacheFileText, response.text);
-    }
-    return response.text;
+    returnedResponse = response.text;
+  }
+
+  if (options.test) {
+    options.test(returnedResponse);
+  }
+
+  if (options.cache && options.returnJson && cacheFileJSON) {
+    writeFileSync(cacheFileJSON, response.text);
+  } else if (options.cache && cacheFileText) {
+    writeFileSync(cacheFileText, response.text);
   }
 }
