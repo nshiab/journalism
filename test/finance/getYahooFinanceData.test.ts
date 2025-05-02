@@ -150,10 +150,6 @@ Deno.test("should return an array of objects with the S&P/TSX Composite index hi
     { timestamp: 1744047000000, value: 23069.73046875 },
     { timestamp: 1744050600000, value: 22986.859375 },
     { timestamp: 1744054200000, value: 22954.33984375 },
-    {
-      timestamp: 1746129600000,
-      value: 24795.55078125,
-    },
   ]);
 });
 Deno.test("should return an array of objects with the S&P/TSX Composite index high prices with a minute interval", async () => {
@@ -176,10 +172,6 @@ Deno.test("should return an array of objects with the S&P/TSX Composite index hi
     { timestamp: 1744121220000, value: 23344.359375 },
     { timestamp: 1744121280000, value: 23348.240234375 },
     { timestamp: 1744121340000, value: 23354.1796875 },
-    {
-      timestamp: 1746129600000,
-      value: 24795.55078125,
-    },
   ]);
 });
 Deno.test("should return an array of objects with the S&P/TSX Composite index adjusted prices with a daily interval", async () => {

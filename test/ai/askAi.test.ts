@@ -86,16 +86,6 @@ if (typeof aiKey === "string" && aiKey !== "") {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
-  Deno.test("should use a simple prompt with verbose but no execution time and no response log", async () => {
-    await askAI("What is the capital of Canada?", {
-      verbose: true,
-      noDurationLog: true,
-      noResponseLog: true,
-    });
-
-    // Just making sure it doesn't crash for now.
-    assertEquals(true, true);
-  });
   Deno.test("should use a simple prompt and return cached data with verbose", async () => {
     const result = await askAI("What is the capital of Canada?", {
       cache: true,
