@@ -20,7 +20,7 @@ To install the library, you can use the following commands:
 deno install jsr:@nshiab/journalism
 
 # NODE.JS
-npx jsr add journalism
+npx jsr add @nshiab/journalism
 
 # BUN
 bunx jsr add journalism
