@@ -171,8 +171,6 @@ import crypto from "node:crypto";
  *   @param options.pdf - The path to the PDF file.
  *   @param options.returnJson - Whether to return the response as JSON. Defaults to `false`.
  *   @param options.verbose - Whether to log additional information. Defaults to `false`. Note that prices are rough estimates.
- *   @param options.noDurationLog - Whether to skip logging the execution time. Defaults to `false`. It's an option for the simple-data-analysis library.
- *   @param options.noResponseLog - Whether to skip logging the response. Defaults to `false`. It's an option for the simple-data-analysis library.
  */
 export default async function askAI(
   prompt: string,
@@ -191,8 +189,6 @@ export default async function askAI(
     verbose?: boolean;
     cache?: boolean;
     test?: (response: unknown) => void;
-    noDurationLog?: boolean;
-    noResponseLog?: boolean;
   } = {},
 ): Promise<unknown> {
   const start = Date.now();
@@ -334,6 +330,10 @@ export default async function askAI(
       if (options.test) {
         options.test(cachedResponse);
       }
+      if (options.verbose) {
+        console.log("\nResponse:");
+        console.log(cachedResponse);
+      }
       return cachedResponse;
     } else if (existsSync(cacheFileText)) {
       const cachedResponse = readFileSync(cacheFileText, "utf-8");
@@ -342,6 +342,10 @@ export default async function askAI(
       }
       if (options.test) {
         options.test(cachedResponse);
+      }
+      if (options.verbose) {
+        console.log("\nResponse:");
+        console.log(cachedResponse);
       }
       return cachedResponse;
     } else {
@@ -389,8 +393,7 @@ export default async function askAI(
         }),
       );
     }
-    !options.noDurationLog &&
-      console.log("Execution time:", prettyDuration(start));
+    console.log("Execution time:", prettyDuration(start));
   }
 
   let returnedResponse;
@@ -417,7 +420,7 @@ export default async function askAI(
     console.log("Response cached as text.");
   }
 
-  if (options.verbose && !options.noResponseLog) {
+  if (options.verbose) {
     console.log("\nResponse:");
     console.log(returnedResponse);
   }
