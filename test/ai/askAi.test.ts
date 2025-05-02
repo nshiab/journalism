@@ -78,11 +78,20 @@ if (typeof aiKey === "string" && aiKey !== "") {
     assertEquals(true, true);
   });
   Deno.test("should use a simple prompt with cache and verbose", async () => {
-    const result = await askAI("What is the capital of Canada?", {
+    await askAI("What is the capital of Canada?", {
       cache: true,
       verbose: true,
     });
-    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt with verbose but no execution time and no response log", async () => {
+    await askAI("What is the capital of Canada?", {
+      verbose: true,
+      noDurationLog: true,
+      noResponseLog: true,
+    });
 
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
@@ -98,23 +107,21 @@ if (typeof aiKey === "string" && aiKey !== "") {
     assertEquals(true, true);
   });
   Deno.test("should use a simple prompt with cache and verbose and json", async () => {
-    const result = await askAI("What is the capital of Canada?", {
+    await askAI("What is the capital of Canada?", {
       cache: true,
       returnJson: true,
       verbose: true,
     });
-    console.log(result);
 
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
   Deno.test("should use a simple prompt and return cached json data with verbose and json", async () => {
-    const result = await askAI("What is the capital of Canada?", {
+    await askAI("What is the capital of Canada?", {
       cache: true,
       returnJson: true,
       verbose: true,
     });
-    console.log(result);
 
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
@@ -140,17 +147,16 @@ if (typeof aiKey === "string" && aiKey !== "") {
   });
 
   Deno.test("should use a simple prompt and log extra information", async () => {
-    const result = await askAI("What is the capital of France?", {
+    await askAI("What is the capital of France?", {
       verbose: true,
     });
-    console.log(result);
 
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
 
   Deno.test("should scrape a web page", async () => {
-    const executiveOrders = await askAI(
+    await askAI(
       `Here's the page showing presidential executive orders. Extract the executive order/names, dates (yyyy-mm-dd), and urls as an array of objects. Also categorize each executive order based on its name.`,
       {
         HTMLFrom:
@@ -159,7 +165,6 @@ if (typeof aiKey === "string" && aiKey !== "") {
         verbose: true,
       },
     );
-    console.table(executiveOrders);
 
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
@@ -185,7 +190,7 @@ if (typeof aiKey === "string" && aiKey !== "") {
       images.push(`test/data/ai/pictures/${dirEntry.name}`);
     }
 
-    const data = await askAI(
+    await askAI(
       `Based on the images I send you, I want an array of objects with the following properties:
     - name: the person on the image if it's a human and you can recognize it,
     - description: a very short description of the image,
@@ -196,14 +201,13 @@ if (typeof aiKey === "string" && aiKey !== "") {
         returnJson: true,
       },
     );
-    console.table(data);
 
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
 
   Deno.test("should analyze a video file", async () => {
-    const videoTranscript = await askAI(
+    await askAI(
       `I want a array of objects, with each object having the following keys: name, timestamp, main emotion, transcript. Each time a new person talks, create a new object.`,
       {
         video: "test/data/ai/The Ontario leaders' debate in 3 minutes 360.mp4",
@@ -211,13 +215,12 @@ if (typeof aiKey === "string" && aiKey !== "") {
         verbose: true,
       },
     );
-    console.table(videoTranscript);
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
 
   Deno.test("should analyze a pdf file with a specific model", async () => {
-    const pdfExtraction = await askAI(
+    await askAI(
       `This is a supreme court decision. Give me the merits of the case in the document. I want to know what happened and when. Return a list of objects with a date and a brief summary for each important event. Sort them chronologically.`,
       {
         model: "gemini-2.0-flash",
@@ -226,12 +229,11 @@ if (typeof aiKey === "string" && aiKey !== "") {
         verbose: true,
       },
     );
-    console.table(pdfExtraction);
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
   Deno.test("should analyze different files with different formats", async () => {
-    const allFiles = await askAI(
+    await askAI(
       `Give me a short description of each things I give you.`,
       {
         model: "gemini-2.0-flash",
@@ -245,7 +247,6 @@ if (typeof aiKey === "string" && aiKey !== "") {
         verbose: true,
       },
     );
-    console.table(allFiles);
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });

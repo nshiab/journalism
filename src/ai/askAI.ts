@@ -171,6 +171,8 @@ import crypto from "node:crypto";
  *   @param options.pdf - The path to the PDF file.
  *   @param options.returnJson - Whether to return the response as JSON. Defaults to `false`.
  *   @param options.verbose - Whether to log additional information. Defaults to `false`. Note that prices are rough estimates.
+ *   @param options.noDurationLog - Whether to skip logging the execution time. Defaults to `false`. It's an option for the simple-data-analysis library.
+ *   @param options.noResponseLog - Whether to skip logging the response. Defaults to `false`. It's an option for the simple-data-analysis library.
  */
 export default async function askAI(
   prompt: string,
@@ -189,6 +191,8 @@ export default async function askAI(
     verbose?: boolean;
     cache?: boolean;
     test?: (response: unknown) => void;
+    noDurationLog?: boolean;
+    noResponseLog?: boolean;
   } = {},
 ): Promise<unknown> {
   const start = Date.now();
@@ -224,6 +228,11 @@ export default async function askAI(
     throw new Error(
       "Model not specified. Use the AI_MODEL environment variable or pass it as an option.",
     );
+  }
+
+  if (options.verbose) {
+    console.log(`\nPrompt to ${model}:`);
+    console.log(prompt);
   }
 
   const contents: ContentListUnion = [];
@@ -358,20 +367,21 @@ export default async function askAI(
       const promptTokenCount = response.usageMetadata?.promptTokenCount ?? 0;
       const promptTokenCost = (promptTokenCount / 1_000_000) *
         modelPricing.input;
-      console.log(
-        `${options.cache ? "" : "\n"}Input tokens:`,
-        promptTokenCount,
-      );
 
       const outputTokenCount = response.usageMetadata?.candidatesTokenCount ??
         0;
       const outputTokenCost = (outputTokenCount / 1_000_000) *
         modelPricing.output;
-      console.log("Output tokens:", outputTokenCount);
 
       const estimatedCost = promptTokenCost + outputTokenCost;
       console.log(
-        `Estimated cost for ${model}:`,
+        `${options.cache ? "" : "\n"}Tokens in:`,
+        formatNumber(promptTokenCount),
+        "/",
+        "Tokens out:",
+        formatNumber(outputTokenCount),
+        "/",
+        `Estimated cost:`,
         formatNumber(estimatedCost, {
           prefix: "$",
           significantDigits: 1,
@@ -379,7 +389,8 @@ export default async function askAI(
         }),
       );
     }
-    console.log("Execution time:", prettyDuration(start));
+    !options.noDurationLog &&
+      console.log("Execution time:", prettyDuration(start));
   }
 
   let returnedResponse;
@@ -391,7 +402,7 @@ export default async function askAI(
   } else if (options.returnJson) {
     returnedResponse = JSON.parse(response.text);
   } else {
-    returnedResponse = response.text;
+    returnedResponse = response.text.trim();
   }
 
   if (options.test) {
@@ -400,8 +411,15 @@ export default async function askAI(
 
   if (options.cache && options.returnJson && cacheFileJSON) {
     writeFileSync(cacheFileJSON, response.text);
+    console.log("Response cached as JSON.");
   } else if (options.cache && cacheFileText) {
-    writeFileSync(cacheFileText, response.text);
+    writeFileSync(cacheFileText, returnedResponse);
+    console.log("Response cached as text.");
+  }
+
+  if (options.verbose && !options.noResponseLog) {
+    console.log("\nResponse:");
+    console.log(returnedResponse);
   }
 
   return returnedResponse;
