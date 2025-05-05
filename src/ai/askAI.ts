@@ -8,7 +8,6 @@ import {
 import { formatNumber, prettyDuration } from "@nshiab/journalism";
 import crypto from "node:crypto";
 import ollama from "ollama";
-import type { ChatResponse } from "ollama";
 
 /**
  * Sends a prompt and optionally a file to an LLM. Currently supports Google Gemini AI and local models running with Ollama.
