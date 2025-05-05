@@ -480,24 +480,20 @@ export default async function askAI(
         "Response text is undefined. Please check the model and input.",
       );
     } else if (options.returnJson) {
-      returnedResponse = options.cleaning
-        ? options.cleaning(JSON.parse(response.text))
-        : JSON.parse(response.text);
+      returnedResponse = JSON.parse(response.text);
     } else {
-      returnedResponse = options.cleaning
-        ? options.cleaning(response.text.trim())
-        : response.text.trim();
+      returnedResponse = response.text.trim();
     }
   } else {
     if (options.returnJson) {
-      returnedResponse = options.cleaning
-        ? options.cleaning(JSON.parse(response.message.content))
-        : JSON.parse(response.message.content);
+      returnedResponse = JSON.parse(response.message.content);
     } else {
-      returnedResponse = options.cleaning
-        ? options.cleaning(response.message.content.trim())
-        : response.message.content.trim();
+      returnedResponse = response.message.content.trim();
     }
+  }
+
+  if (options.cleaning) {
+    returnedResponse = options.cleaning(returnedResponse);
   }
 
   if (options.test) {
