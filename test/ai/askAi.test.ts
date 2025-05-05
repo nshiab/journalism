@@ -340,6 +340,39 @@ if (ollama) {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
+  Deno.test("should use be able to clean complex response (ollama)", async () => {
+    const result = await askAI(
+      `Guess whether it's a "Man" or a "Woman". If it could be both, return "Neutral". Return an objects with two keys in it: one with the names and the other with the genders.
+Here are the name values as a JSON array:
+["Marie","John","Alex"]
+Return your results in a JSON array as well. It's critical you return the same number of items, which is 3, exactly in the same order.`,
+      {
+        returnJson: true,
+        cache: true,
+        cleaning: (response: unknown) =>
+          typeof response === "object" && response !== null &&
+            "genders" in response
+            ? response.genders
+            : response,
+        test: (response: unknown) => {
+          if (
+            !Array.isArray(response) ||
+            response.length !== 3
+          ) {
+            throw new Error(
+              `Response does not contain three items: ${
+                JSON.stringify(response)
+              }`,
+            );
+          }
+        },
+      },
+    );
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
   Deno.test("should use a simple prompt with cache (ollama)", async () => {
     const result = await askAI("What is the capital of France?", {
       cache: true,
