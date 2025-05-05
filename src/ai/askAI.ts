@@ -144,6 +144,7 @@ import crypto from "node:crypto";
  * ```ts
  * const testedResponse = await askAI(`Give me a list of three countries in Europe.`, {
  *   returnJson: true,
+ *   // Can also be an array of functions.
  *   test: (response) => {
  *     if (!Array.isArray(response)) {
  *       throw new Error("Response is not an array.");
@@ -158,17 +159,17 @@ import crypto from "node:crypto";
  * @param prompt - The input string to guide the AI's response.
  * @param options - Configuration options for the AI request.
  *   @param options.cache - Whether to cache the response in a local folder `.journalism-cache`. Defaults to `false`.
- *   @param options.test - A function to test the response. It receives the response as an argument.
+ *   @param options.test - A function or array of functions to test the response. It receives the response as an argument.
  *   @param options.model - The model to use. Defaults to the `AI_MODEL` environment variable.
  *   @param options.apiKey - The API key. Defaults to the `AI_KEY` environment variable.
  *   @param options.vertex - Whether to use Vertex AI. Defaults to `false`. If `AI_PROJECT` and `AI_LOCATION` are set in the environment, it will automatically switch to true.
  *   @param options.project - The Google Cloud project ID. Defaults to the `AI_PROJECT` environment variable.
  *   @param options.location - The Google Cloud location. Defaults to the `AI_LOCATION` environment variable.
- *   @param options.HTMLFrom - The URL to scrape HTML content from. The HTML content is automatically added at the end of the prompt.
- *   @param options.image - The path to the image file. Must be a JPEG file.
- *   @param options.video - The path to the video file. Must be an MP4 file.
- *   @param options.audio - The path to the audio file. Must be an MP3 file.
- *   @param options.pdf - The path to the PDF file.
+ *   @param options.HTMLFrom - A URL (or list of URLs) to scrape HTML content from. The HTML content is automatically added at the end of the prompt.
+ *   @param options.image - The path (or list of paths) to an image file. Must be in JPEG format.
+ *   @param options.video - The path (or list of paths) to a video file. Must be in MP4 format.
+ *   @param options.audio - The path (or list of paths) to an audio file. Must be in MP3 format.
+ *   @param options.pdf - The path (or list of paths) to a PDF file.
  *   @param options.returnJson - Whether to return the response as JSON. Defaults to `false`.
  *   @param options.verbose - Whether to log additional information. Defaults to `false`. Note that prices are rough estimates.
  */
@@ -188,7 +189,7 @@ export default async function askAI(
     returnJson?: boolean;
     verbose?: boolean;
     cache?: boolean;
-    test?: (response: unknown) => void;
+    test?: ((response: unknown) => void) | ((response: unknown) => void)[];
   } = {},
 ): Promise<unknown> {
   const start = Date.now();
@@ -328,7 +329,11 @@ export default async function askAI(
         console.log("\nReturning cached JSON response.");
       }
       if (options.test) {
-        options.test(cachedResponse);
+        if (Array.isArray(options.test)) {
+          options.test.forEach((test) => test(cachedResponse));
+        } else {
+          options.test(cachedResponse);
+        }
       }
       if (options.verbose) {
         console.log("\nResponse:");
@@ -341,7 +346,11 @@ export default async function askAI(
         console.log("\nReturning cached text response.");
       }
       if (options.test) {
-        options.test(cachedResponse);
+        if (Array.isArray(options.test)) {
+          options.test.forEach((test) => test(cachedResponse));
+        } else {
+          options.test(cachedResponse);
+        }
       }
       if (options.verbose) {
         console.log("\nResponse:");
@@ -409,7 +418,11 @@ export default async function askAI(
   }
 
   if (options.test) {
-    options.test(returnedResponse);
+    if (Array.isArray(options.test)) {
+      options.test.forEach((test) => test(returnedResponse));
+    } else {
+      options.test(returnedResponse);
+    }
   }
 
   if (options.cache && options.returnJson && cacheFileJSON) {
