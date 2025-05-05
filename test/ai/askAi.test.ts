@@ -280,14 +280,21 @@ if (ollama) {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
-  Deno.test("should use a simple prompt with a test (ollama)", async () => {
+  Deno.test("should use a simple prompt with a cleaning and test functions (ollama)", async () => {
     const result = await askAI(
       "Give me a list of 3 countries in Europe.",
       {
         returnJson: true,
+        cache: true,
+        cleaning: (response: unknown) =>
+          typeof response === "object" && response !== null &&
+            "countries" in response
+            ? response.countries
+            : response,
         test: (response: unknown) => {
           if (
-            (response as { countries: string[] }).countries.length !== 3
+            Array.isArray(response) &&
+            response.length !== 3
           ) {
             throw new Error(
               `Response does not contain three items: ${
@@ -303,19 +310,31 @@ if (ollama) {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
-  Deno.test("should use a simple prompt with a list of tests (ollama)", async () => {
-    const result = await askAI("Give me a list of 3 countries in Europe.", {
-      returnJson: true,
-      test: [(response: unknown) => {
-        if ((response as { countries: string[] }).countries.length !== 3) {
-          throw new Error(
-            `Response does not contain three items: ${
-              JSON.stringify(response)
-            }`,
-          );
-        }
-      }],
-    });
+  Deno.test("should use a simple prompt with a cleaning and test functions and return cached data (ollama)", async () => {
+    const result = await askAI(
+      "Give me a list of 3 countries in Europe.",
+      {
+        returnJson: true,
+        cache: true,
+        cleaning: (response: unknown) =>
+          typeof response === "object" && response !== null &&
+            "countries" in response
+            ? response.countries
+            : response,
+        test: (response: unknown) => {
+          if (
+            Array.isArray(response) &&
+            response.length !== 3
+          ) {
+            throw new Error(
+              `Response does not contain three items: ${
+                JSON.stringify(response)
+              }`,
+            );
+          }
+        },
+      },
+    );
     console.log(result);
 
     // Just making sure it doesn't crash for now.
@@ -423,10 +442,10 @@ if (ollama) {
   Deno.test("should analyze images (ollama)", async () => {
     await askAI(
       `I want an object with the following properties:
-    - name: the person on the image,
-    - description: a very short description of the image,
-    - isPolitician: true is if it's a politician and false if it isn't.
-Return a JSON.`,
+      - name: the person on the image,
+      - description: a very short description of the image,
+      - isPolitician: true is if it's a politician and false if it isn't.
+  Return a JSON.`,
       {
         image: "test/data/ai/pictures/Screenshot 2025-03-21 at 1.36.47 PM.png",
         verbose: true,
