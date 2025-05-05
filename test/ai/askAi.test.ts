@@ -110,11 +110,10 @@ if (typeof aiKey === "string" && aiKey !== "") {
     assertEquals(true, true);
   });
   Deno.test("should use a simple prompt and return cached data with verbose", async () => {
-    const result = await askAI("What is the capital of Canada?", {
+    await askAI("What is the capital of Canada?", {
       cache: true,
       verbose: true,
     });
-    console.log(result);
 
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
@@ -265,4 +264,179 @@ if (typeof aiKey === "string" && aiKey !== "") {
   });
 } else {
   console.log("No AI_PROJECT in process.env");
+}
+
+const ollama = Deno.env.get("OLLAMA");
+console.log("OLLAMA", ollama);
+if (ollama) {
+  if (existsSync("./.journalism-cache")) {
+    rmSync("./.journalism-cache", { recursive: true });
+  }
+
+  Deno.test("should use a simple prompt (ollama)", async () => {
+    const result = await askAI("What is the capital of France?");
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt with a test (ollama)", async () => {
+    const result = await askAI(
+      "Give me a list of 3 countries in Europe.",
+      {
+        returnJson: true,
+        test: (response: unknown) => {
+          if (
+            (response as { countries: string[] }).countries.length !== 3
+          ) {
+            throw new Error(
+              `Response does not contain three items: ${
+                JSON.stringify(response)
+              }`,
+            );
+          }
+        },
+      },
+    );
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt with a list of tests (ollama)", async () => {
+    const result = await askAI("Give me a list of 3 countries in Europe.", {
+      returnJson: true,
+      test: [(response: unknown) => {
+        if ((response as { countries: string[] }).countries.length !== 3) {
+          throw new Error(
+            `Response does not contain three items: ${
+              JSON.stringify(response)
+            }`,
+          );
+        }
+      }],
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt with cache (ollama)", async () => {
+    const result = await askAI("What is the capital of France?", {
+      cache: true,
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt and return cached data", async () => {
+    const result = await askAI("What is the capital of France?", {
+      cache: true,
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt with cache and json", async () => {
+    const result = await askAI("What is the capital of France? Return a JSON", {
+      cache: true,
+      returnJson: true,
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt and return cached JSON data (ollama)", async () => {
+    const result = await askAI("What is the capital of France? Return a JSON", {
+      cache: true,
+      returnJson: true,
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt with cache and verbose", async () => {
+    await askAI("What is the capital of Canada?", {
+      cache: true,
+      verbose: true,
+    });
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt and return cached data with verbose (ollama)", async () => {
+    await askAI("What is the capital of Canada?", {
+      cache: true,
+      verbose: true,
+    });
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt with cache and verbose and json (ollama)", async () => {
+    await askAI("What is the capital of Canada? Return a JSON.", {
+      cache: true,
+      returnJson: true,
+      verbose: true,
+    });
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt and return cached json data with verbose and json (ollama)", async () => {
+    await askAI("What is the capital of Canada? Return a JSON.", {
+      cache: true,
+      returnJson: true,
+      verbose: true,
+    });
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt and log extra information (ollama)", async () => {
+    await askAI("What is the capital of France?", {
+      verbose: true,
+    });
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+
+  Deno.test("should scrape a web page (ollama)", async () => {
+    await askAI(
+      `Summarize this story.`,
+      {
+        HTMLFrom: "https://www.cbc.ca/lite/story/1.7526442",
+        returnJson: true,
+        verbose: true,
+      },
+    );
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+
+  Deno.test("should analyze images (ollama)", async () => {
+    await askAI(
+      `I want an object with the following properties:
+    - name: the person on the image,
+    - description: a very short description of the image,
+    - isPolitician: true is if it's a politician and false if it isn't.
+Return a JSON.`,
+      {
+        image: "test/data/ai/pictures/Screenshot 2025-03-21 at 1.36.47 PM.png",
+        verbose: true,
+        returnJson: true,
+      },
+    );
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+} else {
+  console.log("No OLLAMA in process.env");
 }
