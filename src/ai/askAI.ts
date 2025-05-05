@@ -1,13 +1,21 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import process from "node:process";
-import { type ContentListUnion, GoogleGenAI } from "@google/genai";
+import {
+  type ContentListUnion,
+  GenerateContentResponse,
+  GoogleGenAI,
+} from "@google/genai";
 import { formatNumber, prettyDuration } from "@nshiab/journalism";
 import crypto from "node:crypto";
+import ollama from "ollama";
+import type { ChatResponse } from "ollama";
 
 /**
- * Sends a prompt and optionally a file to an LLM. Currently supports Google Gemini AI.
+ * Sends a prompt and optionally a file to an LLM. Currently supports Google Gemini AI and local models running with Ollama.
  *
  * The function retrieves credentials and the model from environment variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`, `AI_MODEL`) or accepts them as options. Options take precedence over environment variables.
+ *
+ * To run local models with Ollama, set the `OLLAMA` environment variable to `true` and start Ollama on your machine. Make sure to install the model you want and to set the `AI_MODEL` environment variable to the model name. Note that audio, video, or PDF files are not supported for now.
  *
  * The temperature is set to 0 to ensure reproducible results.
  *
@@ -165,6 +173,7 @@ import crypto from "node:crypto";
  *   @param options.vertex - Whether to use Vertex AI. Defaults to `false`. If `AI_PROJECT` and `AI_LOCATION` are set in the environment, it will automatically switch to true.
  *   @param options.project - The Google Cloud project ID. Defaults to the `AI_PROJECT` environment variable.
  *   @param options.location - The Google Cloud location. Defaults to the `AI_LOCATION` environment variable.
+ *   @param options.ollama - Whether to use Ollama. Defaults to the `OLLAMA` environment variable.
  *   @param options.HTMLFrom - A URL (or list of URLs) to scrape HTML content from. The HTML content is automatically added at the end of the prompt.
  *   @param options.image - The path (or list of paths) to an image file. Must be in JPEG format.
  *   @param options.video - The path (or list of paths) to a video file. Must be in MP4 format.
@@ -181,6 +190,7 @@ export default async function askAI(
     vertex?: boolean;
     project?: string;
     location?: string;
+    ollama?: boolean;
     HTMLFrom?: string | string[];
     image?: string | string[];
     video?: string | string[];
@@ -194,8 +204,13 @@ export default async function askAI(
 ): Promise<unknown> {
   const start = Date.now();
   let client;
+  const ollamaVar = options.ollama || process.env.OLLAMA;
 
-  if (options.vertex || options.apiKey || options.project || options.location) {
+  if (ollamaVar) {
+    client = ollama;
+  } else if (
+    options.vertex || options.apiKey || options.project || options.location
+  ) {
     client = new GoogleGenAI({
       apiKey: options.apiKey,
       vertexai: options.vertex,
@@ -216,7 +231,7 @@ export default async function askAI(
 
   if (!client) {
     throw new Error(
-      "No API key or project/location found. Please set AI_KEY, AI_PROJECT, and AI_LOCATION in your environment variables or pass them as options.",
+      "No API key or project/location or Ollama found. Please set AI_KEY, AI_PROJECT, AI_LOCATION or OLLAMA in your environment variables or pass them as options.",
     );
   }
 
@@ -232,58 +247,84 @@ export default async function askAI(
     console.log(prompt);
   }
 
+  // Google GenAI
   const contents: ContentListUnion = [];
+  // Ollama
+  const message: { role: string; content: string; images?: string[] } = {
+    role: "user",
+    content: "",
+  };
+  let promptToBeSent = prompt;
   if (options.HTMLFrom) {
     const urls = Array.isArray(options.HTMLFrom)
       ? options.HTMLFrom
       : [options.HTMLFrom];
 
-    let promptWithHTML = prompt;
     for (const url of urls) {
       const res = await fetch(url);
       const html = await res.text();
-      promptWithHTML += `\n\nHTML content from ${url}:\n${html}`;
+      promptToBeSent += `\n\nHTML content from ${url}:\n${html}`;
     }
-    contents.push(promptWithHTML);
+  }
+  if (ollamaVar) {
+    message.content = promptToBeSent;
   } else {
-    contents.push(prompt);
+    contents.push(promptToBeSent);
   }
 
   if (options.audio) {
-    const audioFiles = Array.isArray(options.audio)
-      ? options.audio
-      : [options.audio];
-    for (const audioFile of audioFiles) {
-      const base64Audio = readFileSync(audioFile, {
-        encoding: "base64",
-      });
-      contents.push({
-        inlineData: { data: base64Audio, mimeType: "audio/mp3" },
-      });
+    if (ollamaVar) {
+      throw new Error(
+        "Ollama does not support audio files.",
+      );
+    } else {
+      const audioFiles = Array.isArray(options.audio)
+        ? options.audio
+        : [options.audio];
+      for (const audioFile of audioFiles) {
+        const base64Audio = readFileSync(audioFile, {
+          encoding: "base64",
+        });
+        contents.push({
+          inlineData: { data: base64Audio, mimeType: "audio/mp3" },
+        });
+      }
     }
   }
 
   if (options.video) {
-    const videoFiles = Array.isArray(options.video)
-      ? options.video
-      : [options.video];
-    for (const videoFile of videoFiles) {
-      const base64Video = readFileSync(videoFile, {
-        encoding: "base64",
-      });
-      contents.push({
-        inlineData: { data: base64Video, mimeType: "video/mp4" },
-      });
+    if (ollamaVar) {
+      throw new Error(
+        "Ollama does not support video files.",
+      );
+    } else {
+      const videoFiles = Array.isArray(options.video)
+        ? options.video
+        : [options.video];
+      for (const videoFile of videoFiles) {
+        const base64Video = readFileSync(videoFile, {
+          encoding: "base64",
+        });
+        contents.push({
+          inlineData: { data: base64Video, mimeType: "video/mp4" },
+        });
+      }
     }
   }
 
   if (options.pdf) {
-    const pdfFiles = Array.isArray(options.pdf) ? options.pdf : [options.pdf];
-    for (const pdfFile of pdfFiles) {
-      const base64Pdf = readFileSync(pdfFile, { encoding: "base64" });
-      contents.push({
-        inlineData: { data: base64Pdf, mimeType: "application/pdf" },
-      });
+    if (ollamaVar) {
+      throw new Error(
+        "Ollama does not support PDF files.",
+      );
+    } else {
+      const pdfFiles = Array.isArray(options.pdf) ? options.pdf : [options.pdf];
+      for (const pdfFile of pdfFiles) {
+        const base64Pdf = readFileSync(pdfFile, { encoding: "base64" });
+        contents.push({
+          inlineData: { data: base64Pdf, mimeType: "application/pdf" },
+        });
+      }
     }
   }
 
@@ -291,19 +332,31 @@ export default async function askAI(
     const imageFiles = Array.isArray(options.image)
       ? options.image
       : [options.image];
-    for (const imageFile of imageFiles) {
-      const base64Image = readFileSync(imageFile, {
-        encoding: "base64",
-      });
-      contents.push({
-        inlineData: { data: base64Image, mimeType: "image/jpeg" },
-      });
+    if (ollamaVar) {
+      message.images = imageFiles.map((imageFile) =>
+        readFileSync(imageFile, {
+          encoding: "base64",
+        })
+      );
+    } else {
+      for (const imageFile of imageFiles) {
+        const base64Image = readFileSync(imageFile, {
+          encoding: "base64",
+        });
+        contents.push({
+          inlineData: { data: base64Image, mimeType: "image/jpeg" },
+        });
+      }
     }
   }
 
+  // Just everything here
   const params = {
     model,
-    contents,
+    contents: contents,
+    messages: [message],
+    format: options.returnJson ? "json" : undefined,
+    temperature: 0,
     config: {
       temperature: 0,
       responseMimeType: options.returnJson ? "application/json" : undefined,
@@ -322,7 +375,7 @@ export default async function askAI(
       .update(JSON.stringify(params))
       .digest("hex");
     cacheFileJSON = `${cachePath}/askAI-${hash}.json`;
-    cacheFileText = `${cachePath}/askAI${hash}.txt`;
+    cacheFileText = `${cachePath}/askAI-${hash}.txt`;
     if (existsSync(cacheFileJSON)) {
       const cachedResponse = JSON.parse(readFileSync(cacheFileJSON, "utf-8"));
       if (options.verbose) {
@@ -364,57 +417,77 @@ export default async function askAI(
     }
   }
 
-  const response = await client.models.generateContent(params);
+  const response = client instanceof GoogleGenAI
+    ? await client.models.generateContent(params)
+    : await client.chat({
+      model,
+      messages: [message],
+      format: options.returnJson ? "json" : undefined,
+      options: {
+        temperature: 0,
+      },
+    });
 
   if (options.verbose) {
-    const pricing = [
-      { model: "gemini-2.0-flash", input: 0.10, output: 0.40 },
-      { model: "gemini-2.0-flash-lite", input: 0.075, output: 0.30 },
-    ];
-    const modelPricing = pricing.find((p) => p.model === model);
-    if (!modelPricing) {
-      console.log(
-        `${options.cache ? "" : "\n"}Model ${model} not found in pricing list.`,
-      );
-    } else {
-      const promptTokenCount = response.usageMetadata?.promptTokenCount ?? 0;
-      const promptTokenCost = (promptTokenCount / 1_000_000) *
-        modelPricing.input;
+    if (response instanceof GenerateContentResponse) {
+      const pricing = [
+        { model: "gemini-2.0-flash", input: 0.10, output: 0.40 },
+        { model: "gemini-2.0-flash-lite", input: 0.075, output: 0.30 },
+      ];
+      const modelPricing = pricing.find((p) => p.model === model);
+      if (!modelPricing) {
+        console.log(
+          `${
+            options.cache ? "" : "\n"
+          }Model ${model} not found in pricing list.`,
+        );
+      } else {
+        const promptTokenCount = response.usageMetadata?.promptTokenCount ?? 0;
+        const promptTokenCost = (promptTokenCount / 1_000_000) *
+          modelPricing.input;
 
-      const outputTokenCount = response.usageMetadata?.candidatesTokenCount ??
-        0;
-      const outputTokenCost = (outputTokenCount / 1_000_000) *
-        modelPricing.output;
+        const outputTokenCount = response.usageMetadata?.candidatesTokenCount ??
+          0;
+        const outputTokenCost = (outputTokenCount / 1_000_000) *
+          modelPricing.output;
 
-      const estimatedCost = promptTokenCost + outputTokenCost;
-      console.log(
-        `${options.cache ? "" : "\n"}Tokens in:`,
-        formatNumber(promptTokenCount),
-        "/",
-        "Tokens out:",
-        formatNumber(outputTokenCount),
-        "/",
-        `Estimated cost:`,
-        formatNumber(estimatedCost, {
-          prefix: "$",
-          significantDigits: 1,
-          suffix: " USD",
-        }),
-      );
+        const estimatedCost = promptTokenCost + outputTokenCost;
+        console.log(
+          `${options.cache ? "" : "\n"}Tokens in:`,
+          formatNumber(promptTokenCount),
+          "/",
+          "Tokens out:",
+          formatNumber(outputTokenCount),
+          "/",
+          `Estimated cost:`,
+          formatNumber(estimatedCost, {
+            prefix: "$",
+            significantDigits: 1,
+            suffix: " USD",
+          }),
+        );
+      }
     }
     console.log("Execution time:", prettyDuration(start));
   }
 
   let returnedResponse;
-
-  if (!response.text) {
-    throw new Error(
-      "Response text is undefined. Please check the model and input.",
-    );
-  } else if (options.returnJson) {
-    returnedResponse = JSON.parse(response.text);
+  if (response instanceof GenerateContentResponse) {
+    if (!response.text) {
+      throw new Error(
+        "Response text is undefined. Please check the model and input.",
+      );
+    } else if (options.returnJson) {
+      returnedResponse = JSON.parse(response.text);
+    } else {
+      returnedResponse = response.text.trim();
+    }
   } else {
-    returnedResponse = response.text.trim();
+    if (options.returnJson) {
+      returnedResponse = JSON.parse(response.message.content);
+    } else {
+      returnedResponse = response.message.content.trim();
+    }
   }
 
   if (options.test) {
@@ -426,7 +499,14 @@ export default async function askAI(
   }
 
   if (options.cache && options.returnJson && cacheFileJSON) {
-    writeFileSync(cacheFileJSON, response.text);
+    if (
+      response instanceof GenerateContentResponse &&
+      typeof response.text === "string"
+    ) {
+      writeFileSync(cacheFileJSON, response.text);
+    } else {
+      writeFileSync(cacheFileJSON, (response as ChatResponse).message.content);
+    }
     console.log("Response cached as JSON.");
   } else if (options.cache && cacheFileText) {
     writeFileSync(cacheFileText, returnedResponse);
