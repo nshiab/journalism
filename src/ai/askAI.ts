@@ -8,7 +8,6 @@ import {
 import { formatNumber, prettyDuration } from "@nshiab/journalism";
 import crypto from "node:crypto";
 import ollama from "ollama";
-import type { ChatResponse } from "ollama";
 
 /**
  * Sends a prompt and optionally a file to an LLM. Currently supports Google Gemini AI and local models running with Ollama.
@@ -181,6 +180,7 @@ import type { ChatResponse } from "ollama";
  *   @param options.pdf - The path (or list of paths) to a PDF file.
  *   @param options.returnJson - Whether to return the response as JSON. Defaults to `false`.
  *   @param options.verbose - Whether to log additional information. Defaults to `false`. Note that prices are rough estimates.
+ *   @param options.cleaning - A function to clean the response before testing.
  */
 export default async function askAI(
   prompt: string,
@@ -200,6 +200,7 @@ export default async function askAI(
     verbose?: boolean;
     cache?: boolean;
     test?: ((response: unknown) => void) | ((response: unknown) => void)[];
+    cleaning?: (response: unknown) => unknown;
   } = {},
 ): Promise<unknown> {
   const start = Date.now();
@@ -372,7 +373,8 @@ export default async function askAI(
     }
     const hash = crypto
       .createHash("sha256")
-      .update(JSON.stringify(params))
+      // Passing cleaning too because cleaned data is cached
+      .update(JSON.stringify({ ...params, cleaning: options.cleaning }))
       .digest("hex");
     cacheFileJSON = `${cachePath}/askAI-${hash}.json`;
     cacheFileText = `${cachePath}/askAI-${hash}.txt`;
@@ -478,15 +480,23 @@ export default async function askAI(
         "Response text is undefined. Please check the model and input.",
       );
     } else if (options.returnJson) {
-      returnedResponse = JSON.parse(response.text);
+      returnedResponse = options.cleaning
+        ? options.cleaning(JSON.parse(response.text))
+        : JSON.parse(response.text);
     } else {
-      returnedResponse = response.text.trim();
+      returnedResponse = options.cleaning
+        ? options.cleaning(response.text.trim())
+        : response.text.trim();
     }
   } else {
     if (options.returnJson) {
-      returnedResponse = JSON.parse(response.message.content);
+      returnedResponse = options.cleaning
+        ? options.cleaning(JSON.parse(response.message.content))
+        : JSON.parse(response.message.content);
     } else {
-      returnedResponse = response.message.content.trim();
+      returnedResponse = options.cleaning
+        ? options.cleaning(response.message.content.trim())
+        : response.message.content.trim();
     }
   }
 
@@ -503,14 +513,14 @@ export default async function askAI(
       response instanceof GenerateContentResponse &&
       typeof response.text === "string"
     ) {
-      writeFileSync(cacheFileJSON, response.text);
+      writeFileSync(cacheFileJSON, JSON.stringify(returnedResponse));
     } else {
-      writeFileSync(cacheFileJSON, (response as ChatResponse).message.content);
+      writeFileSync(cacheFileJSON, JSON.stringify(returnedResponse));
     }
-    console.log("Response cached as JSON.");
+    options.verbose && console.log("Response cached as JSON.");
   } else if (options.cache && cacheFileText) {
     writeFileSync(cacheFileText, returnedResponse);
-    console.log("Response cached as text.");
+    options.verbose && console.log("Response cached as text.");
   }
 
   if (options.verbose) {
