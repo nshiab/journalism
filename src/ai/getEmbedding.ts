@@ -42,7 +42,7 @@ export default async function getEmbedding(text: string, options: {
   project?: string;
   location?: string;
   cache?: boolean;
-  ollama?: string;
+  ollama?: boolean;
   verbose?: boolean;
 } = {}): Promise<number[]> {
   const start = Date.now();
