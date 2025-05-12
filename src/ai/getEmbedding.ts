@@ -6,14 +6,24 @@ import crypto from "node:crypto";
 import prettyDuration from "../format/prettyDuration.ts";
 
 /**
- * Generates an embedding for the given text using the GoogleGenAI client.
+ * Generates an embedding for the given text. Currently supports Google Gemini AI and local models running with Ollama.
  *
  * The function retrieves credentials and the model from environment variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`, `AI_EMBEDDINGS_MODEL`) or accepts them as options. Options take precedence over environment variables.
+ *
+ * To run local models with Ollama, set the `OLLAMA` environment variable to `true` and start Ollama on your machine. Make sure to install the model you want and to set the `AI_EMBEDDINGS_MODEL` environment variable to the model name.
+ *
+ * To save resources and time, you can cache the response. When `cache` is set to `true`, the function saves the response in a local hidden folder called `.journalism-cache`. If the same request is made again in the future, it will return the cached response instead of making a new request. Don't forget to add `.journalism-cache` to your `.gitignore` file!
  *
  * @example
  * Basic usage
  * ```ts
  * await getEmbedding("Hello world!")
+ * ```
+ *
+ * @example
+ * Using caching
+ * ```ts
+ * await getEmbedding("Hello world!", { cache: true })
  * ```
  *
  * @param text - The input text to generate the embedding for.
@@ -34,7 +44,7 @@ export default async function getEmbedding(text: string, options: {
   cache?: boolean;
   ollama?: string;
   verbose?: boolean;
-} = {}) {
+} = {}): Promise<number[]> {
   const start = Date.now();
   let client;
   const ollamaVar = options.ollama || process.env.OLLAMA;
