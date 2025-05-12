@@ -135,7 +135,6 @@ export default async function getEmbedding(text: string, options: {
   } else {
     returnedResponse = rawResponse[0];
   }
-  console.log(returnedResponse);
   if (
     !Array.isArray(returnedResponse) || typeof returnedResponse[0] !== "number"
   ) {
