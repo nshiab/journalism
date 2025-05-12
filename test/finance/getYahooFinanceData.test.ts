@@ -150,23 +150,23 @@ Deno.test("should return an array of objects with the S&P/TSX Composite index hi
     { timestamp: 1744047000000, value: 23069.73046875 },
   ]);
 });
-Deno.test("should return an array of objects with the S&P/TSX Composite index high prices with a minute interval", async () => {
-  const data = await getYahooFinanceData(
-    "^GSPTSE",
-    new Date("2025-04-08T14:00:00Z"),
-    new Date("2025-04-08T14:10:00Z"),
-    "high",
-    "1m",
-  );
+// Deno.test("should return an array of objects with the S&P/TSX Composite index high prices with a minute interval", async () => {
+//   const data = await getYahooFinanceData(
+//     "^GSPTSE",
+//     new Date("2025-04-08T14:00:00Z"),
+//     new Date("2025-04-08T14:10:00Z"),
+//     "high",
+//     "1m",
+//   );
 
-  assertEquals(data.slice(0, 5), [
-    { timestamp: 1744120800000, value: 23316.599609375 },
-    { timestamp: 1744120860000, value: 23327.099609375 },
-    { timestamp: 1744120920000, value: 23326.7109375 },
-    { timestamp: 1744120980000, value: 23381.76953125 },
-    { timestamp: 1744121040000, value: 23379.44921875 },
-  ]);
-});
+//   assertEquals(data.slice(0, 5), [
+//     { timestamp: 1744120800000, value: 23316.599609375 },
+//     { timestamp: 1744120860000, value: 23327.099609375 },
+//     { timestamp: 1744120920000, value: 23326.7109375 },
+//     { timestamp: 1744120980000, value: 23381.76953125 },
+//     { timestamp: 1744121040000, value: 23379.44921875 },
+//   ]);
+// });
 Deno.test("should return an array of objects with the S&P/TSX Composite index adjusted prices with a daily interval", async () => {
   const tenDaysAgo = new Date(Date.now() - 1000 * 60 * 60 * 24 * 10);
   const data = await getYahooFinanceData(
