@@ -3,7 +3,7 @@ import { assertEquals } from "jsr:@std/assert";
 import askAI from "../../src/ai/askAI.ts";
 import { existsSync, rmSync } from "node:fs";
 
-const aiKey = Deno.env.get("AI_KEY");
+const aiKey = Deno.env.get("AI_KEY") ?? Deno.env.get("AI_PROJECT");
 if (typeof aiKey === "string" && aiKey !== "") {
   if (existsSync("./.journalism-cache")) {
     rmSync("./.journalism-cache", { recursive: true });
