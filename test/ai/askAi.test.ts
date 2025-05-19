@@ -286,7 +286,7 @@ if (ollama) {
       {
         returnJson: true,
         cache: true,
-        cleaning: (response: unknown) =>
+        clean: (response: unknown) =>
           typeof response === "object" && response !== null &&
             "countries" in response
             ? response.countries
@@ -316,7 +316,7 @@ if (ollama) {
       {
         returnJson: true,
         cache: true,
-        cleaning: (response: unknown) =>
+        clean: (response: unknown) =>
           typeof response === "object" && response !== null &&
             "countries" in response
             ? response.countries
@@ -349,7 +349,7 @@ Return your results in a JSON array as well. It's critical you return the same n
       {
         returnJson: true,
         cache: true,
-        cleaning: (response: unknown) =>
+        clean: (response: unknown) =>
           typeof response === "object" && response !== null &&
             "genders" in response
             ? response.genders

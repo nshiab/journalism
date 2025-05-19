@@ -180,7 +180,7 @@ import ollama from "ollama";
  *   @param options.pdf - The path (or list of paths) to a PDF file.
  *   @param options.returnJson - Whether to return the response as JSON. Defaults to `false`.
  *   @param options.verbose - Whether to log additional information. Defaults to `false`. Note that prices are rough estimates.
- *   @param options.cleaning - A function to clean the response before testing.
+ *   @param options.clean - A function to clean the response before testing.
  */
 export default async function askAI(
   prompt: string,
@@ -200,7 +200,7 @@ export default async function askAI(
     verbose?: boolean;
     cache?: boolean;
     test?: ((response: unknown) => void) | ((response: unknown) => void)[];
-    cleaning?: (response: unknown) => unknown;
+    clean?: (response: unknown) => unknown;
   } = {},
 ): Promise<unknown> {
   const start = Date.now();
@@ -373,8 +373,8 @@ export default async function askAI(
     }
     const hash = crypto
       .createHash("sha256")
-      // Passing cleaning too because cleaned data is cached
-      .update(JSON.stringify({ ...params, cleaning: options.cleaning }))
+      // Passing clean too because cleaned data is cached
+      .update(JSON.stringify({ ...params, clean: options.clean }))
       .digest("hex");
     cacheFileJSON = `${cachePath}/askAI-${hash}.json`;
     cacheFileText = `${cachePath}/askAI-${hash}.txt`;
@@ -492,8 +492,8 @@ export default async function askAI(
     }
   }
 
-  if (options.cleaning) {
-    returnedResponse = options.cleaning(returnedResponse);
+  if (options.clean) {
+    returnedResponse = options.clean(returnedResponse);
   }
 
   if (options.test) {
