@@ -17,6 +17,7 @@ import round from "./round.ts";
  * @param options.significantDigits The number of significant digits to keep.
  * @param options.fixed If true, display a fixed number of decimals by keeping 0 digits.
  * @param options.nearestInteger The base to use to round the number.
+ * @param options.abreviation If true, the number will be abbreviated (e.g. 1.2M).
  * @param options.prefix A string to add before the number.
  * @param options.suffix A string to add after the number.
  *
@@ -33,6 +34,7 @@ export default function formatNumber(
     significantDigits?: number;
     fixed?: boolean;
     nearestInteger?: number;
+    abreviation?: boolean;
     prefix?: string;
     suffix?: string;
   } = {},
@@ -47,6 +49,7 @@ export default function formatNumber(
     round: boolean;
     decimals?: number;
     nearestInteger?: number;
+    abreviation?: boolean;
     significantDigits?: number;
     fixed: boolean;
     prefix: string;
@@ -60,6 +63,16 @@ export default function formatNumber(
     suffix: "",
     ...options,
   };
+
+  let abbreviation = "";
+  if (mergedOptions.abreviation) {
+    const abbreviations = ["", "K", "M", "B", "T"];
+    const index = Math.floor(
+      Math.log10(Math.abs(number)) / 3,
+    );
+    abbreviation = abbreviations[index];
+    number = number / Math.pow(10, index * 3);
+  }
 
   if (
     mergedOptions.round ||
@@ -110,5 +123,5 @@ export default function formatNumber(
     formattedNumber = `+${formattedNumber}`;
   }
 
-  return `${mergedOptions.prefix}${formattedNumber}${mergedOptions.suffix}`;
+  return `${mergedOptions.prefix}${formattedNumber}${abbreviation}${mergedOptions.suffix}`;
 }

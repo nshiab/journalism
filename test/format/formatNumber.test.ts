@@ -236,3 +236,59 @@ Deno.test("should return the number round with 2 significant digits and a percen
   });
   assertEquals(string, "1.4%");
 });
+Deno.test("should return the number not abbreviated", () => {
+  const string = formatNumber(15, { abreviation: true });
+  assertEquals(string, "15");
+});
+Deno.test("should return the number abbreviated to K", () => {
+  const string = formatNumber(1500, { abreviation: true });
+  assertEquals(string, "1.5K");
+});
+Deno.test("should return the number abbreviated to M", () => {
+  const string = formatNumber(1500000, { abreviation: true });
+  assertEquals(string, "1.5M");
+});
+Deno.test("should return the number abbreviated to B", () => {
+  const string = formatNumber(1500000000, { abreviation: true });
+  assertEquals(string, "1.5B");
+});
+Deno.test("should return the number abbreviated to T", () => {
+  const string = formatNumber(1500000000000, { abreviation: true });
+  assertEquals(string, "1.5T");
+});
+Deno.test("should return the number abbreviated with prefix and suffix", () => {
+  const string = formatNumber(1500, {
+    abreviation: true,
+    prefix: "$",
+    suffix: " USD",
+  });
+  assertEquals(string, "$1.5K USD");
+});
+Deno.test("should return the number abbreviated with 2 decimals", () => {
+  const string = formatNumber(1525, {
+    abreviation: true,
+    decimals: 2,
+    prefix: "$",
+    suffix: " USD",
+  });
+  assertEquals(string, "$1.52K USD");
+});
+Deno.test("should return the number abbreviated with 3 fixed decimals", () => {
+  const string = formatNumber(1510, {
+    abreviation: true,
+    decimals: 3,
+    fixed: true,
+    prefix: "$",
+    suffix: " USD",
+  });
+  assertEquals(string, "$1.510K USD");
+});
+Deno.test("should return the number abbreviated with 0 decimals", () => {
+  const string = formatNumber(1525, {
+    abreviation: true,
+    decimals: 0,
+    prefix: "$",
+    suffix: " USD",
+  });
+  assertEquals(string, "$2K USD");
+});
