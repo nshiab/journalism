@@ -292,3 +292,12 @@ Deno.test("should return the number abbreviated with 0 decimals", () => {
   });
   assertEquals(string, "$2K USD");
 });
+Deno.test("should return 0 when abbreviation is true", () => {
+  const string = formatNumber(0, {
+    abreviation: true,
+    decimals: 0,
+    prefix: "$",
+    suffix: " USD",
+  });
+  assertEquals(string, "$0 USD");
+});

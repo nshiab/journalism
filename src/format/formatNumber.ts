@@ -65,7 +65,7 @@ export default function formatNumber(
   };
 
   let abbreviation = "";
-  if (mergedOptions.abreviation) {
+  if (mergedOptions.abreviation && number > 0) {
     const abbreviations = ["", "K", "M", "B", "T"];
     const index = Math.floor(
       Math.log10(Math.abs(number)) / 3,
