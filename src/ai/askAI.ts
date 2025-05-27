@@ -68,6 +68,20 @@ import { chromium } from "playwright-chromium";
  * ```
  *
  * @example
+ * Usage with a screenshot from a URL:
+ * ```ts
+ * const screenshotResponse = await askAI(
+ *   `Tell me which products are on special.`,
+ *   {
+ *     // Can also be an array of URLs.
+ *     screenshotFrom: "https://www.metro.ca/circulaire",
+ *     returnJson: true,
+ *   },
+ * );
+ * console.table(screenshotResponse);
+ * ```
+ *
+ * @example
  * Usage with an image:
  * ```ts
  * const obj = await askAI(
