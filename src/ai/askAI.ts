@@ -8,6 +8,7 @@ import {
 import { formatNumber, prettyDuration } from "@nshiab/journalism";
 import crypto from "node:crypto";
 import ollama from "ollama";
+import { chromium } from "playwright-chromium";
 
 /**
  * Sends a prompt and optionally a file to an LLM. Currently supports Google Gemini AI and local models running with Ollama.
@@ -174,6 +175,7 @@ import ollama from "ollama";
  *   @param options.location - The Google Cloud location. Defaults to the `AI_LOCATION` environment variable.
  *   @param options.ollama - Whether to use Ollama. Defaults to the `OLLAMA` environment variable.
  *   @param options.HTMLFrom - A URL (or list of URLs) to scrape HTML content from. The HTML content is automatically added at the end of the prompt.
+ *   @param options.screenshotFrom - A URL (or list of URLs) to take a screenshot from.
  *   @param options.image - The path (or list of paths) to an image file. Must be in JPEG format.
  *   @param options.video - The path (or list of paths) to a video file. Must be in MP4 format.
  *   @param options.audio - The path (or list of paths) to an audio file. Must be in MP3 format.
@@ -192,6 +194,7 @@ export default async function askAI(
     location?: string;
     ollama?: boolean;
     HTMLFrom?: string | string[];
+    screenshotFrom?: string | string[];
     image?: string | string[];
     video?: string | string[];
     audio?: string | string[];
@@ -261,10 +264,87 @@ export default async function askAI(
       ? options.HTMLFrom
       : [options.HTMLFrom];
 
+    const browser = await chromium.launch();
+    const page = await browser.newPage();
+
     for (const url of urls) {
-      const res = await fetch(url);
-      const html = await res.text();
-      promptToBeSent += `\n\nHTML content from ${url}:\n${html}`;
+      try {
+        const start = options.verbose ? new Date() : null;
+        await page.goto(url, {
+          waitUntil: "networkidle",
+          timeout: 5000,
+        });
+        const html = await page.locator("body").innerHTML();
+        promptToBeSent += `\n\nHTML content from ${url}:\n${html}`;
+        if (start) {
+          console.log(
+            `\nRetrieved body HTML from ${url} in ${
+              prettyDuration(
+                start,
+              )
+            }`,
+          );
+        }
+      } catch (error: unknown) {
+        console.log(
+          `Problem retrieving body HTML from ${url}:`,
+          JSON.stringify(error),
+        );
+        const html = await page.locator("body").innerHTML();
+        promptToBeSent += `\n\nHTML content from ${url}:\n${html}`;
+      }
+    }
+
+    await browser.close();
+  }
+  if (options.screenshotFrom) {
+    const urls = Array.isArray(options.screenshotFrom)
+      ? options.screenshotFrom
+      : [options.screenshotFrom];
+
+    const browser = await chromium.launch();
+    const page = await browser.newPage();
+
+    const base64Images: string[] = [];
+
+    for (const url of urls) {
+      try {
+        const start = options.verbose ? new Date() : null;
+        await page.goto(url, {
+          waitUntil: "networkidle",
+          timeout: 5000,
+        });
+        const buffer = await page.screenshot({ fullPage: true, type: "jpeg" });
+        base64Images.push(buffer.toString("base64"));
+        if (start) {
+          console.log(
+            `\nRetrieved screenshot from ${url} in ${
+              prettyDuration(
+                start,
+              )
+            }`,
+          );
+        }
+      } catch (error: unknown) {
+        console.log(
+          `Problem retrieving screenshot from ${url}:`,
+          JSON.stringify(error),
+        );
+        const buffer = await page.screenshot({ fullPage: true, type: "jpeg" });
+        base64Images.push(buffer.toString("base64"));
+      }
+    }
+
+    await browser.close();
+
+    if (ollamaVar) {
+      message.images = base64Images;
+    } else {
+      for (const img of base64Images) {
+        contents.push({
+          inlineData: { data: img, mimeType: "image/jpeg" },
+        });
+      }
     }
   }
   if (ollamaVar) {

@@ -181,6 +181,18 @@ if (typeof aiKey === "string" && aiKey !== "") {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
+  Deno.test("should take a screenshot and analyze it", async () => {
+    await askAI(
+      `Tell me which products are on special.`,
+      {
+        screenshotFrom: "https://www.metro.ca/circulaire",
+        verbose: true,
+      },
+    );
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
 
   Deno.test("should analyze an audio file", async () => {
     const audioResponse = await askAI(
@@ -471,7 +483,18 @@ Return your results in a JSON array as well. It's critical you return the same n
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
+  Deno.test("should take a screenshot and analyze it (ollama)", async () => {
+    await askAI(
+      `Tell me which products are on special.`,
+      {
+        screenshotFrom: "https://www.metro.ca/circulaire",
+        verbose: true,
+      },
+    );
 
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
   Deno.test("should analyze images (ollama)", async () => {
     await askAI(
       `I want an object with the following properties:
