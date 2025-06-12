@@ -1,4 +1,8 @@
-export default function dateToCBCStyle(string: string, abrev: boolean): string {
+export default function dateToCBCStyle(
+  string: string,
+  abrev: boolean,
+  monthAbbr3?: boolean,
+): string {
   string = string
     .replace("AM", "a.m.")
     .replace("PM", "p.m.")
@@ -16,6 +20,22 @@ export default function dateToCBCStyle(string: string, abrev: boolean): string {
     .replace("EDT", "ET")
     .replace("EST", "ET")
     .trim();
+
+  if (monthAbbr3) {
+    string = string
+      .replace("January", "Jan.")
+      .replace("February", "Feb.")
+      .replace("March", "Mar.")
+      .replace("April", "Apr.")
+      // No abbreviation needed for May
+      .replace("June", "Jun.")
+      .replace("July", "Jul.")
+      .replace("August", "Aug.")
+      .replace("September", "Sep.")
+      .replace("October", "Oct.")
+      .replace("November", "Nov.")
+      .replace("December", "Dec.");
+  }
 
   if (abrev) {
     return (

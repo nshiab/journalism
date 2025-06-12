@@ -16,9 +16,16 @@ import isValid from "./helpers/isValidDate.ts";
  *
  * Options can be passed as the last parameter. Pass {style: "rc"} to parse dates in French.
  *
- * @param date - The date to format.
- * @param format - The format string.
- * @param options - Additional options for formatting.
+ * @param date The date to format.
+ * @param format The format string.
+ * @param options Additional options for formatting.
+ * @param options.utc Format as UTC date.
+ * @param options.style "cbc" (default, English) or "rc" (French).
+ * @param options.abbreviations Use abbreviations for months and days.
+ * @param options.noZeroPadding Do not pad numbers with zeros.
+ * @param options.threeLetterMonth Use 3-letter month abbreviations (e.g., "Jan.", "Feb.", "Mar.").
+ * @param options.timeZone Specify a time zone string.
+ * @returns The formatted date string.
  *
  * @category Formatting
  */
@@ -49,6 +56,7 @@ export default function formatDate(
     style?: "cbc" | "rc";
     abbreviations?: boolean;
     noZeroPadding?: boolean;
+    threeLetterMonth?: boolean;
     timeZone?:
       | "Canada/Atlantic"
       | "Canada/Central"
@@ -80,10 +88,12 @@ export default function formatDate(
     style: "cbc" | "rc";
     abbreviations: boolean;
     noZeroPadding: boolean;
+    threeLetterMonth: boolean;
   } = {
     style: "cbc",
     abbreviations: false,
     noZeroPadding: false,
+    threeLetterMonth: false,
     ...options,
   };
 
@@ -191,11 +201,13 @@ export default function formatDate(
     dateFormatted = dateToCBCStyle(
       dateFormatted,
       mergedOptions.abbreviations,
+      mergedOptions.threeLetterMonth,
     );
   } else if (mergedOptions.style === "rc") {
     dateFormatted = dateToRCStyle(
       dateFormatted,
       mergedOptions.abbreviations,
+      mergedOptions.threeLetterMonth,
     );
   }
 

@@ -1,4 +1,8 @@
-export default function dateToRCStyle(string: string, abrev: boolean): string {
+export default function dateToRCStyle(
+  string: string,
+  abrev: boolean,
+  threeLetterMonth?: boolean,
+): string {
   string = string
     .replace(" h 00", " h")
     .replace("NDT", "HAT")
@@ -14,6 +18,22 @@ export default function dateToRCStyle(string: string, abrev: boolean): string {
     .replace("EDT", "HAE")
     .replace("EST", "HNE")
     .trim();
+
+  if (threeLetterMonth) {
+    string = string
+      .replace("January", "janv.")
+      .replace("February", "fév.")
+      .replace("March", "mar.")
+      .replace("April", "avr.")
+      .replace("May", "mai") // No dot for mai
+      .replace("June", "jui.")
+      .replace("July", "juil.")
+      .replace("August", "aoû.")
+      .replace("September", "sep.")
+      .replace("October", "oct.")
+      .replace("November", "nov.")
+      .replace("December", "déc.");
+  }
 
   if (abrev) {
     return string

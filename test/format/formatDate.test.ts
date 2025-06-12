@@ -540,3 +540,122 @@ Deno.test("should return the date in the format HH:MM period TZ with RC style", 
   });
   assertEquals(formattedDate, "20 h 35 HNE");
 });
+Deno.test("should return a Date in the format Month DD, YYYY with threeLetterMonth (CBC)", () => {
+  const formattedDate = formatDate(
+    new Date("2023-05-01T01:35:00.000Z"),
+    "Month DD, YYYY",
+    {
+      utc: true,
+      threeLetterMonth: true,
+    },
+  );
+  assertEquals(formattedDate, "May 1, 2023"); // No dot for May
+});
+Deno.test("should return a Date in the format Month DD, YYYY with threeLetterMonth (CBC, non-May)", () => {
+  const formattedDate = formatDate(
+    new Date("2023-01-01T01:35:00.000Z"),
+    "Month DD, YYYY",
+    {
+      utc: true,
+      threeLetterMonth: true,
+    },
+  );
+  assertEquals(formattedDate, "Jan. 1, 2023");
+});
+Deno.test("should return a Date in the format Month DD, YYYY with threeLetterMonth (RC, mai)", () => {
+  const formattedDate = formatDate(
+    new Date("2023-05-01T01:35:00.000Z"),
+    "Month DD, YYYY",
+    {
+      utc: true,
+      style: "rc",
+      threeLetterMonth: true,
+    },
+  );
+  assertEquals(formattedDate, "1 mai 2023"); // No dot for mai
+});
+Deno.test("should return a Date in the format Month DD, YYYY with threeLetterMonth (RC, non-mai)", () => {
+  const formattedDate = formatDate(
+    new Date("2023-01-01T01:35:00.000Z"),
+    "Month DD, YYYY",
+    {
+      utc: true,
+      style: "rc",
+      threeLetterMonth: true,
+    },
+  );
+  assertEquals(formattedDate, "1 janv. 2023");
+});
+Deno.test("should return a Date in the format Month DD, YYYY with threeLetterMonth and abbreviations (CBC)", () => {
+  const formattedDate = formatDate(
+    new Date("2023-01-01T01:35:00.000Z"),
+    "Month DD, YYYY",
+    {
+      utc: true,
+      threeLetterMonth: true,
+      abbreviations: true,
+    },
+  );
+  assertEquals(formattedDate, "Jan. 1, 2023"); // abbreviations should not override threeLetterMonth
+});
+Deno.test("should return a Date in the format Month DD, YYYY with threeLetterMonth and abbreviations (RC)", () => {
+  const formattedDate = formatDate(
+    new Date("2023-01-01T01:35:00.000Z"),
+    "Month DD, YYYY",
+    {
+      utc: true,
+      style: "rc",
+      threeLetterMonth: true,
+      abbreviations: true,
+    },
+  );
+  assertEquals(formattedDate, "1 janv. 2023");
+});
+Deno.test("should return a Date in the format Month DD, YYYY with threeLetterMonth (CBC, April)", () => {
+  const formattedDate = formatDate(
+    new Date("2023-04-01T01:35:00.000Z"),
+    "Month DD, YYYY",
+    {
+      utc: true,
+      threeLetterMonth: true,
+    },
+  );
+  assertEquals(formattedDate, "Apr. 1, 2023");
+});
+Deno.test("should return a Date in the format Month DD, YYYY with threeLetterMonth (RC, avril)", () => {
+  const formattedDate = formatDate(
+    new Date("2023-04-01T01:35:00.000Z"),
+    "Month DD, YYYY",
+    {
+      utc: true,
+      style: "rc",
+      threeLetterMonth: true,
+    },
+  );
+  assertEquals(formattedDate, "1 avr. 2023");
+});
+Deno.test("should return a Date in the format Month DD, YYYY with threeLetterMonth and abbreviations (CBC, April)", () => {
+  const formattedDate = formatDate(
+    new Date("2023-04-01T01:35:00.000Z"),
+    "Month DD, YYYY",
+    {
+      utc: true,
+      threeLetterMonth: true,
+      abbreviations: true,
+    },
+  );
+  assertEquals(formattedDate, "Apr. 1, 2023");
+});
+Deno.test("should return a Date in the format Month DD, YYYY with threeLetterMonth and abbreviations (RC, avril)", () => {
+  const formattedDate = formatDate(
+    new Date("2023-04-01T01:35:00.000Z"),
+    "Month DD, YYYY",
+    {
+      utc: true,
+      style: "rc",
+      threeLetterMonth: true,
+      abbreviations: true,
+    },
+  );
+  assertEquals(formattedDate, "1 avr. 2023");
+});
