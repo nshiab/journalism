@@ -27,7 +27,7 @@ export default function dateToCBCStyle(
       .replace("February", "Feb.")
       .replace("March", "Mar.")
       .replace("April", "Apr.")
-      .replace("May", "May") // No dot for May
+      // No abbreviation needed for May
       .replace("June", "Jun.")
       .replace("July", "Jul.")
       .replace("August", "Aug.")
