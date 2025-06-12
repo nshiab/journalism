@@ -318,6 +318,10 @@ Deno.test("should not remove sign if sign is undefined (positive number)", () =>
   assertEquals(string, "789");
 });
 Deno.test("should work with sign false and prefix/suffix", () => {
-  const string = formatNumber(-1000, { sign: false, prefix: '$', suffix: ' USD' });
+  const string = formatNumber(-1000, {
+    sign: false,
+    prefix: "$",
+    suffix: " USD",
+  });
   assertEquals(string, "$1,000 USD");
 });
