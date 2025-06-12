@@ -301,3 +301,27 @@ Deno.test("should return 0 when abbreviation is true", () => {
   });
   assertEquals(string, "$0 USD");
 });
+Deno.test("should return the absolute value when sign is strictly false (positive number)", () => {
+  const string = formatNumber(123, { sign: false });
+  assertEquals(string, "123");
+});
+Deno.test("should return the absolute value when sign is strictly false (negative number)", () => {
+  const string = formatNumber(-456, { sign: false });
+  assertEquals(string, "456");
+});
+Deno.test("should not remove sign if sign is undefined (negative number)", () => {
+  const string = formatNumber(-789, {});
+  assertEquals(string, "-789");
+});
+Deno.test("should not remove sign if sign is undefined (positive number)", () => {
+  const string = formatNumber(789, {});
+  assertEquals(string, "789");
+});
+Deno.test("should work with sign false and prefix/suffix", () => {
+  const string = formatNumber(-1000, {
+    sign: false,
+    prefix: "$",
+    suffix: " USD",
+  });
+  assertEquals(string, "$1,000 USD");
+});

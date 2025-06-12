@@ -119,8 +119,14 @@ export default function formatNumber(
     throw new Error("Unknown style");
   }
 
-  if (mergedOptions.sign && number > 0) {
-    formattedNumber = `+${formattedNumber}`;
+  if (mergedOptions.sign) {
+    if (number > 0) {
+      formattedNumber = `+${formattedNumber}`;
+    }
+    // Negative sign is always present for negative numbers
+  } else if (options.sign === false) {
+    // Only show absolute value when sign is strictly false
+    formattedNumber = formattedNumber.replace(/^[-+]/, "");
   }
 
   return `${mergedOptions.prefix}${formattedNumber}${abbreviation}${mergedOptions.suffix}`;
