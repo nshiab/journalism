@@ -195,6 +195,7 @@ import { chromium } from "playwright-chromium";
  *   @param options.audio - The path (or list of paths) to an audio file. Must be in MP3 format.
  *   @param options.pdf - The path (or list of paths) to a PDF file.
  *   @param options.returnJson - Whether to return the response as JSON. Defaults to `false`.
+ *   @param options.parseJson - Whether to parse the response as JSON. Defaults to true. If returnJson is not true, this option is ignored.
  *   @param options.verbose - Whether to log additional information. Defaults to `false`. Note that prices are rough estimates.
  *   @param options.clean - A function to clean the response before testing.
  */
@@ -214,6 +215,7 @@ export default async function askAI(
     audio?: string | string[];
     pdf?: string | string[];
     returnJson?: boolean;
+    parseJson?: boolean;
     verbose?: boolean;
     cache?: boolean;
     test?: ((response: unknown) => void) | ((response: unknown) => void)[];
@@ -223,6 +225,8 @@ export default async function askAI(
   const start = Date.now();
   let client;
   const ollamaVar = options.ollama || process.env.OLLAMA;
+  const defaults = { parseJson: true };
+  options = { ...defaults, ...options };
 
   if (ollamaVar) {
     client = ollama;
@@ -573,13 +577,13 @@ export default async function askAI(
       throw new Error(
         "Response text is undefined. Please check the model and input.",
       );
-    } else if (options.returnJson) {
+    } else if (options.returnJson && options.parseJson) {
       returnedResponse = JSON.parse(response.text);
     } else {
       returnedResponse = response.text.trim();
     }
   } else {
-    if (options.returnJson) {
+    if (options.returnJson && options.parseJson) {
       returnedResponse = JSON.parse(response.message.content);
     } else {
       returnedResponse = response.message.content.trim();

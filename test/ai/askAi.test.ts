@@ -274,6 +274,20 @@ if (typeof aiKey === "string" && aiKey !== "") {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
+  Deno.test("should return raw string when parseJson is false and returnJson is true", async () => {
+    const result = await askAI("Give me a list of 3 countries in Europe.", {
+      returnJson: true,
+      parseJson: false,
+    });
+    console.log(result);
+    // Should be a string, not an array
+    if (Array.isArray(result)) {
+      throw new Error(
+        "Result should not be parsed as JSON when parseJson is false",
+      );
+    }
+    assertEquals(typeof result, "string");
+  });
 } else {
   console.log("No AI_PROJECT in process.env");
 }
@@ -511,6 +525,20 @@ Return your results in a JSON array as well. It's critical you return the same n
 
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
+  });
+  Deno.test("should return raw string when parseJson is false and returnJson is true", async () => {
+    const result = await askAI("Give me a list of 3 countries in Europe.", {
+      returnJson: true,
+      parseJson: false,
+    });
+    console.log(result);
+    // Should be a string, not an array
+    if (Array.isArray(result)) {
+      throw new Error(
+        "Result should not be parsed as JSON when parseJson is false",
+      );
+    }
+    assertEquals(typeof result, "string");
   });
 } else {
   console.log("No OLLAMA in process.env");
