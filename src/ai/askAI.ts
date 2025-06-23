@@ -572,26 +572,34 @@ export default async function askAI(
   }
 
   let returnedResponse;
-  if (response instanceof GenerateContentResponse) {
-    if (!response.text) {
-      throw new Error(
-        "Response text is undefined. Please check the model and input.",
-      );
-    } else if (options.returnJson && options.parseJson) {
-      returnedResponse = JSON.parse(response.text);
+  try {
+    if (response instanceof GenerateContentResponse) {
+      if (!response.text) {
+        throw new Error(
+          "Response text is undefined. Please check the model and input.",
+        );
+      } else if (options.returnJson && options.parseJson) {
+        returnedResponse = JSON.parse(response.text);
+      } else {
+        returnedResponse = response.text.trim();
+      }
     } else {
-      returnedResponse = response.text.trim();
+      if (options.returnJson && options.parseJson) {
+        returnedResponse = JSON.parse(response.message.content);
+      } else {
+        returnedResponse = response.message.content.trim();
+      }
     }
-  } else {
-    if (options.returnJson && options.parseJson) {
-      returnedResponse = JSON.parse(response.message.content);
-    } else {
-      returnedResponse = response.message.content.trim();
-    }
-  }
 
-  if (options.clean) {
-    returnedResponse = options.clean(returnedResponse);
+    if (options.clean) {
+      returnedResponse = options.clean(returnedResponse);
+    }
+  } catch (error: unknown) {
+    throw new Error(
+      `Error parsing or cleaning response: ${
+        error instanceof Error ? error.message : error
+      }.\nResponse\n: ${JSON.stringify(response)}`,
+    );
   }
 
   if (options.test) {
