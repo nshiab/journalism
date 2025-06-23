@@ -1,4 +1,6 @@
 import round from "./round.ts";
+import { transformPositionToCbcStyle } from "./helpers/transformPositionToCbcStyle.ts";
+import { transformPositionToRcStyle } from "./helpers/transformPositionToRcStyle.ts";
 
 /**
  * Format a number with a specific style.
@@ -37,10 +39,19 @@ export default function formatNumber(
     abreviation?: boolean;
     prefix?: string;
     suffix?: string;
+    position?: boolean;
   } = {},
 ): string {
   if (typeof number !== "number") {
     throw new Error("Not a number");
+  }
+
+  if (options.position === true) {
+    if (options.style === "rc") {
+      return transformPositionToRcStyle(number);
+    } else {
+      return transformPositionToCbcStyle(number);
+    }
   }
 
   const mergedOptions: {
