@@ -28,6 +28,7 @@ import euclideanDistance from "./statistics/euclidianDistance.ts";
 import rewind from "./geo/rewind.ts";
 import sleep from "./other/sleep.ts";
 import DurationTracker from "./other/DurationTracker.ts";
+import downloadCSV from "./web/downloadCsv.ts";
 
 export {
   addClusters,
@@ -40,6 +41,7 @@ export {
   dataAsCsv,
   dataToArrays,
   distance,
+  downloadCSV,
   DurationTracker,
   euclideanDistance,
   formatDate,
