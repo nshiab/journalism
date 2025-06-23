@@ -377,3 +377,87 @@ Deno.test("should return the negative number abbreviated with 0 decimals", () =>
   });
   assertEquals(string, "$-2K USD");
 });
+Deno.test("should return CBC-style position for 1", () => {
+  const string = formatNumber(1, { position: true });
+  assertEquals(string, "first");
+});
+Deno.test("should return CBC-style position for 2", () => {
+  const string = formatNumber(2, { position: true });
+  assertEquals(string, "second");
+});
+Deno.test("should return CBC-style position for 3", () => {
+  const string = formatNumber(3, { position: true });
+  assertEquals(string, "third");
+});
+Deno.test("should return CBC-style position for 11", () => {
+  const string = formatNumber(11, { position: true });
+  assertEquals(string, "11th");
+});
+Deno.test("should return CBC-style position for 22", () => {
+  const string = formatNumber(22, { position: true });
+  assertEquals(string, "22nd");
+});
+Deno.test("should return CBC-style position for 33", () => {
+  const string = formatNumber(33, { position: true });
+  assertEquals(string, "33rd");
+});
+Deno.test("should throw for invalid position (0)", () => {
+  let error = null;
+  try {
+    formatNumber(0, { position: true });
+  } catch (e) {
+    error = e;
+  }
+  assertEquals(error instanceof Error, true);
+});
+Deno.test("should throw for invalid position (1.5)", () => {
+  let error = null;
+  try {
+    formatNumber(1.5, { position: true });
+  } catch (e) {
+    error = e;
+  }
+  assertEquals(error instanceof Error, true);
+});
+Deno.test("should return RC-style position for 1", () => {
+  const string = formatNumber(1, { position: true, style: "rc" });
+  assertEquals(string, "premier");
+});
+Deno.test("should return RC-style position for 2", () => {
+  const string = formatNumber(2, { position: true, style: "rc" });
+  assertEquals(string, "deuxième");
+});
+Deno.test("should return RC-style position for 3", () => {
+  const string = formatNumber(3, { position: true, style: "rc" });
+  assertEquals(string, "troisième");
+});
+Deno.test("should return RC-style position for 9", () => {
+  const string = formatNumber(9, { position: true, style: "rc" });
+  assertEquals(string, "neuvième");
+});
+Deno.test("should return RC-style position for 10", () => {
+  const string = formatNumber(10, { position: true, style: "rc" });
+  assertEquals(string, "10e");
+});
+Deno.test("should return RC-style position for 21", () => {
+  const string = formatNumber(21, { position: true, style: "rc" });
+  assertEquals(string, "21e");
+});
+Deno.test("should throw for invalid RC position (0)", () => {
+  let error = null;
+  try {
+    formatNumber(0, { position: true, style: "rc" });
+  } catch (e) {
+    error = e;
+  }
+  assertEquals(error instanceof Error, true);
+});
+Deno.test("should throw for invalid RC position (1.5)", () => {
+  let error = null;
+  try {
+    formatNumber(1.5, { position: true, style: "rc" });
+  } catch (e) {
+    error = e;
+  }
+  assertEquals(error instanceof Error, true);
+});
