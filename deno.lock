@@ -23,6 +23,7 @@
     "npm:d3-geo@^3.1.1": "3.1.1",
     "npm:date-fns-tz@3": "3.2.0_date-fns@4.1.0",
     "npm:date-fns-tz@^3.2.0": "3.2.0_date-fns@4.1.0",
+    "npm:fflate@~0.8.2": "0.8.2",
     "npm:geotiff@2": "2.1.3",
     "npm:geotiff@^2.1.3": "2.1.3",
     "npm:google-auth-library@9": "9.14.2",
@@ -441,6 +442,9 @@
     "extend@3.0.2": {
       "integrity": "sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g=="
     },
+    "fflate@0.8.2": {
+      "integrity": "sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A=="
+    },
     "follow-redirects@1.15.9": {
       "integrity": "sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ=="
     },
@@ -760,6 +764,7 @@
       "npm:d3-dsv@^3.0.1",
       "npm:d3-geo@^3.1.1",
       "npm:date-fns-tz@^3.2.0",
+      "npm:fflate@~0.8.2",
       "npm:geotiff@^2.1.3",
       "npm:google-auth-library@^9.15.1",
       "npm:google-spreadsheet@^4.1.4",
