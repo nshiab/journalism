@@ -11,6 +11,7 @@ if (typeof bucketKey === "string") {
     await toBucket(
       "test/data/data.json",
       "journalism-tests/data.json",
+      { skip: true },
     );
     // Check if it exists
     const exists = await inBucket("journalism-tests/data.json");
