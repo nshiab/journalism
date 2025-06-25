@@ -50,6 +50,9 @@ import sleep from "./other/sleep.ts";
 import DurationTracker from "./other/DurationTracker.ts";
 import askAI from "./ai/askAI.ts";
 import getEmbedding from "./ai/getEmbedding.ts";
+import toBucket from "./google/toBucket.ts";
+import deleteFromBucket from "./google/deleteFromBucket.ts";
+import inBucket from "./google/inBucket.ts";
 
 export {
   addClusters,
@@ -63,6 +66,7 @@ export {
   createDirectory,
   dataAsCsv,
   dataToArrays,
+  deleteFromBucket,
   distance,
   downloadFile,
   DurationTracker,
@@ -83,6 +87,7 @@ export {
   getSheetData,
   getStatCanTable,
   getYahooFinanceData,
+  inBucket,
   invertMatrix,
   logBarChart,
   logDotChart,
@@ -99,6 +104,7 @@ export {
   saveChart,
   sleep,
   styledLayerDescriptor,
+  toBucket,
   unzip,
   updateAnnotationsDW,
   updateDataDW,
