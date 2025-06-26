@@ -53,6 +53,7 @@ import getEmbedding from "./ai/getEmbedding.ts";
 import toBucket from "./google/toBucket.ts";
 import deleteFromBucket from "./google/deleteFromBucket.ts";
 import inBucket from "./google/inBucket.ts";
+import downloadFromBucket from "./google/downloadFromBucket.ts";
 
 export {
   addClusters,
@@ -69,6 +70,7 @@ export {
   deleteFromBucket,
   distance,
   downloadFile,
+  downloadFromBucket,
   DurationTracker,
   euclidianDistance,
   formatDate,
