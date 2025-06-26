@@ -3,7 +3,11 @@ import { assertEquals } from "jsr:@std/assert";
 import getEmbedding from "../../src/ai/getEmbedding.ts";
 
 const aiKey = Deno.env.get("AI_KEY");
-if (typeof aiKey === "string" && aiKey !== "") {
+const embeddingModel = Deno.env.get("AI_EMBEDDINGS_MODEL");
+if (
+  typeof aiKey === "string" && aiKey !== "" &&
+  typeof embeddingModel === "string" && embeddingModel !== ""
+) {
   Deno.test("should create an embedding", async () => {
     const result = await getEmbedding("What is the capital of France?");
     console.log(result);

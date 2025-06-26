@@ -21,6 +21,8 @@ import { chromium } from "playwright-chromium";
  *
  * To save resources and time, you can cache the response. When `cache` is set to `true`, the function saves the response in a local hidden folder called `.journalism-cache`. If the same request is made again in the future, it will return the cached response instead of making a new request. Don't forget to add `.journalism-cache` to your `.gitignore` file!
  *
+ * When working with files, you can pass local paths or Google Cloud Storage URLs (starting with `gs://`). The function will handle both cases. For Ollama, you can only pass local paths.
+ *
  * @example
  * Basic usage with credentials and model in .env:
  * ```ts
@@ -93,6 +95,24 @@ import { chromium } from "playwright-chromium";
  *   {
  *     // Can also be an array of images.
  *     image: `./your_image.jpg`,
+ *     returnJson: true,
+ *   },
+ * );
+ * console.log(obj);
+ * ```
+ *
+ * @example
+ * Usage with an image stored in Google Cloud Storage:
+ * ```ts
+ * const obj = await askAI(
+ *   `Based on the image I send you, return an object with the following properties:
+ *   - name: the person in the image if it's a human and recognizable,
+ *   - description: a very short description of the image,
+ *   - isPolitician: true if it's a politician, false otherwise.
+ *   Return just the object.`,
+ *   {
+ *     // Can also be an array of images.
+ *     image: `gs://your-bucket/your_image.jpg`,
  *     returnJson: true,
  *   },
  * );
@@ -381,12 +401,21 @@ export default async function askAI(
         ? options.audio
         : [options.audio];
       for (const audioFile of audioFiles) {
-        const base64Audio = readFileSync(audioFile, {
-          encoding: "base64",
-        });
-        contents.push({
-          inlineData: { data: base64Audio, mimeType: "audio/mp3" },
-        });
+        if (audioFile.startsWith("gs://")) {
+          contents.push({
+            fileData: {
+              fileUri: audioFile,
+              mimeType: "audio/mp3",
+            },
+          });
+        } else {
+          const base64Audio = readFileSync(audioFile, {
+            encoding: "base64",
+          });
+          contents.push({
+            inlineData: { data: base64Audio, mimeType: "audio/mp3" },
+          });
+        }
       }
     }
   }
@@ -401,12 +430,21 @@ export default async function askAI(
         ? options.video
         : [options.video];
       for (const videoFile of videoFiles) {
-        const base64Video = readFileSync(videoFile, {
-          encoding: "base64",
-        });
-        contents.push({
-          inlineData: { data: base64Video, mimeType: "video/mp4" },
-        });
+        if (videoFile.startsWith("gs://")) {
+          contents.push({
+            fileData: {
+              fileUri: videoFile,
+              mimeType: "video/mp4",
+            },
+          });
+        } else {
+          const base64Video = readFileSync(videoFile, {
+            encoding: "base64",
+          });
+          contents.push({
+            inlineData: { data: base64Video, mimeType: "video/mp4" },
+          });
+        }
       }
     }
   }
@@ -419,10 +457,19 @@ export default async function askAI(
     } else {
       const pdfFiles = Array.isArray(options.pdf) ? options.pdf : [options.pdf];
       for (const pdfFile of pdfFiles) {
-        const base64Pdf = readFileSync(pdfFile, { encoding: "base64" });
-        contents.push({
-          inlineData: { data: base64Pdf, mimeType: "application/pdf" },
-        });
+        if (pdfFile.startsWith("gs://")) {
+          contents.push({
+            fileData: {
+              fileUri: pdfFile,
+              mimeType: "application/pdf",
+            },
+          });
+        } else {
+          const base64Pdf = readFileSync(pdfFile, { encoding: "base64" });
+          contents.push({
+            inlineData: { data: base64Pdf, mimeType: "application/pdf" },
+          });
+        }
       }
     }
   }
@@ -439,12 +486,21 @@ export default async function askAI(
       );
     } else {
       for (const imageFile of imageFiles) {
-        const base64Image = readFileSync(imageFile, {
-          encoding: "base64",
-        });
-        contents.push({
-          inlineData: { data: base64Image, mimeType: "image/jpeg" },
-        });
+        if (imageFile.startsWith("gs://")) {
+          contents.push({
+            fileData: {
+              fileUri: imageFile,
+              mimeType: "image/jpeg",
+            },
+          });
+        } else {
+          const base64Image = readFileSync(imageFile, {
+            encoding: "base64",
+          });
+          contents.push({
+            inlineData: { data: base64Image, mimeType: "image/jpeg" },
+          });
+        }
       }
     }
   }

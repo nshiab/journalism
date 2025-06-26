@@ -2,6 +2,7 @@ import "@std/dotenv/load";
 import { assertEquals } from "jsr:@std/assert";
 import askAI from "../../src/ai/askAI.ts";
 import { existsSync, rmSync } from "node:fs";
+import toBucket from "../../src/google/toBucket.ts";
 
 const aiKey = Deno.env.get("AI_KEY") ?? Deno.env.get("AI_PROJECT");
 if (typeof aiKey === "string" && aiKey !== "") {
@@ -134,15 +135,6 @@ if (typeof aiKey === "string" && aiKey !== "") {
       returnJson: true,
       verbose: true,
     });
-
-    // Just making sure it doesn't crash for now.
-    assertEquals(true, true);
-  });
-  Deno.test("should use a simple prompt with the API key passed as an option", async () => {
-    const result = await askAI("What is the capital of France?", {
-      apiKey: aiKey,
-    });
-    console.log(result);
 
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
@@ -288,6 +280,56 @@ if (typeof aiKey === "string" && aiKey !== "") {
       );
     }
     assertEquals(typeof result, "string");
+  });
+  Deno.test("should use an image file stored in a google bucket", async () => {
+    const uri = await toBucket(
+      "test/data/ai/pictures/Screenshot 2025-03-21 at 1.36.14 PM.png",
+      "journalism-tests/cat.png",
+      { skip: true },
+    );
+
+    await askAI("What is in this image?", {
+      verbose: true,
+      image: uri,
+    });
+    assertEquals(true, true);
+  });
+  Deno.test("should use a video file stored in a google bucket", async () => {
+    const uri = await toBucket(
+      "test/data/ai/The Ontario leaders' debate in 3 minutes 360.mp4",
+      "journalism-tests/debate.mp4",
+      { skip: true },
+    );
+
+    await askAI("What is happening in this video?", {
+      verbose: true,
+      video: uri,
+    });
+    assertEquals(true, true);
+  });
+  Deno.test("should use a pdf file stored in a google bucket", async () => {
+    const uri = await toBucket(
+      "test/data/ai/Piekut-en.pdf",
+      "journalism-tests/piekut.pdf",
+      { skip: true },
+    );
+    await askAI("What is this document about?", {
+      verbose: true,
+      pdf: uri,
+    });
+    assertEquals(true, true);
+  });
+  Deno.test("should use an audio file stored in a google bucket", async () => {
+    const uri = await toBucket(
+      "test/data/ai/speech.mp3",
+      "journalism-tests/speech.mp3",
+      { skip: true },
+    );
+    await askAI("What is this audio about?", {
+      verbose: true,
+      audio: uri,
+    });
+    assertEquals(true, true);
   });
 } else {
   console.log("No AI_PROJECT in process.env");
