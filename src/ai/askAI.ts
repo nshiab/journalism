@@ -530,10 +530,52 @@ export default async function askAI(
 
   if (options.verbose) {
     if (response instanceof GenerateContentResponse) {
+      const hasAudio = options.audio ? true : false;
+
       const pricing = [
-        { model: "gemini-2.0-flash", input: 0.10, output: 0.40 },
-        { model: "gemini-2.0-flash-lite", input: 0.075, output: 0.30 },
+        {
+          model: "gemini-2.5-pro",
+          tiers: [
+            { threshold: 200_000, input: 1.25, output: 10.00 },
+            { threshold: Infinity, input: 2.50, output: 15.00 },
+          ],
+        },
+        {
+          model: "gemini-2.5-flash",
+          input: hasAudio ? 1.00 : 0.30,
+          output: 2.50,
+        },
+        {
+          model: "gemini-2.5-flash-lite",
+          input: hasAudio ? 0.50 : 0.10,
+          output: 0.40,
+        },
+        {
+          model: "gemini-2.0-flash",
+          input: hasAudio ? 0.70 : 0.10,
+          output: 0.40,
+        },
+        {
+          model: "gemini-2.0-flash-lite",
+          input: 0.075,
+          output: 0.30,
+        },
+        {
+          model: "gemini-1.5-pro",
+          tiers: [
+            { threshold: 128_000, input: 1.25, output: 5.00 },
+            { threshold: Infinity, input: 2.50, output: 10.00 },
+          ],
+        },
+        {
+          model: "gemini-1.5-flash",
+          tiers: [
+            { threshold: 128_000, input: 0.075, output: 0.30 },
+            { threshold: Infinity, input: 0.15, output: 0.60 },
+          ],
+        },
       ];
+
       const modelPricing = pricing.find((p) => p.model === model);
       if (!modelPricing) {
         console.log(
@@ -543,15 +585,45 @@ export default async function askAI(
         );
       } else {
         const promptTokenCount = response.usageMetadata?.promptTokenCount ?? 0;
-        const promptTokenCost = (promptTokenCount / 1_000_000) *
-          modelPricing.input;
-
         const outputTokenCount = response.usageMetadata?.candidatesTokenCount ??
           0;
-        const outputTokenCost = (outputTokenCount / 1_000_000) *
-          modelPricing.output;
 
+        let inputRate: number;
+        let outputRate: number;
+
+        if ("tiers" in modelPricing && modelPricing.tiers) {
+          // Find the appropriate tier based on prompt token count
+          const tier = modelPricing.tiers.find((t) =>
+            promptTokenCount <= t.threshold
+          ) || modelPricing.tiers[modelPricing.tiers.length - 1];
+          inputRate = tier.input;
+          outputRate = tier.output;
+
+          const tierDescription = tier.threshold === Infinity
+            ? `> ${formatNumber(modelPricing.tiers[0].threshold)} tokens`
+            : `≤ ${formatNumber(tier.threshold)} tokens`;
+
+          console.log(
+            `${options.cache ? "" : "\n"}Pricing tier: ${tierDescription}${
+              hasAudio ? " (audio pricing applied)" : ""
+            }`,
+          );
+        } else if ("input" in modelPricing && "output" in modelPricing) {
+          inputRate = modelPricing.input;
+          outputRate = modelPricing.output;
+        } else {
+          console.log(
+            `${
+              options.cache ? "" : "\n"
+            }Invalid pricing structure for model ${model}.`,
+          );
+          return;
+        }
+
+        const promptTokenCost = (promptTokenCount / 1_000_000) * inputRate;
+        const outputTokenCost = (outputTokenCount / 1_000_000) * outputRate;
         const estimatedCost = promptTokenCost + outputTokenCost;
+
         console.log(
           `${options.cache ? "" : "\n"}Tokens in:`,
           formatNumber(promptTokenCount),
