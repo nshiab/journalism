@@ -200,6 +200,7 @@ if (typeof aiKey === "string" && aiKey !== "") {
       {
         audio: "test/data/ai/speech.mp3",
         returnJson: true,
+        verbose: true,
       },
     );
     console.log(audioResponse);
