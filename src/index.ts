@@ -54,6 +54,7 @@ import toBucket from "./google/toBucket.ts";
 import deleteFromBucket from "./google/deleteFromBucket.ts";
 import inBucket from "./google/inBucket.ts";
 import downloadFromBucket from "./google/downloadFromBucket.ts";
+import filesInBucket from "./google/filesInBucket.ts";
 
 export {
   addClusters,
@@ -73,6 +74,7 @@ export {
   downloadFromBucket,
   DurationTracker,
   euclidianDistance,
+  filesInBucket,
   formatDate,
   formatNumber,
   geoTo3D,
