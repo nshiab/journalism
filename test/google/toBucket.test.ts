@@ -96,6 +96,44 @@ if (typeof bucketKey === "string") {
       "Cannot use both 'skip' and 'overwrite' options",
     );
   });
+
+  Deno.test("should return URI when skip is true, local file doesn't exist, but remote file exists", async () => {
+    // Ensure remote file exists
+    await toBucket(testDataFile, testDestination, { overwrite: true });
+
+    // Verify remote file exists
+    const remoteExists = await inBucket(testDestination);
+    assertEquals(remoteExists, true);
+
+    // Try to upload a non-existent local file with skip option
+    const nonExistentFile = "test/data/non-existent-file.json";
+    const result = await toBucket(nonExistentFile, testDestination, {
+      skip: true,
+    });
+
+    // Should return URI of existing remote file
+    assertEquals(typeof result, "string");
+    assertEquals(result.startsWith("gs://"), true);
+    assertEquals(result.includes(testDestination), true);
+  });
+
+  Deno.test("should throw error when skip is true and neither local nor remote file exists", async () => {
+    // Ensure remote file doesn't exist
+    const nonExistentDestination =
+      "journalism-tests/definitely-non-existent-file.json";
+    const existsBefore = await inBucket(nonExistentDestination);
+    if (existsBefore) {
+      await deleteFromBucket(nonExistentDestination);
+    }
+
+    // Try to upload a non-existent local file to non-existent remote location with skip option
+    const nonExistentFile = "test/data/non-existent-file.json";
+    await assertRejects(
+      () => toBucket(nonExistentFile, nonExistentDestination, { skip: true }),
+      Error,
+      "Local file",
+    );
+  });
 } else {
   console.log("No BUCKET_PROJECT in process.env");
 }
