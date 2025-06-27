@@ -331,6 +331,16 @@ if (typeof aiKey === "string" && aiKey !== "") {
     });
     assertEquals(true, true);
   });
+  Deno.test("should use a text file", async () => {
+    const result = await askAI(
+      "What is the content of this text file?",
+      {
+        text: "test/data/data.csv",
+        verbose: true,
+      },
+    );
+    assertEquals(true, true);
+  });
 } else {
   console.log("No AI_PROJECT in process.env");
 }
@@ -567,6 +577,29 @@ Return your results in a JSON array as well. It's critical you return the same n
     );
 
     // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a text file (ollama)", async () => {
+    const result = await askAI(
+      "What is the content of this text file?",
+      {
+        text: "test/data/sample.txt",
+        verbose: true,
+      },
+    );
+    console.log(result);
+    assertEquals(true, true);
+  });
+  Deno.test("should use a CSV file (ollama)", async () => {
+    const result = await askAI(
+      "What data is in this CSV file? Return a summary in JSON format.",
+      {
+        text: "test/data/data.csv",
+        returnJson: true,
+        verbose: true,
+      },
+    );
+    console.log(result);
     assertEquals(true, true);
   });
   Deno.test("should return raw string when parseJson is false and returnJson is true", async () => {
