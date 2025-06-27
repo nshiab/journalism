@@ -175,6 +175,20 @@ import { chromium } from "playwright-chromium";
  * ```
  *
  * @example
+ * Usage with a text file stored in Google Cloud Storage:
+ * ```ts
+ * const textAnalysis = await askAI(
+ *   `Analyze the content and provide a summary.`,
+ *   {
+ *     // Can also be an array of text files.
+ *     text: "gs://your-bucket/data.csv",
+ *     returnJson: true,
+ *   },
+ * );
+ * console.log(textAnalysis);
+ * ```
+ *
+ * @example
  * Usage with multiple file formats:
  * ```ts
  * const allFiles = await askAI(
@@ -408,8 +422,23 @@ export default async function askAI(
       ? options.text
       : [options.text];
     for (const textFile of textFiles) {
-      const textContent = readFileSync(textFile, { encoding: "utf-8" });
-      promptToBeSent += `\n\nContent from ${textFile}:\n${textContent}`;
+      if (textFile.startsWith("gs://")) {
+        if (!ollamaVar) {
+          contents.push({
+            fileData: {
+              fileUri: textFile,
+              mimeType: "text/plain",
+            },
+          });
+        } else {
+          throw new Error(
+            "Ollama does not support Google Cloud Storage files. Please use local file paths.",
+          );
+        }
+      } else {
+        const textContent = readFileSync(textFile, { encoding: "utf-8" });
+        promptToBeSent += `\n\nContent from ${textFile}:\n${textContent}`;
+      }
     }
   }
   if (ollamaVar) {
