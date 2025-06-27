@@ -161,6 +161,20 @@ import { chromium } from "playwright-chromium";
  * ```
  *
  * @example
+ * Usage with a text file:
+ * ```ts
+ * const textAnalysis = await askAI(
+ *   `Analyze the content and provide a summary.`,
+ *   {
+ *     // Can also be an array of text files.
+ *     text: "./data.csv",
+ *     returnJson: true,
+ *   },
+ * );
+ * console.log(textAnalysis);
+ * ```
+ *
+ * @example
  * Usage with multiple file formats:
  * ```ts
  * const allFiles = await askAI(
@@ -176,6 +190,8 @@ import { chromium } from "playwright-chromium";
  *     video: "something.mp4",
  *     // Can also be an array of PDF files.
  *     pdf: "decision.pdf",
+ *     // Can also be an array of text files.
+ *     text: "data.csv",
  *     returnJson: true,
  *   },
  * );
@@ -214,6 +230,7 @@ import { chromium } from "playwright-chromium";
  *   @param options.video - The path (or list of paths) to a video file. Must be in MP4 format.
  *   @param options.audio - The path (or list of paths) to an audio file. Must be in MP3 format.
  *   @param options.pdf - The path (or list of paths) to a PDF file.
+ *   @param options.text - The path (or list of paths) to a text file (.txt, .md, .csv, or any text-based file).
  *   @param options.returnJson - Whether to return the response as JSON. Defaults to `false`.
  *   @param options.parseJson - Whether to parse the response as JSON. Defaults to true. If returnJson is not true, this option is ignored.
  *   @param options.verbose - Whether to log additional information. Defaults to `false`. Note that prices are rough estimates.
@@ -234,6 +251,7 @@ export default async function askAI(
     video?: string | string[];
     audio?: string | string[];
     pdf?: string | string[];
+    text?: string | string[];
     returnJson?: boolean;
     parseJson?: boolean;
     verbose?: boolean;
@@ -383,6 +401,15 @@ export default async function askAI(
           inlineData: { data: img, mimeType: "image/jpeg" },
         });
       }
+    }
+  }
+  if (options.text) {
+    const textFiles = Array.isArray(options.text)
+      ? options.text
+      : [options.text];
+    for (const textFile of textFiles) {
+      const textContent = readFileSync(textFile, { encoding: "utf-8" });
+      promptToBeSent += `\n\nContent from ${textFile}:\n${textContent}`;
     }
   }
   if (ollamaVar) {
