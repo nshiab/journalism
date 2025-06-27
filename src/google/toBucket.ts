@@ -1,8 +1,11 @@
 import { Storage, type UploadOptions } from "@google-cloud/storage";
 import process from "node:process";
+import { existsSync } from "node:fs";
 
 /**
  * Uploads a file to a Google Cloud Storage bucket and returns the URI of the uploaded file. By default, if the file already exists, an error is thrown. To skip the upload if the file exists, set `skip: true` in the options. To overwrite an existing file, set `overwrite: true`.
+ *
+ * When `skip: true` is set and the local file doesn't exist, the function checks if the remote file exists in the bucket. If it does, it returns the URI without error. If neither local nor remote file exists, it throws an error.
  *
  * This function expects the project ID and bucket name to be set either through environment variables (BUCKET_PROJECT and BUCKET_NAME) or passed as options.
  *
@@ -21,6 +24,16 @@ import process from "node:process";
  *   skip: true
  * });
  * // Returns URI whether file was uploaded or already existed
+ * console.log(uri); // "gs://my-bucket/remote/file.txt"
+ * ```
+ *
+ * @example
+ * Skip with non-existent local file:
+ * ```ts
+ * // If local file doesn't exist but remote file does, returns URI
+ * const uri = await toBucket("./non-existent.txt", "remote/file.txt", {
+ *   skip: true
+ * });
  * console.log(uri); // "gs://my-bucket/remote/file.txt"
  * ```
  *
@@ -53,7 +66,7 @@ import process from "node:process";
  * @param options.bucket - The bucket name.
  * @param options.metadata - File metadata to set on upload.
  * @param options.overwrite - If true, overwrites existing files. Default is false.
- * @param options.skip - If true, skips upload if file already exists. Default is false.
+ * @param options.skip - If true, skips upload if file already exists. If local file doesn't exist but remote file does, returns URI. Default is false.
  * @returns The URI of the uploaded file (gs://bucket/path).
  */
 export default async function toBucket(
@@ -90,15 +103,27 @@ export default async function toBucket(
   const fileRef = b.file(destination);
   const [exists] = await fileRef.exists();
 
-  if (exists) {
-    if (options.skip) {
-      return `gs://${bucketName}/${destination}`; // Return URI of existing file
+  if (options.skip) {
+    const localFileExists = existsSync(file);
+    if (!localFileExists && exists) {
+      // Local file doesn't exist but remote file does, return URI
+      return `gs://${bucketName}/${destination}`;
     }
-    if (!options.overwrite) {
+    if (!localFileExists && !exists) {
+      // Neither local nor remote file exists, throw error
       throw new Error(
-        `File '${destination}' already exists in bucket '${bucketName}'. Set overwrite: true to replace it or skip: true to skip upload.`,
+        `Local file '${file}' does not exist. Cannot upload to bucket.`,
       );
     }
+    if (exists) {
+      // Local file exists and remote file exists, skip upload
+      return `gs://${bucketName}/${destination}`;
+    }
+    // Local file exists but remote file doesn't, proceed with upload
+  } else if (exists && !options.overwrite) {
+    throw new Error(
+      `File '${destination}' already exists in bucket '${bucketName}'. Set overwrite: true to replace it or skip: true to skip upload.`,
+    );
   }
 
   await b.upload(file, {
