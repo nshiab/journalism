@@ -332,7 +332,7 @@ if (typeof aiKey === "string" && aiKey !== "") {
     assertEquals(true, true);
   });
   Deno.test("should use a text file", async () => {
-    const result = await askAI(
+    await askAI(
       "What is the content of this text file?",
       {
         text: "test/data/data.csv",
