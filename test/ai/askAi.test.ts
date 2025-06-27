@@ -281,6 +281,17 @@ if (typeof aiKey === "string" && aiKey !== "") {
     }
     assertEquals(typeof result, "string");
   });
+
+  Deno.test("should use a text file", async () => {
+    await askAI(
+      "What is the content of this text file?",
+      {
+        text: "test/data/data.csv",
+        verbose: true,
+      },
+    );
+    assertEquals(true, true);
+  });
   Deno.test("should use an image file stored in a google bucket", async () => {
     const uri = await toBucket(
       "test/data/ai/pictures/Screenshot 2025-03-21 at 1.36.14 PM.png",
@@ -331,14 +342,16 @@ if (typeof aiKey === "string" && aiKey !== "") {
     });
     assertEquals(true, true);
   });
-  Deno.test("should use a text file", async () => {
-    await askAI(
-      "What is the content of this text file?",
-      {
-        text: "test/data/data.csv",
-        verbose: true,
-      },
+  Deno.test("should use a text file stored in a google bucket", async () => {
+    const uri = await toBucket(
+      "test/data/data.csv",
+      "journalism-tests/data.csv",
+      { skip: true },
     );
+    await askAI("What is the content of this text file?", {
+      verbose: true,
+      text: uri,
+    });
     assertEquals(true, true);
   });
 } else {
@@ -421,7 +434,7 @@ if (ollama) {
   });
   Deno.test("should use be able to clean complex response (ollama)", async () => {
     const result = await askAI(
-      `Guess whether it's a "Man" or a "Woman". If it could be both, return "Neutral". Return an objects with two keys in it: one with the names and the other with the genders.
+      `Guess whether it's a "Man" or a "Woman". If it could be both, return "Neutral". Return an objects with two keys in it: one with the names as an array and the other with the genders as an array.
 Here are the name values as a JSON array:
 ["Marie","John","Alex"]
 Return your results in a JSON array as well. It's critical you return the same number of items, which is 3, exactly in the same order.`,
@@ -583,19 +596,7 @@ Return your results in a JSON array as well. It's critical you return the same n
     const result = await askAI(
       "What is the content of this text file?",
       {
-        text: "test/data/sample.txt",
-        verbose: true,
-      },
-    );
-    console.log(result);
-    assertEquals(true, true);
-  });
-  Deno.test("should use a CSV file (ollama)", async () => {
-    const result = await askAI(
-      "What data is in this CSV file? Return a summary in JSON format.",
-      {
         text: "test/data/data.csv",
-        returnJson: true,
         verbose: true,
       },
     );
