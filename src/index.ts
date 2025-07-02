@@ -30,6 +30,7 @@ import getSheetData from "./google/getSheetData.ts";
 import getGeoTiffDetails from "./geo/getGeoTiffDetails.ts";
 import getGeoTiffValues from "./geo/getGeoTiffValues.ts";
 import createDirectory from "./other/createDirectory.ts";
+import removeDirectory from "./other/removeDirectory.ts";
 import getId from "./other/getId.ts";
 import getSeason from "./weather/getSeason.ts";
 import getCovarianceMatrix from "./statistics/getCovarianceMatrix.ts";
@@ -103,6 +104,7 @@ export {
   prettyDuration,
   publishChartDW,
   reencode,
+  removeDirectory,
   rewind,
   round,
   saveChart,
