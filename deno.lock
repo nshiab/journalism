@@ -8,7 +8,7 @@
     "jsr:@std/internal@^1.0.6": "1.0.6",
     "jsr:@std/path@^1.1.0": "1.1.0",
     "npm:@google-cloud/storage@^7.16.0": "7.16.0",
-    "npm:@google/genai@^1.7.0": "1.7.0_zod@3.25.67",
+    "npm:@google/genai@^1.8.0": "1.8.0_zod@3.25.67",
     "npm:@observablehq/plot@~0.6.17": "0.6.17",
     "npm:@types/d3-geo@*": "3.1.0",
     "npm:@types/d3-geo@3": "3.1.0",
@@ -39,7 +39,7 @@
     "npm:iconv-lite@0.6": "0.6.3",
     "npm:iconv-lite@~0.6.3": "0.6.3",
     "npm:ollama@~0.5.16": "0.5.16",
-    "npm:playwright-chromium@^1.53.1": "1.53.1",
+    "npm:playwright-chromium@^1.53.2": "1.53.2",
     "npm:playwright@*": "1.48.2"
   },
   "jsr": {
@@ -99,8 +99,8 @@
         "uuid@8.3.2"
       ]
     },
-    "@google/genai@1.7.0_zod@3.25.67": {
-      "integrity": "sha512-s/OZLkrIfBwc+SFFaZoKdEogkw4in0YRTGc4Q483jnfchNBWzrNe560eZEfGJHQRPn6YfzJgECCx0sqEOMWvYw==",
+    "@google/genai@1.8.0_zod@3.25.67": {
+      "integrity": "sha512-n3KiMFesQCy2R9iSdBIuJ0JWYQ1HZBJJkmt4PPZMGZKvlgHhBAGw1kUMyX+vsAIzprN3lK45DI755lm70wPOOg==",
       "dependencies": [
         "google-auth-library@9.15.1",
         "ws",
@@ -978,10 +978,10 @@
         "entities@6.0.1"
       ]
     },
-    "playwright-chromium@1.53.1": {
-      "integrity": "sha512-V+S/r4UkmVoF+ARC4YDnJF6fIsdIGMgyJ6daBdrODryU5qqWrM1M+5PP/jRX6u1yfwPfSNRwlYsat49duKsyMQ==",
+    "playwright-chromium@1.53.2": {
+      "integrity": "sha512-srR0AVmLltaDH6bkEdPlHrqOwtqHI7XkQNm1m20RZNYBIo3L83uv2ENX2SZyYNKtTcT6R//F5moFS7D5UoMINw==",
       "dependencies": [
-        "playwright-core@1.53.1"
+        "playwright-core@1.53.2"
       ],
       "scripts": true,
       "bin": true
@@ -990,8 +990,8 @@
       "integrity": "sha512-sjjw+qrLFlriJo64du+EK0kJgZzoQPsabGF4lBvsid+3CNIZIYLgnMj9V6JY5VhM2Peh20DJWIVpVljLLnlawA==",
       "bin": true
     },
-    "playwright-core@1.53.1": {
-      "integrity": "sha512-Z46Oq7tLAyT0lGoFx4DOuB1IA9D1TPj0QkYxpPVUnGDqHHvDpCftu1J2hM2PiWsNMoZh8+LQaarAWcDfPBc6zg==",
+    "playwright-core@1.53.2": {
+      "integrity": "sha512-ox/OytMy+2w1jcYEYlOo1Hhp8hZkLCximMTUTMBXjGUA1KoFfiSZ+DU+3a739jsPY0yoKH2TFy9S2fsJas8yAw==",
       "bin": true
     },
     "playwright@1.48.2": {
@@ -1126,8 +1126,8 @@
     "wrappy@1.0.2": {
       "integrity": "sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ=="
     },
-    "ws@8.18.2": {
-      "integrity": "sha512-DMricUmwGZUVr++AEAe2uiVM7UoO9MAVZMDu05UQOaUII0lp+zOzLLU4Xqh/JvTqklB1T4uELaaPBKyjE1r4fQ=="
+    "ws@8.18.3": {
+      "integrity": "sha512-PEIGCY5tSlUt50cqyMXfCzX+oOPqN0vuGqWzbcJ2xvnkzkq46oOpz7dQaTDBdfICb4N14+GARUDw2XV2N4tvzg=="
     },
     "xml-utils@1.10.2": {
       "integrity": "sha512-RqM+2o1RYs6T8+3DzDSoTRAUfrvaejbVHcp3+thnAtDKo8LskR+HomLajEy5UjTz24rpka7AxVBRR3g2wTUkJA=="
@@ -1156,7 +1156,7 @@
       "jsr:@std/assert@^1.0.13",
       "jsr:@std/dotenv@~0.225.5",
       "npm:@google-cloud/storage@^7.16.0",
-      "npm:@google/genai@^1.7.0",
+      "npm:@google/genai@^1.8.0",
       "npm:@observablehq/plot@~0.6.17",
       "npm:@types/d3-geo@^3.1.0",
       "npm:adm-zip@~0.5.16",
@@ -1171,7 +1171,7 @@
       "npm:google-spreadsheet@^4.1.4",
       "npm:iconv-lite@~0.6.3",
       "npm:ollama@~0.5.16",
-      "npm:playwright-chromium@^1.53.1"
+      "npm:playwright-chromium@^1.53.2"
     ]
   }
 }
