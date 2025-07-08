@@ -31,6 +31,11 @@ import DurationTracker from "./other/DurationTracker.ts";
 import downloadCSV from "./web/downloadCsv.ts";
 import zipToUrls from "./web/unzipImagesFromUrl.ts";
 
+/**
+ * This module provides a collection of functions to be used in web applications.
+ * @module
+ */
+
 export {
   addClusters,
   addMahalanobisDistance,
