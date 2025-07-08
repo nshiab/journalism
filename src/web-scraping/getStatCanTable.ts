@@ -10,7 +10,6 @@ import { Buffer } from "node:buffer";
  * @param pid - The Product ID (PID) of the Statistics Canada table. This is a string of up to 8 digits. If a longer string is provided, it will be truncated to the first 8 characters.
  * @param options - Optional settings to customize the data retrieval.
  * @param options.lang - The language of the table data. Can be 'en' for English or 'fr' for French. Defaults to 'en'.
- * @param options.removeDoubleQuotesInColumnNames - A boolean indicating whether to remove double quotes from column names in the parsed data. Statistics Canada sometimes includes quotes in their column headers. Defaults to `false`.
  * @param options.returnRawCSV - A boolean indicating whether to return the raw CSV data as a string instead of a parsed array of objects. Useful for direct file storage or custom parsing. Defaults to `false`.
  * @param options.debug - A boolean indicating whether to enable debug logging to the console, showing fetch URLs and other process details. Defaults to `false`.
  * @returns A Promise that resolves to either a `string` (if `returnRawCSV` is `true`) or an array of objects representing the table rows.
@@ -25,10 +24,9 @@ import { Buffer } from "node:buffer";
  * @example
  * // -- With Options --
  *
- * // Retrieve data in French, remove double quotes from column names, and return as raw CSV.
+ * // Retrieve data in French and return as raw CSV.
  * const rawCsvData = await getStatCanTable('98100001', {
  *   lang: 'fr',
- *   removeDoubleQuotesInColumnNames: true,
  *   returnRawCSV: true,
  * });
  * console.log(rawCsvData);
@@ -47,7 +45,6 @@ export default async function getStatCanTable(
   pid: string,
   options: {
     lang?: "en" | "fr";
-    removeDoubleQuotesInColumnNames?: boolean;
     returnRawCSV?: boolean;
     debug?: boolean;
   } = {},
@@ -83,15 +80,13 @@ export default async function getStatCanTable(
   if (csvEntry === undefined) {
     throw new Error(`No ${pid}.csv in the zipped file.`);
   }
-  const csv = csvEntry.getData().toString();
+  const csv = csvEntry.getData().toString().replace(/\uFEFF/g, "");
 
   if (options.returnRawCSV) {
     return csv;
   }
 
-  const data = options.removeDoubleQuotesInColumnNames
-    ? csvParse(csv).map((d: { [key: string]: unknown }) => removeQuotes(d))
-    : csvParse(csv);
+  const data = csvParse(csv);
   delete data["columns" as unknown as number];
 
   options.debug &&
@@ -100,10 +95,4 @@ export default async function getStatCanTable(
   options.debug && console.table(data);
 
   return data;
-}
-
-function removeQuotes(obj: { [key: string]: unknown }) {
-  return Object.fromEntries(
-    Object.entries(obj).map(([key, value]) => [key.replace(/"/g, ""), value]),
-  );
 }

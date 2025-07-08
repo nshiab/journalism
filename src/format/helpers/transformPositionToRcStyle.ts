@@ -21,4 +21,3 @@ export function transformPositionToRcStyle(position: number): string {
     return `${position}e`;
   }
 }
-

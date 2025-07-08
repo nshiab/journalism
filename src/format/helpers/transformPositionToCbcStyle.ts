@@ -31,4 +31,3 @@ export function transformPositionToCbcStyle(position: number): string {
     return `${position}${suffix}`;
   }
 }
-
