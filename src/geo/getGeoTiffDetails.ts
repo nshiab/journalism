@@ -11,7 +11,6 @@ import type { GeoTIFFImage } from "npm:geotiff@2";
  *
  * @example
  * // Using the output with `getGeoTiffValues`
- * import getGeoTiffValues from "./getGeoTiffValues.ts";
  *
  * const geoTiffDetails = await getGeoTiffDetails("./some-file.tif")
  * const value = await getGeoTiffValues(45.50, -73.57, geoTiffDetails)

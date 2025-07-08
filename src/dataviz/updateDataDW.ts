@@ -34,7 +34,6 @@ import process from "node:process";
  * // -- Example for a Locator Map (GeoJSON) --
  *
  * // Update the data of a Datawrapper locator map with GeoJSON data.
- * import { updateDataDW } from "journalism";
  *
  * const mapID = "myMapId";
  * const geojson = {

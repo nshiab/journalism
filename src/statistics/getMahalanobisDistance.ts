@@ -40,8 +40,7 @@
  * // -- Integration with `getCovarianceMatrix` --
  *
  * // Demonstrate how `getMahalanobisDistance` would typically be used with `getCovarianceMatrix`.
- * // (Assuming `getCovarianceMatrix` is available and returns an inverted matrix when `invert: true`)
- * import getCovarianceMatrix from "./getCovarianceMatrix.ts";
+ * import { getCovarianceMatrix, getMahalanobisDistance} from "journalism";
  *
  * const dataPoints = [
  *   [1, 10],

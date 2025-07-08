@@ -13,7 +13,6 @@ import { csvFormat } from "d3-dsv";
  * // -- Basic Usage --
  *
  * // Download a simple array of objects as a CSV file.
- * import downloadCSV from "./downloadCsv.ts";
  *
  * const data = [
  *   { name: "Alice", age: 30, city: "New York" },

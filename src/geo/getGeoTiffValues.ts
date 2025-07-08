@@ -5,7 +5,6 @@ import type { GeoTIFFImage, TypedArray } from "npm:geotiff@2";
  *
  * @example
  * // Basic usage
- * import getGeoTiffDetails from "./getGeoTiffDetails.ts";
  *
  * const geoTiffDetails = await getGeoTiffDetails("./some-file.tif")
  * const value = await getGeoTiffValues(45.50, -73.57, geoTiffDetails)

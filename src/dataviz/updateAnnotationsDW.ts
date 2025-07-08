@@ -43,7 +43,6 @@ import process from "node:process";
  * // -- Basic Usage --
  *
  * // Update annotations on a Datawrapper chart with a simple text annotation and one with an arrow.
- * import { updateAnnotationsDW } from "journalism";
  *
  * const chartID = "myChartId";
  * const myAnnotations = [

@@ -19,7 +19,6 @@ import { writeFileSync } from "node:fs";
  * // -- Basic Usage: Saving as PNG --
  *
  * // Save a simple dot plot as a PNG image.
- * import { saveChart } from "@nshiab/journalism";
  * import { plot, dot } from "@observablehq/plot";
  *
  * const dataForPng = [{ year: 2024, value: 10 }, { year: 2025, value: 15 }];
@@ -33,7 +32,6 @@ import { writeFileSync } from "node:fs";
  * // -- Saving as SVG with Custom Style --
  *
  * // Save a bar chart as an SVG file with a custom background color.
- * import { saveChart } from "@nshiab/journalism";
  * import { plot, barY } from "@observablehq/plot";
  *
  * const dataForSvg = [{ city: "New York", population: 8.4 }, { city: "Los Angeles", population: 3.9 }];
@@ -47,7 +45,6 @@ import { writeFileSync } from "node:fs";
  * // -- Dark Mode Chart --
  *
  * // Save a line chart in dark mode.
- * import { saveChart } from "@nshiab/journalism";
  * import { plot, line } from "@observablehq/plot";
  *
  * const dataForDark = [{ month: "Jan", temp: 5 }, { month: "Feb", temp: 7 }, { month: "Mar", temp: 10 }];
