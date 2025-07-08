@@ -6,9 +6,46 @@ import { geoArea, geoContains, geoStream, geoTransform } from "npm:d3-geo@3";
 import type { GeoPermissibleObjects } from "npm:d3-geo@3";
 
 /**
- * Rewinds the winding order of the specified GeoJSON object to be clockwise.
+ * Rewinds the winding order of the specified GeoJSON object to be clockwise. It is based on the D3-geo library's winding order conventions.
  *
- * @param object The GeoJSON object to rewind.
+ * @param object - The GeoJSON object to rewind.
+ * @returns A new GeoJSON object.
+ *
+ * @example
+ * // -- Basic Usage: Rewinding a FeatureCollection --
+ *
+ * // Rewind a FeatureCollection.
+ * const featureCollection = {
+ *   type: "FeatureCollection",
+ *   features: [
+ *     {
+ *       type: "Feature",
+ *       properties: {},
+ *       geometry: {
+ *         type: "Polygon",
+ *         coordinates: [[[-10, -10], [-10, 10], [10, 10], [10, -10], [-10, -10]]]
+ *       }
+ *     }
+ *   ]
+ * };
+ * const rewoundFeatureCollection = rewind(featureCollection);
+ *
+ * @example
+ * // -- Handling GeoJSON Feature --
+ *
+ * // Rewind a GeoJSON Feature containing a Polygon geometry.
+ * const feature = {
+ *   type: "Feature",
+ *   properties: { name: "Example Area" },
+ *   geometry: {
+ *     type: "Polygon",
+ *     coordinates: [[[-5, -5], [-5, 5], [5, 5], [5, -5], [-5, -5]]]
+ *   }
+ * };
+ * const rewoundFeature = rewind(feature);
+ * console.log(rewoundFeature);
+ *
+ * @category Geo
  */
 export default function rewind(
   object: GeoPermissibleObjects,

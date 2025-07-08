@@ -1,13 +1,19 @@
 import noScientificNotation from "../format/helpers/noScientificNotation.ts";
 
 /**
- * Returns the OpenGIS Styled Layer Descriptor encoded for an URL. The required parameters are the layer and the color scale.
+ * Generates an OpenGIS Styled Layer Descriptor (SLD) XML string, encoded for use in a URL. This function is particularly useful for dynamically styling Web Map Service (WMS) layers, allowing for custom color scales and visual representations of geospatial data directly through the WMS request.
+ *
+ * The SLD specifies how a map layer should be rendered. This function focuses on creating a `ColorMap` within the SLD, which defines a gradient of colors based on data values. This is commonly used for visualizing continuous data, such as temperature, elevation, or precipitation, on a map.
+ *
+ * @param layer - The name of the WMS layer to which this SLD will be applied (e.g., `"GDPS.ETA_TT"`).
+ * @param colorScale - An array of objects, where each object defines a `color` (hex code) and a `value` (the data threshold for that color). The function will sort these entries by value in ascending order to create a proper color gradient.
+ * @returns A URL-encoded XML string representing the Styled Layer Descriptor.
  *
  * @example
- * Basic usage
- * ```ts
+ * // -- Basic Usage --
+ *
  * // Returns the SLD for the GDPS.ETA_TT layer with a color scale going from blue to red.
- * const sdl = styledLayerDescriptor("GDPS.ETA_TT", [
+ * const sld = styledLayerDescriptor("GDPS.ETA_TT", [
  *   { color: "#550c24", value: 100 },
  *   { color: "#7f2e34", value: 30 },
  *   { color: "#c26847", value: 20 },
@@ -17,14 +23,11 @@ import noScientificNotation from "../format/helpers/noScientificNotation.ts";
  *   { color: "#5881a1", value: -20 },
  *   { color: "#334f60", value: -30 },
  *   { color: "#21353f", value: -100 },
- * ])
-
- * // The sdl can now be used in a WMS request as SLD_BODY
- * const url = `https://geo.weather.gc.ca/geomet?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX=-90,-180,90,180&CRS=EPSG:4326&WIDTH=2400&HEIGHT=1200&LAYERS=GDPS.ETA_TT&FORMAT=image/jpeg&SLD_BODY=${sld}`
- * ```
+ * ]);
  *
- * @param layer The name of the layer.
- * @param colorScale An array of objects containing color and value properties.
+ * // The sld can now be used in a WMS request as SLD_BODY.
+ * const url = `https://geo.weather.gc.ca/geomet?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX=-90,-180,90,180&CRS=EPSG:4326&WIDTH=2400&HEIGHT=1200&LAYERS=GDPS.ETA_TT&FORMAT=image/jpeg&SLD_BODY=${sld}`;
+ * console.log(url);
  *
  * @category Geo
  */

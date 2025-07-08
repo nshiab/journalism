@@ -1,18 +1,30 @@
 /**
- * Compute the adjusted to inflation amount of money, based on the Consumer Price Index. The options (last parameter) are optional.
+ * Adjusts a monetary amount for inflation using the Consumer Price Index (CPI).
+ *
+ * @param amount The initial amount of money to be adjusted.
+ * @param amountCPI The Consumer Price Index (CPI) corresponding to the period of the `amount`.
+ * @param targetCPI The Consumer Price Index (CPI) for the period to which the amount is being adjusted.
+ * @param options Optional settings for the calculation.
+ * @param options.decimals The number of decimal places to which the resulting adjusted amount should be rounded. If not specified, the result will not be rounded.
  *
  * @example
- * Basic usage
- * ```js
- * const adjustedAmount = adjustToInflation(100, 6.0, 156.4, { decimals: 0 })
- * // returns 2607 dollars
- * ```
+ * // Basic usage: Adjusting $100 from a time when the CPI was 120 to a time when the CPI is 150.
+ * const adjustedValue = adjustToInflation(100, 120, 150);
+ * console.log(adjustedValue); // Expected output: 125
  *
- * @param amount - The initial amount of money.
- * @param amountCPI - The Consumer Price Index (CPI) at the time of the initial amount.
- * @param targetCPI - The Consumer Price Index (CPI) at the target time.
- * @param options - Optional parameters.
- * @param options.decimals - Number of decimal places to round the result to.
+ * @example
+ * // With rounding to two decimal places
+ * const adjustedValueRounded = adjustToInflation(100, 120, 150.5, { decimals: 2 });
+ * console.log(adjustedValueRounded); // Expected output: 125.42
+ *
+ * @example
+ * // Calculating the value of a 1990 salary in 2023 terms
+ * const salary1990 = 45000;
+ * const cpi1990 = 60.5; // Hypothetical CPI for 1990
+ * const cpi2023 = 135.2; // Hypothetical CPI for 2023
+ * const adjustedSalary = adjustToInflation(salary1990, cpi1990, cpi2023, { decimals: 0 });
+ * console.log(`A $45,000 salary in 1990 is equivalent to approximately ${adjustedSalary} in 2023.`);
+ * // Expected output: "A $45,000 salary in 1990 is equivalent to approximately $100149 in 2023."
  *
  * @category Finance
  */

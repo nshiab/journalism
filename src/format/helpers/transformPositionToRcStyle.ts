@@ -1,4 +1,5 @@
 // Returns the French ordinal for a given positive integer position.
+// Returns the French ordinal for a given positive integer position.
 export function transformPositionToRcStyle(position: number): string {
   if (!Number.isInteger(position) || position < 1) {
     throw new Error("Input must be a positive integer.");
@@ -20,3 +21,4 @@ export function transformPositionToRcStyle(position: number): string {
     return `${position}e`;
   }
 }
+

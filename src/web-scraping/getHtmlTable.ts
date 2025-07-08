@@ -2,25 +2,27 @@ import { load } from "npm:cheerio@1";
 import { csvFormatRow, csvParse, type DSVRowArray } from "npm:d3-dsv@3";
 
 /**
- * Returns the data from an HTML table as an array of objects.
+ * Extracts tabular data from an HTML table on a given URL and returns it as an array of objects. This function is particularly useful for scraping structured data from web pages.
  *
- * @param url The URL of the page containing the HTML table.
- * @param options Optional parameters to specify the table selector and index.
- * @param options.selector A CSS selector to identify the table.
- * @param options.index The index of the table if multiple tables match the selector.
+ * @param url - The URL of the web page containing the HTML table.
+ * @param options - An optional object to specify how to locate the table.
+ * @param options.selector - A CSS selector string to identify the target table on the page. If not provided, the function will look for the first `<table>` element.
+ * @param options.index - The 0-based index of the table to select if multiple tables match the `selector`. Defaults to `0`.
+ * @returns A Promise that resolves to an array of objects representing the table data, where each row is an object with column headers as keys.
  *
  * @example
- * Basic usage
- * ```js
- * // This would parse the data from the fourth
- * // table with the class name data-table.
- * const data = await getHtmlTable("your-url-here", {
+ * // Extract data from the first table on a page
+ * const data = await getHtmlTable("https://example.com/data");
+ * console.log(data[0]); // Accessing data from the first row
+ *
+ * @example
+ * // Extract data from a specific table using a selector and index
+ * // This parses the fourth table with the class name 'data-table'.
+ * const specificTableData = await getHtmlTable("https://example.com/data", {
  *   selector: ".data-table",
  *   index: 3
- * })
- * ```
- *
- * @category Web scraping
+ * });
+ * console.table(specificTableData);
  */
 
 export default async function getHtmlTable(

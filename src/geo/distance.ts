@@ -1,21 +1,30 @@
 // Based on https://github.com/Turfjs/turf/blob/master/packages/turf-distance/index.ts
 
 /**
- * Compute the Haversine distance in kilometres based on longitude and latitude. The options (last parameter) are optional.
+ * Calculates the Haversine distance between two geographical points (longitude and latitude) in kilometers. The Haversine formula is used to determine the great-circle distance between two points on a sphere given their longitudes and latitudes.
+ *
+ * This function is useful for geospatial applications where accurate distance measurements over the Earth's surface are required,.
+ *
+ * @param lon1 The longitude of the first point.
+ * @param lat1 The latitude of the first point.
+ * @param lon2 The longitude of the second point.
+ * @param lat2 The latitude of the second point.
+ * @param options Optional settings for the distance calculation.
+ * @param options.decimals The number of decimal places to round the result to. If not specified, the result will not be rounded.
+ *
+ * @returns The distance between the two points in kilometers.
  *
  * @example
- * Basic usage
- * ```js
- * const distance = distance(-73.66, 45.51, -79.43, 43.66, { decimals: 0 })
- * // returns 501
- * ```
+ * // Basic usage: Calculate the distance between two cities.
+ * // Montreal (-73.5673, 45.5017) and Toronto (-79.3832, 43.6532)
+ * const dist = distance(-73.5673, 45.5017, -79.3832, 43.6532);
+ * console.log(dist); // Approximately 504.5 km
  *
- * @param lon1 - Longitude of the first point
- * @param lat1 - Latitude of the first point
- * @param lon2 - Longitude of the second point
- * @param lat2 - Latitude of the second point
- * @param options - Optional parameter to specify the number of decimal places
- * @param options.decimals - The number of decimal places to keep in the result
+ * @example
+ * // Rounding the result to a whole number.
+ * const roundedDist = distance(-73.5673, 45.5017, -79.3832, 43.6532, { decimals: 0 });
+ * console.log(roundedDist); // 505 km
+ *
  * @category Geo
  */
 

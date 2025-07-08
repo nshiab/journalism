@@ -3,48 +3,43 @@ import process from "node:process";
 import { existsSync } from "node:fs";
 
 /**
- * Downloads a file from a Google Cloud Storage bucket to a local path. By default, if the local file already exists, an error is thrown. To skip the download if the file exists, set `skip: true` in the options. To overwrite an existing file, set `overwrite: true`.
+ * Downloads a file from a Google Cloud Storage (GCS) bucket to a specified local path. This function provides robust handling for existing local files, allowing you to skip downloads or overwrite files as needed.
  *
- * This function expects the project ID and bucket name to be set either through environment variables (BUCKET_PROJECT and BUCKET_NAME) or passed as options.
+ * The function requires the Google Cloud project ID and the target bucket name. These can be provided either through environment variables (`BUCKET_PROJECT` and `BUCKET_NAME`) or directly as parameters in the `options` object. Parameters passed in `options` will take precedence over environment variables.
  *
- * @example
- * Basic usage:
- * ```ts
- * await downloadFromBucket("remote/file.txt", "local/file.txt");
- * ```
+ * By default, if a local file with the same name already exists at the `destination` path, the function will throw an error to prevent accidental overwrites. You can modify this behavior using the `skip` or `overwrite` options.
  *
- * @example
- * Skip download if file exists:
- * ```ts
- * await downloadFromBucket("remote/file.txt", "local/file.txt", {
- *   skip: true
- * });
- * ```
+ * @param source The path to the file within the GCS bucket (e.g., 'my-folder/document.pdf').
+ * @param destination The local file path where the downloaded file will be saved (e.g., './downloads/document.pdf').
+ * @param options Optional configuration for the download operation.
+ * @param options.project The Google Cloud project ID. If not provided, it defaults to the `BUCKET_PROJECT` environment variable.
+ * @param options.bucket The name of the Google Cloud Storage bucket. If not provided, it defaults to the `BUCKET_NAME` environment variable.
+ * @param options.overwrite If `true`, an existing local file at the `destination` path will be overwritten. Cannot be used with `skip`. Defaults to `false`.
+ * @param options.skip If `true`, the download will be skipped if a local file already exists at the `destination` path. Cannot be used with `overwrite`. Defaults to `false`.
  *
  * @example
- * Overwrite existing file:
- * ```ts
- * await downloadFromBucket("remote/file.txt", "local/file.txt", {
- *   overwrite: true
- * });
- * ```
+ * // Basic usage: Download a file.
+ * await downloadFromBucket("reports/annual-report.pdf", "./local-reports/annual-report.pdf");
+ * console.log("File downloaded successfully!");
  *
  * @example
- * Using explicit options:
- * ```ts
- * await downloadFromBucket("remote/file.txt", "local/file.txt", {
+ * // Skip download if the file already exists locally.
+ * await downloadFromBucket("images/profile.jpg", "./local-images/profile.jpg", { skip: true });
+ * console.log("Download skipped if file exists, or downloaded otherwise.");
+ *
+ * @example
+ * // Overwrite an existing local file.
+ * await downloadFromBucket("data/latest-data.csv", "./local-data/latest-data.csv", { overwrite: true });
+ * console.log("File downloaded and overwritten if it existed.");
+ *
+ * @example
+ * // Specify project and bucket explicitly.
+ * await downloadFromBucket("configs/app-settings.json", "./local-configs/settings.json", {
  *   project: "my-gcp-project",
- *   bucket: "my-bucket-name"
+ *   bucket: "my-config-bucket"
  * });
- * ```
  *
- * @param source - The path to the file in the bucket.
- * @param destination - The local path to save the file to.
- * @param options - Optional settings including project ID, bucket name, and behavior options.
- * @param options.project - The Google Cloud project ID.
- * @param options.bucket - The bucket name.
- * @param options.overwrite - If true, overwrites existing files. Default is false.
- * @param options.skip - If true, skips download if file already exists. Default is false.
+ * @category Google
  */
 export default async function downloadFromBucket(
   source: string,

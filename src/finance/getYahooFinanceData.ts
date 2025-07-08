@@ -1,27 +1,53 @@
 import arraysToData from "../format/arraysToData.ts";
 
 /**
- * Fetches historical financial data for a given symbol from Yahoo Finance. The use of a small amount of data is tolerated for educational or public interest purposes, but if you want to collect and reuse a large volume of this data, with or without a commercial purpose, contact the team behind the site or purchase a premium subscription.
+ * Fetches historical financial data for a given stock symbol from Yahoo Finance. This function provides a convenient way to access various financial metrics (e.g., open, high, low, close, adjusted close, volume) at specified intervals (daily, hourly, or minute-by-minute).
+ *
+ * **Important Note on Data Usage:** The use of a small amount of data from Yahoo Finance is generally tolerated for educational or public interest purposes. However, if you intend to collect and reuse a large volume of this data, especially for commercial purposes, it is crucial to contact the Yahoo Finance team or consider purchasing a premium subscription to ensure compliance with their terms of service.
+ *
+ * @param symbol - The stock symbol (ticker) for which to fetch data (e.g., 'AAPL' for Apple Inc., '^GSPTSE' for S&P/TSX Composite Index).
+ * @param startDate - The start date for the data range (inclusive). Data will be fetched from this date onwards.
+ * @param endDate - The end date for the data range (inclusive). Data will be fetched up to this date.
+ * @param variable - The specific financial variable to retrieve. Can be one of:
+ *   - `"open"`: The opening price for the period.
+ *   - `"high"`: The highest price for the period.
+ *   - `"low"`: The lowest price for the period.
+ *   - `"close"`: The closing price for the period.
+ *   - `"adjclose"`: The adjusted closing price, accounting for dividends and stock splits.
+ *   - `"volume"`: The trading volume for the period.
+ * @param interval - The time interval for the data points. Can be one of:
+ *   - `"1d"`: Daily data.
+ *   - `"1h"`: Hourly data.
+ *   - `"1m"`: Minute-by-minute data.
+ * @returns A promise that resolves to an array of objects, where each object contains a `timestamp` (Unix timestamp in milliseconds) and the `value` of the requested financial variable for that period.
  *
  * @example
- * Basic usage
- * ```ts
- * // Fetch the adjusted close price for the S&P/TSX Composite Index.
- * const data = await getYahooFinanceData(
+ * // -- Basic Usage --
+ *
+ * // Fetch the adjusted close price for the S&P/TSX Composite Index for a specific period.
+ * const spTsxData = await getYahooFinanceData(
  *   "^GSPTSE",
  *   new Date("2025-03-01"),
  *   new Date("2025-03-15"),
  *   "adjclose",
  *   "1d"
  * );
- * ```
+ * console.log("S&P/TSX Composite Index Data:", spTsxData);
  *
- * @param symbol - The stock symbol to fetch data for.
- * @param startDate - The start date for the data range.
- * @param endDate - The end date for the data range.
- * @param variable - The specific financial variable to retrieve. Can be one of "open", "high", "low", "close", "adjclose", or "volume".
- * @param interval - The time interval for the data. Can be one of "1d" (daily), "1h" (hourly), or "1m" (minutes).
- * @returns A promise that resolves to an array of objects containing timestamp and value pairs.
+ * @example
+ * // -- Fetching Hourly Volume Data --
+ *
+ * // Get hourly trading volume for Apple (AAPL) for a single day.
+ * const appleVolumeData = await getYahooFinanceData(
+ *   "AAPL",
+ *   new Date("2024-07-01T09:30:00"),
+ *   new Date("2024-07-01T16:00:00"),
+ *   "volume",
+ *   "1h"
+ * );
+ * console.log("Apple Hourly Volume Data:", appleVolumeData);
+ *
+ * @category Finance
  */
 
 export default async function getYahooFinanceData(

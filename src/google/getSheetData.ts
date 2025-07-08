@@ -2,35 +2,63 @@ import { csvParse } from "npm:d3-dsv@3";
 import logToSheet from "./helpers/logToSheet.ts";
 
 /**
- * Returns the data of a Google Sheet.
+ * Retrieves data from a Google Sheet.
  *
- * By default, this function looks for the API key in process.env.GOOGLE_PRIVATE_KEY and the service account email in process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL. If you don't have credentials, check [this](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
+ * By default, this function attempts to authenticate using environment variables (`GOOGLE_PRIVATE_KEY` for the API key and `GOOGLE_SERVICE_ACCOUNT_EMAIL` for the service account email). For detailed instructions on setting up credentials, refer to the `node-google-spreadsheet` authentication guide: [https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
+ *
+ * @param sheetUrl - The URL of the Google Sheet from which to retrieve data. This URL should point to a specific sheet (e.g., ending with `#gid=0`).
+ * @param options - An optional object with configuration options:
+ *   @param options.skip - The number of rows to skip from the beginning of the sheet before parsing the data. This is useful for sheets that have metadata at the top. Defaults to `0`.
+ *   @param options.csv - If `true`, the function will return the raw data as a CSV string. If `false` or omitted, it will return an array of objects, where each object represents a row and keys correspond to column headers. Defaults to `false`.
+ *   @param options.apiEmail - Optional. Your Google Service Account email. If provided, this will override the `GOOGLE_SERVICE_ACCOUNT_EMAIL` environment variable.
+ *   @param options.apiKey - Optional. Your Google Service Account private key. If provided, this will override the `GOOGLE_PRIVATE_KEY` environment variable.
+ * @returns A Promise that resolves to either an array of objects (`Record<string, string>[]`) if `options.csv` is `false`, or a CSV string (`string`) if `options.csv` is `true`.
  *
  * @example
- * Basic usage
- * ```ts
- * // Fake url used as an example.
+ * // -- Basic Usage --
+ *
+ * // Fake URL used as an example.
  * const sheetUrl = "https://docs.google.com/spreadsheets/d/nrqo3oP4KMWYbELScQa8W1nHZPfIrA7LIz9UmcRE4GyJN/edit#gid=0";
  *
  * // Returning the data as an array of objects.
- * const data = await getSheetData(data, sheetUrl);
+ * const data = await getSheetData(sheetUrl);
+ * console.log(data);
+ * // Expected output (example):
+ * // [
+ * //   { Header1: 'Value1', Header2: 'Value2' },
+ * //   { Header1: 'Value3', Header2: 'Value4' }
+ * // ]
  *
- * // Same but skipping first row.
- * const data = await getSheetData(data, sheetUrl, { skip: 1});
+ * @example
+ * // -- Skipping Rows --
  *
- * // You have an option to return the data as a CSV string. Useful if you just want to write the data somewhere.
- * const csv = await getSheetData(data, sheetUrl, { csv: true });
+ * // Retrieve data, skipping the first row (e.g., if it contains metadata).
+ * const dataSkippingFirstRow = await getSheetData(sheetUrl, { skip: 1 });
+ * console.log(dataSkippingFirstRow);
+ * // Expected output (example, assuming first row was metadata):
+ * // [
+ * //   { Header1: 'Value1', Header2: 'Value2' },
+ * //   { Header1: 'Value3', Header2: 'Value4' }
+ * // ]
  *
- * // If your API email and key are stored under different names in process.env, use the options.
- * const csv = await getSheetData(data, sheetUrl, { apiEmail: "GG_EMAIL", apiKey: "GG_KEY" });
- * ```
+ * @example
+ * // -- Returning as CSV String --
  *
- * @param sheetUrl - The url directing to a specific sheet.
- * @param options - An optional object with configuration options:
- *   @param options.skip - The number of rows to skip before parsing the data. Defaults to 0.
- *   @param options.csv - If true, the function will return a CSV string instead of an array of objects.
- *   @param options.apiEmail - If your API email is stored under different names in process.env, use this option.
- *   @param options.apiKey - If your API key is stored under different names in process.env, use this option.
+ * // Return the data as a raw CSV string, useful for direct writing to files or other systems.
+ * const csvString = await getSheetData(sheetUrl, { csv: true });
+ * console.log(csvString);
+ * // Expected output (example):
+ * // "Header1,Header2\nValue1,Value2\nValue3,Value4"
+ *
+ * @example
+ * // -- Custom API Credentials --
+ *
+ * // Use custom environment variable names for API email and key.
+ * const dataWithCustomCredentials = await getSheetData(sheetUrl, {
+ *   apiEmail: "GG_EMAIL",
+ *   apiKey: "GG_KEY"
+ * });
+ * console.log(dataWithCustomCredentials);
  *
  * @category Google
  */

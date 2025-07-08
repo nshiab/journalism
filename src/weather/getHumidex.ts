@@ -1,17 +1,28 @@
 /**
- * Calculates Humidex Factor in Celsius given the temperature in Celsius and humidity percentage.
- * In case the calculated humidex is less than the given temperature, it returns temperature itself.
+ * Calculates the humidex factor in Celsius based on the given temperature in Celsius and humidity percentage.
  *
- * This is using the formula from the Canadian Centre for Climate Services.
+ * If the calculated humidex is less than the provided temperature, the temperature itself is returned.
+ *
+ * This calculation uses the formula provided by the Canadian Centre for Climate Services.
+ *
+ * @param temperature - The ambient temperature in Celsius.
+ * @param humidity - The relative humidity as a percentage (0-100).
+ * @returns The calculated humidex value in Celsius, rounded to the nearest whole number. Returns the original temperature if the calculated humidex is lower.
+ * @throws {Error} If the humidity value is not within the valid range of 0 to 100.
  *
  * @example
- * Basic usage
- * ```js
- * const humidex = getHumidex(30, 70); // returns 41
- * ```
+ * // -- Basic Usage --
  *
- * @param temperature - The temperature in Celsius.
- * @param humidity - The humidity percentage (0-100).
+ * // Calculate humidex for a warm and humid day.
+ * const humidex = getHumidex(30, 70); // returns 41
+ * console.log(`Humidex: ${humidex}`);
+ *
+ * @example
+ * // -- When Humidex is lower than temperature --
+ *
+ * // In cases where the calculated humidex is less than the temperature, the temperature is returned.
+ * const humidexLowHumidity = getHumidex(20, 30); // returns 20 (since calculated humidex would be lower)
+ * console.log(`Humidex: ${humidexLowHumidity}`);
  *
  * @category Weather and climate
  */

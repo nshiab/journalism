@@ -3,24 +3,28 @@ const characters =
   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 /**
- * Creates a unique id with letters, numbers, but no spaces or special characters. By default, the length is 6 characters. Works in the browser and NodeJS (and other runtimes). Handy, but not cryptographically secure.
+ * Generates a unique ID string composed of letters and numbers, without spaces or special characters. By default, the ID has a length of 6 characters. While handy for general use, it is not cryptographically secure, meaning it should not be used for security-sensitive applications where true randomness and unpredictability are required.
+ *
+ * The function ensures uniqueness by keeping track of previously generated IDs within the current session. If a collision occurs (which is highly unlikely for reasonable lengths), it will attempt to generate a new ID. For very small `length` values, repeated collisions might trigger a warning to suggest increasing the length to maintain uniqueness.
+ *
+ * @param length - The desired length of the generated ID. Defaults to 6.
+ * @returns A unique string ID.
  *
  * @example
- * Basic usage
- * ```js
- * // Generate a default length id
+ * // -- Basic Usage --
+ *
+ * // Generate a default length ID (6 characters).
  * const id = getId();
  * console.log(id); // e.g., 'a1B2c3'
- * ```
  *
  * @example
- * Custom length id
- * ```js
- * const id = getId(10);
- * console.log(id); // e.g., 'a1B2c3D4e5'
- * ```
+ * // -- Custom Length ID --
  *
- * @param length - The length of the generated id. Default is 6.
+ * // Generate an ID with a specified length (e.g., 10 characters).
+ * const customId = getId(10);
+ * console.log(customId); // e.g., 'a1B2c3D4e5'
+ *
+ * @category Other
  */
 
 export default function getId(length: number = 6): string {

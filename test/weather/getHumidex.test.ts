@@ -21,6 +21,10 @@ Deno.test("should return the temperature (21 C) (with humidity (20%)) if humidex
   const humidex = getHumidex(21, 20);
   assertEquals(humidex, 21);
 });
+Deno.test("should return the temperature (20 C) (with humidity (30%)) if humidex is less than the temperature", () => {
+  const humidex = getHumidex(20, 30);
+  assertEquals(humidex, 20);
+});
 Deno.test("should throw error when humidex is not between 0 and 100", () => {
   assertThrows(() => getHumidex(30, 105));
 });

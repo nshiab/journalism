@@ -1,18 +1,21 @@
 import type { GeoTIFFImage, TypedArray } from "npm:geotiff@2";
 
 /**
- * Extracts values at specific lat/lon coordinates from a geotiff. Works with the values returned by the getGeoTiffDetails function.
+ * Extracts values at specific latitude and longitude coordinates from a GeoTIFF image. This function works in conjunction with the `getGeoTiffDetails` function, using the details returned by it.
  *
  * @example
- * Basic usage
- * ```js
+ * // Basic usage
+ * import getGeoTiffDetails from "./getGeoTiffDetails.ts";
+ *
  * const geoTiffDetails = await getGeoTiffDetails("./some-file.tif")
  * const value = await getGeoTiffValues(45.50, -73.57, geoTiffDetails)
- * ```
+ * console.log(value) // 255
  *
- * @param lat - The latitude coordinate.
- * @param lon - The longitude coordinate.
- * @param geoTiffDetails - The details of the GeoTIFF file, computed with the getGeoTiffDetails function.
+ * @param lat - The latitude coordinate for which to extract the value.
+ * @param lon - The longitude coordinate for which to extract the value.
+ * @param geoTiffDetails - An object containing the GeoTIFF image details, typically obtained from `getGeoTiffDetails`.
+ * @returns A Promise that resolves to the pixel value at the specified coordinates, or a `TypedArray` if multiple bands are present.
+ * @throws {Error} If the coordinates are outside the GeoTIFF's bounding box or if there's an issue reading the raster data.
  *
  * @category Geo
  */

@@ -3,53 +3,63 @@ import process from "node:process";
 import { existsSync } from "node:fs";
 
 /**
- * Uploads a file to a Google Cloud Storage bucket and returns the URI of the uploaded file. By default, if the file already exists, an error is thrown. To skip the upload if the file exists, set `skip: true` in the options. To overwrite an existing file, set `overwrite: true`.
+ * Uploads a local file to a Google Cloud Storage (GCS) bucket and returns the URI of the uploaded file. This function provides robust control over the upload process, including options for skipping uploads if the file already exists, overwriting existing files, and setting custom metadata.
  *
- * When `skip: true` is set and the local file doesn't exist, the function checks if the remote file exists in the bucket. If it does, it returns the URI without error. If neither local nor remote file exists, it throws an error.
+ * By default, if a file with the same destination path already exists in the bucket, an error will be thrown to prevent accidental overwrites. You can modify this behavior using the `skip` or `overwrite` options.
  *
- * This function expects the project ID and bucket name to be set either through environment variables (BUCKET_PROJECT and BUCKET_NAME) or passed as options.
+ * Authentication and bucket identification can be configured either through environment variables (`BUCKET_PROJECT` for the Google Cloud Project ID and `BUCKET_NAME` for the bucket name) or by passing them directly as options to the function. Options provided directly will take precedence over environment variables.
+ *
+ * @param file - The absolute or relative path to the local file that you want to upload.
+ * @param destination - The desired path and filename for the file within the GCS bucket (e.g., `"my-folder/my-uploaded-file.txt"`).
+ * @param options - Optional settings to customize the upload behavior.
+ *   @param options.project - Your Google Cloud Project ID. If not provided, it defaults to the `BUCKET_PROJECT` environment variable.
+ *   @param options.bucket - The name of the Google Cloud Storage bucket. If not provided, it defaults to the `BUCKET_NAME` environment variable.
+ *   @param options.metadata - An object containing custom metadata to be associated with the uploaded file (e.g., `contentType`, `cacheControl`). This is passed directly to the GCS upload options.
+ *   @param options.overwrite - If `true`, an existing file at the `destination` path in the bucket will be overwritten. Cannot be used with `skip: true`. Defaults to `false`.
+ *   @param options.skip - If `true`, the upload will be skipped if a file with the same `destination` path already exists in the bucket. If the local file does not exist but the remote file does, the URI of the remote file will be returned without an error. Cannot be used with `overwrite: true`. Defaults to `false`.
+ * @returns A Promise that resolves to the Google Cloud Storage URI of the uploaded file (e.g., `"gs://your-bucket-name/your-file-path.txt"`).
  *
  * @example
- * Basic usage:
- * ```ts
- * // Upload a file using environment variables for project and bucket
+ * // -- Basic Usage --
+ *
+ * // Upload a file using environment variables for project and bucket.
+ * // Assuming `BUCKET_PROJECT` and `BUCKET_NAME` are set in your environment.
  * const uri = await toBucket("./local/file.txt", "remote/file.txt");
  * console.log(uri); // "gs://my-bucket/remote/file.txt"
- * ```
  *
  * @example
- * Skip upload if file exists:
- * ```ts
- * const uri = await toBucket("./local/file.txt", "remote/file.txt", {
+ * // -- Skip Upload if File Exists --
+ *
+ * // Skip upload if the file already exists in the bucket.
+ * const uriSkip = await toBucket("./local/file.txt", "remote/file.txt", {
  *   skip: true
  * });
- * // Returns URI whether file was uploaded or already existed
- * console.log(uri); // "gs://my-bucket/remote/file.txt"
- * ```
+ * console.log(uriSkip); // Returns URI whether file was uploaded or already existed
  *
  * @example
- * Skip with non-existent local file:
- * ```ts
- * // If local file doesn't exist but remote file does, returns URI
- * const uri = await toBucket("./non-existent.txt", "remote/file.txt", {
+ * // -- Skip with Non-Existent Local File --
+ *
+ * // If the local file doesn't exist but the remote file does, the URI is returned without error.
+ * // (Assuming "./non-existent.txt" does not exist locally, but "remote/file.txt" exists in the bucket)
+ * const uriNonExistentLocal = await toBucket("./non-existent.txt", "remote/file.txt", {
  *   skip: true
  * });
- * console.log(uri); // "gs://my-bucket/remote/file.txt"
- * ```
+ * console.log(uriNonExistentLocal); // "gs://my-bucket/remote/file.txt"
  *
  * @example
- * Overwrite existing file:
- * ```ts
- * const uri = await toBucket("./local/file.txt", "remote/file.txt", {
+ * // -- Overwrite Existing File --
+ *
+ * // Overwrite an existing file in the bucket.
+ * const uriOverwrite = await toBucket("./local/file.txt", "remote/file.txt", {
  *   overwrite: true
  * });
- * console.log(uri); // "gs://my-bucket/remote/file.txt"
- * ```
+ * console.log(uriOverwrite); // "gs://my-bucket/remote/file.txt"
  *
  * @example
- * Using explicit options:
- * ```ts
- * const uri = await toBucket("./local/file.txt", "remote/file.txt", {
+ * // -- Using Explicit Options and Metadata --
+ *
+ * // Upload a file with specified project, bucket, and custom metadata.
+ * const uriExplicit = await toBucket("./local/file.txt", "remote/file.txt", {
  *   project: "my-gcp-project",
  *   bucket: "my-bucket-name",
  *   metadata: {
@@ -57,17 +67,9 @@ import { existsSync } from "node:fs";
  *     cacheControl: "public, max-age=3600"
  *   }
  * });
- * ```
+ * console.log(uriExplicit);
  *
- * @param file - The local path to the file to upload.
- * @param destination - The destination path in the bucket.
- * @param options - Optional settings including project ID, bucket name, metadata, and behavior options.
- * @param options.project - The Google Cloud project ID.
- * @param options.bucket - The bucket name.
- * @param options.metadata - File metadata to set on upload.
- * @param options.overwrite - If true, overwrites existing files. Default is false.
- * @param options.skip - If true, skips upload if file already exists. If local file doesn't exist but remote file does, returns URI. Default is false.
- * @returns The URI of the uploaded file (gs://bucket/path).
+ * @category Google
  */
 export default async function toBucket(
   file: string,

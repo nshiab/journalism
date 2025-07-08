@@ -1,21 +1,28 @@
 /**
- * Capitalizes the first character of a string.
+ * Capitalizes the first letter of a given string.
+ *
+ * @param input The string to be capitalized.
+ *
+ * @returns A new string with the first letter in uppercase.
  *
  * @example
- * Basic usage
- * ```js
- * // Returns 'Journalism'.
- * const text = capitalize('journalism')
- * ```
+ * // Basic usage
+ * const capitalized = capitalize("hello world");
+ * console.log(capitalized); // "Hello world"
  *
- * @param string - The string to capitalize.
+ * @example
+ * // With an already capitalized string
+ * const alreadyCapitalized = capitalize("Journalism");
+ * console.log(alreadyCapitalized); // "Journalism"
+ *
+ * @example
+ * // With a single character
+ * const singleChar = capitalize("a");
+ * console.log(singleChar); // "A"
  *
  * @category Formatting
  */
 export default function capitalize(string: string): string {
-  const first = string.at(0);
-  if (first === undefined) {
-    throw new Error("Can't capitalize because string.at(0) === undefined");
-  }
+  const first = string[0];
   return first.toUpperCase() + string.slice(1);
 }

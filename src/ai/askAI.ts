@@ -11,244 +11,209 @@ import ollama from "ollama";
 import { chromium } from "playwright-chromium";
 
 /**
- * Sends a prompt and optionally a file to an LLM. Currently supports Google Gemini AI and local models running with Ollama.
+ * Interacts with a Large Language Model (LLM) to perform a wide range of tasks, from answering questions to analyzing multimedia content. This function serves as a versatile interface to various AI models, including Google's Gemini and local models via Ollama.
  *
- * The function retrieves credentials and the model from environment variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`, `AI_MODEL`) or accepts them as options. Options take precedence over environment variables.
+ * The function is designed to be highly configurable, allowing you to specify the AI model, credentials, and various input types such as text, images, audio, video, and even web pages. It also includes features for caching responses to improve performance and reduce costs, as well as for testing and cleaning the AI's output.
  *
- * To run local models with Ollama, set the `OLLAMA` environment variable to `true` and start Ollama on your machine. Make sure to install the model you want and to set the `AI_MODEL` environment variable to the model name. Note that audio, video, or PDF files are not supported for now.
+ * **Authentication**:
+ * The function can be authenticated using environment variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`, `AI_MODEL`) or by passing credentials directly in the `options` object. Options will always take precedence over environment variables.
  *
- * The temperature is set to 0 to ensure reproducible results.
+ * **Local Models**:
+ * To use a local model with Ollama, set the `OLLAMA` environment variable to `true` and ensure that Ollama is running on your machine. You will also need to specify the model name using the `AI_MODEL` environment variable or the `model` option.
  *
- * To save resources and time, you can cache the response. When `cache` is set to `true`, the function saves the response in a local hidden folder called `.journalism-cache`. If the same request is made again in the future, it will return the cached response instead of making a new request. Don't forget to add `.journalism-cache` to your `.gitignore` file!
+ * **Caching**:
+ * Caching is a powerful feature that saves the AI's response to a local directory (`.journalism-cache`). When the same request is made again, the cached response is returned instantly, saving time and API costs. To enable caching, set the `cache` option to `true`.
  *
- * When working with files, you can pass local paths or Google Cloud Storage URLs (starting with `gs://`). The function will handle both cases. For Ollama, you can only pass local paths.
- *
- * @example
- * Basic usage with credentials and model in .env:
- * ```ts
- * await askAI("What is the capital of France?");
- * ```
+ * **File Handling**:
+ * The function can process both local files and files stored in Google Cloud Storage (GCS). Simply provide the file path or the `gs://` URL. Note that Ollama only supports local files.
  *
  * @example
- * Basic usage with cache:
- * ```ts
- * // Don't forget to add .journalism-cache to your .gitignore file!
- * await askAI("What is the capital of France?", { cache: true });
- * ```
+ * // -- Basic Usage --
+ *
+ * // Get a simple text response from the AI.
+ * // Assumes credentials are set in environment variables.
+ * const capital = await askAI("What is the capital of France?");
+ * console.log(capital); // "Paris"
  *
  * @example
- * Usage with API credentials and model passed as options:
- * ```ts
- * await askAI("What is the capital of France?", {
+ * // -- Caching --
+ *
+ * // Enable caching to save the response and avoid repeated API calls.
+ * // A .journalism-cache directory will be created.
+ * const cachedCapital = await askAI("What is the capital of France?", { cache: true });
+ *
+ * @example
+ * // -- Authentication --
+ *
+ * // Pass API credentials directly as options.
+ * const response = await askAI("What is the capital of France?", {
  *   apiKey: "your_api_key",
- *   model: "gemini-2.0-flash",
+ *   model: "gemini-1.5-flash",
  * });
- * ```
  *
- * @example
- * Usage with Vertex AI credentials passed as options:
- * ```ts
- * await askAI("What is the capital of France?", {
+ * // Use Vertex AI for authentication.
+ * const vertexResponse = await askAI("What is the capital of France?", {
  *   vertex: true,
  *   project: "your_project_id",
  *   location: "us-central1",
  * });
- * ```
  *
  * @example
- * Usage with HTML content to scrape data:
- * ```ts
- * const executiveOrders = await askAI(
- *   `Here's the page showing presidential executive orders. Extract the executive order names, dates (yyyy-mm-dd), and URLs as an array of objects. Also categorize each executive order based on its name.`,
+ * // -- Web Content Analysis --
+ *
+ * // Scrape and analyze HTML content from a URL.
+ * const orders = await askAI(
+ *   `From the following HTML, extract the executive order titles, their dates (in yyyy-mm-dd format), and their URLs. Return the data as a JSON array of objects.`,
  *   {
- *     // Can also be an array of URLs.
  *     HTMLFrom: "https://www.whitehouse.gov/presidential-actions/executive-orders/",
  *     returnJson: true,
  *   },
  * );
- * console.table(executiveOrders);
- * ```
+ * console.table(orders);
  *
- * @example
- * Usage with a screenshot from a URL:
- * ```ts
- * const screenshotResponse = await askAI(
- *   `Tell me which products are on special.`,
+ * // Analyze a screenshot of a webpage.
+ * const specials = await askAI(
+ *   `Based on this screenshot of a grocery store flyer, list the products that are on special.`,
  *   {
- *     // Can also be an array of URLs.
  *     screenshotFrom: "https://www.metro.ca/circulaire",
  *     returnJson: true,
  *   },
  * );
- * console.table(screenshotResponse);
- * ```
+ * console.table(specials);
  *
  * @example
- * Usage with an image:
- * ```ts
- * const obj = await askAI(
- *   `Based on the image I send you, return an object with the following properties:
- *   - name: the person in the image if it's a human and recognizable,
- *   - description: a very short description of the image,
- *   - isPolitician: true if it's a politician, false otherwise.
- *   Return just the object.`,
+ * // -- Multimedia File Analysis --
+ *
+ * // Analyze a local image file.
+ * const personInfo = await askAI(
+ *   `Analyze the provided image and return a JSON object with the following details:
+ *   - name: The name of the person if they are a recognizable public figure.
+ *   - description: A brief description of the image.
+ *   - isPolitician: A boolean indicating if the person is a politician.`,
  *   {
- *     // Can also be an array of images.
- *     image: `./your_image.jpg`,
+ *     image: "./path/to/your_image.jpg",
  *     returnJson: true,
  *   },
  * );
- * console.log(obj);
- * ```
+ * console.log(personInfo);
  *
- * @example
- * Usage with an image stored in Google Cloud Storage:
- * ```ts
- * const obj = await askAI(
- *   `Based on the image I send you, return an object with the following properties:
- *   - name: the person in the image if it's a human and recognizable,
- *   - description: a very short description of the image,
- *   - isPolitician: true if it's a politician, false otherwise.
- *   Return just the object.`,
+ * // Analyze an image from Google Cloud Storage.
+ * const gcsImageInfo = await askAI(
+ *   `Describe the scene in this image.`,
  *   {
- *     // Can also be an array of images.
- *     image: `gs://your-bucket/your_image.jpg`,
+ *     image: "gs://your-bucket/your_image.jpg",
+ *   },
+ * );
+ * console.log(gcsImageInfo);
+ *
+ * // Transcribe an audio file.
+ * const speechDetails = await askAI(
+ *   `Transcribe the speech in this audio file. If possible, identify the speaker and the approximate date of the speech.`,
+ *   {
+ *     audio: "./path/to/speech.mp3",
  *     returnJson: true,
  *   },
  * );
- * console.log(obj);
- * ```
+ * console.log(speechDetails);
  *
- * @example
- * Usage with an audio file:
- * ```ts
- * const audioResponse = await askAI(
- *   `Return an object with the name of the person speaking and an approximate date of the speech if recognizable.`,
+ * // Analyze a video file.
+ * const videoAnalysis = await askAI(
+ *   `Create a timeline of events from this video. For each event, provide a timestamp, a short description, and identify the main people involved.`,
  *   {
- *     // Can also be an array of audio files.
- *     audio: "./speech.mp3",
+ *     video: "./path/to/your_video.mp4",
  *     returnJson: true,
  *   },
  * );
- * ```
+ * console.table(videoAnalysis);
  *
  * @example
- * Usage with a video file:
- * ```ts
- * const videoTranscript = await askAI(
- *   `Return an array of objects, each containing the following keys: name, timestamp, main emotion, and transcript. Create a new object each time a new person speaks.`,
- *   {
- *     // Can also be an array of video files.
- *     video: "./your_video.mp4",
- *     returnJson: true,
- *   },
- * );
- * console.table(videoTranscript);
- * ```
+ * // -- Document and Text File Analysis --
  *
- * @example
- * Usage with a PDF file:
- * ```ts
- * const pdfExtraction = await askAI(
+ * // Extract structured data from a PDF document.
+ * const caseSummary = await askAI(
  *   `This is a Supreme Court decision. Provide a list of objects with a date and a brief summary for each important event of the case's merits, sorted chronologically.`,
  *   {
- *     // Can also be an array of PDF files.
- *     pdf: "./decision.pdf",
+ *     pdf: "./path/to/decision.pdf",
  *     returnJson: true,
  *   },
  * );
- * console.table(pdfExtraction);
- * ```
+ * console.table(caseSummary);
  *
- * @example
- * Usage with a text file:
- * ```ts
- * const textAnalysis = await askAI(
- *   `Analyze the content and provide a summary.`,
+ * // Summarize a local text file.
+ * const summary = await askAI(
+ *   `Analyze the content of this CSV file and provide a summary of its key findings.`,
  *   {
- *     // Can also be an array of text files.
- *     text: "./data.csv",
- *     returnJson: true,
+ *     text: "./path/to/data.csv",
  *   },
  * );
- * console.log(textAnalysis);
- * ```
+ * console.log(summary);
  *
  * @example
- * Usage with a text file stored in Google Cloud Storage:
- * ```ts
- * const textAnalysis = await askAI(
- *   `Analyze the content and provide a summary.`,
+ * // -- Advanced Features --
+ *
+ * // Process multiple files of different types in a single call.
+ * const multiFileSummary = await askAI(
+ *   `Provide a brief summary for each file I've provided.`,
  *   {
- *     // Can also be an array of text files.
- *     text: "gs://your-bucket/data.csv",
+ *     HTMLFrom: "https://www.un.org/en/global-issues",
+ *     audio: "path/to/speech.mp3",
+ *     image: "path/to/protest.jpg",
+ *     video: "path/to/event.mp4",
+ *     pdf: "path/to/report.pdf",
+ *     text: "path/to/notes.txt",
  *     returnJson: true,
  *   },
  * );
- * console.log(textAnalysis);
- * ```
+ * console.log(multiFileSummary);
  *
- * @example
- * Usage with multiple file formats:
- * ```ts
- * const allFiles = await askAI(
- *   `Give me a short description of each thing I give you.`,
+ * // Use a clean and test function to process and validate the AI's output.
+ * const europeanCountries = await askAI(
+ *   `Give me a list of three countries in Northern Europe.`,
  *   {
- *     // Can also be an array of URLs.
- *     HTMLFrom: "https://example.com",
- *     // Can also be an array of audio files.
- *     audio: "speech.mp3",
- *     // Can also be an array of images.
- *     image: "cat.png",
- *     // Can also be an array of video files.
- *     video: "something.mp4",
- *     // Can also be an array of PDF files.
- *     pdf: "decision.pdf",
- *     // Can also be an array of text files.
- *     text: "data.csv",
  *     returnJson: true,
+ *     clean: (response) => {
+ *       // Example: Trim whitespace from each country name in the array
+ *       if (Array.isArray(response)) {
+ *         return response.map(item => typeof item === 'string' ? item.trim() : item);
+ *       }
+ *       return response;
+ *     },
+ *     test: (response) => {
+ *       if (!Array.isArray(response)) {
+ *         throw new Error("Response is not an array.");
+ *       }
+ *       if (response.length !== 3) {
+ *         throw new Error("Response does not contain exactly three items.");
+ *       }
+ *       console.log("Test passed: The response is a valid list of three countries.");
+ *     },
  *   },
  * );
- * ```
+ * console.log(europeanCountries);
  *
- * @example
- * Usage with a test function:
- * ```ts
- * const testedResponse = await askAI(`Give me a list of three countries in Europe.`, {
- *   returnJson: true,
- *   // Can also be an array of functions.
- *   test: (response) => {
- *     if (!Array.isArray(response)) {
- *       throw new Error("Response is not an array.");
- *     }
- *     if (response.length !== 3) {
- *       throw new Error("Response does not contain three items.");
- *     }
- *   },
- * });
- * ```
+ * @param prompt - The primary text input for the AI model.
+ * @param options - A comprehensive set of options.
+ *   @param options.model - The specific AI model to use (e.g., 'gemini-1.5-flash'). Defaults to the `AI_MODEL` environment variable.
+ *   @param options.apiKey - Your API key for the AI service. Defaults to the `AI_KEY` environment variable.
+ *   @param options.vertex - Set to `true` to use Vertex AI for authentication. Auto-enables if `AI_PROJECT` and `AI_LOCATION` are set.
+ *   @param options.project - Your Google Cloud project ID. Defaults to the `AI_PROJECT` environment variable.
+ *   @param options.location - The Google Cloud location for your project. Defaults to the `AI_LOCATION` environment variable.
+ *   @param options.ollama - Set to `true` to use a local Ollama model. Defaults to the `OLLAMA` environment variable.
+ *   @param options.HTMLFrom - A URL or an array of URLs to scrape HTML content from. The content is appended to the prompt.
+ *   @param options.screenshotFrom - A URL or an array of URLs to take a screenshot from for analysis.
+ *   @param options.image - A path or GCS URL (or an array of them) to an image file.
+ *   @param options.video - A path or GCS URL (or an array of them) to a video file.
+ *   @param options.audio - A path or GCS URL (or an array of them) to an audio file.
+ *   @param options.pdf - A path or GCS URL (or an array of them) to a PDF file.
+ *   @param options.text - A path or GCS URL (or an array of them) to a text file.
+ *   @param options.returnJson - If `true`, instructs the AI to return a JSON object. Defaults to `false`.
+ *   @param options.parseJson - If `true`, automatically parses the AI's response as JSON. Defaults to `true` if `returnJson` is `true`.
+ *   @param options.cache - If `true`, caches the response locally in a `.journalism-cache` directory. Defaults to `false`.
+ *   @param options.verbose - If `true`, enables detailed logging, including token usage and estimated costs. Defaults to `false`.
+ *   @param options.clean - A function to process and clean the AI's response before it is returned or tested.
+ *   @param options.test - A function or an array of functions to validate the AI's response before it's returned.
  *
- * @param prompt - The input string to guide the AI's response.
- * @param options - Configuration options for the AI request.
- *   @param options.cache - Whether to cache the response in a local folder `.journalism-cache`. Defaults to `false`.
- *   @param options.test - A function or array of functions to test the response. It receives the response as an argument.
- *   @param options.model - The model to use. Defaults to the `AI_MODEL` environment variable.
- *   @param options.apiKey - The API key. Defaults to the `AI_KEY` environment variable.
- *   @param options.vertex - Whether to use Vertex AI. Defaults to `false`. If `AI_PROJECT` and `AI_LOCATION` are set in the environment, it will automatically switch to true.
- *   @param options.project - The Google Cloud project ID. Defaults to the `AI_PROJECT` environment variable.
- *   @param options.location - The Google Cloud location. Defaults to the `AI_LOCATION` environment variable.
- *   @param options.ollama - Whether to use Ollama. Defaults to the `OLLAMA` environment variable.
- *   @param options.HTMLFrom - A URL (or list of URLs) to scrape HTML content from. The HTML content is automatically added at the end of the prompt.
- *   @param options.screenshotFrom - A URL (or list of URLs) to take a screenshot from.
- *   @param options.image - The path (or list of paths) to an image file. Must be in JPEG format.
- *   @param options.video - The path (or list of paths) to a video file. Must be in MP4 format.
- *   @param options.audio - The path (or list of paths) to an audio file. Must be in MP3 format.
- *   @param options.pdf - The path (or list of paths) to a PDF file.
- *   @param options.text - The path (or list of paths) to a text file (.txt, .md, .csv, or any text-based file).
- *   @param options.returnJson - Whether to return the response as JSON. Defaults to `false`.
- *   @param options.parseJson - Whether to parse the response as JSON. Defaults to true. If returnJson is not true, this option is ignored.
- *   @param options.verbose - Whether to log additional information. Defaults to `false`. Note that prices are rough estimates.
- *   @param options.clean - A function to clean the response before testing.
+ * @category AI
  */
 export default async function askAI(
   prompt: string,
