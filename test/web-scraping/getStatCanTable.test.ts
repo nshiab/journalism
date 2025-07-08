@@ -2,9 +2,7 @@ import { assertEquals } from "jsr:@std/assert";
 import { getStatCanTable } from "../../src/index.ts";
 
 Deno.test("should return an array of objects from a table id", async function () {
-  const data = await getStatCanTable("9810000101", {
-    removeDoubleQuotesInColumnNames: true,
-  });
+  const data = await getStatCanTable("9810000101");
 
   assertEquals(data, [
     {
@@ -444,7 +442,6 @@ Deno.test("should return an array of objects from a table id", async function ()
 Deno.test("should return an array of objects from a table id in French", async function () {
   const data = await getStatCanTable("9810000101", {
     lang: "fr",
-    removeDoubleQuotesInColumnNames: true,
   });
 
   assertEquals(data, [

@@ -2,55 +2,60 @@ import getCovarianceMatrix from "./getCovarianceMatrix.ts";
 import getMahalanobisDistance from "./getMahalanobisDistance.ts";
 
 /**
- * Computes the Mahalanobis distance from an origin object for each object in an array. The keys in the origin object are the dimensions considered (tested up to four dimensions but should work for more in theory). The function adds the key `mahaDist` in each object in the original array.
+ * Calculates the Mahalanobis distance for each object in an array relative to a specified origin point.
  *
- * If you pass the option `{ similarity: true }`, it will add another key `similarity` which goes from 1 to 0. The closer similarity is to 1, the closer the item is to the origin. You can also pass a precomputed matrix in options if needed: `{ matrix : precomputedMatrix }.`
+ * The function enriches the input `data` array by adding a `mahaDist` property to each object, representing its Mahalanobis distance from the `origin`. The dimensions for the calculation are determined by the keys in the `origin` object.
+ *
+ * Optionally, you can also compute a `similarity` score, which is a normalized value between 0 and 1, where 1 indicates that the point is identical to the origin. To improve performance on large datasets, you can provide a pre-computed inverted covariance matrix.
+ *
+ * @param origin - An object defining the reference point for the distance calculation. The keys of this object represent the variables (dimensions) to be used, and the values are their corresponding coordinates.
+ * @param data - An array of objects to be analyzed. Each object should contain the same keys as the `origin` object, and their values for these keys should be numbers.
+ * @param options - Optional parameters to customize the function's behavior.
+ * @param options.similarity - If `true`, a `similarity` property will be added to each object in the `data` array. The similarity is calculated as `1 - (mahaDist / maxMahaDist)`, providing an intuitive measure of closeness to the origin.
+ * @param options.matrix - A pre-computed inverted covariance matrix. Providing this can significantly speed up calculations, as it avoids re-computing the matrix for each call. This matrix should be obtained from `getCovarianceMatrix` with `invert: true`.
+ * @returns The input `data` array, with `mahaDist` (and optionally `similarity`) properties added to each object.
+ * @throws {Error} If the dimensions of the data points or the provided matrix do not match, or if `getCovarianceMatrix` throws an error (e.g., due to non-numeric data).
  *
  * @example
- * Basic usage
- * ```js
- * // Wines
- * const data = [
- *     {'fixed acidity': 6.5, 'alcohol' : 11, ... },
- *     {'fixed acidity': 7.1, 'alcohol' : 12.2, ... },
- *     {'fixed acidity': 6.3, 'alcohol' : 10.5, ... }
- * ]
+ * // Basic usage with a dataset of wines
+ * const wines = [
+ *   { 'fixed acidity': 6.5, 'alcohol': 11.0 },
+ *   { 'fixed acidity': 7.1, 'alcohol': 12.2 },
+ *   { 'fixed acidity': 6.3, 'alcohol': 10.5 },
+ *   { 'fixed acidity': 7.2, 'alcohol': 11.3 }
+ * ];
  *
- * // We want the distance from this wine. All the keys in the origin will be used as variables. They need to be present in the data, of course.
- * const origin = {'fixed acidity': 7.2, 'alcohol' : 11.3 }
+ * // Define the ideal wine profile (our origin)
+ * const idealWine = { 'fixed acidity': 7.2, 'alcohol': 11.3 };
  *
- * addMahalanobisDistance(origin, data)
+ * // Calculate the Mahalanobis distance for each wine
+ * addMahalanobisDistance(idealWine, wines);
  *
- * // We now have mahaDist in the data.
- * data.sort((a, b) => a.mahaDist - b.mahaDist)
+ * // Sort the wines by their distance to the ideal profile
+ * wines.sort((a, b) => a.mahaDist - b.mahaDist);
  *
- * // And data looks like this.
- * //[
- * //  { 'fixed acidity': 7.2, alcohol: 11.3, mahaDist: 0 },
- * //  { 'fixed acidity': 7.5, alcohol: 10.5, mahaDist: 0.939 },
- * //  { 'fixed acidity': 7.3, alcohol: 11.4, mahaDist: 1.263 },
- * //  { 'fixed acidity': 6.5, alcohol: 13, mahaDist: 2.079 },
- * //  { 'fixed acidity': 7.1, alcohol: 12.2, mahaDist: 2.411 }
- * //]
- *
- * // You can also pass the option similarity if you want.
- * addMahalanobisDistance(origin, data, { similarity: true })
- *
- * // The data will have a similarity key going from 0 to 1.
+ * console.log(wines);
+ * // Expected output:
  * // [
- * //  { "fixed acidity": 7.2, alcohol: 11.3, mahaDist: 0, similarity: 1 },
- * //  { "fixed acidity": 7.5, alcohol: 10.5, mahaDist: 0.939, similarity: 0.611 },
- * //  { "fixed acidity": 7.3, alcohol: 11.4, mahaDist: 1.263, similarity: 0.476 },
- * //  { "fixed acidity": 6.5, alcohol: 13, mahaDist: 2.079, similarity: 0.138 },
- * //  { "fixed acidity": 7.1, alcohol: 12.2, mahaDist: 2.412, similarity: 0 }
+ * //   { 'fixed acidity': 7.2, 'alcohol': 11.3, mahaDist: 0 },
+ * //   { 'fixed acidity': 7.1, 'alcohol': 12.2, mahaDist: 0.939 },
+ * //   { 'fixed acidity': 6.5, 'alcohol': 11.0, mahaDist: 1.263 },
+ * //   { 'fixed acidity': 6.3, 'alcohol': 10.5, mahaDist: 2.079 }
  * // ]
- * ```
  *
- * @param origin - The origin object with keys as dimensions and values as the reference point.
- * @param data - The array of objects to compute the Mahalanobis distance for.
- * @param options - Optional parameters.
- * @param options.similarity - If true, adds a similarity key to each object.
- * @param options.matrix - A precomputed covariance matrix.
+ * @example
+ * // Usage with the similarity option
+ * addMahalanobisDistance(idealWine, wines, { similarity: true });
+ *
+ * console.log(wines);
+ * // Expected output with similarity scores:
+ * // [
+ * //   { 'fixed acidity': 7.2, 'alcohol': 11.3, mahaDist: 0, similarity: 1 },
+ * //   { 'fixed acidity': 7.1, 'alcohol': 12.2, mahaDist: 0.939, similarity: 0.548 },
+ * //   { 'fixed acidity': 6.5, 'alcohol': 11.0, mahaDist: 1.263, similarity: 0.392 },
+ * //   { 'fixed acidity': 6.3, 'alcohol': 10.5, mahaDist: 2.079, similarity: 0 }
+ * // ]
+ *
  * @category Statistics
  */
 

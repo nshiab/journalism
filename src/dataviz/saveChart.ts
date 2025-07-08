@@ -3,35 +3,56 @@ import type { Data } from "@observablehq/plot";
 import { writeFileSync } from "node:fs";
 
 /**
- * Saves an [Observable Plot](https://github.com/observablehq/plot) chart as an image file (`.png` or `.jpeg`). You can also save a SVG file (`.svg`), but only svg elements will be saved and the layout between them might be inconsistent.
+ * Saves an [Observable Plot](https://github.com/observablehq/plot) chart as an image file (`.png` or `.jpeg`) or an SVG file (`.svg`).
+ *
+ * When saving as an SVG, only the SVG elements will be captured.
+ *
+ * @param data - An array of data objects that your Observable Plot chart function expects.
+ * @param chart - A function that takes the `data` array and returns an SVG or HTML element representing the chart. This function should typically be a direct call to `Plot.plot()` or a similar Observable Plot constructor.
+ * @param path - The file path where the image or SVG will be saved. The file extension (`.png`, `.jpeg`, or `.svg`) determines the output format.
+ * @param options - Optional settings to customize the chart's appearance and behavior.
+ *   @param options.style - A CSS string to apply custom styles to the chart's container `div` (which has the ID `chart`). This is useful for fine-tuning the visual presentation beyond what Observable Plot's `style` option offers.
+ *   @param options.dark - If `true`, the chart will be rendered with a dark mode theme. This adjusts background and text colors for better visibility in dark environments. Defaults to `false`.
+ * @returns A Promise that resolves when the chart has been successfully saved to the specified path.
  *
  * @example
- * Basic usage:
- * ```ts
- * import { saveChart } from "@nshiab/journalism"
- * import type { Data } from "@observablehq/plot";
+ * // -- Basic Usage: Saving as PNG --
+ *
+ * // Save a simple dot plot as a PNG image.
  * import { plot, dot } from "@observablehq/plot";
  *
- * const data = [{ year: 2024, value: 10 }, { year: 2025, value: 15 }];
+ * const dataForPng = [{ year: 2024, value: 10 }, { year: 2025, value: 15 }];
+ * const chartForPng = (d) => plot({ marks: [dot(d, { x: "year", y: "value" })] });
+ * const pngPath = "output/dot-chart.png";
  *
- * const chart = (data: Data) =>
- *   plot({
- *     marks: [
- *       dot(data, { x: "year", y: "value" }),
- *     ],
- *   });
+ * await saveChart(dataForPng, chartForPng, pngPath);
+ * console.log(`Chart saved to ${pngPath}`);
  *
- * const path = "output/chart.png";
+ * @example
+ * // -- Saving as SVG with Custom Style --
  *
- * await saveChart(data, chart, path);
- * ```
+ * // Save a bar chart as an SVG file with a custom background color.
+ * import { plot, barY } from "@observablehq/plot";
  *
- * @param data - An array of data objects.
- * @param chart - A function that takes the data array and returns an SVG or HTML element representing the chart.
- * @param path - The file path where the image will be saved.
- * @param options - Optional object containing additional settings.
- * @param options.style - CSS string to customize the chart's appearance if the Plot `style` option is not enough. Note the Plot chart is wrapped within a <div> element with the id `chart`.
- * @param options.dark - To switch the chart to dark mode. Defaults to false.
+ * const dataForSvg = [{ city: "New York", population: 8.4 }, { city: "Los Angeles", population: 3.9 }];
+ * const chartForSvg = (d) => plot({ marks: [barY(d, { x: "city", y: "population" })] });
+ * const svgPath = "output/bar-chart.svg";
+ *
+ * await saveChart(dataForSvg, chartForSvg, svgPath, { style: "background-color: #f0f0f0;" });
+ * console.log(`Chart saved to ${svgPath}`);
+ *
+ * @example
+ * // -- Dark Mode Chart --
+ *
+ * // Save a line chart in dark mode.
+ * import { plot, line } from "@observablehq/plot";
+ *
+ * const dataForDark = [{ month: "Jan", temp: 5 }, { month: "Feb", temp: 7 }, { month: "Mar", temp: 10 }];
+ * const chartForDark = (d) => plot({ marks: [line(d, { x: "month", y: "temp" })] });
+ * const darkPath = "output/line-chart-dark.jpeg";
+ *
+ * await saveChart(dataForDark, chartForDark, darkPath, { dark: true });
+ * console.log(`Chart saved to ${darkPath}`);
  *
  * @category Dataviz
  */

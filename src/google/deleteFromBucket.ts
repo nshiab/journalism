@@ -2,33 +2,34 @@ import { Storage } from "@google-cloud/storage";
 import process from "node:process";
 
 /**
- * Deletes a file from a Google Cloud Storage bucket. By default, it will throw an error if the file does not exist, but you can use the `try` option to avoid errors in such cases.
+ * Deletes a specified file from a Google Cloud Storage (GCS) bucket.
  *
- * This function expects the project ID and bucket name to be set either through environment variables (BUCKET_PROJECT and BUCKET_NAME) or passed as options.
+ * The function requires the Google Cloud project ID and the target bucket name. These can be provided either through environment variables (`BUCKET_PROJECT` and `BUCKET_NAME`) or directly as parameters in the `options` object. Parameters passed in `options` will take precedence over environment variables.
  *
- * @example
- * Basic usage:
- * ```ts
- * await deleteFromBucket("remote/file.txt");
- * ```
+ * By default, if the specified file does not exist in the bucket, the function will throw an error. However, you can suppress this behavior by setting the `try` option to `true`, which will cause the function to complete silently if the file is not found.
  *
- * @example
- * No error if file doesn't exist:
- * ```ts
- * await deleteFromBucket("remote/file.txt", { try: true });
- * ```
+ * @param destination The full path to the file within the bucket (e.g., 'my-folder/my-file.txt').
+ * @param options Optional configuration for the deletion operation.
+ * @param options.project The Google Cloud project ID. If not provided, it defaults to the `BUCKET_PROJECT` environment variable.
+ * @param options.bucket The name of the Google Cloud Storage bucket. If not provided, it defaults to the `BUCKET_NAME` environment variable.
+ * @param options.try If `true`, the function will not throw an error if the file to be deleted does not exist. Defaults to `false`.
  *
  * @example
- * Using explicit options:
- * ```ts
- * await deleteFromBucket("remote/file.txt", { project: "my-gcp-project", bucket: "my-bucket-name" });
- * ```
+ * // Basic usage: Delete a file from the bucket.
+ * await deleteFromBucket("path/to/your/file.txt");
  *
- * @param destination - The destination path in the bucket to delete.
- * @param options - Optional settings including project ID, bucket name, and behavior options.
- * @param options.project - The Google Cloud project ID.
- * @param options.bucket - The bucket name.
- * @param options.try - If true, won't throw an error if the file doesn't exist. Default is false.
+ * @example
+ * // Delete a file, suppressing errors if it doesn't exist.
+ * await deleteFromBucket("path/to/non-existent-file.txt", { try: true });
+ *
+ * @example
+ * // Explicitly specify project ID and bucket name.
+ * await deleteFromBucket("reports/2023-summary.pdf", {
+ *   project: "my-gcp-project-id",
+ *   bucket: "my-data-bucket"
+ * });
+ *
+ * @category Google
  */
 export default async function deleteFromBucket(
   destination: string,

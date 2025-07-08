@@ -1,28 +1,38 @@
 import process from "node:process";
 
 /**
- * Updates notes field for a specified Datawrapper chart, table or map. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
+ * Updates the notes field for a specified Datawrapper chart, table, or map. This function provides a programmatic way to add or modify descriptive text associated with your Datawrapper visualizations, which can include data sources, methodologies, or any other relevant context.
+ *
+ * Authentication is handled via an API key, which can be provided through environment variables (`DATAWRAPPER_KEY`) or explicitly in the options.
+ *
+ * @param chartId - The unique ID of the Datawrapper chart, table, or map to update. This ID can be found in the Datawrapper URL or dashboard.
+ * @param note - The string content to update the chart's notes field with.
+ * @param options - Optional parameters to configure the notes update process.
+ *   @param options.apiKey - The name of the environment variable that stores your Datawrapper API key (e.g., `"DATAWRAPPER_KEY"`). If not provided, the function defaults to looking for the `DATAWRAPPER_KEY` environment variable.
+ *   @param options.returnResponse - If `true`, the function will return the full `Response` object from the Datawrapper API call. This can be useful for debugging or for more detailed handling of the API response. Defaults to `false`.
+ * @returns A Promise that resolves to `void` if `returnResponse` is `false` (default), or a `Response` object if `returnResponse` is `true`.
  *
  * @example
- * Basic usage
- * ```js
- * import { updateNotesDW, formatDate } from "journalism"
+ * // -- Basic Usage --
  *
- * const chartID = "myChartId"
- * const dateString = formatDate(new Date(), "Month DD, YYYY, at HH:MM period", { abbreviations: true })
- * const note = `This chart was last updated on ${dateString}`
+ * // Update the notes field of a Datawrapper chart with a simple text string.
+ * import { updateNotesDW, formatDate } from "journalism";
  *
- * await updateNotesDW(chartID, note)
+ * const chartID = "myChartId";
+ * const dateString = formatDate(new Date(), "Month DD, YYYY, at HH:MM period", { abbreviations: true });
+ * const note = `This chart was last updated on ${dateString}`;
  *
- * // If your API key is stored under a different name in process.env, use the options.
- * await updateNotesDW(chartID, note, { apiKey: "DW_KEY" })
- * ```
+ * await updateNotesDW(chartID, note);
+ * console.log(`Notes updated for chart ${chartID}.`);
  *
- * @param chartId - The ID of the chart to update.
- * @param note - The note content to update in the chart.
- * @param options - Optional parameters.
- * @param options.apiKey - The process.env API key name to use for authentication. If not provided, defaults to process.env.DATAWRAPPER_KEY.
- * @param options.returnResponse - If true, the function returns the response object from the fetch call.
+ * @example
+ * // -- Using Custom API Key Environment Variable --
+ *
+ * // If your API key is stored under a different name in process.env (e.g., `DW_KEY`).
+ * const customApiKeyChartID = "anotherChartId";
+ * const customNote = "This is a note using a custom API key.";
+ * await updateNotesDW(customApiKeyChartID, customNote, { apiKey: "DW_KEY" });
+ * console.log(`Notes updated for chart ${customApiKeyChartID} using custom API key.`);
  *
  * @category Dataviz
  */

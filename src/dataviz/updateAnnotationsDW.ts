@@ -1,14 +1,50 @@
 import process from "node:process";
 
 /**
- * Updates annotations on a chart. By default, this function looks for the API key in process.env.DATAWRAPPER_KEY.
+ * Updates annotations on a Datawrapper chart. This function allows you to programmatically add, modify, or remove text and line annotations on your Datawrapper visualizations, providing precise control over highlighting specific data points or trends.
+ *
+ * This function supports various annotation properties, including position, text content, styling (bold, italic, color, size), alignment, and connector lines with customizable arrowheads.
+ *
+ * Authentication is handled via an API key, which can be provided through environment variables (`DATAWRAPPER_KEY`) or explicitly in the options. For detailed information on Datawrapper annotations and their properties, refer to the official Datawrapper API documentation.
+ *
+ * @param chartId - The ID of the Datawrapper chart to update. This ID can be found in the Datawrapper URL or dashboard.
+ * @param annotations - An array of annotation objects. Each object defines a single annotation with its properties. Required properties for each annotation are `x`, `y`, and `text`.
+ *   @param annotations.x - The x-coordinate of the annotation's position on the chart.
+ *   @param annotations.y - The y-coordinate of the annotation's position on the chart.
+ *   @param annotations.text - The text content of the annotation.
+ *   @param annotations.bg - If `true`, the annotation text will have a background. Defaults to `false`.
+ *   @param annotations.dx - The horizontal offset of the annotation text from its `x` coordinate, in pixels. Defaults to `0`.
+ *   @param annotations.dy - The vertical offset of the annotation text from its `y` coordinate, in pixels. Defaults to `0`.
+ *   @param annotations.bold - If `true`, the annotation text will be bold. Defaults to `false`.
+ *   @param annotations.size - The font size of the annotation text in pixels. Defaults to `12`.
+ *   @param annotations.align - The alignment of the annotation text relative to its `x` and `y` coordinates. Can be `"tl"` (top-left), `"tc"` (top-center), `"tr"` (top-right), `"ml"` (middle-left), `"mc"` (middle-center), `"mr"` (middle-right), `"bl"` (bottom-left), `"bc"` (bottom-center), or `"br"` (bottom-right). Defaults to `"mr"`.
+ *   @param annotations.color - The color of the annotation text (e.g., `"#FF0000"`, `"red"`). Defaults to `"#8C8C8C"`.
+ *   @param annotations.width - The maximum width of the annotation text box in pixels. Text will wrap if it exceeds this width. Defaults to `20`.
+ *   @param annotations.italic - If `true`, the annotation text will be italic. Defaults to `false`.
+ *   @param annotations.underline - If `true`, the annotation text will be underlined. Defaults to `false`.
+ *   @param annotations.showMobile - If `true`, the annotation will be visible on mobile devices. Defaults to `true`.
+ *   @param annotations.showDesktop - If `true`, the annotation will be visible on desktop devices. Defaults to `true`.
+ *   @param annotations.mobileFallback - If `true`, the annotation will be displayed as a simple text label on mobile if it's too complex. Defaults to `false`.
+ *   @param annotations.connectorLine - An object defining the properties of a connector line from the annotation to a data point.
+ *     @param annotations.connectorLine.type - The type of the connector line. Can be `"straight"`, `"curveRight"`, or `"curveLeft"`. Defaults to `"straight"`.
+ *     @param annotations.connectorLine.circle - If `true`, a circle will be drawn at the end of the connector line. Defaults to `false`.
+ *     @param annotations.connectorLine.stroke - The stroke width of the connector line. Can be `1`, `2`, or `3`. Defaults to `1`.
+ *     @param annotations.connectorLine.enabled - If `true`, the connector line will be drawn. Defaults to `false`.
+ *     @param annotations.connectorLine.arrowHead - The style of the arrowhead. Can be `"lines"`, `"triangle"`, or `false` (no arrowhead). Defaults to `"lines"`.
+ *     @param annotations.connectorLine.circleStyle - The style of the circle at the end of the connector line. Defaults to `"solid"`.
+ *     @param annotations.connectorLine.circleRadius - The radius of the circle at the end of the connector line. Defaults to `10`.
+ *     @param annotations.connectorLine.inheritColor - If `true`, the connector line will inherit the annotation's text color. Defaults to `false`.
+ *     @param annotations.connectorLine.targetPadding - The padding between the end of the connector line and the target data point. Defaults to `4`.
+ * @param options.apiKey - The name of the environment variable that stores your Datawrapper API key. If not provided, the function defaults to looking for `DATAWRAPPER_KEY`.
+ * @param options.returnResponse - If `true`, the function will return the full `Response` object from the Datawrapper API call. This can be useful for debugging or for more detailed handling of the API response. Defaults to `false`.
+ * @returns A Promise that resolves to `void` if `returnResponse` is `false` (default), or a `Response` object if `returnResponse` is `true`.
  *
  * @example
- * Basic usage
- * ```ts
- * import { updateAnnotationsDW } from "journalism"
+ * // -- Basic Usage --
  *
- * const chartID = "myChartId"
+ * // Update annotations on a Datawrapper chart with a simple text annotation and one with an arrow.
+ *
+ * const chartID = "myChartId";
  * const myAnnotations = [
  *    {
  *        "x": "2024/08/30 01:52",
@@ -27,19 +63,21 @@ import process from "node:process";
  *        },
  *        "mobileFallback": false
  *    }
- * ]
+ * ];
  *
- * await updateAnnotationsDW(chartID, myAnnotations)
+ * await updateAnnotationsDW(chartID, myAnnotations);
+ * console.log(`Annotations updated for chart ${chartID}.`);
  *
- * // If your API key is stored under a different name in process.env, use the options.
- * await updateAnnotationsDW(chartID, myAnnotations, { apiKey: "DW_KEY" })
- * ```
+ * @example
+ * // -- Using Custom API Key Environment Variable --
  *
- * @param chartId - The ID of the chart to update.
- * @param annotations - An array of annotation objects.
- * @param options - Additional options.
- * @param options.apiKey - The process.env API key name to use for authentication. If not provided, it defaults to process.env.DATAWRAPPER_KEY.
- * @param options.returnResponse - Whether to return the response object.
+ * // If your Datawrapper API key is stored under a different environment variable name (e.g., `DW_API_KEY`).
+ * const customApiKeyChartID = "anotherChartId";
+ * const annotationsForCustomKey = [
+ *   { x: "2024/01/01", y: "100", text: "Custom API Key Test" }
+ * ];
+ * await updateAnnotationsDW(customApiKeyChartID, annotationsForCustomKey, { apiKey: "DW_API_KEY" });
+ * console.log(`Annotations updated for chart ${customApiKeyChartID} using custom API key.`);
  *
  * @category Dataviz
  */

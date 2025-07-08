@@ -461,3 +461,38 @@ Deno.test("should throw for invalid RC position (1.5)", () => {
   }
   assertEquals(error instanceof Error, true);
 });
+
+Deno.test("should format a number with thousands separator", () => {
+  const num1 = formatNumber(1234567.89);
+  assertEquals(num1, "1,234,567.89");
+});
+
+Deno.test("should format a number with sign and rounding to 0 decimals", () => {
+  const num2 = formatNumber(1234.567, { sign: true, decimals: 0 });
+  assertEquals(num2, "+1,235");
+});
+
+Deno.test("should format a number in French style with abbreviation", () => {
+  const num3 = formatNumber(1234567, { style: "rc", abreviation: true });
+  assertEquals(num3, "1,234567M");
+});
+
+Deno.test("should format a number with fixed decimals, prefix and suffix", () => {
+  const num4 = formatNumber(98.765, {
+    decimals: 2,
+    fixed: true,
+    prefix: "$",
+    suffix: " CAD",
+  });
+  assertEquals(num4, "$98.77 CAD");
+});
+
+Deno.test("should format a number as an ordinal position (English)", () => {
+  const position1 = formatNumber(1, { position: true });
+  assertEquals(position1, "first");
+});
+
+Deno.test("should format a number as an ordinal position (French)", () => {
+  const position2 = formatNumber(2, { position: true, style: "rc" });
+  assertEquals(position2, "deuxième");
+});

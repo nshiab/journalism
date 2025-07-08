@@ -25,6 +25,28 @@ Deno.test("should return astronomical spring for 2024-06-20", () => {
   const season = getSeason({ date: new Date(2023, 5, 20) });
   assertEquals(season, "spring");
 });
+Deno.test("should return meteorological spring for 2024-03-21", () => {
+  const season = getSeason({
+    date: new Date(2024, 2, 21),
+    type: "meteorological",
+  });
+  assertEquals(season, "spring");
+});
+Deno.test("should return astronomical fall for 2024-12-01", () => {
+  const season = getSeason({
+    date: new Date(2024, 11, 1),
+    type: "astronomical",
+  });
+  assertEquals(season, "fall");
+});
+Deno.test("should return winter for 2023-06-15 in southern hemisphere (meteorological)", () => {
+  const season = getSeason({
+    date: new Date("2023-06-15"),
+    hemisphere: "southern",
+    type: "meteorological",
+  });
+  assertEquals(season, "winter");
+});
 Deno.test("should return astronomical summer for 2024-06-21", () => {
   const season = getSeason({ date: new Date(2024, 5, 21) });
   assertEquals(season, "summer");

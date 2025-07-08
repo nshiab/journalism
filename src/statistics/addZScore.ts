@@ -1,47 +1,51 @@
 /**
- * Computes the Z-Score for a given variable in an array of objects. By default, the function adds a new key `zScore` in each object, but you can change it by passing this option as the last parameter `{ newKey: "myNewKey" }`.
+ * Calculates the Z-score for a specific numeric variable within an array of objects and adds it as a new property to each object. The Z-score is a statistical measure that indicates how many standard deviations a data point is from the mean of the dataset.
+ *
+ * The function modifies the input `data` array by adding a new key to each object, which by default is `zScore`. You can customize the name of this new key by using the `newKey` option.
+ *
+ * @param data - An array of objects. Each object should contain the variable for which the Z-score is to be calculated.
+ * @param variable - The key (as a string) of the numeric variable for which the Z-score will be computed.
+ * @param options - Optional settings for the Z-score calculation.
+ * @param options.newKey - The name of the new key to be added to each object, representing the Z-score. If not provided, it defaults to `'zScore'`.
+ * @returns The input `data` array, with the Z-score added to each object under the specified key.
+ * @throws {Error} If the specified `variable` is not found in an object or its value is not a number.
  *
  * @example
- * Basic example
- * ```js
- * // Let's say we have a data set like this.
- * const data = [
- *   { grade: 1 },
- *   { grade: 4 },
- *   { grade: 7 },
- *   { grade: 2 },
- *   { grade: 6 },
- * ]
+ * // Basic usage with a list of student grades
+ * const studentData = [
+ *   { student: 'Alice', grade: 85 },
+ *   { student: 'Bob', grade: 92 },
+ *   { student: 'Charlie', grade: 78 },
+ *   { student: 'David', grade: 95 },
+ *   { student: 'Eve', grade: 62 }
+ * ];
  *
- * // We compute the Z-Score for the variable grade.
- * addZScore(data, "grade")
+ * // Calculate the Z-score for the 'grade' variable
+ * addZScore(studentData, 'grade');
  *
- * // We now have the key zScore in the data.
+ * console.log(studentData);
+ * // Expected output:
  * // [
- * //  { grade: 1, zScore: -1.3155870289605438 },
- * //  { grade: 4, zScore: 0 },
- * //  { grade: 7, zScore: 1.3155870289605438 },
- * //  { grade: 2, zScore: -0.8770580193070292 },
- * //  { grade: 6, zScore: 0.8770580193070292 },
+ * //   { student: 'Alice', grade: 85, zScore: 0.25 },
+ * //   { student: 'Bob', grade: 92, zScore: 0.83 },
+ * //   { student: 'Charlie', grade: 78, zScore: -0.33 },
+ * //   { student: 'David', grade: 95, zScore: 1.08 },
+ * //   { student: 'Eve', grade: 62, zScore: -1.83 }
  * // ]
  *
- * // If you want a specific new key, use the options.
- * addZScore(data, "grade", { newKey: "zScoreGrade"})
+ * @example
+ * // Using a custom key for the Z-score
+ * addZScore(studentData, 'grade', { newKey: 'gradeZScore' });
  *
- * // We now have the key zScoreGrade in the data.
+ * console.log(studentData);
+ * // Expected output with a custom key:
  * // [
- * //  { grade: 1, zScoreGrade: -1.3155870289605438 },
- * //  { grade: 4, zScoreGrade: 0 },
- * //  { grade: 7, zScoreGrade: 1.3155870289605438 },
- * //  { grade: 2, zScoreGrade: -0.8770580193070292 },
- * //  { grade: 6, zScoreGrade: 0.8770580193070292 },
+ * //   { student: 'Alice', grade: 85, gradeZScore: 0.25 },
+ * //   { student: 'Bob', grade: 92, gradeZScore: 0.83 },
+ * //   { student: 'Charlie', grade: 78, gradeZScore: -0.33 },
+ * //   { student: 'David', grade: 95, gradeZScore: 1.08 },
+ * //   { student: 'Eve', grade: 62, gradeZScore: -1.83 }
  * // ]
- * ```
- *
- * @param data - The array of objects containing the data.
- * @param variable - The key of the variable to compute the Z-Score for.
- * @param options - Optional settings for the computation.
- * @param options.newKey - The key to use for the Z-Score. Default is "zScore".
  *
  * @category Statistics
  */

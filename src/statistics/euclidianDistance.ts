@@ -1,20 +1,29 @@
 /**
- * Calculates the Euclidean distance between two points (x1, y1) and (x2, y2).
+ * Calculates the Euclidean distance between two points in a 2D Cartesian coordinate system. The Euclidean distance is the shortest straight-line distance between two points, often referred to as the "as the crow flies" distance.
  *
- * The Euclidean distance is the straight-line distance between two points in a
- * Euclidean space and is calculated using the Pythagorean theorem.
+ * This function applies the Pythagorean theorem to compute the distance.
+ *
+ * @param x1 The x-coordinate of the first point.
+ * @param y1 The y-coordinate of the first point.
+ * @param x2 The x-coordinate of the second point.
+ * @param y2 The y-coordinate of the second point.
+ *
+ * @returns The Euclidean distance between the two points.
  *
  * @example
- * Basic usage
- * ```
- * const distance = euclideanDistance(0, 0, 3, 4);
- * console.log(distance); // 5
- * ```
+ * // Basic usage: Calculate the distance between (0,0) and (3,4).
+ * const dist1 = euclideanDistance(0, 0, 3, 4);
+ * console.log(dist1); // 5
  *
- * @param x1 - The x-coordinate of the first point.
- * @param y1 - The y-coordinate of the first point.
- * @param x2 - The x-coordinate of the second point.
- * @param y2 - The y-coordinate of the second point.
+ * @example
+ * // Calculate the distance between two points with negative coordinates.
+ * const dist2 = euclideanDistance(-1, -1, 2, 3);
+ * console.log(dist2); // 5
+ *
+ * @example
+ * // Distance between identical points should be zero.
+ * const dist3 = euclideanDistance(5, 10, 5, 10);
+ * console.log(dist3); // 0
  *
  * @category Statistics
  */

@@ -1,35 +1,72 @@
 import round from "../format/round.ts";
 
 /**
- * Returns fixed rate mortgage payments in an array. Each payment is an object with the paymentId, the payment amount, the interest and capital portions of the payment, the remaining mortgage balance, and the total amount paid, total interest paid, and total capital reimbursed so far. The calculations have been tested for Canada, which requires fixed rate mortgages to be compounded semi-annually by law. But you can change the annualCompounding in the options.
+ * Calculates and returns a detailed schedule of fixed-rate mortgage payments. This function is designed to provide a comprehensive breakdown of each payment, including the principal and interest portions, remaining balance, and cumulative amounts paid. It adheres to Canadian mortgage regulations, which typically require semi-annual compounding, but allows for customization of the compounding frequency.
  *
- * If the amortizationPeriod is smaller than the term, an error is thrown.
+ * The function is flexible, supporting various payment frequencies (weekly, bi-weekly, monthly, semi-monthly, accelerated weekly, accelerated bi-weekly) and allowing for the specification of the mortgage amount, interest rate, term, and amortization period. It also includes options for rounding payment values and enabling debug logging.
  *
- * These options can be passed in an object as the last parameter:
- * - id: a string if we want to add an id in the payment objects.
- * - decimals: the number of decimals to round to. By default, it's 2.
- * - annualCompounding: how many times the mortgage should be compounded per year. By default, it's 2.
- * - debug: Will log extra information if true.
- *
- * Calculations are based on https://www.yorku.ca/amarshal/mortgage.htm and https://www.mikesukmanowsky.com/blog/a-guide-to-canadian-mortgage-calculations
+ * @param mortageAmount - The total amount of the mortgage loan.
+ * @param rate - The annual interest rate of the mortgage (e.g., `6.00` for 6.00%).
+ * @param paymentFrequency - The frequency at which mortgage payments are made. Supported values are: `"weekly"`, `"biWeekly"`, `"monthly"`, `"semiMonthly"`, `"acceleratedWeekly"`, `"acceleratedBiWeekly"`.
+ * @param term - The term of the mortgage in years. This is the length of the current mortgage contract.
+ * @param amortizationPeriod - The total amortization period of the mortgage in years. This is the total time it will take to pay off the mortgage.
+ * @param options - Additional options for customizing the mortgage calculation and output.
+ *   @param options.id - An optional string ID to be added to each payment object in the returned array. Useful for tracking payments related to a specific mortgage.
+ *   @param options.decimals - The number of decimal places to round the financial values (payment, interest, capital, balance) to. Defaults to `2`.
+ *   @param options.annualCompounding - The number of times the mortgage interest should be compounded per year. Defaults to `2` (semi-annual compounding, as is standard in Canada).
+ *   @param options.debug - If `true`, enables debug logging to the console, providing additional insights into the calculation process. Defaults to `false`.
+ * @returns An array of objects, where each object represents a single mortgage payment and contains:
+ *   - `paymentId`: A 0-based index for the payment.
+ *   - `payment`: The total amount of the payment.
+ *   - `interest`: The portion of the payment that goes towards interest.
+ *   - `capital`: The portion of the payment that goes towards the principal (capital).
+ *   - `balance`: The remaining mortgage balance after the payment.
+ *   - `amountPaid`: The cumulative total amount paid so far.
+ *   - `interestPaid`: The cumulative total interest paid so far.
+ *   - `capitalPaid`: The cumulative total capital reimbursed so far.
+ *   - `id` (optional): The ID provided in `options.id`.
+ * @throws {Error} If the `amortizationPeriod` is less than the `term`, as this is an invalid mortgage configuration.
  *
  * @example
- * Basic usage
- * ```js
- * // return the monthly mortgage payments for a $250k loan with a 6.00% rate
- * const payments = mortgagePayments(250_000, 6, "monthly", 5, 25)
- * ```
+ * // -- Basic Usage --
  *
- * @param mortageAmount The amount of the mortgage loan
- * @param rate The interest rate of the mortgage
- * @param paymentFrequency The frequency of the mortgage payments
- * @param term The term of the mortgage in years
- * @param amortizationPeriod The amortization period of the mortgage in years
- * @param options Additional options for the mortgage calculation
- * @param options.id A string if we want to add an id in the payment objects
- * @param options.decimals The number of decimals to round to. By default, it's 2
- * @param options.annualCompounding How many times the mortgage should be compounded per year. By default, it's 2
- * @param options.debug Will log extra information if true
+ * // Return the monthly mortgage payments for a $250,000 loan with a 6.00% rate, 5-year term, and 25-year amortization.
+ * const payments = mortgagePayments(250_000, 6, "monthly", 5, 25);
+ * console.log(payments[0]); // First payment details
+ * // Expected output (example):
+ * // {
+ * //   paymentId: 0,
+ * //   payment: 1599.52,
+ * //   interest: 1234.66,
+ * //   capital: 364.86,
+ * //   balance: 249635.14,
+ * //   amountPaid: 1599.52,
+ * //   interestPaid: 1234.66,
+ * //   capitalPaid: 364.86,
+ * // }
+ * console.log(payments[payments.length - 1]); // Last payment details
+ * // Expected output (example):
+ * // {
+ * //   paymentId: 59,
+ * //   payment: 1599.52,
+ * //   interest: 1111.58,
+ * //   capital: 487.93,
+ * //   balance: 224591.84,
+ * //   amountPaid: 95970.99,
+ * //   interestPaid: 70562.76,
+ * //   capitalPaid: 25408.23,
+ * // }
+ *
+ * @example
+ * // -- Handling Invalid Amortization Period --
+ *
+ * // Attempting to set an amortization period shorter than the term will throw an error.
+ * try {
+ *   mortgagePayments(200_000, 5, "monthly", 10, 5); // Term (10) > Amortization (5)
+ * } catch (error) {
+ *   console.error("Error:", error.message);
+ *   // Expected output: "Error: The amortizationPeriod should be equal or greater than the term."
+ * }
  *
  * @category Finance
  */
