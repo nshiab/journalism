@@ -13,8 +13,7 @@ import process from "node:process";
  * @returns A Promise that resolves to `void` if `returnResponse` is `false` (default), or a `Response` object if `returnResponse` is `true`.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Update the notes field of a Datawrapper chart with a simple text string.
  * import { updateNotesDW, formatDate } from "journalism";
  *
@@ -24,16 +23,15 @@ import process from "node:process";
  *
  * await updateNotesDW(chartID, note);
  * console.log(`Notes updated for chart ${chartID}.`);
- *
+ * ```
  * @example
- * // -- Using Custom API Key Environment Variable --
- *
+ * ```ts
  * // If your API key is stored under a different name in process.env (e.g., `DW_KEY`).
  * const customApiKeyChartID = "anotherChartId";
  * const customNote = "This is a note using a custom API key.";
  * await updateNotesDW(customApiKeyChartID, customNote, { apiKey: "DW_KEY" });
  * console.log(`Notes updated for chart ${customApiKeyChartID} using custom API key.`);
- *
+ * ```
  * @category Dataviz
  */
 export default async function updateNotesDW(

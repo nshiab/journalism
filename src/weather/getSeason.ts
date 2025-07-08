@@ -10,15 +10,14 @@
  * @returns The name of the season ('winter', 'spring', 'summer', or 'fall').
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Get the current season in the northern hemisphere using astronomical seasons.
  * const season = getSeason();
  * console.log(season); // e.g., "summer" (if current date is July 7, 2025)
+ * ```
  *
  * @example
- * // -- With Options --
- *
+ * ```ts
  * // Get the season for a specific date in the southern hemisphere using meteorological seasons.
  * const specificDate = new Date('2023-06-15');
  * const seasonSouthernMeteorological = getSeason({
@@ -27,10 +26,10 @@
  *   type: 'meteorological'
  * });
  * console.log(seasonSouthernMeteorological); // Output: "winter"
+ * ```
  *
  * @example
- * // -- Astronomical vs. Meteorological Seasons --
- *
+ * ```ts
  * // Compare astronomical and meteorological seasons for a specific date in the Northern Hemisphere.
  * const march21 = new Date('2024-03-21');
  * const astronomicalSeason = getSeason({ date: march21, type: 'astronomical' });
@@ -45,7 +44,7 @@
  *
  * const meteorologicalSeasonDec = getSeason({ date: december1, type: 'meteorological' });
  * console.log(`Meteorological season on December 1: ${meteorologicalSeasonDec}`); // Output: "winter"
- *
+ * ```
  * @category Weather and climate
  */
 export default function getSeason(

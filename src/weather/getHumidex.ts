@@ -11,19 +11,17 @@
  * @throws {Error} If the humidity value is not within the valid range of 0 to 100.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Calculate humidex for a warm and humid day.
  * const humidex = getHumidex(30, 70); // returns 41
  * console.log(`Humidex: ${humidex}`);
- *
+ * ```
  * @example
- * // -- When Humidex is lower than temperature --
- *
+ * ```ts
  * // In cases where the calculated humidex is less than the temperature, the temperature is returned.
  * const humidexLowHumidity = getHumidex(20, 30); // returns 20 (since calculated humidex would be lower)
  * console.log(`Humidex: ${humidexLowHumidity}`);
- *
+ * ```
  * @category Weather and climate
  */
 

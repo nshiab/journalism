@@ -24,33 +24,38 @@ import { transformPositionToRcStyle } from "./helpers/transformPositionToRcStyle
  * @returns The formatted number as a string.
  *
  * @example
+ * ```ts
  * // Basic usage: Format a number with thousands separator.
  * const num1 = formatNumber(1234567.89);
  * console.log(num1); // "1,234,567.89"
- *
+ * ```
  * @example
+ * ```ts
  * // With sign and rounding to 0 decimals.
  * const num2 = formatNumber(1234.567, { sign: true, decimals: 0 });
  * console.log(num2); // "+1,235"
- *
+ * ```
  * @example
+ * ```ts
  * // French style with abbreviation.
  * const num3 = formatNumber(1234567, { style: "rc", abreviation: true });
  * console.log(num3); // "1,2 M"
- *
+ * ```
  * @example
+ * ```ts
  * // Fixed number of decimals with prefix and suffix.
  * const num4 = formatNumber(98.765, { decimals: 2, fixed: true, prefix: "$", suffix: " CAD" });
  * console.log(num4); // "$98.77 CAD"
- *
+ * ```
  * @example
+ * ```ts
  * // Formatting as an ordinal position.
  * const position1 = formatNumber(1, { position: true });
  * console.log(position1); // "1st"
  *
  * const position2 = formatNumber(2, { position: true, style: "rc" });
  * console.log(position2); // "2e"
- *
+ * ```
  * @category Formatting
  */
 

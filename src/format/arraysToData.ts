@@ -8,6 +8,7 @@
  * @returns An array of objects, where each object is a "row" of data created by combining values from the input arrays at the same index.
  *
  * @example
+ * ```ts
  * // Basic usage with mixed data types
  * const columnarData = {
  *   name: ['Alice', 'Bob', 'Charlie'],
@@ -24,8 +25,9 @@
  * //   { name: 'Bob', age: 25, city: 'London' },
  * //   { name: 'Charlie', age: 35, city: 'Paris' }
  * // ]
- *
+ * ```
  * @example
+ * ```ts
  * // Usage with numerical data for charting
  * const chartData = {
  *   x: [1, 2, 3, 4, 5],
@@ -43,7 +45,7 @@
  * //   { x: 4, y: 25 },
  * //   { x: 5, y: 30 }
  * // ]
- *
+ * ```
  * @category Formatting
  */
 

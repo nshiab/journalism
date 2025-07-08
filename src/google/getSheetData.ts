@@ -15,8 +15,7 @@ import logToSheet from "./helpers/logToSheet.ts";
  * @returns A Promise that resolves to either an array of objects (`Record<string, string>[]`) if `options.csv` is `false`, or a CSV string (`string`) if `options.csv` is `true`.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Fake URL used as an example.
  * const sheetUrl = "https://docs.google.com/spreadsheets/d/nrqo3oP4KMWYbELScQa8W1nHZPfIrA7LIz9UmcRE4GyJN/edit#gid=0";
  *
@@ -28,10 +27,9 @@ import logToSheet from "./helpers/logToSheet.ts";
  * //   { Header1: 'Value1', Header2: 'Value2' },
  * //   { Header1: 'Value3', Header2: 'Value4' }
  * // ]
- *
+ * ```
  * @example
- * // -- Skipping Rows --
- *
+ * ```ts
  * // Retrieve data, skipping the first row (e.g., if it contains metadata).
  * const dataSkippingFirstRow = await getSheetData(sheetUrl, { skip: 1 });
  * console.log(dataSkippingFirstRow);
@@ -40,26 +38,24 @@ import logToSheet from "./helpers/logToSheet.ts";
  * //   { Header1: 'Value1', Header2: 'Value2' },
  * //   { Header1: 'Value3', Header2: 'Value4' }
  * // ]
- *
+ * ```
  * @example
- * // -- Returning as CSV String --
- *
+ * ```ts
  * // Return the data as a raw CSV string, useful for direct writing to files or other systems.
  * const csvString = await getSheetData(sheetUrl, { csv: true });
  * console.log(csvString);
  * // Expected output (example):
  * // "Header1,Header2\nValue1,Value2\nValue3,Value4"
- *
+ * ```
  * @example
- * // -- Custom API Credentials --
- *
+ * ```ts
  * // Use custom environment variable names for API email and key.
  * const dataWithCustomCredentials = await getSheetData(sheetUrl, {
  *   apiEmail: "GG_EMAIL",
  *   apiKey: "GG_KEY"
  * });
  * console.log(dataWithCustomCredentials);
- *
+ * ```
  * @category Google
  */
 export default async function getSheetData(

@@ -20,8 +20,7 @@ import prepChart from "./helpers/prepChart.ts";
  * @param options.title - The title of the chart. If not provided, a default title based on `x`, `y`, and `smallMultiples` (if applicable) will be generated.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Visualize a time series of values.
  * const timeSeriesData = [
  *     { date: new Date("2023-01-01"), value: 10 },
@@ -35,10 +34,10 @@ import prepChart from "./helpers/prepChart.ts";
  *     formatY: (d) => "$" + (d as number).toString(),
  *     title: "Monthly Sales Trend",
  * });
+ * ```
  *
  * @example
- * // -- Small Multiples --
- *
+ * ```ts
  * // Compare trends across different categories using small multiples.
  * const multiCategoryData = [
  *     { date: new Date("2023-01-01"), value: 10, category: "A" },
@@ -59,6 +58,7 @@ import prepChart from "./helpers/prepChart.ts";
  *     fixedScales: true,
  *     title: "Sales Trend by Category",
  * });
+ * ```
  *
  * @category Dataviz
  */

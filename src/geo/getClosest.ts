@@ -20,6 +20,7 @@ import distance from "./distance.ts";
  * @returns The geographical item from `geoItems` that is closest to the reference point. If `addDistance` is `true`, the returned object will also include the `distance` property.
  *
  * @example
+ * ```ts
  * // Basic usage: Find the closest city to Ottawa.
  * const cities = [
  *   { name: "Montreal", lon: -73.5673, lat: 45.5017 },
@@ -39,8 +40,9 @@ import distance from "./distance.ts";
  *
  * console.log(closestCity);
  * // Expected output: { name: "Montreal", lon: -73.5673, lat: 45.5017, distance: 160.69 }
- *
+ * ```
  * @example
+ * ```ts
  * // Finding the closest point in a GeoJSON FeatureCollection.
  * const featureCollection = {
  *   type: "FeatureCollection",
@@ -62,7 +64,7 @@ import distance from "./distance.ts";
  *
  * console.log(closestPark);
  * // Expected output: { type: "Feature", properties: { name: "Park B", distance: ... }, geometry: { ... } }
- *
+ * ```
  * @category Geo
  */
 

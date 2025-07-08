@@ -11,19 +11,17 @@ import { unlinkSync } from "node:fs";
  * @returns `void`
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Unzip a file to a specified output directory.
  * unzip('path/to/file.zip', 'path/to/output');
  * console.log("File unzipped successfully.");
- *
+ * ```
  * @example
- * // -- Delete Zipped File After Extraction --
- *
+ * ```ts
  * // Unzip a file and then delete the original zipped file.
  * unzip('path/to/another-file.zip', 'path/to/another-output', { deleteZippedFile: true });
  * console.log("File unzipped and original zipped file deleted.");
- *
+ * ```
  * @category Other
  */
 export default function unzip(

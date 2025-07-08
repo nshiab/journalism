@@ -13,21 +13,24 @@
  * @returns An object `{ x, y, z }` or an array `[x, y, z]` representing the 3D Cartesian coordinates.
  *
  * @example
+ * ```ts
  * // Basic usage: Convert geographical coordinates to 3D object coordinates.
  * // Longitude: -73.5674 (Montreal), Latitude: 45.5019 (Montreal), Radius: 1
  * const coordsObject = geoTo3D(-73.5674, 45.5019, 1, { decimals: 2 });
  * console.log(coordsObject); // Expected output: { x: -0.67, y: 0.71, z: 0.2 }
- *
+ * ```
  * @example
+ * ```ts
  * // Convert geographical coordinates to 3D array coordinates.
  * const coordsArray = geoTo3D(-73.5674, 45.5019, 1, { decimals: 2, toArray: true });
  * console.log(coordsArray); // Expected output: [-0.67, 0.71, 0.2]
- *
+ * ```
  * @example
+ * ```ts
  * // Using a larger radius for visualization purposes.
  * const earthCoords = geoTo3D(0, 0, 6371, { decimals: 0 }); // Earth's approximate radius in km
  * console.log(earthCoords); // Expected output: { x: 0, y: 6371, z: 0 } (for 0,0 lat/lon)
- *
+ * ```
  * @category Geo
  */
 

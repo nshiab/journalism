@@ -15,20 +15,23 @@ import process from "node:process";
  * @param options.try If `true`, the function will not throw an error if the file to be deleted does not exist. Defaults to `false`.
  *
  * @example
+ * ```ts
  * // Basic usage: Delete a file from the bucket.
  * await deleteFromBucket("path/to/your/file.txt");
- *
+ * ```
  * @example
+ * ```ts
  * // Delete a file, suppressing errors if it doesn't exist.
  * await deleteFromBucket("path/to/non-existent-file.txt", { try: true });
- *
+ * ```
  * @example
+ * ```ts
  * // Explicitly specify project ID and bucket name.
  * await deleteFromBucket("reports/2023-summary.pdf", {
  *   project: "my-gcp-project-id",
  *   bucket: "my-data-bucket"
  * });
- *
+ * ```
  * @category Google
  */
 export default async function deleteFromBucket(

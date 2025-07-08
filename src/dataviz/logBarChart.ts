@@ -18,8 +18,7 @@ import makeBars from "./helpers/makeBars.ts";
  * @param options.compact - If `true`, the chart will be rendered in a more compact format, reducing vertical spacing between bars. Defaults to `false`.
  *
  * @example
- * // -- Basic Bar Chart of Sales by Region --
- *
+ * ```ts
  * // Visualize sales data for different regions.
  * const salesData = [
  *   { region: 'North', sales: 1200 },
@@ -28,10 +27,9 @@ import makeBars from "./helpers/makeBars.ts";
  *   { region: 'West', sales: 950 }
  * ];
  * logBarChart(salesData, 'region', 'sales', { title: 'Regional Sales Overview' });
- *
+ * ```
  * @example
- * // -- Bar Chart with Custom Formatting and Compact Mode --
- *
+ * ```ts
  * // Display product popularity with custom value formatting and a compact layout.
  * const productPopularity = [
  *   { product: 'Laptop', views: 5000 },
@@ -44,7 +42,7 @@ import makeBars from "./helpers/makeBars.ts";
  *   compact: true,
  *   totalLabel: 'Total Views'
  * });
- *
+ * ```
  * @category Dataviz
  */
 export default function logBarChart(

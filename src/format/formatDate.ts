@@ -19,12 +19,14 @@ import isValid from "./helpers/isValidDate.ts";
  * @returns The formatted date string.
  *
  * @example
+ * ```ts
  * // Basic usage: Format a date in default English style.
  * const date = new Date("2023-01-01T01:35:00.000Z");
  * const formatted = formatDate(date, "Month DD, YYYY, at HH:MM period", { utc: true });
  * console.log(formatted); // "January 1, 2023, at 1:35 a.m."
- *
+ * ```
  * @example
+ * ```ts
  * // Formatting in French style with abbreviations.
  * const frenchFormatted = formatDate(date, "Month DD, YYYY, at HH:MM period", {
  *   style: "rc",
@@ -32,19 +34,21 @@ import isValid from "./helpers/isValidDate.ts";
  *   utc: true
  * });
  * console.log(frenchFormatted); // "1 janv. 2023 à 1 h 35"
- *
+ * ```
  * @example
+ * ```ts
  * // Formatting with a specific time zone.
  * const estFormatted = formatDate(date, "Month DD, YYYY, at HH:MM period TZ", {
  *   timeZone: "Canada/Eastern"
  * });
  * console.log(estFormatted); // "January 1, 2023, at 8:35 p.m. EST" (assuming date is UTC)
- *
+ * ```
  * @example
+ * ```ts
  * // Custom format: YYYY-MM-DD
  * const isoFormatted = formatDate(new Date("2024-03-15T10:00:00Z"), "YYYY-MM-DD");
  * console.log(isoFormatted); // "2024-03-15"
- *
+ * ```
  * @category Formatting
  */
 

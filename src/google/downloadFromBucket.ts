@@ -18,27 +18,31 @@ import { existsSync } from "node:fs";
  * @param options.skip If `true`, the download will be skipped if a local file already exists at the `destination` path. Cannot be used with `overwrite`. Defaults to `false`.
  *
  * @example
+ * ```ts
  * // Basic usage: Download a file.
  * await downloadFromBucket("reports/annual-report.pdf", "./local-reports/annual-report.pdf");
  * console.log("File downloaded successfully!");
- *
+ * ```
  * @example
+ * ```ts
  * // Skip download if the file already exists locally.
  * await downloadFromBucket("images/profile.jpg", "./local-images/profile.jpg", { skip: true });
  * console.log("Download skipped if file exists, or downloaded otherwise.");
- *
+ * ```
  * @example
+ * ```ts
  * // Overwrite an existing local file.
  * await downloadFromBucket("data/latest-data.csv", "./local-data/latest-data.csv", { overwrite: true });
  * console.log("File downloaded and overwritten if it existed.");
- *
+ * ```
  * @example
+ * ```ts
  * // Specify project and bucket explicitly.
  * await downloadFromBucket("configs/app-settings.json", "./local-configs/settings.json", {
  *   project: "my-gcp-project",
  *   bucket: "my-config-bucket"
  * });
- *
+ * ```
  * @category Google
  */
 export default async function downloadFromBucket(

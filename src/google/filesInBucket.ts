@@ -15,21 +15,25 @@ import process from "node:process";
  * @returns An array of strings, where each string is either the file path within the bucket or its full Google Storage URI, depending on the `URI` option.
  *
  * @example
+ * ```ts
  * // List all files in the default bucket.
  * const allFiles = await filesInBucket();
  * console.log("All files:", allFiles);
- *
+ * ```
  * @example
+ * ```ts
  * // List files within a specific folder.
  * const folderFiles = await filesInBucket({ folder: "images/thumbnails/" });
  * console.log("Files in folder:", folderFiles);
- *
+ * ```
  * @example
+ * ```ts
  * // Get Google Storage URIs for files in a folder.
  * const fileURIs = await filesInBucket({ folder: "documents/", URI: true });
  * console.log("File URIs:", fileURIs);
- *
+ * ```
  * @example
+ * ```ts
  * // Explicitly specify project and bucket.
  * const specificBucketFiles = await filesInBucket({
  *   project: "my-gcp-project",
@@ -37,7 +41,7 @@ import process from "node:process";
  *   folder: "old-data/"
  * });
  * console.log("Files from specific bucket:", specificBucketFiles);
- *
+ * ```
  * @category Google
  */
 export default async function filesInBucket(

@@ -20,44 +20,39 @@ import { existsSync } from "node:fs";
  * @returns A Promise that resolves to the Google Cloud Storage URI of the uploaded file (e.g., `"gs://your-bucket-name/your-file-path.txt"`).
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Upload a file using environment variables for project and bucket.
  * // Assuming `BUCKET_PROJECT` and `BUCKET_NAME` are set in your environment.
  * const uri = await toBucket("./local/file.txt", "remote/file.txt");
  * console.log(uri); // "gs://my-bucket/remote/file.txt"
- *
+ * ```
  * @example
- * // -- Skip Upload if File Exists --
- *
+ * ```ts
  * // Skip upload if the file already exists in the bucket.
  * const uriSkip = await toBucket("./local/file.txt", "remote/file.txt", {
  *   skip: true
  * });
  * console.log(uriSkip); // Returns URI whether file was uploaded or already existed
- *
+ * ```
  * @example
- * // -- Skip with Non-Existent Local File --
- *
+ * ```ts
  * // If the local file doesn't exist but the remote file does, the URI is returned without error.
  * // (Assuming "./non-existent.txt" does not exist locally, but "remote/file.txt" exists in the bucket)
  * const uriNonExistentLocal = await toBucket("./non-existent.txt", "remote/file.txt", {
  *   skip: true
  * });
  * console.log(uriNonExistentLocal); // "gs://my-bucket/remote/file.txt"
- *
+ * ```
  * @example
- * // -- Overwrite Existing File --
- *
+ * ```ts
  * // Overwrite an existing file in the bucket.
  * const uriOverwrite = await toBucket("./local/file.txt", "remote/file.txt", {
  *   overwrite: true
  * });
  * console.log(uriOverwrite); // "gs://my-bucket/remote/file.txt"
- *
+ * ```
  * @example
- * // -- Using Explicit Options and Metadata --
- *
+ * ```ts
  * // Upload a file with specified project, bucket, and custom metadata.
  * const uriExplicit = await toBucket("./local/file.txt", "remote/file.txt", {
  *   project: "my-gcp-project",
@@ -68,7 +63,7 @@ import { existsSync } from "node:fs";
  *   }
  * });
  * console.log(uriExplicit);
- *
+ * ```
  * @category Google
  */
 export default async function toBucket(

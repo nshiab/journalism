@@ -9,16 +9,14 @@
  * @throws {Error} If the down payment is less than 5% of the purchase price, as this is generally the minimum required down payment for insured mortgages in Canada.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Calculate the insurance premium for a property with a $500,000 purchase price and a $25,000 down payment.
  * // (5% down payment, so 4% premium on the mortgage amount)
  * const insurancePremium = mortgageInsurancePremium(500_000, 25_000);
  * console.log(insurancePremium); // Expected output: 19000 (4% of $475,000)
- *
+ * ```
  * @example
- * // -- Different Down Payment Scenarios --
- *
+ * ```ts
  * // Scenario 1: 10% down payment ($50,000 on $500,000 property) - 3.1% premium
  * const premium10Percent = mortgageInsurancePremium(500_000, 50_000);
  * console.log(`Premium for 10% down: ${premium10Percent}`); // Expected: 13950 (3.1% of $450,000)
@@ -30,10 +28,9 @@
  * // Scenario 3: 20% or more down payment ($100,000 on $500,000 property) - No premium
  * const premium20Percent = mortgageInsurancePremium(500_000, 100_000);
  * console.log(`Premium for 20% down: ${premium20Percent}`); // Expected: 0
- *
+ * ```
  * @example
- * // -- Handling Insufficient Down Payment --
- *
+ * ```ts
  * // Attempting to calculate with a down payment less than 5% will throw an error.
  * try {
  *   mortgageInsurancePremium(500_000, 20_000); // 4% down payment
@@ -41,7 +38,7 @@
  *   console.error("Error:", error.message);
  *   // Expected output: "Error: The down payment must be more than 5% of the purchase price..."
  * }
- *
+ * ```
  * @category Finance
  */
 

@@ -10,8 +10,7 @@ import noScientificNotation from "../format/helpers/noScientificNotation.ts";
  * @returns A URL-encoded XML string representing the Styled Layer Descriptor.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Returns the SLD for the GDPS.ETA_TT layer with a color scale going from blue to red.
  * const sld = styledLayerDescriptor("GDPS.ETA_TT", [
  *   { color: "#550c24", value: 100 },
@@ -28,7 +27,7 @@ import noScientificNotation from "../format/helpers/noScientificNotation.ts";
  * // The sld can now be used in a WMS request as SLD_BODY.
  * const url = `https://geo.weather.gc.ca/geomet?SERVICE=WMS&VERSION=1.3.0&REQUEST=GetMap&BBOX=-90,-180,90,180&CRS=EPSG:4326&WIDTH=2400&HEIGHT=1200&LAYERS=GDPS.ETA_TT&FORMAT=image/jpeg&SLD_BODY=${sld}`;
  * console.log(url);
- *
+ * ```
  * @category Geo
  */
 export default function styledLayerDescriptor(

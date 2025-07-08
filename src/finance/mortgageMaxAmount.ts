@@ -33,8 +33,7 @@ import mortgageInsurancePremium from "./mortgageInsurancePremium.ts";
  *   - `monthlyCondoFees`: The monthly condo fees used in the calculation.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Calculate affordability for a borrower with $100,000 annual income, $25,000 down payment, and a 5.25% rate.
  * const results = mortgageMaxAmount(100_000, 25_000, 5.25);
  * console.log(results);
@@ -58,10 +57,9 @@ import mortgageInsurancePremium from "./mortgageInsurancePremium.ts";
  * //   isTaxEstimate: true,
  * //   monthlyCondoFees: 0,
  * // }
- *
+ * ```
  * @example
- * // -- Customizing Monthly Expenses --
- *
+ * ```ts
  * // Calculate affordability with specific monthly debt payments and property taxes.
  * const customExpensesResults = mortgageMaxAmount(120_000, 40_000, 4.5,
  *   {
@@ -71,7 +69,7 @@ import mortgageInsurancePremium from "./mortgageInsurancePremium.ts";
  *   },
  * );
  * console.log(customExpensesResults);
- *
+ * ```
  * @category Finance
  */
 

@@ -21,8 +21,7 @@ import logToSheet from "./helpers/logToSheet.ts";
  * @returns A Promise that resolves when the sheet has been successfully cleared and populated with new data.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // The data needs to be an array of objects. The keys of the first object will be used to create the header row.
  * const data = [
  *   { first: "Nael", last: "Shiab" },
@@ -34,10 +33,10 @@ import logToSheet from "./helpers/logToSheet.ts";
  * // Clearing the sheet and then populating it.
  * await overwriteSheetData(data, sheetUrl);
  * console.log("Sheet updated successfully with data.");
+ * ```
  *
  * @example
- * // -- Raw Values --
- *
+ * ```ts
  * // Write data as raw values to prevent Google Sheets from interpreting them.
  * const rawData = [
  *   { id: '001', value: '05' }, // '05' might be interpreted as 5 without raw: true
@@ -45,10 +44,9 @@ import logToSheet from "./helpers/logToSheet.ts";
  * ];
  * await overwriteSheetData(rawData, sheetUrl, { raw: true });
  * console.log("Sheet updated successfully with raw data.");
- *
+ * ```
  * @example
- * // -- Adding Last Update Timestamp --
- *
+ * ```ts
  * // Add a timestamp of the update in UTC.
  * await overwriteSheetData(data, sheetUrl, { lastUpdate: true });
  * console.log("Sheet updated with UTC timestamp.");
@@ -56,10 +54,9 @@ import logToSheet from "./helpers/logToSheet.ts";
  * // Add a timestamp formatted to a specific time zone.
  * await overwriteSheetData(data, sheetUrl, { lastUpdate: true, timeZone: "Canada/Eastern" });
  * console.log("Sheet updated with Eastern Time timestamp.");
- *
+ * ```
  * @example
- * // -- Prepending Text --
- *
+ * ```ts
  * // Add a custom message at the top of the sheet.
  * await overwriteSheetData(data, sheetUrl, { prepend: "For inquiries, contact data.team@example.com" });
  * console.log("Sheet updated with prepended text.");
@@ -71,17 +68,16 @@ import logToSheet from "./helpers/logToSheet.ts";
  *   timeZone: "Canada/Eastern"
  * });
  * console.log("Sheet updated with prepended text and timestamp.");
- *
+ * ```
  * @example
- * // -- Custom API Credentials --
- *
+ * ```ts
  * // Use explicitly provided API credentials instead of environment variables.
  * await overwriteSheetData(data, sheetUrl, {
  *   apiEmail: "your-service-account@project-id.iam.gserviceaccount.com",
  *   apiKey: "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
  * });
  * console.log("Sheet updated using custom API credentials.");
- *
+ * ```
  * @category Google
  */
 

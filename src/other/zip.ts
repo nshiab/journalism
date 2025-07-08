@@ -11,8 +11,7 @@ import createDirectory from "./createDirectory.ts";
  * @returns `void`
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Compressing multiple files into a zip archive.
  * zip(['file1.txt', 'file2.txt'], 'archive.zip');
  * console.log("Files zipped successfully.");
@@ -20,7 +19,7 @@ import createDirectory from "./createDirectory.ts";
  * // Compressing a folder into a zip archive.
  * zip('path/to/folder', 'folder-archive.zip');
  * console.log("Folder zipped successfully.");
- *
+ * ```
  * @category Other
  */
 export default function zip(files: string | string[], zipFile: string) {

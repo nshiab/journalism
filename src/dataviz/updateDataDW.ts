@@ -15,8 +15,7 @@ import process from "node:process";
  * @throws {Error} If the API key is not found, if the Datawrapper API returns an error status (e.g., invalid chart ID, authentication failure, malformed data), or if there's a network issue.
  *
  * @example
- * // -- Basic Usage (for charts/tables) --
- *
+ * ```ts
  * // Update the data of a Datawrapper chart or table with CSV formatted data.
  * import { updateDataDW, dataAsCsv } from "journalism";
  *
@@ -29,10 +28,10 @@ import process from "node:process";
  *
  * await updateDataDW(chartID, dataForChart);
  * console.log(`Data updated for chart ${chartID}.`);
+ * ```
  *
  * @example
- * // -- Example for a Locator Map (GeoJSON) --
- *
+ * ```ts
  * // Update the data of a Datawrapper locator map with GeoJSON data.
  *
  * const mapID = "myMapId";
@@ -100,26 +99,26 @@ import process from "node:process";
  *
  * await updateDataDW(mapID, JSON.stringify(dataForMap));
  * console.log(`Data updated for map ${mapID}.`);
- *
+ * ```
  * @example
- * // -- Using Custom API Key Environment Variable --
- *
+ * ```ts
  * // If your API key is stored under a different name in process.env, use the options.
  * const chartIDCustomKey = "anotherChartId";
  * const dataForCustomKey = "col1,col2\nval1,val2";
  * await updateDataDW(chartIDCustomKey, dataForCustomKey, { apiKey: "DW_KEY" });
  * console.log(`Data updated for chart ${chartIDCustomKey} using custom API key.`);
+ * ```
  *
  * @example
- * // -- Handling Missing API Key --
- *
+ * ```ts
  * // Attempting to update data without a configured API key will throw an error.
  * try {
  *   await updateDataDW("someChartId", "data", { apiKey: "NON_EXISTENT_KEY" });
  * } catch (error) {
  *   console.error("Error:", error.message);
- *   // Expected output: "Error: process.env.NON_EXISTENT_KEY is undefined or ''."
+ *   // Expected output: "Error: process.env.NON_EXISTENT_KEY is undefined or ''"
  * }
+ * ```
  *
  * @category Dataviz
  */

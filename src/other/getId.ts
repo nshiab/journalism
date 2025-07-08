@@ -11,19 +11,17 @@ const characters =
  * @returns A unique string ID.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Generate a default length ID (6 characters).
  * const id = getId();
  * console.log(id); // e.g., 'a1B2c3'
- *
+ * ```
  * @example
- * // -- Custom Length ID --
- *
+ * ```ts
  * // Generate an ID with a specified length (e.g., 10 characters).
  * const customId = getId(10);
  * console.log(customId); // e.g., 'a1B2c3D4e5'
- *
+ * ```
  * @category Other
  */
 

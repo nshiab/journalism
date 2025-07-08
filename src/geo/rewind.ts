@@ -12,8 +12,7 @@ import type { GeoPermissibleObjects } from "npm:d3-geo@3";
  * @returns A new GeoJSON object.
  *
  * @example
- * // -- Basic Usage: Rewinding a FeatureCollection --
- *
+ * ```ts
  * // Rewind a FeatureCollection.
  * const featureCollection = {
  *   type: "FeatureCollection",
@@ -29,10 +28,9 @@ import type { GeoPermissibleObjects } from "npm:d3-geo@3";
  *   ]
  * };
  * const rewoundFeatureCollection = rewind(featureCollection);
- *
+ * ```
  * @example
- * // -- Handling GeoJSON Feature --
- *
+ * ```ts
  * // Rewind a GeoJSON Feature containing a Polygon geometry.
  * const feature = {
  *   type: "Feature",
@@ -44,7 +42,7 @@ import type { GeoPermissibleObjects } from "npm:d3-geo@3";
  * };
  * const rewoundFeature = rewind(feature);
  * console.log(rewoundFeature);
- *
+ * ```
  * @category Geo
  */
 export default function rewind(

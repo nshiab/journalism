@@ -9,8 +9,7 @@ import { unzip } from "fflate";
  * @returns A Promise that resolves to an array of strings, where each string is an object URL for an extracted file.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Fetch a ZIP archive from a URL, extract its contents, and get object URLs for each file.
  * const urls = await zipToUrls('https://example.com/files.zip');
  * console.log(urls);
@@ -19,7 +18,7 @@ import { unzip } from "fflate";
  * const img = document.createElement('img');
  * img.src = urls[0];
  * document.body.appendChild(img);
- *
+ * ```
  * @category Web
  */
 export default async function zipToUrls(url: string): Promise<string[]> {

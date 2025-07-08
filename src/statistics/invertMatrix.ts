@@ -8,8 +8,7 @@
  * @throws {Error} If the input matrix is not square (e.g., `matrix.length !== matrix[0].length`), or if it is singular (non-invertible), an error will be thrown.
  *
  * @example
- * // -- Basic Usage: Inverting a 2x2 matrix --
- *
+ * ```ts
  * // Invert a simple 2x2 matrix.
  * const matrix2x2 = [
  *   [4, 7],
@@ -17,10 +16,9 @@
  * ];
  * const inverted2x2 = invertMatrix(matrix2x2);
  * console.log(inverted2x2);
- *
+ * ```
  * @example
- * // -- Inverting a 3x3 matrix --
- *
+ * ```ts
  * // Invert a 3x3 matrix.
  * const matrix3x3 = [
  *   [1, 2, 3],
@@ -29,10 +27,9 @@
  * ];
  * const inverted3x3 = invertMatrix(matrix3x3);
  * console.log(inverted3x3);
- *
+ * ```
  * @example
- * // -- Handling a Singular Matrix --
- *
+ * ```ts
  * // Attempting to invert a singular matrix will throw an error.
  * const singularMatrix = [
  *   [1, 2],
@@ -44,7 +41,7 @@
  *   console.error("Error:", error.message);
  *   // Expected output: "Error: Matrix is singular and cannot be inverted"
  * }
- *
+ * ```
  * @category Statistics
  */
 export default function invertMatrix(matrix: number[][]): number[][] {

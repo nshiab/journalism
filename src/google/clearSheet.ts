@@ -12,25 +12,23 @@ import logToSheet from "./helpers/logToSheet.ts";
  * @returns A Promise that resolves when the sheet has been successfully cleared.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Fake URL used as an example.
  * const sheetUrl = "https://docs.google.com/spreadsheets/d/nrqo3oP4KMWYbELScQa8W1nHZPfIrA7LIz9UmcRE4GyJN/edit#gid=0";
  *
  * // Removing all rows from the sheet.
  * await clearSheet(sheetUrl);
  * console.log("Sheet cleared successfully.");
- *
+ * ```
  * @example
- * // -- Custom API Credentials --
- *
+ * ```ts
  * // Use explicitly provided API credentials instead of environment variables.
  * await clearSheet(sheetUrl, {
  *   apiEmail: "your-service-account@project-id.iam.gserviceaccount.com",
  *   apiKey: "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
  * });
  * console.log("Sheet cleared using custom API credentials.");
- *
+ * ```
  * @category Google
  */
 export default async function clearSheet(

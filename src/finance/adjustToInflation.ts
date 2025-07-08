@@ -8,16 +8,19 @@
  * @param options.decimals The number of decimal places to which the resulting adjusted amount should be rounded. If not specified, the result will not be rounded.
  *
  * @example
+ * ```ts
  * // Basic usage: Adjusting $100 from a time when the CPI was 120 to a time when the CPI is 150.
  * const adjustedValue = adjustToInflation(100, 120, 150);
  * console.log(adjustedValue); // Expected output: 125
- *
+ * ```
  * @example
+ * ```ts
  * // With rounding to two decimal places
  * const adjustedValueRounded = adjustToInflation(100, 120, 150.5, { decimals: 2 });
  * console.log(adjustedValueRounded); // Expected output: 125.42
- *
+ * ```
  * @example
+ * ```ts
  * // Calculating the value of a 1990 salary in 2023 terms
  * const salary1990 = 45000;
  * const cpi1990 = 60.5; // Hypothetical CPI for 1990
@@ -25,7 +28,7 @@
  * const adjustedSalary = adjustToInflation(salary1990, cpi1990, cpi2023, { decimals: 0 });
  * console.log(`A $45,000 salary in 1990 is equivalent to approximately ${adjustedSalary} in 2023.`);
  * // Expected output: "A $45,000 salary in 1990 is equivalent to approximately $100149 in 2023."
- *
+ * ```
  * @category Finance
  */
 

@@ -19,6 +19,7 @@
  * @param options.reset If `true`, the `clusterId` and `clusterType` properties of all points will be cleared before the clustering process begins. This is useful for re-running the clustering with different parameters.
  *
  * @example
+ * ```ts
  * // Basic usage with Euclidean distance
  * const data = [
  *   { id: 'a', x: 1, y: 2 },
@@ -42,8 +43,9 @@
  * //   { id: 'd', x: 11, y: 11, clusterId: 'cluster2', clusterType: 'core' },
  * //   { id: 'e', x: 50, y: 50, clusterId: null, clusterType: 'noise' }
  * // ]
- *
+ * ```
  * @example
+ * ```ts
  * // Re-running clustering with different parameters
  * addClusters(data, 10, 2, distance, { reset: true });
  *
@@ -56,7 +58,7 @@
  * //   { id: 'd', x: 11, y: 11, clusterId: 'cluster1', clusterType: 'border' },
  * //   { id: 'e', x: 50, y: 50, clusterId: null, clusterType: 'noise' }
  * // ]
- *
+ * ```
  * @category Statistics
  */
 export default function addClusters(

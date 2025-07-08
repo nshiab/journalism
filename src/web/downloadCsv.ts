@@ -10,8 +10,7 @@ import { csvFormat } from "d3-dsv";
  * @returns `void`
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Download a simple array of objects as a CSV file.
  *
  * const data = [
@@ -20,6 +19,7 @@ import { csvFormat } from "d3-dsv";
  * ];
  * downloadCSV(data, "data.csv");
  * console.log("CSV download initiated.");
+ * ```
  *
  * @category Web
  */

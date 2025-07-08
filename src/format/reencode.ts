@@ -17,22 +17,20 @@ import iconv from "npm:iconv-lite@0.6";
  * @returns A Promise that resolves when the file has been successfully re-encoded and saved.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Convert a CSV file from Windows-1252 to UTF-8 encoding.
  * await reencode('input.csv', 'output.csv', 'windows-1252', 'utf-8');
  * console.log("File re-encoded successfully.");
- *
+ * ```
  * @example
- * // -- With Custom Buffer Size and BOM --
- *
+ * ```ts
  * // Re-encode a large file with a larger buffer size and add a UTF-8 Byte Order Mark (BOM).
  * await reencode('large_input.csv', 'large_output.csv', 'latin1', 'utf-8', {
  *   bufferSize: 1024, // 1MB buffer
  *   addBOM: true,
  * });
  * console.log("Large file re-encoded with custom buffer and BOM.");
- *
+ * ```
  * @category Formatting
  */
 export default async function reencode(

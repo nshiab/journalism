@@ -28,8 +28,7 @@ import round from "../format/round.ts";
  * @throws {Error} If the `amortizationPeriod` is less than the `term`, as this is an invalid mortgage configuration.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Return the monthly mortgage payments for a $250,000 loan with a 6.00% rate, 5-year term, and 25-year amortization.
  * const payments = mortgagePayments(250_000, 6, "monthly", 5, 25);
  * console.log(payments[0]); // First payment details
@@ -56,10 +55,9 @@ import round from "../format/round.ts";
  * //   interestPaid: 70562.76,
  * //   capitalPaid: 25408.23,
  * // }
- *
+ * ```
  * @example
- * // -- Handling Invalid Amortization Period --
- *
+ * ```ts
  * // Attempting to set an amortization period shorter than the term will throw an error.
  * try {
  *   mortgagePayments(200_000, 5, "monthly", 10, 5); // Term (10) > Amortization (5)
@@ -67,7 +65,7 @@ import round from "../format/round.ts";
  *   console.error("Error:", error.message);
  *   // Expected output: "Error: The amortizationPeriod should be equal or greater than the term."
  * }
- *
+ * ```
  * @category Finance
  */
 

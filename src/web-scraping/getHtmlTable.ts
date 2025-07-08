@@ -11,11 +11,14 @@ import { csvFormatRow, csvParse, type DSVRowArray } from "npm:d3-dsv@3";
  * @returns A Promise that resolves to an array of objects representing the table data, where each row is an object with column headers as keys.
  *
  * @example
+ * ```ts
  * // Extract data from the first table on a page
  * const data = await getHtmlTable("https://example.com/data");
  * console.log(data[0]); // Accessing data from the first row
+ * ```
  *
  * @example
+ * ```ts
  * // Extract data from a specific table using a selector and index
  * // This parses the fourth table with the class name 'data-table'.
  * const specificTableData = await getHtmlTable("https://example.com/data", {
@@ -23,6 +26,7 @@ import { csvFormatRow, csvParse, type DSVRowArray } from "npm:d3-dsv@3";
  *   index: 3
  * });
  * console.table(specificTableData);
+ * ```
  */
 
 export default async function getHtmlTable(

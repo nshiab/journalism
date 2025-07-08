@@ -10,19 +10,20 @@ import { csvFormat } from "npm:d3-dsv@3";
  * @returns A string representing the data in CSV format.
  *
  * @example
+ * ```ts
  * // Basic usage with a simple dataset
  * const dataset = [
  *   { make: "Toyota", model: "Camry", year: 2021 },
  *   { make: "Honda", model: "Accord", year: 2022 },
  *   { make: "Ford", model: "Mustang", year: 2020 }
  * ];
- *
+ * 
  * const csvString = dataAsCsv(dataset);
- *
+ * 
  * console.log(csvString);
  * // Expected output:
  * // "make,model,year\nToyota,Camry,2021\nHonda,Accord,2022\nFord,Mustang,2020"
- *
+ * ```
  * @category Formatting
  */
 export default function dataAsCsv(

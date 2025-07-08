@@ -9,8 +9,7 @@
  * @returns The Mahalanobis distance between `x1` and `x2`.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Calculate the Mahalanobis distance between two simple 2D points.
  * // Note: In a real-world scenario, `invCovMatrix` would be derived from a dataset.
  * const x1 = [1, 2];
@@ -21,10 +20,9 @@
  * ];
  * const distance = getMahalanobisDistance(x1, x2, invCovMatrix);
  * console.log(`Mahalanobis Distance: ${distance}`);
- *
+ * ```
  * @example
- * // -- Multi-dimensional Points --
- *
+ * ```ts
  * // Calculate the Mahalanobis distance for 3D points.
  * const p1 = [1, 2, 3];
  * const p2 = [4, 5, 6];
@@ -35,10 +33,9 @@
  * ];
  * const distance3D = getMahalanobisDistance(p1, p2, invCovMatrix3D);
  * console.log(`Mahalanobis Distance (3D): ${distance3D}`);
- *
+ * ```
  * @example
- * // -- Integration with `getCovarianceMatrix` --
- *
+ * ```ts
  * // Demonstrate how `getMahalanobisDistance` would typically be used with `getCovarianceMatrix`.
  * import { getCovarianceMatrix, getMahalanobisDistance} from "journalism";
  *
@@ -55,7 +52,7 @@
  * const covMatrix = getCovarianceMatrix(dataPoints, { invert: true });
  * const mahalanobisDist = getMahalanobisDistance(point1, point2, covMatrix);
  * console.log(`Mahalanobis Distance between point1 and point2: ${mahalanobisDist}`);
- *
+ * ```
  * @category Statistics
  */
 

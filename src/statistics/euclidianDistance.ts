@@ -11,20 +11,23 @@
  * @returns The Euclidean distance between the two points.
  *
  * @example
+ * ```ts
  * // Basic usage: Calculate the distance between (0,0) and (3,4).
  * const dist1 = euclideanDistance(0, 0, 3, 4);
  * console.log(dist1); // 5
- *
+ * ```
  * @example
+ * ```ts
  * // Calculate the distance between two points with negative coordinates.
  * const dist2 = euclideanDistance(-1, -1, 2, 3);
  * console.log(dist2); // 5
- *
+ * ```
  * @example
+ * ```ts
  * // Distance between identical points should be zero.
  * const dist3 = euclideanDistance(5, 10, 5, 10);
  * console.log(dist3); // 0
- *
+ * ```
  * @category Statistics
  */
 export default function euclideanDistance(

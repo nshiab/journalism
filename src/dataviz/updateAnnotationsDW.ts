@@ -40,8 +40,7 @@ import process from "node:process";
  * @returns A Promise that resolves to `void` if `returnResponse` is `false` (default), or a `Response` object if `returnResponse` is `true`.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Update annotations on a Datawrapper chart with a simple text annotation and one with an arrow.
  *
  * const chartID = "myChartId";
@@ -67,10 +66,9 @@ import process from "node:process";
  *
  * await updateAnnotationsDW(chartID, myAnnotations);
  * console.log(`Annotations updated for chart ${chartID}.`);
- *
+ * ```
  * @example
- * // -- Using Custom API Key Environment Variable --
- *
+ * ```ts
  * // If your Datawrapper API key is stored under a different environment variable name (e.g., `DW_API_KEY`).
  * const customApiKeyChartID = "anotherChartId";
  * const annotationsForCustomKey = [
@@ -78,7 +76,7 @@ import process from "node:process";
  * ];
  * await updateAnnotationsDW(customApiKeyChartID, annotationsForCustomKey, { apiKey: "DW_API_KEY" });
  * console.log(`Annotations updated for chart ${customApiKeyChartID} using custom API key.`);
- *
+ * ```
  * @category Dataviz
  */
 export default async function updateAnnotationsDW(

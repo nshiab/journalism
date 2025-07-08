@@ -33,28 +33,32 @@ import prettyDuration from "../format/prettyDuration.ts";
  * @returns A promise that resolves to an an array of numbers representing the generated embedding.
  *
  * @example
+ * ```ts
  * // Basic usage: Generate an embedding for a simple text.
  * const embedding = await getEmbedding("The quick brown fox jumps over the lazy dog.");
  * console.log(embedding); // [0.012, -0.034, ..., 0.056] (example output)
- *
+ * ```
  * @example
+ * ```ts
  * // Generate an embedding with caching enabled.
  * const cachedEmbedding = await getEmbedding("Artificial intelligence is transforming industries.", { cache: true });
  * console.log(cachedEmbedding);
- *
+ * ```
  * @example
+ * ```ts
  * // Generate an embedding using a specific model and API key.
  * const customEmbedding = await getEmbedding("Machine learning is a subset of AI.", {
  *   model: "another-embedding-model",
  *   apiKey: "your_custom_api_key"
  * });
  * console.log(customEmbedding);
- *
+ * ```
  * @example
+ * ```ts
  * // Generate an embedding with verbose logging.
  * const verboseEmbedding = await getEmbedding("The quick brown fox jumps over the lazy dog.", { verbose: true });
  * console.log(verboseEmbedding);
- *
+ * ```
  * @category AI
  */
 export default async function getEmbedding(text: string, options: {

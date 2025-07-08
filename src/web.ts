@@ -34,7 +34,7 @@ import rewind from "./geo/rewind.ts";
 import sleep from "./other/sleep.ts";
 import DurationTracker from "./other/DurationTracker.ts";
 import downloadCSV from "./web/downloadCsv.ts";
-import zipToUrls from "./web/unzipImagesFromUrl.ts";
+import zipToUrls from "./web/zipToUrls.ts";
 
 export {
   addClusters,

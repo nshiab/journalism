@@ -15,16 +15,18 @@
  * @returns The distance between the two points in kilometers.
  *
  * @example
+ * ```ts
  * // Basic usage: Calculate the distance between two cities.
  * // Montreal (-73.5673, 45.5017) and Toronto (-79.3832, 43.6532)
  * const dist = distance(-73.5673, 45.5017, -79.3832, 43.6532);
  * console.log(dist); // Approximately 504.5 km
- *
+ * ```
  * @example
+ * ```ts
  * // Rounding the result to a whole number.
  * const roundedDist = distance(-73.5673, 45.5017, -79.3832, 43.6532, { decimals: 0 });
  * console.log(roundedDist); // 505 km
- *
+ * ```
  * @category Geo
  */
 

@@ -9,19 +9,17 @@ import { rmSync } from "node:fs";
  * @returns `void`
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Removes the directory and all its contents recursively.
  * removeDirectory("./data/temp");
  * console.log("Directory removed successfully.");
- *
+ * ```
  * @example
- * // -- Handling Non-Existent Directory --
- *
+ * ```ts
  * // Attempting to remove a directory that does not exist will not throw an error due to `force: true`.
  * removeDirectory("./non-existent-folder");
  * console.log("Attempted to remove non-existent folder (no error thrown).");
- *
+ * ```
  * @category Other
  */
 

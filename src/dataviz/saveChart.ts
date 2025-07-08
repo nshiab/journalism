@@ -16,8 +16,7 @@ import { writeFileSync } from "node:fs";
  * @returns A Promise that resolves when the chart has been successfully saved to the specified path.
  *
  * @example
- * // -- Basic Usage: Saving as PNG --
- *
+ * ```ts
  * // Save a simple dot plot as a PNG image.
  * import { plot, dot } from "@observablehq/plot";
  *
@@ -27,10 +26,10 @@ import { writeFileSync } from "node:fs";
  *
  * await saveChart(dataForPng, chartForPng, pngPath);
  * console.log(`Chart saved to ${pngPath}`);
+ * ```
  *
  * @example
- * // -- Saving as SVG with Custom Style --
- *
+ * ```ts
  * // Save a bar chart as an SVG file with a custom background color.
  * import { plot, barY } from "@observablehq/plot";
  *
@@ -40,10 +39,10 @@ import { writeFileSync } from "node:fs";
  *
  * await saveChart(dataForSvg, chartForSvg, svgPath, { style: "background-color: #f0f0f0;" });
  * console.log(`Chart saved to ${svgPath}`);
+ * ```
  *
  * @example
- * // -- Dark Mode Chart --
- *
+ * ```ts
  * // Save a line chart in dark mode.
  * import { plot, line } from "@observablehq/plot";
  *
@@ -53,6 +52,7 @@ import { writeFileSync } from "node:fs";
  *
  * await saveChart(dataForDark, chartForDark, darkPath, { dark: true });
  * console.log(`Chart saved to ${darkPath}`);
+ * ```
  *
  * @category Dataviz
  */

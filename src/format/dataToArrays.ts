@@ -6,6 +6,7 @@
  * @returns An object where each key maps to an array of values, effectively representing the data in a columnar format.
  *
  * @example
+ * ```ts
  * // Basic usage with a simple dataset
  * const rowData = [
  *   { name: 'Alice', age: 30, city: 'New York' },
@@ -22,8 +23,9 @@
  * //   age: [30, 25, 35],
  * //   city: ['New York', 'London', 'Paris']
  * // }
- *
+ * ```
  * @example
+ * ```ts
  * // Preparing data for statistical analysis
  * const measurements = [
  *   { id: 1, temp: 20, humidity: 60 },
@@ -40,7 +42,7 @@
  * //   temp: [20, 22, 18],
  * //   humidity: [60, 65, 55]
  * // }
- *
+ * ```
  * @category Formatting
  */
 

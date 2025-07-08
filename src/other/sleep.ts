@@ -12,39 +12,36 @@ import prettyDuration from "../format/prettyDuration.ts";
  * @returns A Promise that resolves after the specified (or adjusted) duration has passed.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Pause execution for 1 second.
  * await sleep(1000);
  * console.log("1 second has passed.");
+ * ```
  *
  * @example
- * // -- With Options: Subtracting Elapsed Time --
- *
+ * ```ts
  * // Pause execution for 1 second, but subtract any time already elapsed since `start`.
  * const start = new Date();
  * // Simulate a task that takes some time (e.g., 200ms)
  * await new Promise(resolve => setTimeout(resolve, 200));
  * await sleep(1000, { start }); // This will pause for approximately 800ms
  * console.log("Execution resumed after approximately 1 second from start.");
- *
+ * ```
  * @example
- * // -- No Sleep Needed --
- *
+ * ```ts
  * // If the elapsed time already exceeds the requested sleep duration, no actual sleep occurs.
  * const startTime = new Date();
  * // Simulate a long-running task (e.g., 150ms)
  * await new Promise(resolve => setTimeout(resolve, 150));
  * await sleep(100, { start: startTime, log: true });
  * // Expected console output: "No need to sleep, already took 150 ms." (or similar)
- *
+ * ```
  * @example
- * // -- With Logging --
- *
+ * ```ts
  * // Pause execution for 2 seconds and log the sleep duration.
  * await sleep(2000, { log: true });
- * // Expected console output: "Sleeping for 2 sec, 0 ms..." (or similar, depending on exact execution time)
- *
+ * // Expected console output: "Sleeping for 2 sec, 0 ms..." (or similar)
+ * ```
  * @category Other
  */
 export default function sleep(

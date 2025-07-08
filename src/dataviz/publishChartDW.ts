@@ -10,29 +10,26 @@ import process from "node:process";
  * @returns A Promise that resolves to `void` if `returnResponse` is `false` (default), or a `Response` object if `returnResponse` is `true`.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Publish a Datawrapper chart with a given ID.
  * const chartID = "myChartId";
  * await publishChartDW(chartID);
  * console.log(`Chart ${chartID} published successfully.`);
- *
+ * ```
  * @example
- * // -- Using Custom API Key Environment Variable --
- *
+ * ```ts
  * // If your Datawrapper API key is stored under a different environment variable name (e.g., `DW_API_KEY`).
  * const customApiKeyChartID = "anotherChartId";
  * await publishChartDW(customApiKeyChartID, { apiKey: "DW_API_KEY" });
  * console.log(`Chart ${customApiKeyChartID} published using custom API key.`);
- *
+ * ```
  * @example
- * // -- Returning the Full Response --
- *
+ * ```ts
  * // Get the full HTTP response object after publishing.
  * const chartIDForResponse = "yetAnotherChartId";
  * const response = await publishChartDW(chartIDForResponse, { returnResponse: true });
  * console.log(`Response status for ${chartIDForResponse}: ${response?.status}`);
- *
+ * ```
  * @category Dataviz
  */
 export default async function publishChartDW(

@@ -14,6 +14,7 @@ import invertMatrix from "./invertMatrix.ts";
  * @throws {Error} If any element in the input `data` is not a number.
  *
  * @example
+ * ```ts
  * // Basic usage: Compute the covariance matrix for a 2x2 dataset.
  * // This example uses a subset of the wine-quality dataset.
  * const twoVariables = [
@@ -28,8 +29,9 @@ import invertMatrix from "./invertMatrix.ts";
  * //   [0.7119681970550005, -0.12550719251309772],
  * //   [-0.12550719251309772, 1.514117788841716]
  * // ]
- *
+ * ```
  * @example
+ * ```ts
  * // Compute the inverse covariance matrix for a 2x2 dataset.
  * const invertedMatrix2x2 = getCovarianceMatrix(twoVariables, { invert: true });
  * console.log(invertedMatrix2x2);
@@ -38,7 +40,7 @@ import invertMatrix from "./invertMatrix.ts";
  * //   [1.4253851985430073, 0.1181520327131952],
  * //   [0.11815203271319519, 0.6702443742450724]
  * // ]
- *
+ * ```
  * @example
  * // Basic usage: Compute the covariance matrix for a 3x3 dataset.
  * const threeVariables = [

@@ -11,14 +11,18 @@ import { finished } from "node:stream/promises";
  * @param filePath The absolute or relative local path where the downloaded file should be saved (e.g., './downloads/report.pdf').
  *
  * @example
+ * ```ts
  * // Basic usage: Download a CSV file.
  * await downloadFile("https://example.com/data.csv", "./data/downloaded_data.csv");
  * console.log("CSV file downloaded successfully!");
+ * ```
  *
  * @example
+ * ```ts
  * // Download an image file.
  * await downloadFile("https://www.example.com/image.jpg", "./images/downloaded_image.jpg");
  * console.log("Image downloaded successfully!");
+ * ```
  *
  * @category Web scraping
  */

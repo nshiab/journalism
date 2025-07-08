@@ -13,8 +13,7 @@ import process from "node:process";
  * @returns A Promise that resolves to `true` if the file exists in the bucket, and `false` otherwise.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Check if a file exists in the default Google Cloud Storage bucket (configured via environment variables).
  * const exists = await inBucket("remote/file.txt");
  * if (exists) {
@@ -22,10 +21,9 @@ import process from "node:process";
  * } else {
  *   console.log("File does not exist in the bucket.");
  * }
- *
+ * ```
  * @example
- * // -- Using Explicit Options --
- *
+ * ```ts
  * // Check for a file's existence in a specified project and bucket, overriding environment variables.
  * const existsInSpecificBucket = await inBucket("remote/file.txt", {
  *  project: "my-gcp-project",
@@ -36,7 +34,7 @@ import process from "node:process";
  * } else {
  *   console.log("File does not exist in the specified bucket.");
  * }
- *
+ * ```
  * @category Google
  */
 export default async function inBucket(

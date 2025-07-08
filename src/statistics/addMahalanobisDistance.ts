@@ -17,6 +17,7 @@ import getMahalanobisDistance from "./getMahalanobisDistance.ts";
  * @throws {Error} If the dimensions of the data points or the provided matrix do not match, or if `getCovarianceMatrix` throws an error (e.g., due to non-numeric data).
  *
  * @example
+ * ```ts
  * // Basic usage with a dataset of wines
  * const wines = [
  *   { 'fixed acidity': 6.5, 'alcohol': 11.0 },
@@ -42,8 +43,9 @@ import getMahalanobisDistance from "./getMahalanobisDistance.ts";
  * //   { 'fixed acidity': 6.5, 'alcohol': 11.0, mahaDist: 1.263 },
  * //   { 'fixed acidity': 6.3, 'alcohol': 10.5, mahaDist: 2.079 }
  * // ]
- *
+ * ```
  * @example
+ * ```ts
  * // Usage with the similarity option
  * addMahalanobisDistance(idealWine, wines, { similarity: true });
  *
@@ -55,7 +57,7 @@ import getMahalanobisDistance from "./getMahalanobisDistance.ts";
  * //   { 'fixed acidity': 6.5, 'alcohol': 11.0, mahaDist: 1.263, similarity: 0.392 },
  * //   { 'fixed acidity': 6.3, 'alcohol': 10.5, mahaDist: 2.079, similarity: 0 }
  * // ]
- *
+ * ```
  * @category Statistics
  */
 

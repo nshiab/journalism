@@ -28,23 +28,22 @@ import { chromium } from "playwright-chromium";
  * The function can process both local files and files stored in Google Cloud Storage (GCS). Simply provide the file path or the `gs://` URL. Note that Ollama only supports local files.
  *
  * @example
- * // -- Basic Usage --
- *
- * // Get a simple text response from the AI.
+ * ```ts
+ * // Basic usage: Get a simple text response from the AI.
  * // Assumes credentials are set in environment variables.
  * const capital = await askAI("What is the capital of France?");
  * console.log(capital); // "Paris"
+ * ```
  *
  * @example
- * // -- Caching --
- *
+ * ```ts
  * // Enable caching to save the response and avoid repeated API calls.
  * // A .journalism-cache directory will be created.
  * const cachedCapital = await askAI("What is the capital of France?", { cache: true });
+ * ```
  *
  * @example
- * // -- Authentication --
- *
+ * ```ts
  * // Pass API credentials directly as options.
  * const response = await askAI("What is the capital of France?", {
  *   apiKey: "your_api_key",
@@ -57,10 +56,10 @@ import { chromium } from "playwright-chromium";
  *   project: "your_project_id",
  *   location: "us-central1",
  * });
+ * ```
  *
  * @example
- * // -- Web Content Analysis --
- *
+ * ```ts
  * // Scrape and analyze HTML content from a URL.
  * const orders = await askAI(
  *   `From the following HTML, extract the executive order titles, their dates (in yyyy-mm-dd format), and their URLs. Return the data as a JSON array of objects.`,
@@ -80,10 +79,9 @@ import { chromium } from "playwright-chromium";
  *   },
  * );
  * console.table(specials);
- *
+ * ```
  * @example
- * // -- Multimedia File Analysis --
- *
+ * ```ts
  * // Analyze a local image file.
  * const personInfo = await askAI(
  *   `Analyze the provided image and return a JSON object with the following details:
@@ -125,10 +123,9 @@ import { chromium } from "playwright-chromium";
  *   },
  * );
  * console.table(videoAnalysis);
- *
+ * ```
  * @example
- * // -- Document and Text File Analysis --
- *
+ * ```ts
  * // Extract structured data from a PDF document.
  * const caseSummary = await askAI(
  *   `This is a Supreme Court decision. Provide a list of objects with a date and a brief summary for each important event of the case's merits, sorted chronologically.`,
@@ -147,10 +144,9 @@ import { chromium } from "playwright-chromium";
  *   },
  * );
  * console.log(summary);
- *
+ * ```
  * @example
- * // -- Advanced Features --
- *
+ * ```ts
  * // Process multiple files of different types in a single call.
  * const multiFileSummary = await askAI(
  *   `Provide a brief summary for each file I've provided.`,
@@ -190,7 +186,7 @@ import { chromium } from "playwright-chromium";
  *   },
  * );
  * console.log(europeanCountries);
- *
+ * ```
  * @param prompt - The primary text input for the AI model.
  * @param options - A comprehensive set of options.
  *   @param options.model - The specific AI model to use (e.g., 'gemini-1.5-flash'). Defaults to the `AI_MODEL` environment variable.

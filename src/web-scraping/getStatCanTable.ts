@@ -15,28 +15,28 @@ import { Buffer } from "node:buffer";
  * @returns A Promise that resolves to either a `string` (if `returnRawCSV` is `true`) or an array of objects representing the table rows.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Retrieve data for a specific Statistics Canada table (e.g., PID '98100001').
  * const data = await getStatCanTable('98100001');
  * console.table(data);
+ * ```
  *
  * @example
- * // -- With Options --
- *
+ * ```ts
  * // Retrieve data in French and return as raw CSV.
  * const rawCsvData = await getStatCanTable('98100001', {
  *   lang: 'fr',
  *   returnRawCSV: true,
  * });
  * console.log(rawCsvData);
+ * ```
  *
  * @example
- * // -- Handling Invalid PID --
- *
+ * ```ts
  * // The function automatically truncates PIDs longer than 8 characters.
  * const truncatedPidData = await getStatCanTable('9810000112345', { debug: true });
  * console.table(truncatedPidData); // Console will show a warning about truncation.
+ * ```
  *
  * @category Web scraping
  */

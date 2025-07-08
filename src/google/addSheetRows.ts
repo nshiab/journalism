@@ -18,8 +18,7 @@ import logToSheet from "./helpers/logToSheet.ts";
  * @returns A Promise that resolves when the rows have been successfully appended to the sheet.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // The data needs to be an array of objects. The keys of the objects must match the sheet's columns.
  * const data = [
  *   { first: "Nael", last: "Shiab" },
@@ -32,10 +31,9 @@ import logToSheet from "./helpers/logToSheet.ts";
  * // Appending the new rows to the sheet.
  * await addSheetRows(data, sheetUrl);
  * console.log("Rows added successfully.");
- *
+ * ```
  * @example
- * // -- Appending Raw Values --
- *
+ * ```ts
  * // Append data as raw values to prevent Google Sheets from interpreting them.
  * const rawData = [
  *   { product_id: '001', quantity: '05' }, // '05' might be interpreted as 5 without raw: true
@@ -43,27 +41,25 @@ import logToSheet from "./helpers/logToSheet.ts";
  * ];
  * await addSheetRows(rawData, sheetUrl, { raw: true });
  * console.log("Raw rows added successfully.");
- *
+ * ```
  * @example
- * // -- Specifying Header Index --
- *
+ * ```ts
  * // If your sheet's headers are on the second row (index 1).
  * const dataWithHeaderIndex = [
  *   { Name: "John Doe", Age: 30 }
  * ];
  * await addSheetRows(dataWithHeaderIndex, sheetUrl, { headerIndex: 1 });
  * console.log("Rows added with custom header index.");
- *
+ * ```
  * @example
- * // -- Custom API Credentials --
- *
+ * ```ts
  * // Use explicitly provided API credentials instead of environment variables.
  * await addSheetRows(data, sheetUrl, {
  *   apiEmail: "your-service-account@project-id.iam.gserviceaccount.com",
  *   apiKey: "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
  * });
  * console.log("Rows added using custom API credentials.");
- *
+ * ```
  * @category Google
  */
 export default async function addSheetRows(

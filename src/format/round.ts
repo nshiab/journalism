@@ -13,8 +13,7 @@
  * @throws {Error} If the input `number` is not a number (and `options.try` is not `true`), or if more than one rounding option (`decimals`, `nearestInteger`, `significantDigits`) is provided.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Round to the nearest integer (default behavior).
  * const resultDefault = round(1234.567);
  * console.log(resultDefault); // Expected output: 1235
@@ -22,10 +21,9 @@
  * // Round to one decimal place.
  * const resultDecimal = round(1234.567, { decimals: 1 });
  * console.log(resultDecimal); // Expected output: 1234.6
- *
+ * ```
  * @example
- * // -- Rounding to Nearest Integer Multiple --
- *
+ * ```ts
  * // Round 123 to the nearest multiple of 10.
  * const resultNearestInteger = round(123, { nearestInteger: 10 });
  * console.log(resultNearestInteger); // Expected output: 120
@@ -33,10 +31,9 @@
  * // Round 127 to the nearest multiple of 5.
  * const resultNearestFive = round(127, { nearestInteger: 5 });
  * console.log(resultNearestFive); // Expected output: 125
- *
+ * ```
  * @example
- * // -- Rounding to Significant Digits --
- *
+ * ```ts
  * // Round 0.004622 to 1 significant digit.
  * const resultSignificantDigits = round(0.004622, { significantDigits: 1 });
  * console.log(resultSignificantDigits); // Expected output: 0.005
@@ -44,10 +41,9 @@
  * // Round 12345 to 2 significant digits.
  * const resultSignificantDigitsLarge = round(12345, { significantDigits: 2 });
  * console.log(resultSignificantDigitsLarge); // Expected output: 12000
- *
+ * ```
  * @example
- * // -- Handling Invalid Input --
- *
+ * ```ts
  * // Attempting to round a non-numeric value without `try: true` will throw an error.
  * try {
  *   round("abc");
@@ -59,10 +55,9 @@
  * // With `try: true`, it returns NaN for non-numeric input.
  * const nanResult = round("abc", { try: true });
  * console.log(nanResult); // Expected output: NaN
- *
+ * ```
  * @example
- * // -- Handling Conflicting Options --
- *
+ * ```ts
  * // Providing multiple rounding options will throw an error.
  * try {
  *   round(123.45, { decimals: 1, significantDigits: 2 });
@@ -70,7 +65,7 @@
  *   console.error("Error:", error.message);
  *   // Expected output: "Error: You can't use options decimals, nearestInteger, or significantDigits together. Pick one."
  * }
- *
+ * ```
  * @category Formatting
  */
 

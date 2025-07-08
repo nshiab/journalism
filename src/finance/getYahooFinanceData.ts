@@ -22,8 +22,7 @@ import arraysToData from "../format/arraysToData.ts";
  * @returns A promise that resolves to an array of objects, where each object contains a `timestamp` (Unix timestamp in milliseconds) and the `value` of the requested financial variable for that period.
  *
  * @example
- * // -- Basic Usage --
- *
+ * ```ts
  * // Fetch the adjusted close price for the S&P/TSX Composite Index for a specific period.
  * const spTsxData = await getYahooFinanceData(
  *   "^GSPTSE",
@@ -33,10 +32,9 @@ import arraysToData from "../format/arraysToData.ts";
  *   "1d"
  * );
  * console.log("S&P/TSX Composite Index Data:", spTsxData);
- *
+ * ```
  * @example
- * // -- Fetching Hourly Volume Data --
- *
+ * ```ts
  * // Get hourly trading volume for Apple (AAPL) for a single day.
  * const appleVolumeData = await getYahooFinanceData(
  *   "AAPL",
@@ -46,7 +44,7 @@ import arraysToData from "../format/arraysToData.ts";
  *   "1h"
  * );
  * console.log("Apple Hourly Volume Data:", appleVolumeData);
- *
+ * ```
  * @category Finance
  */
 

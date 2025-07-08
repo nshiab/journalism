@@ -11,6 +11,7 @@
  * @throws {Error} If the specified `variable` is not found in an object or its value is not a number.
  *
  * @example
+ * ```ts
  * // Basic usage with a list of student grades
  * const studentData = [
  *   { student: 'Alice', grade: 85 },
@@ -32,8 +33,9 @@
  * //   { student: 'David', grade: 95, zScore: 1.08 },
  * //   { student: 'Eve', grade: 62, zScore: -1.83 }
  * // ]
- *
+ * ```
  * @example
+ * ```ts
  * // Using a custom key for the Z-score
  * addZScore(studentData, 'grade', { newKey: 'gradeZScore' });
  *
@@ -46,7 +48,7 @@
  * //   { student: 'David', grade: 95, gradeZScore: 1.08 },
  * //   { student: 'Eve', grade: 62, gradeZScore: -1.83 }
  * // ]
- *
+ * ```
  * @category Statistics
  */
 

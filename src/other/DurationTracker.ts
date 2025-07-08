@@ -11,6 +11,7 @@ import prettyDuration from "../format/prettyDuration.ts";
  * @param options.suffix A string to append to the logged remaining time message. Defaults to an empty string.
  *
  * @example
+ * ```ts
  * // Basic usage: Tracking a loop with 100 iterations.
  * const totalItems = 100;
  * const tracker = new DurationTracker(totalItems, {
@@ -25,7 +26,7 @@ import prettyDuration from "../format/prettyDuration.ts";
  *   tracker.log();
  * }
  * console.log("Processing complete!");
- *
+ * ```
  * @category Other
  */
 export default class DurationTracker {
