@@ -1,3 +1,8 @@
+/**
+ * This module provides a collection of functions to be used in web applications.
+ * @module
+ */
+
 import formatDate from "./format/formatDate.ts";
 import formatNumber from "./format/formatNumber.ts";
 import round from "./format/round.ts";
@@ -30,11 +35,6 @@ import sleep from "./other/sleep.ts";
 import DurationTracker from "./other/DurationTracker.ts";
 import downloadCSV from "./web/downloadCsv.ts";
 import zipToUrls from "./web/unzipImagesFromUrl.ts";
-
-/**
- * This module provides a collection of functions to be used in web applications.
- * @module
- */
 
 export {
   addClusters,

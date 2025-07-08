@@ -1,3 +1,18 @@
+/**
+ * @module
+ * A collection of TypeScript functions for journalistic projects.
+ *
+ * The library is maintained by [Nael Shiab](http://naelshiab.com/), computational
+ * journalist and senior data producer for [CBC News](https://www.cbc.ca/news).
+ *
+ * To learn how to use this library and more, check out
+ * [Code Like a Journalist](https://www.code-like-a-journalist.com/), a free and
+ * open-source data analysis and data visualization course in TypeScript. You
+ * might also find the
+ * [simple-data-analysis library](https://github.com/nshiab/simple-data-analysis)
+ * interesting.
+ */
+
 import formatDate from "./format/formatDate.ts";
 import formatNumber from "./format/formatNumber.ts";
 import round from "./format/round.ts";
