@@ -17,9 +17,9 @@ import { csvFormat } from "npm:d3-dsv@3";
  *   { make: "Honda", model: "Accord", year: 2022 },
  *   { make: "Ford", model: "Mustang", year: 2020 }
  * ];
- * 
+ *
  * const csvString = dataAsCsv(dataset);
- * 
+ *
  * console.log(csvString);
  * // Expected output:
  * // "make,model,year\nToyota,Camry,2021\nHonda,Accord,2022\nFord,Mustang,2020"
