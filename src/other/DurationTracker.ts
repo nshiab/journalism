@@ -43,7 +43,11 @@ export default class DurationTracker {
   /** Option suffix for the log message. */
   suffix: string;
 
-  /** @param length The total number of iterations. */
+  /**
+   * Creates an instance of DurationTracker.
+   * @param length The total number of iterations.
+   * @param options Optional settings for the tracker.
+   */
   constructor(
     length: number,
     options: { prefix?: string; suffix?: string } = {},
