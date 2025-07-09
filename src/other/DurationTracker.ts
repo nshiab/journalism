@@ -62,6 +62,17 @@ export default class DurationTracker {
 
   /**
    * Starts the timer for the current iteration.
+   * @example
+   * ```ts
+   * const totalItems = 100;
+   * const tracker = new DurationTracker(totalItems);
+   * for (let i = 0; i < totalItems; i++) {
+   *   tracker.start(); // Mark the start of each iteration
+   *   // Simulate some work
+   *   await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
+   *   tracker.log();
+   * }
+   * ```
    */
   start() {
     this.currentStart = Date.now();
@@ -69,6 +80,17 @@ export default class DurationTracker {
 
   /**
    * Logs the estimated remaining time based on the average duration of previous iterations.
+   * @example
+   * ```ts
+   * const totalItems = 100;
+   * const tracker = new DurationTracker(totalItems);
+   * for (let i = 0; i < totalItems; i++) {
+   *   tracker.start();
+   *   // Simulate some work
+   *   await new Promise(resolve => setTimeout(resolve, Math.random() * 100));
+   *   tracker.log(); // Log the estimated remaining time for each iteration
+   * }
+   * ```
    */
   log() {
     this.currentEnd = Date.now();

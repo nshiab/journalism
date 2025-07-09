@@ -2712,6 +2712,43 @@ for (let i = 0; i < totalItems; i++) {
 console.log("Processing complete!");
 ```
 
+#### Methods
+
+##### `start`
+
+Starts the timer for the current iteration.
+
+**Examples:**
+
+```typescript
+const totalItems = 100;
+const tracker = new DurationTracker(totalItems);
+for (let i = 0; i < totalItems; i++) {
+  tracker.start(); // Mark the start of each iteration
+  // Simulate some work
+  await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
+  tracker.log();
+}
+```
+
+##### `log`
+
+Logs the estimated remaining time based on the average duration of previous
+iterations.
+
+**Examples:**
+
+```typescript
+const totalItems = 100;
+const tracker = new DurationTracker(totalItems);
+for (let i = 0; i < totalItems; i++) {
+  tracker.start();
+  // Simulate some work
+  await new Promise((resolve) => setTimeout(resolve, Math.random() * 100));
+  tracker.log(); // Log the estimated remaining time for each iteration
+}
+```
+
 ---
 
 ### `getId`

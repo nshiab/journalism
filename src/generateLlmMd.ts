@@ -15,6 +15,9 @@ interface Node {
   name: string;
   kind: string;
   jsDoc?: JSDoc;
+  classDef?: {
+    methods: Node[];
+  };
 }
 
 interface DocsData {
@@ -59,43 +62,56 @@ for (const node of docsData.nodes) {
   }
 }
 
+function generateNodeMarkdown(node: Node, level: number): string {
+  let content = "";
+  const name = node.name || "Unnamed";
+  const doc = node.jsDoc?.doc?.replace(/\n/g, " ") ||
+    "No description available.";
+
+  content += `${"#".repeat(level)} \`${name}\`\n\n`;
+  content += `${doc}\n\n`;
+
+  if (node.jsDoc && node.jsDoc.tags) {
+    const params = node.jsDoc.tags.filter((tag) => tag.kind === "param");
+    const examples = node.jsDoc.tags.filter((tag) => tag.kind === "example");
+
+    if (params.length > 0) {
+      content += "**Parameters:**\n\n";
+      for (const param of params) {
+        const paramName = param.name || "N/A";
+        const paramDoc = param.doc?.replace(/\n/g, " ") || "No description.";
+        content += `- \`${paramName}\`: ${paramDoc}\n`;
+      }
+      content += "\n";
+    }
+
+    if (examples.length > 0) {
+      content += "**Examples:**\n\n";
+      for (const example of examples) {
+        const exampleDoc =
+          example.doc?.replace(/```ts\n/g, "```typescript\n") ||
+          "No example provided.";
+        content += `${exampleDoc}\n\n`;
+      }
+    }
+  }
+  return content;
+}
+
 const sortedCategories = Object.keys(categories).sort();
 
 for (const category of sortedCategories) {
   markdownContent += `## ${category}\n\n`;
   for (const node of categories[category]) {
-    const name = node.name || "Unnamed";
-    const doc = node.jsDoc?.doc?.replace(/\n/g, " ") ||
-      "No description available.";
+    markdownContent += generateNodeMarkdown(node, 3);
 
-    markdownContent += `### \`${name}\`\n\n`;
-    markdownContent += `${doc}\n\n`;
-
-    if (node.jsDoc && node.jsDoc.tags) {
-      const params = node.jsDoc.tags.filter((tag) => tag.kind === "param");
-      const examples = node.jsDoc.tags.filter((tag) => tag.kind === "example");
-
-      if (params.length > 0) {
-        markdownContent += "**Parameters:**\n\n";
-        for (const param of params) {
-          const paramName = param.name || "N/A";
-          const paramDoc = param.doc?.replace(/\n/g, " ") ||
-            "No description.";
-          markdownContent += `- \`${paramName}\`: ${paramDoc}\n`;
-        }
-        markdownContent += "\n";
-      }
-
-      if (examples.length > 0) {
-        markdownContent += "**Examples:**\n\n";
-        for (const example of examples) {
-          const exampleDoc =
-            example.doc?.replace(/```ts\n/g, "```typescript\n") ||
-            "No example provided.";
-          markdownContent += `${exampleDoc}\n\n`;
-        }
+    if (node.kind === "class" && node.classDef?.methods) {
+      markdownContent += "#### Methods\n\n";
+      for (const method of node.classDef.methods) {
+        markdownContent += generateNodeMarkdown(method, 5);
       }
     }
+
     markdownContent += "---\n\n";
   }
 }
