@@ -4,3 +4,4 @@ test/output/
 .env
 cov_profile
 .journalism-cache
+docs.json
