@@ -1,5 +1,10 @@
 // Utility to transform a number position to CBC-style string (e.g., 1 -> 'first', 2 -> 'second', 11 -> '11th')
 // Based on https://www.cbc.ca/news/canada/new-brunswick/fredericton-councillors-vote-to-increase-their-salaries-1.6944020
+/**
+ * Transforms a number position to CBC-style string (e.g., 1 -> 'first', 2 -> 'second', 11 -> '11th').
+ * @param position The number to transform.
+ * @returns The CBC-style string representation of the position.
+ */
 export function transformPositionToCbcStyle(position: number): string {
   if (position < 1 || !Number.isInteger(position)) {
     throw new Error("Input must be a positive integer.");

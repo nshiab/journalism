@@ -34,7 +34,7 @@ import logToSheet from "./helpers/logToSheet.ts";
 export default async function clearSheet(
   sheetUrl: string,
   options: { apiEmail?: string; apiKey?: string } = {},
-) {
+): Promise<void> {
   const sheet = await logToSheet(sheetUrl, options);
   await sheet.clear();
 }

@@ -43,6 +43,7 @@ import makeBars from "./helpers/makeBars.ts";
  *   totalLabel: 'Total Views'
  * });
  * ```
+ * @returns {void}
  * @category Dataviz
  */
 export default function logBarChart(
@@ -57,7 +58,7 @@ export default function logBarChart(
     totalLabel?: string;
     compact?: boolean;
   } = {},
-) {
+): void {
   if (options.title) {
     console.log(`\n${options.title}`);
   } else {

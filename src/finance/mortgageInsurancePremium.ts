@@ -45,7 +45,7 @@
 export default function mortgageInsurancePremium(
   purchasePrice: number,
   downPayment: number,
-) {
+): number {
   const downPaymentPerc = downPayment / purchasePrice;
   const mortgageAmount = purchasePrice - downPayment;
 

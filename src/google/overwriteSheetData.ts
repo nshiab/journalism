@@ -100,7 +100,7 @@ export default async function overwriteSheetData(
     apiEmail?: string;
     apiKey?: string;
   } = {},
-) {
+): Promise<void> {
   const sheet = await logToSheet(sheetUrl, options);
   await sheet.clear();
 

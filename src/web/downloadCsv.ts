@@ -26,7 +26,7 @@ import { csvFormat } from "d3-dsv";
 export default function downloadCSV(
   data: { [key: string]: unknown }[],
   filename: string,
-) {
+): void {
   const csvContent = csvFormat(data);
   const blob = new Blob([csvContent], { type: "text/csv" });
   const url = URL.createObjectURL(blob);

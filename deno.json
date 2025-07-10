@@ -49,11 +49,6 @@
       "src/dataviz/imports"
     ]
   },
-  "lint": {
-    "exclude": [
-      "src/dataviz/imports"
-    ]
-  },
   "compilerOptions": {
     "lib": [
       "dom",

@@ -208,6 +208,7 @@ import { chromium } from "playwright-chromium";
  *   @param options.verbose - If `true`, enables detailed logging, including token usage and estimated costs. Defaults to `false`.
  *   @param options.clean - A function to process and clean the AI's response before it is returned or tested.
  *   @param options.test - A function or an array of functions to validate the AI's response before it's returned.
+ * @return {Promise<unknown>} A Promise that resolves to the AI's response.
  *
  * @category AI
  */

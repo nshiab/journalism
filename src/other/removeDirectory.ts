@@ -23,6 +23,6 @@ import { rmSync } from "node:fs";
  * @category Other
  */
 
-export default function removeDirectory(path: string) {
+export default function removeDirectory(path: string): void {
   rmSync(path, { recursive: true, force: true });
 }

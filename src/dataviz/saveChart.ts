@@ -62,7 +62,7 @@ export default async function saveChart(
   chart: (data: Data) => SVGSVGElement | HTMLElement,
   path: string,
   options: { style?: string; dark?: boolean } = {},
-) {
+): Promise<void> {
   const browser = await chromium.launch();
   const context = await browser.newContext({
     deviceScaleFactor: 2,

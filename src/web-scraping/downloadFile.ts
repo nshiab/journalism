@@ -27,7 +27,10 @@ import { finished } from "node:stream/promises";
  * @category Web scraping
  */
 
-export default async function downloadFile(url: string, filePath: string) {
+export default async function downloadFile(
+  url: string,
+  filePath: string,
+): Promise<void> {
   const res = await fetch(url);
   const fileStream = createWriteStream(filePath, { flags: "w" });
   if (res.body === null) {

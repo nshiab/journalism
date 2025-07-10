@@ -71,7 +71,7 @@ export default async function addSheetRows(
     apiEmail?: string;
     apiKey?: string;
   } = {},
-) {
+): Promise<void> {
   const sheet = await logToSheet(sheetUrl, options);
   const headerRow = Object.keys(data[0]);
   await sheet.setHeaderRow(

@@ -73,8 +73,9 @@ export default class DurationTracker {
    *   tracker.log();
    * }
    * ```
+   * @returns {void}
    */
-  start() {
+  start(): void {
     this.currentStart = Date.now();
   }
 
@@ -91,8 +92,9 @@ export default class DurationTracker {
    *   tracker.log(); // Log the estimated remaining time for each iteration
    * }
    * ```
+   * @returns {void}
    */
-  log() {
+  log(): void {
     this.currentEnd = Date.now();
     this.iterationDurations.push(this.currentEnd - this.currentStart);
     const averageDuration = Math.round(

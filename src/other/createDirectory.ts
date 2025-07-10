@@ -7,6 +7,7 @@ import { existsSync, mkdirSync } from "node:fs";
  *
  * @param path The path of the directory to create. This can be a path to a directory or a full path to a file.
  *
+ * @returns {void}
  * @example
  * ```ts
  * // Create a simple directory
@@ -21,7 +22,7 @@ import { existsSync, mkdirSync } from "node:fs";
  * ``` @category Other
  */
 
-export default function createDirectory(path: string) {
+export default function createDirectory(path: string): void {
   path = path
     .split("/")
     .filter((d) => (d.startsWith(".") ? true : !d.includes(".")))

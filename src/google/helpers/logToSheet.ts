@@ -6,6 +6,12 @@ import {
   type GoogleSpreadsheetWorksheet,
 } from "npm:google-spreadsheet@4";
 
+/**
+ * Authenticates with Google Sheets and returns a worksheet object.
+ * @param sheetUrl The URL of the Google Sheet.
+ * @param options Optional authentication options.
+ * @returns A GoogleSpreadsheetWorksheet object.
+ */
 export default async function logToSheet(
   sheetUrl: string,
   options: { apiEmail?: string; apiKey?: string } = {},

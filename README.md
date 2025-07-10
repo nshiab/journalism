@@ -5,6 +5,11 @@ A collection of TypeScript functions for journalistic projects.
 The library is available on [JSR](https://jsr.io/@nshiab/journalism) with its
 [documentation](https://jsr.io/@nshiab/journalism/doc).
 
+The documentation is also available as the markdown file
+[llm.md](https://github.com/nshiab/journalism/blob/main/llm.md), which can be
+passed as context to improve the use of the library by AI coding assistants or
+agents.
+
 The library is maintained by [Nael Shiab](http://naelshiab.com/), computational
 journalist and senior data producer for [CBC News](https://www.cbc.ca/news).
 
@@ -26,7 +31,7 @@ deno install jsr:@nshiab/journalism
 npx jsr add @nshiab/journalism
 
 # BUN
-bunx jsr add journalism
+bunx jsr add @nshiab/journalism
 ```
 
 If you run your code in a browser, use the `web` entry point:

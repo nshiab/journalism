@@ -28,7 +28,7 @@ export default function unzip(
   zippedFile: string,
   output: string,
   options: { deleteZippedFile?: boolean } = {},
-) {
+): void {
   const zip = new AdmZip(zippedFile);
   zip.extractAllTo(output, true);
   if (options.deleteZippedFile) {

@@ -22,7 +22,7 @@ import createDirectory from "./createDirectory.ts";
  * ```
  * @category Other
  */
-export default function zip(files: string | string[], zipFile: string) {
+export default function zip(files: string | string[], zipFile: string): void {
   const z = new AdmZip();
   if (Array.isArray(files)) {
     for (const file of files) {

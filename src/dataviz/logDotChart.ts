@@ -60,6 +60,7 @@ import prepChart from "./helpers/prepChart.ts";
  * });
  * ```
  *
+ * @returns {void}
  * @category Dataviz
  */
 export default function logDotChart(
@@ -76,7 +77,7 @@ export default function logDotChart(
     height?: number;
     title?: number;
   } = {},
-) {
+): void {
   if (options.title) {
     console.log(`\n${options.title}`);
   } else {

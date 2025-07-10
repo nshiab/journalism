@@ -59,6 +59,7 @@ import prepChart from "./helpers/prepChart.ts";
  * });
  * ```
  *
+ * @returns {void}
  * @category Dataviz
  */
 export default function logLineChart(
@@ -75,7 +76,7 @@ export default function logLineChart(
     height?: number;
     title?: string;
   } = {},
-) {
+): void {
   if (options.title) {
     console.log(`\n${options.title}`);
   } else {

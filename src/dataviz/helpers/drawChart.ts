@@ -2,6 +2,17 @@ import getAxisX from "./getAxisX.ts";
 import getAxisY from "./getAxisY.ts";
 import getChartData from "./getChartData.ts";
 
+/**
+ * Draws a chart based on the specified type and data.
+ * @param type The type of chart to draw, either 'line' or 'dot'.
+ * @param drawFunction The function used to draw the specific chart elements (dots or lines).
+ * @param data The data to be plotted.
+ * @param x The key for the x-axis values in the data.
+ * @param y The key for the y-axis values in the data.
+ * @param color The color to use for the chart elements.
+ * @param options Configuration options for the chart, including dimensions, axis formatting, and title.
+ * @returns An object containing the chart data as a 2D array of strings and the x-axis labels.
+ */
 export default function drawChart(
   type: "line" | "dot",
   drawFunction: (
