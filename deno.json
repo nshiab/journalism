@@ -1,6 +1,6 @@
 {
   "name": "@nshiab/journalism",
-  "version": "1.31.6",
+  "version": "1.31.7",
   "exports": {
     ".": "./src/index.ts",
     "./web": "./src/web.ts"
@@ -55,5 +55,12 @@
       "deno.ns"
     ]
   },
-  "lint": { "include": ["src/**/*.ts"], "exclude": ["src/dataviz/imports"] }
+  "lint": {
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "src/dataviz/imports"
+    ]
+  }
 }
