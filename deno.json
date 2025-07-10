@@ -54,5 +54,6 @@
       "dom",
       "deno.ns"
     ]
-  }
+  },
+  "lint": { "include": ["src/**/*.ts"], "exclude": ["src/dataviz/imports"] }
 }

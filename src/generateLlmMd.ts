@@ -79,7 +79,6 @@ interface ClassConstructor {
 interface ClassDef {
   isAbstract: boolean;
   constructors: ClassConstructor[];
-  properties: any[]; // Simplified for this script
   methods: ClassMethod[];
 }
 
@@ -360,8 +359,8 @@ function generateMarkdown(jsonPath: string, outputPath: string) {
     console.log(
       `✅ Markdown documentation successfully generated at ${outputPath}\n`,
     );
-  } catch (error: any) {
-    if (error.code === "ENOENT") {
+  } catch (error: unknown) {
+    if ((error as { code: string }).code === "ENOENT") {
       console.error(`Error: Input file not found at ${jsonPath}`);
       console.error(
         "Please make sure 'docs.json' is in the same directory as this script.",
