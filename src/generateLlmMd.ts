@@ -26,7 +26,9 @@ interface TsTypeDef {
     | "array"
     | "union"
     | "typeLiteral"
-    | "fnOrConstructor";
+    | "fnOrConstructor"
+    | "parenthesized"
+    | "literal";
   keyword?: string;
   typeRef?: {
     typeName: string;
@@ -34,6 +36,7 @@ interface TsTypeDef {
   };
   array?: TsTypeDef;
   union?: TsTypeDef[];
+  parenthesized?: TsTypeDef;
   typeLiteral?: {
     properties: { name: string; optional?: boolean; tsType?: TsTypeDef }[];
     indexSignatures: { params: Param[]; tsType?: TsTypeDef }[];
@@ -41,6 +44,12 @@ interface TsTypeDef {
   fnOrConstructor?: {
     params: Param[];
     returnType?: TsTypeDef;
+  };
+  literal?: {
+    kind: "string" | "number" | "boolean";
+    string?: string;
+    number?: number;
+    boolean?: boolean;
   };
 }
 
@@ -104,7 +113,15 @@ interface DenoDoc {
  */
 function generateTypeRepr(tsType?: TsTypeDef): string {
   if (!tsType) return "any";
-  if (tsType.repr) return tsType.repr; // Use existing representation if available
+
+  // Don't use repr if we have type parameters to process or if repr is empty
+  // Also skip repr for literal types so they get quoted properly
+  if (
+    tsType.repr && tsType.repr.trim() !== "" && tsType.kind !== "typeRef" &&
+    tsType.kind !== "literal"
+  ) {
+    return tsType.repr;
+  }
 
   switch (tsType.kind) {
     case "keyword":
@@ -121,6 +138,9 @@ function generateTypeRepr(tsType?: TsTypeDef): string {
       return `${generateTypeRepr(tsType.array)}[]`;
     case "union":
       return tsType.union?.map(generateTypeRepr).join(" | ") ?? "any";
+    case "parenthesized":
+      // Handle parenthesized types (e.g., (string | number))
+      return `(${generateTypeRepr(tsType.parenthesized)})`;
     case "typeLiteral": {
       if (tsType.typeLiteral?.indexSignatures?.length) {
         const sig = tsType.typeLiteral.indexSignatures[0];
@@ -148,8 +168,21 @@ function generateTypeRepr(tsType?: TsTypeDef): string {
       const returnType = generateTypeRepr(tsType.fnOrConstructor.returnType);
       return `(${params}) => ${returnType}`;
     }
+    case "literal": {
+      if (tsType.literal?.kind === "string") {
+        return `"${tsType.literal.string}"`;
+      }
+      if (tsType.literal?.kind === "number") {
+        return `${tsType.literal.number}`;
+      }
+      if (tsType.literal?.kind === "boolean") {
+        return `${tsType.literal.boolean}`;
+      }
+      return tsType.repr || "any";
+    }
     default:
-      return "any";
+      // Fallback to repr if available and not empty
+      return (tsType.repr && tsType.repr.trim() !== "") ? tsType.repr : "any";
   }
 }
 
@@ -236,7 +269,7 @@ const generateFunctionMarkdown = (node: DocNode): string => {
   if (examples.length > 0) {
     md += "### Examples\n\n";
     examples.forEach((example) => {
-      md += `${example.doc}\n\n`;
+      md += `${example.doc?.trim()}\n\n`;
     });
   }
   return md;
@@ -278,29 +311,93 @@ const generateClassMarkdown = (node: DocNode): string => {
 
   // Methods
   if (node.classDef.methods.length > 0) {
-    md += "### Methods\n\n";
-    node.classDef.methods.forEach((method) => {
-      md += `#### \`${method.name}\`\n\n`;
-      if (method.jsDoc?.doc) {
-        md += `${method.jsDoc.doc.trim()}\n\n`;
-      }
-      const examples = getJsDocTag(
-        { jsDoc: method.jsDoc } as DocNode,
-        "example",
+    // Filter out internal methods
+    const publicMethods = node.classDef.methods.filter((method) => {
+      const isInternal = method.jsDoc?.tags?.some((tag) =>
+        tag.kind === "internal"
       );
-      if (examples.length > 0) {
-        examples.forEach((example) => {
-          md += `${example.doc}\n\n`;
-        });
-      }
+      return !isInternal;
     });
+
+    if (publicMethods.length > 0) {
+      md += "### Methods\n\n";
+      publicMethods.forEach((method) => {
+        md += `#### \`${method.name}\`\n\n`;
+        if (method.jsDoc?.doc) {
+          md += `${method.jsDoc.doc.trim()}\n\n`;
+        }
+
+        // Method signature
+        if (method.functionDef) {
+          const params = method.functionDef.params.map((p) => {
+            let name = "";
+            let typeInfo: TsTypeDef | undefined;
+            let isOptional = p.optional;
+
+            if (p.kind === "identifier") {
+              name = p.name;
+              typeInfo = p.tsType;
+            } else if (p.kind === "assign" && p.left?.kind === "identifier") {
+              name = p.left.name;
+              typeInfo = p.left.tsType;
+              isOptional = true;
+            }
+
+            const typeRepr = generateTypeRepr(typeInfo);
+            const type = typeRepr ? `: ${typeRepr}` : "";
+            return `${name}${isOptional ? "?" : ""}${type}`;
+          }).join(", ");
+
+          const returnType = generateTypeRepr(method.functionDef.returnType);
+          md += `##### Signature\n\`\`\`typescript\n${
+            method.functionDef.isAsync ? "async " : ""
+          }${method.name}(${params}): ${returnType};\n\`\`\`\n\n`;
+        }
+
+        // Method parameters
+        const methodParams = getJsDocTag(
+          { jsDoc: method.jsDoc } as DocNode,
+          "param",
+        );
+        if (methodParams.length > 0) {
+          md += "##### Parameters\n\n";
+          methodParams.forEach((param) => {
+            md += `* **\`${param.name}\`**: ${
+              param.doc?.replace(/\n/g, " ").trim() ?? ""
+            }\n`;
+          });
+          md += "\n";
+        }
+
+        // Method return type
+        const methodReturns = getJsDocTag(
+          { jsDoc: method.jsDoc } as DocNode,
+          "return",
+        )[0];
+        if (methodReturns?.doc) {
+          md += `##### Returns\n\n${methodReturns.doc.trim()}\n\n`;
+        }
+
+        // Method examples
+        const examples = getJsDocTag(
+          { jsDoc: method.jsDoc } as DocNode,
+          "example",
+        );
+        if (examples.length > 0) {
+          md += "##### Examples\n\n";
+          examples.forEach((example) => {
+            md += `${example.doc?.trim()}\n\n`;
+          });
+        }
+      });
+    }
   }
 
   const examples = getJsDocTag(node, "example");
   if (examples.length > 0) {
     md += "### Examples\n\n";
     examples.forEach((example) => {
-      md += `${example.doc}\n\n`;
+      md += `${example.doc?.trim()}\n\n`;
     });
   }
 
@@ -322,7 +419,8 @@ function generateMarkdown(jsonPath: string, outputPath: string) {
       .filter((node) =>
         node.declarationKind === "export" &&
         (node.kind === "function" || node.kind === "class") &&
-        node.jsDoc?.doc
+        node.jsDoc?.doc &&
+        !node.jsDoc?.tags?.some((tag) => tag.kind === "internal")
       )
       .sort((a, b) => a.name.localeCompare(b.name));
 

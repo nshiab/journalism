@@ -138,10 +138,10 @@ inverted covariance matrix.
 
 ```typescript
 function addMahalanobisDistance(
-  origin: Record,
-  data: Record[],
+  origin: Record<string, number>,
+  data: Record<string, unknown>[],
   options?: { similarity?: boolean; matrix?: number[][] },
-): Record[];
+): Record<string, unknown>[];
 ```
 
 ### Parameters
@@ -232,10 +232,10 @@ using the `newKey` option.
 
 ```typescript
 function addZScore(
-  data: Record[],
+  data: Record<string, unknown>[],
   variable: string,
   options?: { newKey?: string },
-): Record[];
+): Record<string, unknown>[];
 ```
 
 ### Parameters
@@ -478,10 +478,10 @@ async function askAI(
     parseJson?: boolean;
     verbose?: boolean;
     cache?: boolean;
-    test?: any | any[];
+    test?: ((response: unknown) => any) | ((response: unknown) => any)[];
     clean?: (response: unknown) => any;
   },
-): Promise;
+): Promise<unknown>;
 ```
 
 ### Parameters
@@ -930,7 +930,7 @@ the file is not found.
 async function deleteFromBucket(
   destination: string,
   options?: { project?: string; bucket?: string; try?: boolean },
-): Promise;
+): Promise<void>;
 ```
 
 ### Parameters
@@ -1030,7 +1030,7 @@ ensuring that the entire file does not need to be loaded into memory at once.
 ### Signature
 
 ```typescript
-async function downloadFile(url: string, filePath: string): Promise;
+async function downloadFile(url: string, filePath: string): Promise<void>;
 ```
 
 ### Parameters
@@ -1088,7 +1088,7 @@ async function downloadFromBucket(
     overwrite?: boolean;
     skip?: boolean;
   },
-): Promise;
+): Promise<void>;
 ```
 
 ### Parameters
@@ -1177,6 +1177,14 @@ Creates an instance of DurationTracker.
 
 Starts the timer for the current iteration.
 
+##### Signature
+
+```typescript
+start(): void;
+```
+
+##### Examples
+
 ```ts
 const totalItems = 100;
 const tracker = new DurationTracker(totalItems);
@@ -1192,6 +1200,14 @@ for (let i = 0; i < totalItems; i++) {
 
 Logs the estimated remaining time based on the average duration of previous
 iterations.
+
+##### Signature
+
+```typescript
+log(): void;
+```
+
+##### Examples
 
 ```ts
 const totalItems = 100;
@@ -1294,7 +1310,7 @@ async function filesInBucket(
     bucket?: string;
     URI?: boolean;
   },
-): Promise;
+): Promise<string[]>;
 ```
 
 ### Parameters
@@ -1356,7 +1372,44 @@ zero-padding.
 ### Signature
 
 ```typescript
-function formatDate(date: Date, format: YYYY-MM-DD | YYYY-MM-DD HH:MM:SS TZ | DayOfWeek, Month Day | Month DD | Month DD, HH:MM period | Month DD, HH:MM period TZ | DayOfWeek, HH:MM period | DayOfWeek, HH:MM period TZ | Month DD, YYYY | Month DD, YYYY, at HH:MM period | Month DD, YYYY, at HH:MM period TZ | DayOfWeek | Month | YYYY | MM | DD | HH:MM period | HH:MM period TZ, options?: { utc?: boolean; style?: cbc | rc; abbreviations?: boolean; noZeroPadding?: boolean; threeLetterMonth?: boolean; timeZone?: Canada/Atlantic | Canada/Central | Canada/Eastern | Canada/Mountain | Canada/Newfoundland | Canada/Pacific | Canada/Saskatchewan | Canada/Yukon }): string;
+function formatDate(
+  date: Date,
+  format:
+    | "YYYY-MM-DD"
+    | "YYYY-MM-DD HH:MM:SS TZ"
+    | "DayOfWeek, Month Day"
+    | "Month DD"
+    | "Month DD, HH:MM period"
+    | "Month DD, HH:MM period TZ"
+    | "DayOfWeek, HH:MM period"
+    | "DayOfWeek, HH:MM period TZ"
+    | "Month DD, YYYY"
+    | "Month DD, YYYY, at HH:MM period"
+    | "Month DD, YYYY, at HH:MM period TZ"
+    | "DayOfWeek"
+    | "Month"
+    | "YYYY"
+    | "MM"
+    | "DD"
+    | "HH:MM period"
+    | "HH:MM period TZ",
+  options?: {
+    utc?: boolean;
+    style?: "cbc" | "rc";
+    abbreviations?: boolean;
+    noZeroPadding?: boolean;
+    threeLetterMonth?: boolean;
+    timeZone?:
+      | "Canada/Atlantic"
+      | "Canada/Central"
+      | "Canada/Eastern"
+      | "Canada/Mountain"
+      | "Canada/Newfoundland"
+      | "Canada/Pacific"
+      | "Canada/Saskatchewan"
+      | "Canada/Yukon";
+  },
+): string;
 ```
 
 ### Parameters
@@ -1435,7 +1488,7 @@ dictate the thousands separator and decimal marker.
 function formatNumber(
   number: number,
   options?: {
-    style?: cbc | rc;
+    style?: "cbc" | "rc";
     sign?: boolean;
     round?: boolean;
     decimals?: number;
@@ -1599,7 +1652,7 @@ be added directly to the item object.
 function getClosest(
   lon: number,
   lat: number,
-  geoItems: Array,
+  geoItems: Array<unknown>,
   getItemLon: (d: unknown) => any,
   getItemLat: (d: unknown) => any,
   options?: { addDistance?: boolean; decimals?: number },
@@ -1837,7 +1890,7 @@ async function getEmbedding(
     ollama?: boolean;
     verbose?: boolean;
   },
-): Promise;
+): Promise<number[]>;
 ```
 
 ### Parameters
@@ -1915,7 +1968,18 @@ the `getGeoTiffValues` function.
 ### Signature
 
 ```typescript
-async function getGeoTiffDetails(path: string): Promise;
+async function getGeoTiffDetails(
+  path: string,
+): Promise<
+  {
+    image: GeoTIFFImage;
+    bbox: number[];
+    pixelWidth: number;
+    pixelHeight: number;
+    bboxWidth: number;
+    bboxHeight: number;
+  }
+>;
 ```
 
 ### Parameters
@@ -1963,7 +2027,7 @@ async function getGeoTiffValues(
     bboxWidth: number;
     bboxHeight: number;
   },
-): Promise;
+): Promise<number | TypedArray>;
 ```
 
 ### Parameters
@@ -2005,7 +2069,7 @@ data from web pages.
 async function getHtmlTable(
   url: string,
   options?: { selector?: string; index?: number },
-): Promise;
+): Promise<DSVRowArray<string>>;
 ```
 
 ### Parameters
@@ -2229,10 +2293,10 @@ them consistent for statistical purposes.
 function getSeason(
   options?: {
     date?: Date;
-    hemisphere?: northern | southern;
-    type?: meteorological | astronomical;
+    hemisphere?: "northern" | "southern";
+    type?: "meteorological" | "astronomical";
   },
-): winter | spring | summer | fall;
+): "winter" | "spring" | "summer" | "fall";
 ```
 
 ### Parameters
@@ -2315,7 +2379,7 @@ async function getSheetData(
     apiEmail?: string;
     apiKey?: string;
   },
-): Promise;
+): Promise<Record<string, string>[] | string>;
 ```
 
 ### Parameters
@@ -2404,8 +2468,8 @@ It can typically be found in the URL of the table's page (e.g.,
 ```typescript
 async function getStatCanTable(
   pid: string,
-  options?: { lang?: en | fr; returnRawCSV?: boolean; debug?: boolean },
-): Promise;
+  options?: { lang?: "en" | "fr"; returnRawCSV?: boolean; debug?: boolean },
+): Promise<string | DSVRowArray<string>>;
 ```
 
 ### Parameters
@@ -2470,7 +2534,13 @@ their terms of service.
 ### Signature
 
 ```typescript
-async function getYahooFinanceData(symbol: string, startDate: Date, endDate: Date, variable: open | high | low | close | adjclose | volume, interval: 1d | 1h | 1m): Promise;
+async function getYahooFinanceData(
+  symbol: string,
+  startDate: Date,
+  endDate: Date,
+  variable: "open" | "high" | "low" | "close" | "adjclose" | "volume",
+  interval: "1d" | "1h" | "1m",
+): Promise<{ timestamp: number; value: number }[]>;
 ```
 
 ### Parameters
@@ -2541,7 +2611,7 @@ variables.
 async function inBucket(
   destination: string,
   options?: { project?: string; bucket?: string },
-): Promise;
+): Promise<boolean>;
 ```
 
 ### Parameters
@@ -3177,12 +3247,12 @@ function mortgagePayments(
   mortageAmount: number,
   rate: number,
   paymentFrequency:
-    | weekly
-    | biWeekly
-    | monthly
-    | semiMonthly
-    | acceleratedWeekly
-    | acceleratedBiWeekly,
+    | "weekly"
+    | "biWeekly"
+    | "monthly"
+    | "semiMonthly"
+    | "acceleratedWeekly"
+    | "acceleratedBiWeekly",
   term: number,
   amortizationPeriod: number,
   options?: {
@@ -3312,7 +3382,26 @@ instructions, refer to the `node-google-spreadsheet` authentication guide:
 ### Signature
 
 ```typescript
-async function overwriteSheetData(data: Record<string, string | number | boolean | Date | null>[], sheetUrl: string, options?: { prepend?: string; lastUpdate?: boolean; timeZone?: Canada/Atlantic | Canada/Central | Canada/Eastern | Canada/Mountain | Canada/Newfoundland | Canada/Pacific | Canada/Saskatchewan | Canada/Yukon; raw?: boolean; apiEmail?: string; apiKey?: string }): Promise;
+async function overwriteSheetData(
+  data: Record<string, string | number | boolean | Date | null>[],
+  sheetUrl: string,
+  options?: {
+    prepend?: string;
+    lastUpdate?: boolean;
+    timeZone?:
+      | "Canada/Atlantic"
+      | "Canada/Central"
+      | "Canada/Eastern"
+      | "Canada/Mountain"
+      | "Canada/Newfoundland"
+      | "Canada/Pacific"
+      | "Canada/Saskatchewan"
+      | "Canada/Yukon";
+    raw?: boolean;
+    apiEmail?: string;
+    apiKey?: string;
+  },
+): Promise<void>;
 ```
 
 ### Parameters
@@ -3510,7 +3599,7 @@ options.
 async function publishChartDW(
   chartId: string,
   options?: { apiKey?: string; returnResponse?: boolean },
-): Promise;
+): Promise<void | Response>;
 ```
 
 ### Parameters
@@ -3575,7 +3664,7 @@ async function reencode(
   fromEncoding: string,
   toEncoding: string,
   options?: { bufferSize?: number; addBOM?: boolean },
-): Promise;
+): Promise<void>;
 ```
 
 ### Parameters
@@ -3827,7 +3916,7 @@ async function saveChart(
   chart: (data: Data) => any,
   path: string,
   options?: { style?: string; dark?: boolean },
-): Promise;
+): Promise<void>;
 ```
 
 ### Parameters
@@ -3917,7 +4006,10 @@ the function will resolve immediately without pausing.
 ### Signature
 
 ```typescript
-function sleep(ms: number, options?: { start?: Date; log?: boolean }): Promise;
+function sleep(
+  ms: number,
+  options?: { start?: Date; log?: boolean },
+): Promise<void>;
 ```
 
 ### Parameters
@@ -4054,7 +4146,7 @@ async function toBucket(
     overwrite?: boolean;
     skip?: boolean;
   },
-): Promise;
+): Promise<string>;
 ```
 
 ### Parameters
@@ -4215,7 +4307,7 @@ async function updateAnnotationsDW(
     dy?: number;
     bold?: boolean;
     size?: number;
-    align?: tl | tc | tr | ml | mc | mr | bl | bc | br;
+    align?: "tl" | "tc" | "tr" | "ml" | "mc" | "mr" | "bl" | "bc" | "br";
     color?: string;
     width?: number;
     italic?: boolean;
@@ -4224,11 +4316,11 @@ async function updateAnnotationsDW(
     showDesktop?: boolean;
     mobileFallback?: boolean;
     connectorLine?: {
-      type?: straight | curveRight | curveLeft;
+      type?: "straight" | "curveRight" | "curveLeft";
       circle?: boolean;
       stroke?: 1 | 2 | 3;
       enabled?: boolean;
-      arrowHead?: lines | triangle | false;
+      arrowHead?: "lines" | "triangle" | false;
       circleStyle?: string;
       circleRadius?: number;
       inheritColor?: boolean;
@@ -4236,7 +4328,7 @@ async function updateAnnotationsDW(
     };
   }[],
   options?: { apiKey?: string; returnResponse?: boolean },
-): Promise;
+): Promise<void | Response>;
 ```
 
 ### Parameters
@@ -4382,7 +4474,7 @@ async function updateDataDW(
   chartId: string,
   data: string,
   options?: { apiKey?: string; returnResponse?: boolean },
-): Promise;
+): Promise<void | Response>;
 ```
 
 ### Parameters
@@ -4535,7 +4627,7 @@ async function updateNotesDW(
   chartId: string,
   note: string,
   options?: { apiKey?: string; returnResponse?: boolean },
-): Promise;
+): Promise<void | Response>;
 ```
 
 ### Parameters
