@@ -19,7 +19,7 @@ import { chromium } from "playwright-chromium";
  * The function can be authenticated using environment variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`, `AI_MODEL`) or by passing credentials directly in the `options` object. Options will always take precedence over environment variables.
  *
  * **Local Models**:
- * To use a local model with Ollama, set the `OLLAMA` environment variable to `true` and ensure that Ollama is running on your machine. You will also need to specify the model name using the `AI_MODEL` environment variable or the `model` option.
+ * To use a local model with Ollama, set the `OLLAMA` environment variable to `true` and ensure that Ollama is running on your machine. You will also need to specify the model name using the `AI_MODEL` environment variable or the `model` option. If you want your Ollama instance to be used, you can pass an instance of the `Ollama` class as the `ollama` option.
  *
  * **Caching**:
  * Caching is a powerful feature that saves the AI's response to a local directory (`.journalism-cache`). When the same request is made again, the cached response is returned instantly, saving time and API costs. To enable caching, set the `cache` option to `true`.
