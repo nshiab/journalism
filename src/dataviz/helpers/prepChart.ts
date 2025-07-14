@@ -3,6 +3,7 @@ import getColors from "./getColors.ts";
 import drawChart from "./drawChart.ts";
 import validateDataTypes from "./validateDataTypes.ts";
 import formatDate from "../../format/formatDate.ts";
+import formatNumber from "../../format/formatNumber.ts";
 
 export default function prepChart(
   type: "line" | "dot",
@@ -40,11 +41,10 @@ export default function prepChart(
     : function (d: unknown) {
       return String(d);
     };
+  const formatY = options.formatY
+    ? options.formatY
+    : (d: unknown) => formatNumber(d as number);
 
-  const formatY = options.formatY ??
-    function (d) {
-      return String(d);
-    };
   const width = options.width ?? 75;
   const height = options.height ?? 15;
   const smallMultiplesPerRow = options.smallMultiplesPerRow ?? 2;

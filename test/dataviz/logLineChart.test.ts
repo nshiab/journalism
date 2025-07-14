@@ -9,7 +9,11 @@ Deno.test("should create a line chart", () => {
   const data = JSON.parse(
     readFileSync("test/data/temperatures.json", "utf-8"),
   )
-    .map((d: { time: string }) => ({ ...d, time: new Date(d.time) }))
+    .map((d: { time: string; t: number }) => ({
+      ...d,
+      time: new Date(d.time),
+      t: d.t * 1000,
+    }))
     .filter((d: { city: string }) => d.city === "Montreal");
 
   logLineChart(data, "time", "t");
@@ -25,7 +29,7 @@ Deno.test("should create a line chart with formatting options", () => {
 
   logLineChart(data, "time", "t", {
     formatX: (d) => formatDate(d as Date, "Month DD", { utc: true }),
-    formatY: (d) => formatNumber(d as number, { decimals: 0 }),
+    formatY: (d) => formatNumber(d as number, { decimals: 0, suffix: "°C" }),
   });
   // How to assert
   assertEquals(true, true);
