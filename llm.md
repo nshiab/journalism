@@ -2828,14 +2828,9 @@ values for proper rendering, it does not enforce this.
 
 **Data Type Requirements:**
 
-- **X-axis values**: Must be `number` or `Date` objects. String values
-  (including numeric strings) are not supported.
-- **Y-axis values**: Must be `number` values. String values (including numeric
-  strings) are not supported.
+- **X-axis values**: Must be `number` or `Date` objects.
+- **Y-axis values**: Must be `number` values.
 - All values must be non-null and defined.
-
-If your data contains string values that need to be converted, use `parseInt()`,
-`parseFloat()`, or `new Date()` before passing the data to this function.
 
 ### Signature
 
@@ -2868,7 +2863,9 @@ function logDotChart(
 - **`options`**: - An optional object to customize the chart's appearance and
   behavior.
 - **`options.formatX`**: - A function to format the x-axis values for display.
-  It receives the raw x-value as input and should return a string.
+  It receives the raw x-value as input and should return a string. If the first
+  data point's x value is a Date, it defaults to formatting the date as
+  "YYYY-MM-DD".
 - **`options.formatY`**: - A function to format the y-axis values for display.
   It receives the raw y-value as input and should return a string.
 - **`options.smallMultiples`**: - A key in the data objects to create small
@@ -2929,22 +2926,6 @@ logDotChart(multiCategoryData, "date", "value", {
 });
 ```
 
-```ts
-// Converting CSV data with proper type conversion
-import { csvParse } from "d3-dsv";
-
-const csvData = csvParse(csvString);
-const data = csvData.map((d) => ({
-  year: parseInt(d.year), // Convert string to number
-  value: parseFloat(d.value), // Convert string to number
-  category: d.category, // Keep string as-is for grouping
-}));
-
-logDotChart(data, "year", "value", {
-  smallMultiples: "category",
-});
-```
-
 ## logLineChart
 
 Generates and logs a text-based line chart to the console. This function is
@@ -2962,14 +2943,9 @@ values.
 
 **Data Type Requirements:**
 
-- **X-axis values**: Must be `number` or `Date` objects. String values
-  (including numeric strings) are not supported.
-- **Y-axis values**: Must be `number` values. String values (including numeric
-  strings) are not supported.
+- **X-axis values**: Must be `number` or `Date` objects.
+- **Y-axis values**: Must be `number` values.
 - All values must be non-null and defined.
-
-If your data contains string values that need to be converted, use `parseInt()`,
-`parseFloat()`, or `new Date()` before passing the data to this function.
 
 ### Signature
 
@@ -3002,7 +2978,9 @@ function logLineChart(
 - **`options`**: - An optional object to customize the chart's appearance and
   behavior.
 - **`options.formatX`**: - A function to format the x-axis values for display.
-  It receives the raw x-value as input and should return a string.
+  It receives the raw x-value as input and should return a string. If the first
+  data point's x value is a Date, it defaults to formatting the date as
+  "YYYY-MM-DD".
 - **`options.formatY`**: - A function to format the y-axis values for display.
   It receives the raw y-value as input and should return a string.
 - **`options.smallMultiples`**: - A key in the data objects to create small
@@ -3059,22 +3037,6 @@ logLineChart(multiCategoryData, "date", "value", {
   smallMultiplesPerRow: 2,
   fixedScales: true,
   title: "Sales Trend by Category",
-});
-```
-
-```ts
-// Converting CSV data with proper type conversion
-import { csvParse } from "d3-dsv";
-
-const csvData = csvParse(csvString);
-const data = csvData.map((d) => ({
-  year: parseInt(d.year), // Convert string to number
-  value: parseFloat(d.value), // Convert string to number
-  category: d.category, // Keep string as-is for grouping
-}));
-
-logLineChart(data, "year", "value", {
-  smallMultiples: "category",
 });
 ```
 
