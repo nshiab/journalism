@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import process from "node:process";
 import { GoogleGenAI } from "@google/genai";
-import ollama from "ollama";
+import ollama, { Ollama } from "ollama";
 import crypto from "node:crypto";
 import prettyDuration from "../format/prettyDuration.ts";
 
@@ -14,7 +14,7 @@ import prettyDuration from "../format/prettyDuration.ts";
  * Credentials and model information can be provided via environment variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`, `AI_EMBEDDINGS_MODEL`) or directly through the `options` object. Options take precedence over environment variables.
  *
  * **Local Models**:
- * To use a local model with Ollama, set the `OLLAMA` environment variable to `true` and ensure Ollama is running on your machine. You will also need to specify the model name using the `AI_EMBEDDINGS_MODEL` environment variable or the `model` option.
+ * To use a local model with Ollama, set the `OLLAMA` environment variable to `true` and ensure Ollama is running on your machine. You will also need to specify the model name using the `AI_EMBEDDINGS_MODEL` environment variable or the `model` option. If you want your Ollama instance to be used, you can pass an instance of the `Ollama` class as the `ollama` option.
  *
  * **Caching**:
  * To save resources and time, you can enable caching by setting `cache` to `true`. Responses will be stored in a local `.journalism-cache` directory. If the same request is made again, the cached response will be returned, avoiding redundant API calls. Remember to add `.journalism-cache` to your `.gitignore` file.
@@ -27,7 +27,7 @@ import prettyDuration from "../format/prettyDuration.ts";
  * @param options.project Your Google Cloud project ID for Vertex AI. Defaults to the `AI_PROJECT` environment variable.
  * @param options.location The Google Cloud location for your Vertex AI project. Defaults to the `AI_LOCATION` environment variable.
  * @param options.cache If `true`, enables caching of the embedding response. Defaults to `false`.
- * @param options.ollama If `true`, uses Ollama for local embedding generation. Defaults to the `OLLAMA` environment variable.
+ * @param options.ollama If `true`, uses Ollama for local embedding generation. Defaults to the `OLLAMA` environment variable. If you want your Ollama instance to be used, you can pass it here too.
  * @param options.verbose If `true`, logs additional information such as execution time and the truncated input text. Defaults to `false`.
  *
  * @returns A promise that resolves to an an array of numbers representing the generated embedding.
@@ -68,15 +68,16 @@ export default async function getEmbedding(text: string, options: {
   project?: string;
   location?: string;
   cache?: boolean;
-  ollama?: boolean;
+  ollama?: boolean | Ollama;
   verbose?: boolean;
 } = {}): Promise<number[]> {
   const start = Date.now();
   let client;
-  const ollamaVar = options.ollama || process.env.OLLAMA;
+  const ollamaVar = options.ollama === true ||
+    options.ollama instanceof Ollama || process.env.OLLAMA;
 
   if (ollamaVar) {
-    client = ollama;
+    client = options.ollama instanceof Ollama ? options.ollama : ollama;
   } else if (
     options.vertex || options.apiKey || options.project || options.location
   ) {

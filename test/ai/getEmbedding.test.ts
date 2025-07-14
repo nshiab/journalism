@@ -1,6 +1,7 @@
 import "@std/dotenv/load";
 import { assertEquals } from "jsr:@std/assert";
 import getEmbedding from "../../src/ai/getEmbedding.ts";
+import { Ollama } from "ollama";
 
 const aiKey = Deno.env.get("AI_KEY");
 const embeddingModel = Deno.env.get("AI_EMBEDDINGS_MODEL");
@@ -52,6 +53,17 @@ const ollama = Deno.env.get("OLLAMA");
 if (typeof ollama === "string" && ollama !== "") {
   Deno.test("should create an embedding (ollama)", async () => {
     const result = await getEmbedding("What is the capital of France?");
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should create an embedding with a different Ollama instance (ollama)", async () => {
+    const ollama = new Ollama({ host: "http://127.0.0.1:11434" });
+
+    const result = await getEmbedding("What is the capital of France?", {
+      ollama,
+    });
     console.log(result);
 
     // Just making sure it doesn't crash for now.
