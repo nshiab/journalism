@@ -194,7 +194,7 @@ import { chromium } from "playwright-chromium";
  *   @param options.vertex - Set to `true` to use Vertex AI for authentication. Auto-enables if `AI_PROJECT` and `AI_LOCATION` are set.
  *   @param options.project - Your Google Cloud project ID. Defaults to the `AI_PROJECT` environment variable.
  *   @param options.location - The Google Cloud location for your project. Defaults to the `AI_LOCATION` environment variable.
- *   @param options.ollama - Set to `true` to use a local Ollama model. Defaults to the `OLLAMA` environment variable.
+ *   @param options.ollama - Set to `true` to use a local Ollama model. Defaults to the `OLLAMA` environment variable. If you want your Ollama instance to be used, you can pass it here too.
  *   @param options.HTMLFrom - A URL or an array of URLs to scrape HTML content from. The content is appended to the prompt.
  *   @param options.screenshotFrom - A URL or an array of URLs to take a screenshot from for analysis.
  *   @param options.image - A path or GCS URL (or an array of them) to an image file.
