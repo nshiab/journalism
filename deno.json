@@ -1,6 +1,6 @@
 {
   "name": "@nshiab/journalism",
-  "version": "1.31.10",
+  "version": "1.31.11",
   "exports": {
     ".": "./src/index.ts",
     "./web": "./src/web.ts"

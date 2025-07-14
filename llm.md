@@ -466,7 +466,7 @@ async function askAI(
     vertex?: boolean;
     project?: string;
     location?: string;
-    ollama?: boolean;
+    ollama?: boolean | Ollama;
     HTMLFrom?: string | string[];
     screenshotFrom?: string | string[];
     image?: string | string[];
