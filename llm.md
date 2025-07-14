@@ -444,7 +444,8 @@ precedence over environment variables.
 **Local Models**: To use a local model with Ollama, set the `OLLAMA` environment
 variable to `true` and ensure that Ollama is running on your machine. You will
 also need to specify the model name using the `AI_MODEL` environment variable or
-the `model` option.
+the `model` option. If you want your Ollama instance to be used, you can pass an
+instance of the `Ollama` class as the `ollama` option.
 
 **Caching**: Caching is a powerful feature that saves the AI's response to a
 local directory (`.journalism-cache`). When the same request is made again, the
@@ -499,7 +500,8 @@ async function askAI(
 - **`options.location`**: - The Google Cloud location for your project. Defaults
   to the `AI_LOCATION` environment variable.
 - **`options.ollama`**: - Set to `true` to use a local Ollama model. Defaults to
-  the `OLLAMA` environment variable.
+  the `OLLAMA` environment variable. If you want your Ollama instance to be
+  used, you can pass it here too.
 - **`options.HTMLFrom`**: - A URL or an array of URLs to scrape HTML content
   from. The content is appended to the prompt.
 - **`options.screenshotFrom`**: - A URL or an array of URLs to take a screenshot
@@ -1867,7 +1869,8 @@ precedence over environment variables.
 **Local Models**: To use a local model with Ollama, set the `OLLAMA` environment
 variable to `true` and ensure Ollama is running on your machine. You will also
 need to specify the model name using the `AI_EMBEDDINGS_MODEL` environment
-variable or the `model` option.
+variable or the `model` option. If you want your Ollama instance to be used, you
+can pass an instance of the `Ollama` class as the `ollama` option.
 
 **Caching**: To save resources and time, you can enable caching by setting
 `cache` to `true`. Responses will be stored in a local `.journalism-cache`
@@ -1887,7 +1890,7 @@ async function getEmbedding(
     project?: string;
     location?: string;
     cache?: boolean;
-    ollama?: boolean;
+    ollama?: boolean | Ollama;
     verbose?: boolean;
   },
 ): Promise<number[]>;
@@ -1911,7 +1914,8 @@ async function getEmbedding(
 - **`options.cache`**: If `true`, enables caching of the embedding response.
   Defaults to `false`.
 - **`options.ollama`**: If `true`, uses Ollama for local embedding generation.
-  Defaults to the `OLLAMA` environment variable.
+  Defaults to the `OLLAMA` environment variable. If you want your Ollama
+  instance to be used, you can pass it here too.
 - **`options.verbose`**: If `true`, logs additional information such as
   execution time and the truncated input text. Defaults to `false`.
 
