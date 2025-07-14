@@ -14,13 +14,18 @@ export default function addLines(
   for (let i = 0; i < data.length; i++) {
     const xIndexRaw = Math.round((i / (data.length - 1)) * options.width);
     const xIndex = Math.min(xIndexRaw, options.width - 1);
-    const yValue = data[i][y];
-    if (typeof yValue !== "number") {
-      throw new Error(`The value of ${y} is not a number.`);
+    // yValue is guaranteed to be a number due to upfront validation
+    const yValue = data[i][y] as number;
+
+    let yIndexRaw: number;
+    if (yMax === yMin) {
+      // All values are the same, place them in the middle of the chart
+      yIndexRaw = Math.round(options.height / 2);
+    } else {
+      yIndexRaw = Math.round(
+        ((yValue - yMin) / (yMax - yMin)) * options.height,
+      );
     }
-    const yIndexRaw = Math.round(
-      ((yValue - yMin) / (yMax - yMin)) * options.height,
-    );
     const yIndex = Math.min(yIndexRaw, options.height - 1);
 
     chartValues.push({ x: xIndex, y: yIndex });

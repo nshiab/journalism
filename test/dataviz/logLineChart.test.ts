@@ -3,6 +3,7 @@ import logLineChart from "../../src/dataviz/logLineChart.ts";
 import { readFileSync } from "node:fs";
 import formatDate from "../../src/format/formatDate.ts";
 import formatNumber from "../../src/format/formatNumber.ts";
+import { csvParse } from "d3-dsv";
 
 Deno.test("should create a line chart", () => {
   const data = JSON.parse(
@@ -11,8 +12,19 @@ Deno.test("should create a line chart", () => {
     .map((d: { time: string }) => ({ ...d, time: new Date(d.time) }))
     .filter((d: { city: string }) => d.city === "Montreal");
 
+  logLineChart(data, "time", "t");
+  // How to assert
+  assertEquals(true, true);
+});
+Deno.test("should create a line chart with formatting options", () => {
+  const data = JSON.parse(
+    readFileSync("test/data/temperatures.json", "utf-8"),
+  )
+    .map((d: { time: string }) => ({ ...d, time: new Date(d.time) }))
+    .filter((d: { city: string }) => d.city === "Montreal");
+
   logLineChart(data, "time", "t", {
-    formatX: (d) => formatDate(d as Date, "YYYY-MM-DD", { utc: true }),
+    formatX: (d) => formatDate(d as Date, "Month DD", { utc: true }),
     formatY: (d) => formatNumber(d as number, { decimals: 0 }),
   });
   // How to assert
@@ -83,6 +95,22 @@ Deno.test("should create a line chart with few points and small multiples (examp
   logLineChart(data, "date", "value", {
     formatX: (d) => (d as Date).toISOString().slice(0, 10),
     smallMultiples: "category",
+  });
+
+  // How to assert
+  assertEquals(true, true);
+});
+Deno.test("should create another line chart from strings", () => {
+  const data = csvParse(
+    readFileSync("test/data/aircraftByEvents.csv", "utf-8"),
+  ).map((d: { [key: string]: string }) => ({
+    ...d,
+    count: parseInt(d.count),
+    occurenceYear: parseInt(d.occurenceYear),
+  }));
+
+  logLineChart(data, "occurenceYear", "count", {
+    smallMultiples: "aircraftEvent",
   });
 
   // How to assert

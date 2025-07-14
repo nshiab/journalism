@@ -9,8 +9,8 @@ export default function getAxisX(
   type: "line" | "dot",
   x: string,
   options: {
-    xMin: number;
-    xMax: number;
+    xMin: unknown;
+    xMax: unknown;
     width: number;
     formatX: (d: unknown) => string;
   },
