@@ -2826,6 +2826,17 @@ y-axis values, and can generate small multiples to compare distributions across
 different categories. While the function expects data to be sorted by the x-axis
 values for proper rendering, it does not enforce this.
 
+**Data Type Requirements:**
+
+- **X-axis values**: Must be `number` or `Date` objects. String values
+  (including numeric strings) are not supported.
+- **Y-axis values**: Must be `number` values. String values (including numeric
+  strings) are not supported.
+- All values must be non-null and defined.
+
+If your data contains string values that need to be converted, use `parseInt()`,
+`parseFloat()`, or `new Date()` before passing the data to this function.
+
 ### Signature
 
 ```typescript
@@ -2851,9 +2862,9 @@ function logDotChart(
 - **`data`**: - An array of objects representing the data to be visualized. Each
   object should contain keys corresponding to the `x` and `y` parameters.
 - **`x`**: - The key in the data objects whose values will be plotted on the
-  x-axis. These values are typically numerical or temporal.
+  x-axis. Values must be numbers or Date objects.
 - **`y`**: - The key in the data objects whose values will be plotted on the
-  y-axis. These values are typically numerical.
+  y-axis. Values must be numbers.
 - **`options`**: - An optional object to customize the chart's appearance and
   behavior.
 - **`options.formatX`**: - A function to format the x-axis values for display.
@@ -2918,6 +2929,22 @@ logDotChart(multiCategoryData, "date", "value", {
 });
 ```
 
+```ts
+// Converting CSV data with proper type conversion
+import { csvParse } from "d3-dsv";
+
+const csvData = csvParse(csvString);
+const data = csvData.map((d) => ({
+  year: parseInt(d.year), // Convert string to number
+  value: parseFloat(d.value), // Convert string to number
+  category: d.category, // Keep string as-is for grouping
+}));
+
+logDotChart(data, "year", "value", {
+  smallMultiples: "category",
+});
+```
+
 ## logLineChart
 
 Generates and logs a text-based line chart to the console. This function is
@@ -2932,6 +2959,17 @@ is smaller than the number of data points, the line represents an averaged
 approximation of the data, providing a smoothed view of the trend. For optimal
 visualization, it's recommended that the input `data` be sorted by the x-axis
 values.
+
+**Data Type Requirements:**
+
+- **X-axis values**: Must be `number` or `Date` objects. String values
+  (including numeric strings) are not supported.
+- **Y-axis values**: Must be `number` values. String values (including numeric
+  strings) are not supported.
+- All values must be non-null and defined.
+
+If your data contains string values that need to be converted, use `parseInt()`,
+`parseFloat()`, or `new Date()` before passing the data to this function.
 
 ### Signature
 
@@ -2958,9 +2996,9 @@ function logLineChart(
 - **`data`**: - An array of objects representing the data to be visualized. Each
   object should contain keys corresponding to the `x` and `y` parameters.
 - **`x`**: - The key in the data objects whose values will be plotted on the
-  x-axis. These values are typically numerical or temporal.
+  x-axis. Values must be numbers or Date objects.
 - **`y`**: - The key in the data objects whose values will be plotted on the
-  y-axis. These values are typically numerical.
+  y-axis. Values must be numbers.
 - **`options`**: - An optional object to customize the chart's appearance and
   behavior.
 - **`options.formatX`**: - A function to format the x-axis values for display.
@@ -3021,6 +3059,22 @@ logLineChart(multiCategoryData, "date", "value", {
   smallMultiplesPerRow: 2,
   fixedScales: true,
   title: "Sales Trend by Category",
+});
+```
+
+```ts
+// Converting CSV data with proper type conversion
+import { csvParse } from "d3-dsv";
+
+const csvData = csvParse(csvString);
+const data = csvData.map((d) => ({
+  year: parseInt(d.year), // Convert string to number
+  value: parseFloat(d.value), // Convert string to number
+  category: d.category, // Keep string as-is for grouping
+}));
+
+logLineChart(data, "year", "value", {
+  smallMultiples: "category",
 });
 ```
 

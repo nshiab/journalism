@@ -6,11 +6,16 @@ import prepChart from "./helpers/prepChart.ts";
  *
  * The chart is rendered using ASCII characters, ensuring compatibility across various terminal environments. It supports custom formatting for both x and y-axis values, and can generate small multiples to compare distributions across different categories. While the function expects data to be sorted by the x-axis values for proper rendering, it does not enforce this.
  *
+ * **Data Type Requirements:**
+ * - **X-axis values**: Must be `number` or `Date` objects.
+ * - **Y-axis values**: Must be `number` values.
+ * - All values must be non-null and defined.
+ *
  * @param data - An array of objects representing the data to be visualized. Each object should contain keys corresponding to the `x` and `y` parameters.
- * @param x - The key in the data objects whose values will be plotted on the x-axis. These values are typically numerical or temporal.
- * @param y - The key in the data objects whose values will be plotted on the y-axis. These values are typically numerical.
+ * @param x - The key in the data objects whose values will be plotted on the x-axis. Values must be numbers or Date objects.
+ * @param y - The key in the data objects whose values will be plotted on the y-axis. Values must be numbers.
  * @param options - An optional object to customize the chart's appearance and behavior.
- * @param options.formatX - A function to format the x-axis values for display. It receives the raw x-value as input and should return a string.
+ * @param options.formatX - A function to format the x-axis values for display. It receives the raw x-value as input and should return a string. If the first data point's x value is a Date, it defaults to formatting the date as "YYYY-MM-DD".
  * @param options.formatY - A function to format the y-axis values for display. It receives the raw y-value as input and should return a string.
  * @param options.smallMultiples - A key in the data objects to create small multiples (separate charts) for each unique value of this key. This is useful for comparing trends across different categories.
  * @param options.fixedScales - If `true` and `smallMultiples` is used, all small multiple charts will share the same x and y scales, allowing for direct comparison of magnitudes. If `false`, each small multiple will have its own independent scales. Defaults to `false`.

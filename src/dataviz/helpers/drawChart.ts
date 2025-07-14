@@ -43,9 +43,15 @@ export default function drawChart(
     formatY: (d: unknown) => string;
   },
 ): { chart: string[][]; xLabels: string[] } {
+  // Convert numeric min/max back to original format for formatting
+  // Check if the first data point's x value is a Date to determine the format
+  const isDateX = data.length > 0 && data[0][x] instanceof Date;
+  const xMinForFormat = isDateX ? new Date(options.xMin) : options.xMin;
+  const xMaxForFormat = isDateX ? new Date(options.xMax) : options.xMax;
+
   const { xAxis, xTicks, xLabels, topFrame } = getAxisX(type, x, {
-    xMin: options.xMin,
-    xMax: options.xMax,
+    xMin: xMinForFormat,
+    xMax: xMaxForFormat,
     formatX: options.formatX,
     width: options.width,
   });

@@ -1,6 +1,9 @@
 import { max, min, type Numeric } from "npm:d3-array@3";
 import getColors from "./getColors.ts";
 import drawChart from "./drawChart.ts";
+import validateDataTypes from "./validateDataTypes.ts";
+import formatDate from "../../format/formatDate.ts";
+import formatNumber from "../../format/formatNumber.ts";
 
 export default function prepChart(
   type: "line" | "dot",
@@ -29,14 +32,19 @@ export default function prepChart(
     height?: number;
   } = {},
 ) {
-  const formatX = options.formatX ??
-    function (d) {
+  validateDataTypes(data, x, y);
+
+  const formatX = options.formatX
+    ? options.formatX
+    : data[0][x] instanceof Date
+    ? (d: unknown) => formatDate(d as Date, "YYYY-MM-DD", { utc: true })
+    : function (d: unknown) {
       return String(d);
     };
-  const formatY = options.formatY ??
-    function (d) {
-      return String(d);
-    };
+  const formatY = options.formatY
+    ? options.formatY
+    : (d: unknown) => formatNumber(d as number);
+
   const width = options.width ?? 75;
   const height = options.height ?? 15;
   const smallMultiplesPerRow = options.smallMultiplesPerRow ?? 2;
@@ -58,11 +66,14 @@ export default function prepChart(
 
     // min and max values for the whole data
     if (fixedScales) {
-      const xValues = data.map((d) => d[x]);
+      const xValues = data.map((d) => {
+        const val = d[x];
+        return val instanceof Date ? val.getTime() : val as number;
+      });
       xMin = min(xValues as Numeric[]) as number;
       xMax = max(xValues as Numeric[]) as number;
 
-      const yValues = data.map((d) => d[y]);
+      const yValues = data.map((d) => d[y] as number);
       yMin = min(yValues as Numeric[]) as number;
       yMax = max(yValues as Numeric[]) as number;
 
@@ -95,11 +106,14 @@ export default function prepChart(
 
       // The min and max values for each small multiple
       if (!fixedScales) {
-        const xValues = dataFiltered.map((d) => d[x]);
+        const xValues = dataFiltered.map((d) => {
+          const val = d[x];
+          return val instanceof Date ? val.getTime() : val as number;
+        });
         xMin = min(xValues as Numeric[]) as number;
         xMax = max(xValues as Numeric[]) as number;
 
-        const yValues = dataFiltered.map((d) => d[y]);
+        const yValues = dataFiltered.map((d) => d[y] as number);
         yMin = min(yValues as Numeric[]) as number;
         yMax = max(yValues as Numeric[]) as number;
       }
@@ -162,11 +176,14 @@ export default function prepChart(
 
     console.log(`\n${chartString}\n`);
   } else {
-    const xValues = data.map((d) => d[x]);
+    const xValues = data.map((d) => {
+      const val = d[x];
+      return val instanceof Date ? val.getTime() : val as number;
+    });
     const xMin = min(xValues as Numeric[]) as number;
     const xMax = max(xValues as Numeric[]) as number;
 
-    const yValues = data.map((d) => d[y]);
+    const yValues = data.map((d) => d[y] as number);
     const yMin = min(yValues as Numeric[]) as number;
     const yMax = max(yValues as Numeric[]) as number;
 
