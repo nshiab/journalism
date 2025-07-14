@@ -3,6 +3,7 @@ import { assertEquals } from "jsr:@std/assert";
 import askAI from "../../src/ai/askAI.ts";
 import { existsSync, rmSync } from "node:fs";
 import toBucket from "../../src/google/toBucket.ts";
+import { Ollama } from "ollama";
 
 const aiKey = Deno.env.get("AI_KEY") ?? Deno.env.get("AI_PROJECT");
 if (typeof aiKey === "string" && aiKey !== "") {
@@ -367,6 +368,15 @@ if (ollama) {
 
   Deno.test("should use a simple prompt (ollama)", async () => {
     const result = await askAI("What is the capital of France?");
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt with a different Ollama instance (ollama)", async () => {
+    const ollama = new Ollama({ host: "http://127.0.0.1:11434" });
+
+    const result = await askAI("What is the capital of France?", { ollama });
     console.log(result);
 
     // Just making sure it doesn't crash for now.

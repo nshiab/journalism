@@ -7,7 +7,7 @@ import {
 } from "@google/genai";
 import { formatNumber, prettyDuration } from "@nshiab/journalism";
 import crypto from "node:crypto";
-import ollama from "ollama";
+import ollama, { Ollama } from "ollama";
 import { chromium } from "playwright-chromium";
 
 /**
@@ -220,7 +220,7 @@ export default async function askAI(
     vertex?: boolean;
     project?: string;
     location?: string;
-    ollama?: boolean;
+    ollama?: boolean | Ollama;
     HTMLFrom?: string | string[];
     screenshotFrom?: string | string[];
     image?: string | string[];
@@ -238,12 +238,13 @@ export default async function askAI(
 ): Promise<unknown> {
   const start = Date.now();
   let client;
-  const ollamaVar = options.ollama || process.env.OLLAMA;
+  const ollamaVar = options.ollama === true ||
+    options.ollama instanceof Ollama || process.env.OLLAMA;
   const defaults = { parseJson: true };
   options = { ...defaults, ...options };
 
   if (ollamaVar) {
-    client = ollama;
+    client = options.ollama instanceof Ollama ? options.ollama : ollama;
   } else if (
     options.vertex || options.apiKey || options.project || options.location
   ) {
