@@ -3,6 +3,7 @@ import logDotChart from "../../src/dataviz/logDotChart.ts";
 import { readFileSync } from "node:fs";
 import formatDate from "../../src/format/formatDate.ts";
 import formatNumber from "../../src/format/formatNumber.ts";
+import { csvParse } from "d3-dsv";
 
 Deno.test("should create a dot chart", () => {
   const data = JSON.parse(
@@ -83,6 +84,22 @@ Deno.test("should create a dot chart with few points and small multiples (exampl
   logDotChart(data, "date", "value", {
     formatX: (d) => (d as Date).toISOString().slice(0, 10),
     smallMultiples: "category",
+  });
+
+  // How to assert
+  assertEquals(true, true);
+});
+Deno.test("should create another line chart from strings", () => {
+  const data = csvParse(
+    readFileSync("test/data/aircraftByEvents.csv", "utf-8"),
+  ).map((d: { [key: string]: string }) => ({
+    ...d,
+    count: parseInt(d.count),
+    occurenceYear: parseInt(d.occurenceYear),
+  }));
+
+  logDotChart(data, "occurenceYear", "count", {
+    smallMultiples: "aircraftEvent",
   });
 
   // How to assert
