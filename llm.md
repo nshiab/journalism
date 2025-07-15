@@ -481,6 +481,7 @@ async function askAI(
     cache?: boolean;
     test?: ((response: unknown) => any) | ((response: unknown) => any)[];
     clean?: (response: unknown) => any;
+    contextWindow?: number;
   },
 ): Promise<unknown>;
 ```
@@ -526,6 +527,9 @@ async function askAI(
   before it is returned or tested.
 - **`options.test`**: - A function or an array of functions to validate the AI's
   response before it's returned.
+- **`options.contextWindow`**: - An option to specify the context window size
+  for Ollama models. By default, Ollama sets this depending on the model, which
+  can be lower than the actual maximum context window size of the model.
 
 ### Returns
 
@@ -1892,6 +1896,7 @@ async function getEmbedding(
     cache?: boolean;
     ollama?: boolean | Ollama;
     verbose?: boolean;
+    contextWindow?: number;
   },
 ): Promise<number[]>;
 ```
@@ -1918,6 +1923,9 @@ async function getEmbedding(
   instance to be used, you can pass it here too.
 - **`options.verbose`**: If `true`, logs additional information such as
   execution time and the truncated input text. Defaults to `false`.
+- **`options.contextWindow`**: - An option to specify the context window size
+  for Ollama models. By default, Ollama sets this depending on the model, which
+  can be lower than the actual maximum context window size of the model.
 
 ### Returns
 
