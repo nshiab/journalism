@@ -58,6 +58,25 @@ if (typeof ollama === "string" && ollama !== "") {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
+  Deno.test("should create without a specific context window", async () => {
+    const result = await getEmbedding(
+      "This website is a free, open-source online course on data analysis and visualization using TypeScript. It’s available in English and French. I assume you know nothing about data or code, and I guide you step by step until you’re ready to take off on your own.",
+    );
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should create with a specific context window", async () => {
+    const result = await getEmbedding(
+      "This website is a free, open-source online course on data analysis and visualization using TypeScript. It’s available in English and French. I assume you know nothing about data or code, and I guide you step by step until you’re ready to take off on your own.",
+      { contextWindow: 32000 },
+    );
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
   Deno.test("should create an embedding with a different Ollama instance (ollama)", async () => {
     const ollama = new Ollama({ host: "http://127.0.0.1:11434" });
 

@@ -29,6 +29,7 @@ import prettyDuration from "../format/prettyDuration.ts";
  * @param options.cache If `true`, enables caching of the embedding response. Defaults to `false`.
  * @param options.ollama If `true`, uses Ollama for local embedding generation. Defaults to the `OLLAMA` environment variable. If you want your Ollama instance to be used, you can pass it here too.
  * @param options.verbose If `true`, logs additional information such as execution time and the truncated input text. Defaults to `false`.
+ *   @param options.contextWindow - An option to specify the context window size for Ollama models. By default, Ollama sets this depending on the model, which can be lower than the actual maximum context window size of the model.
  *
  * @returns A promise that resolves to an an array of numbers representing the generated embedding.
  *
@@ -70,6 +71,7 @@ export default async function getEmbedding(text: string, options: {
   cache?: boolean;
   ollama?: boolean | Ollama;
   verbose?: boolean;
+  contextWindow?: number;
 } = {}): Promise<number[]> {
   const start = Date.now();
   let client;
@@ -148,7 +150,13 @@ export default async function getEmbedding(text: string, options: {
 
   const response = client instanceof GoogleGenAI
     ? await client.models.embedContent({ model, contents: text })
-    : await client.embed({ model, input: text });
+    : await client.embed({
+      model,
+      input: text,
+      options: {
+        num_ctx: options.contextWindow,
+      },
+    });
 
   let returnedResponse;
   const rawResponse = response.embeddings;

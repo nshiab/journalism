@@ -208,6 +208,7 @@ import { chromium } from "playwright-chromium";
  *   @param options.verbose - If `true`, enables detailed logging, including token usage and estimated costs. Defaults to `false`.
  *   @param options.clean - A function to process and clean the AI's response before it is returned or tested.
  *   @param options.test - A function or an array of functions to validate the AI's response before it's returned.
+ *   @param options.contextWindow - An option to specify the context window size for Ollama models. By default, Ollama sets this depending on the model, which can be lower than the actual maximum context window size of the model.
  * @return {Promise<unknown>} A Promise that resolves to the AI's response.
  *
  * @category AI
@@ -234,6 +235,7 @@ export default async function askAI(
     cache?: boolean;
     test?: ((response: unknown) => void) | ((response: unknown) => void)[];
     clean?: (response: unknown) => unknown;
+    contextWindow?: number;
   } = {},
 ): Promise<unknown> {
   const start = Date.now();
@@ -600,6 +602,7 @@ export default async function askAI(
       format: options.returnJson ? "json" : undefined,
       options: {
         temperature: 0,
+        num_ctx: options.contextWindow,
       },
     });
 
@@ -714,6 +717,14 @@ export default async function askAI(
           }),
         );
       }
+    } else if (client instanceof Ollama) {
+      console.log(
+        `${options.cache ? "" : "\n"}Tokens in:`,
+        formatNumber(response.prompt_eval_count),
+        "/",
+        "Tokens out:",
+        formatNumber(response.eval_count),
+      );
     }
     console.log("Execution time:", prettyDuration(start));
   }

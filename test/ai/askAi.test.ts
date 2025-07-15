@@ -365,7 +365,6 @@ if (ollama) {
   if (existsSync("./.journalism-cache")) {
     rmSync("./.journalism-cache", { recursive: true });
   }
-
   Deno.test("should use a simple prompt (ollama)", async () => {
     const result = await askAI("What is the capital of France?");
     console.log(result);
@@ -445,9 +444,9 @@ if (ollama) {
   Deno.test("should use be able to clean complex response (ollama)", async () => {
     const result = await askAI(
       `Guess whether it's a "Man" or a "Woman". If it could be both, return "Neutral". Return an objects with two keys in it: one with the names as an array and the other with the genders as an array.
-Here are the name values as a JSON array:
-["Marie","John","Alex"]
-Return your results in a JSON array as well. It's critical you return the same number of items, which is 3, exactly in the same order.`,
+  Here are the name values as a JSON array:
+  ["Marie","John","Alex"]
+  Return your results in a JSON array as well. It's critical you return the same number of items, which is 3, exactly in the same order.`,
       {
         returnJson: true,
         cache: true,
@@ -560,13 +559,30 @@ Return your results in a JSON array as well. It's critical you return the same n
     assertEquals(true, true);
   });
 
-  Deno.test("should scrape a web page (ollama)", async () => {
+  Deno.test("should scrape a web page with default context window size (ollama)", async () => {
     await askAI(
-      `Summarize this story.`,
+      `What is this website about?`,
       {
-        HTMLFrom: "https://www.cbc.ca/lite/story/1.7526442",
+        HTMLFrom: "https://www.code-like-a-journalist.com/en",
         returnJson: true,
         verbose: true,
+        cache: true,
+      },
+    );
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+
+  Deno.test("should scrape a web page with specific context window size (ollama)", async () => {
+    await askAI(
+      `What is this website about?`,
+      {
+        HTMLFrom: "https://www.code-like-a-journalist.com/en",
+        returnJson: true,
+        verbose: true,
+        contextWindow: 32000,
+        cache: true,
       },
     );
 
@@ -588,10 +604,10 @@ Return your results in a JSON array as well. It's critical you return the same n
   Deno.test("should analyze images (ollama)", async () => {
     await askAI(
       `I want an object with the following properties:
-      - name: the person on the image,
-      - description: a very short description of the image,
-      - isPolitician: true is if it's a politician and false if it isn't.
-  Return a JSON.`,
+        - name: the person on the image,
+        - description: a very short description of the image,
+        - isPolitician: true is if it's a politician and false if it isn't.
+    Return a JSON.`,
       {
         image: "test/data/ai/pictures/Screenshot 2025-03-21 at 1.36.47 PM.png",
         verbose: true,
