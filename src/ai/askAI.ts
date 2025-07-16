@@ -5,7 +5,7 @@ import {
   GenerateContentResponse,
   GoogleGenAI,
 } from "@google/genai";
-import { formatNumber, prettyDuration } from "@nshiab/journalism";
+import { formatNumber, prettyDuration } from "../index.ts";
 import crypto from "node:crypto";
 import ollama, { Ollama } from "ollama";
 import { chromium } from "playwright-chromium";
@@ -702,12 +702,19 @@ export default async function askAI(
         const outputTokenCost = (outputTokenCount / 1_000_000) * outputRate;
         const estimatedCost = promptTokenCost + outputTokenCost;
 
+        const totalTokens = promptTokenCount + outputTokenCount;
+        const durationSeconds = (Date.now() - start) / 1000;
+        const tokensPerSecond = totalTokens / durationSeconds;
+
         console.log(
           `${options.cache ? "" : "\n"}Tokens in:`,
           formatNumber(promptTokenCount),
           "/",
           "Tokens out:",
           formatNumber(outputTokenCount),
+          "/",
+          "Tokens per second:",
+          formatNumber(tokensPerSecond, { significantDigits: 1 }),
           "/",
           `Estimated cost:`,
           formatNumber(estimatedCost, {
@@ -718,12 +725,19 @@ export default async function askAI(
         );
       }
     } else if (client instanceof Ollama) {
+      const totalTokens = response.prompt_eval_count + response.eval_count;
+      const durationSeconds = (Date.now() - start) / 1000;
+      const tokensPerSecond = totalTokens / durationSeconds;
+
       console.log(
         `${options.cache ? "" : "\n"}Tokens in:`,
         formatNumber(response.prompt_eval_count),
         "/",
         "Tokens out:",
         formatNumber(response.eval_count),
+        "/",
+        "Tokens per second:",
+        formatNumber(tokensPerSecond, { significantDigits: 1 }),
       );
     }
     console.log("Execution time:", prettyDuration(start));
