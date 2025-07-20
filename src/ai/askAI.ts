@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import process from "node:process";
 import {
+  type Candidate,
   type ContentListUnion,
   GenerateContentResponse,
   GoogleGenAI,
@@ -209,6 +210,7 @@ import { chromium } from "playwright-chromium";
  *   @param options.clean - A function to process and clean the AI's response before it is returned or tested.
  *   @param options.test - A function or an array of functions to validate the AI's response before it's returned.
  *   @param options.contextWindow - An option to specify the context window size for Ollama models. By default, Ollama sets this depending on the model, which can be lower than the actual maximum context window size of the model.
+ *   @param options.thinkingBudget - Sets the reasoning token budget: 0 to disable (default, though some models may reason regardless), -1 for a dynamic budget, or > 0 for a fixed budget. For Ollama models, any non-zero value simply enables reasoning, ignoring the specific budget amount.
  * @return {Promise<unknown>} A Promise that resolves to the AI's response.
  *
  * @category AI
@@ -236,6 +238,7 @@ export default async function askAI(
     test?: ((response: unknown) => void) | ((response: unknown) => void)[];
     clean?: (response: unknown) => unknown;
     contextWindow?: number;
+    thinkingBudget?: number;
   } = {},
 ): Promise<unknown> {
   const start = Date.now();
@@ -536,6 +539,12 @@ export default async function askAI(
     config: {
       temperature: 0,
       responseMimeType: options.returnJson ? "application/json" : undefined,
+      thinkingConfig: typeof options.thinkingBudget === "number"
+        ? {
+          thinkingBudget: options.thinkingBudget ?? 0,
+          includeThoughts: true,
+        }
+        : undefined,
     },
   };
 
@@ -604,6 +613,7 @@ export default async function askAI(
         temperature: 0,
         num_ctx: options.contextWindow,
       },
+      think: (options.thinkingBudget ?? 0) > 0,
     });
 
   if (options.verbose) {
@@ -798,6 +808,18 @@ export default async function askAI(
   }
 
   if (options.verbose) {
+    if (response instanceof GenerateContentResponse) {
+      const candidate: Candidate | undefined = response.candidates?.at(0);
+      const parts = candidate?.content?.parts ?? [];
+      for (const p of parts.filter((p) => p.thought)) {
+        console.log(`\nThought:`);
+        console.log(p.text);
+      }
+    } else if (response.message.thinking) {
+      console.log(`\nThought:`);
+      console.log(response.message.thinking);
+    }
+
     console.log("\nResponse:");
     console.log(returnedResponse);
   }
