@@ -12,7 +12,20 @@ if (typeof aiKey === "string" && aiKey !== "") {
   }
 
   Deno.test("should use a simple prompt", async () => {
-    const result = await askAI("What is the capital of France?");
+    const result = await askAI("What is the capital of France?", {
+      verbose: true,
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt with thinking", async () => {
+    const result = await askAI("What is the capital of France?", {
+      thinkingBudget: 500,
+      verbose: true,
+      model: "gemini-2.5-flash",
+    });
     console.log(result);
 
     // Just making sure it doesn't crash for now.
@@ -366,7 +379,19 @@ if (ollama) {
     rmSync("./.journalism-cache", { recursive: true });
   }
   Deno.test("should use a simple prompt (ollama)", async () => {
-    const result = await askAI("What is the capital of France?");
+    const result = await askAI("What is the capital of France?", {
+      verbose: true,
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt with thinking (ollama)", async () => {
+    const result = await askAI("What is the capital of France?", {
+      verbose: true,
+      thinkingBudget: 1,
+    });
     console.log(result);
 
     // Just making sure it doesn't crash for now.

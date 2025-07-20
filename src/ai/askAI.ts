@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import process from "node:process";
 import {
+  type Candidate,
   type ContentListUnion,
   GenerateContentResponse,
   GoogleGenAI,
@@ -538,11 +539,13 @@ export default async function askAI(
     config: {
       temperature: 0,
       responseMimeType: options.returnJson ? "application/json" : undefined,
-      thinkingConfig: {
-        thinkingBudget: options.thinkingBudget ?? 0,
-      }
+      thinkingConfig: typeof options.thinkingBudget === "number"
+        ? {
+          thinkingBudget: options.thinkingBudget ?? 0,
+          includeThoughts: true,
+        }
+        : undefined,
     },
-    
   };
 
   let cacheFileJSON;
@@ -596,25 +599,6 @@ export default async function askAI(
     } else {
       if (options.verbose) {
         console.log("\nCache missed. Generating new response...");
-      }
-    }
-  }
-
-  if (options.verbose && typeof options.thinkingBudget === "number") {
-    if (client instanceof GoogleGenAI ) {
-      if (options.thinkingBudget === -1) {
-        console.log(
-          `\nThinking budget is set to dynamic.`,
-        );
-      } else if (options.thinkingBudget > 0) {
-        console.log(`\nThinking... (Budget: ${options.thinkingBudget} tokens)`);
-      }
-    } 
-    if (client instanceof Ollama) {
-      if (options.thinkingBudget > 0) {
-        console.log(
-          `\nThinking...`,
-        );
       }
     }
   }
@@ -824,6 +808,18 @@ export default async function askAI(
   }
 
   if (options.verbose) {
+    if (response instanceof GenerateContentResponse) {
+      const candidate: Candidate | undefined = response.candidates?.at(0);
+      const parts = candidate?.content?.parts ?? [];
+      for (const p of parts.filter((p) => p.thought)) {
+        console.log(`\nThought:`);
+        console.log(p.text);
+      }
+    } else if (response.message.thinking) {
+      console.log(`\nThought:`);
+      console.log(response.message.thinking);
+    }
+
     console.log("\nResponse:");
     console.log(returnedResponse);
   }
