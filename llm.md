@@ -482,6 +482,7 @@ async function askAI(
     test?: ((response: unknown) => any) | ((response: unknown) => any)[];
     clean?: (response: unknown) => any;
     contextWindow?: number;
+    thinkingBudget?: number;
   },
 ): Promise<unknown>;
 ```
@@ -530,6 +531,10 @@ async function askAI(
 - **`options.contextWindow`**: - An option to specify the context window size
   for Ollama models. By default, Ollama sets this depending on the model, which
   can be lower than the actual maximum context window size of the model.
+- **`options.thinkingBudget`**: - Sets the reasoning token budget: 0 to disable
+  (default, though some models may reason regardless), -1 for a dynamic budget,
+  or > 0 for a fixed budget. For Ollama models, any non-zero value simply
+  enables reasoning, ignoring the specific budget amount.
 
 ### Returns
 
