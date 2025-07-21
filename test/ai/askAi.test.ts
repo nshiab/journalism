@@ -31,6 +31,18 @@ if (typeof aiKey === "string" && aiKey !== "") {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
+  Deno.test("should use a simple prompt with thinking and returning JSON", async () => {
+    const result = await askAI("What is the capital of France?", {
+      thinkingBudget: 500,
+      verbose: true,
+      returnJson: true,
+      model: "gemini-2.5-flash",
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
   Deno.test("should use a simple prompt with a test", async () => {
     const result = await askAI("Give me a list of 3 countries in Europe.", {
       returnJson: true,
@@ -397,6 +409,21 @@ if (ollama) {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
+  Deno.test("should use a simple prompt with thinking and returning JSON (ollama)", async () => {
+    const result = await askAI(
+      "What is the capital of France? Return a JSON with this shape: {country: string, capital: string}",
+      {
+        verbose: true,
+        thinkingBudget: 1,
+        returnJson: true,
+        clean: (response) => response.replace(`{"{"`, `{"`),
+      },
+    );
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
   Deno.test("should use a simple prompt with a different Ollama instance (ollama)", async () => {
     const ollama = new Ollama({ host: "http://127.0.0.1:11434" });
 
@@ -475,11 +502,11 @@ if (ollama) {
       {
         returnJson: true,
         cache: true,
-        clean: (response: unknown) =>
-          typeof response === "object" && response !== null &&
-            "genders" in response
-            ? response.genders
-            : response,
+        clean: (response: string) => {
+          const parsed =
+            (JSON.parse(response) as { genders: string[] }).genders;
+          return parsed;
+        },
         test: (response: unknown) => {
           if (
             !Array.isArray(response) ||

@@ -207,7 +207,7 @@ import { chromium } from "playwright-chromium";
  *   @param options.parseJson - If `true`, automatically parses the AI's response as JSON. Defaults to `true` if `returnJson` is `true`.
  *   @param options.cache - If `true`, caches the response locally in a `.journalism-cache` directory. Defaults to `false`.
  *   @param options.verbose - If `true`, enables detailed logging, including token usage and estimated costs. Defaults to `false`.
- *   @param options.clean - A function to process and clean the AI's response before it is returned or tested.
+ *   @param options.clean - A function to process and clean the AI's response before it is returned, tested or parsed to JSON.
  *   @param options.test - A function or an array of functions to validate the AI's response before it's returned.
  *   @param options.contextWindow - An option to specify the context window size for Ollama models. By default, Ollama sets this depending on the model, which can be lower than the actual maximum context window size of the model.
  *   @param options.thinkingBudget - Sets the reasoning token budget: 0 to disable (default, though some models may reason regardless), -1 for a dynamic budget, or > 0 for a fixed budget. For Ollama models, any non-zero value simply enables reasoning, ignoring the specific budget amount.
@@ -236,7 +236,7 @@ export default async function askAI(
     verbose?: boolean;
     cache?: boolean;
     test?: ((response: unknown) => void) | ((response: unknown) => void)[];
-    clean?: (response: unknown) => unknown;
+    clean?: (response: string) => unknown;
     contextWindow?: number;
     thinkingBudget?: number;
   } = {},
@@ -637,19 +637,11 @@ export default async function askAI(
         throw new Error(
           "Response text is undefined. Please check the model and input.",
         );
-      } else if (options.returnJson && options.parseJson) {
-        returnedResponse = response.text;
-        returnedResponse = JSON.parse(returnedResponse);
       } else {
         returnedResponse = response.text.trim();
       }
     } else {
-      if (options.returnJson && options.parseJson) {
-        returnedResponse = response.message.content;
-        returnedResponse = JSON.parse(response.message.content);
-      } else {
-        returnedResponse = response.message.content.trim();
-      }
+      returnedResponse = response.message.content.trim();
     }
 
     if (options.clean) {
@@ -658,6 +650,12 @@ export default async function askAI(
         console.log(returnedResponse, "\n");
       }
       returnedResponse = options.clean(returnedResponse);
+    }
+
+    if (options.returnJson && options.parseJson) {
+      returnedResponse = typeof returnedResponse === "string"
+        ? JSON.parse(returnedResponse)
+        : returnedResponse;
     }
   } catch (error: unknown) {
     throw new Error(
