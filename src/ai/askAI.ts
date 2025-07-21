@@ -618,6 +618,83 @@ export default async function askAI(
 
   if (options.verbose) {
     if (response instanceof GenerateContentResponse) {
+      const candidate: Candidate | undefined = response.candidates?.at(0);
+      const parts = candidate?.content?.parts ?? [];
+      for (const p of parts.filter((p) => p.thought)) {
+        console.log(`\nThought:`);
+        console.log(p.text?.trim());
+      }
+    } else if (response.message.thinking) {
+      console.log(`\nThought:`);
+      console.log(response.message.thinking.trim());
+    }
+  }
+
+  let returnedResponse;
+  try {
+    if (response instanceof GenerateContentResponse) {
+      if (!response.text) {
+        throw new Error(
+          "Response text is undefined. Please check the model and input.",
+        );
+      } else if (options.returnJson && options.parseJson) {
+        returnedResponse = JSON.parse(response.text);
+      } else {
+        returnedResponse = response.text.trim();
+      }
+    } else {
+      if (options.returnJson && options.parseJson) {
+        returnedResponse = JSON.parse(response.message.content);
+      } else {
+        returnedResponse = response.message.content.trim();
+      }
+    }
+
+    if (options.clean) {
+      if (options.verbose) {
+        console.log("\nResponse before cleaning:");
+        console.log(returnedResponse, "\n");
+      }
+      returnedResponse = options.clean(returnedResponse);
+    }
+  } catch (error: unknown) {
+    throw new Error(
+      `Error parsing or cleaning response: ${
+        error instanceof Error ? error.message : error
+      }.\nResponse\n: ${JSON.stringify(response)}`,
+    );
+  }
+
+  if (options.test) {
+    if (Array.isArray(options.test)) {
+      options.test.forEach((test) => test(returnedResponse));
+    } else {
+      options.test(returnedResponse);
+    }
+  }
+
+  if (options.cache && options.returnJson && cacheFileJSON) {
+    if (
+      response instanceof GenerateContentResponse &&
+      typeof response.text === "string"
+    ) {
+      writeFileSync(cacheFileJSON, JSON.stringify(returnedResponse));
+    } else {
+      writeFileSync(cacheFileJSON, JSON.stringify(returnedResponse));
+    }
+    options.verbose && console.log("Response cached as JSON.");
+  } else if (options.cache && cacheFileText) {
+    writeFileSync(cacheFileText, returnedResponse);
+    options.verbose && console.log("Response cached as text.");
+  }
+
+  if (options.verbose) {
+    console.log("\nResponse:");
+    console.log(returnedResponse, "\n");
+  }
+
+  if (options.verbose) {
+    if (response instanceof GenerateContentResponse) {
       const hasAudio = options.audio ? true : false;
 
       const pricing = [
@@ -750,78 +827,7 @@ export default async function askAI(
         formatNumber(tokensPerSecond, { significantDigits: 1 }),
       );
     }
-    console.log("Execution time:", prettyDuration(start));
-  }
-
-  let returnedResponse;
-  try {
-    if (response instanceof GenerateContentResponse) {
-      if (!response.text) {
-        throw new Error(
-          "Response text is undefined. Please check the model and input.",
-        );
-      } else if (options.returnJson && options.parseJson) {
-        returnedResponse = JSON.parse(response.text);
-      } else {
-        returnedResponse = response.text.trim();
-      }
-    } else {
-      if (options.returnJson && options.parseJson) {
-        returnedResponse = JSON.parse(response.message.content);
-      } else {
-        returnedResponse = response.message.content.trim();
-      }
-    }
-
-    if (options.clean) {
-      returnedResponse = options.clean(returnedResponse);
-    }
-  } catch (error: unknown) {
-    throw new Error(
-      `Error parsing or cleaning response: ${
-        error instanceof Error ? error.message : error
-      }.\nResponse\n: ${JSON.stringify(response)}`,
-    );
-  }
-
-  if (options.test) {
-    if (Array.isArray(options.test)) {
-      options.test.forEach((test) => test(returnedResponse));
-    } else {
-      options.test(returnedResponse);
-    }
-  }
-
-  if (options.cache && options.returnJson && cacheFileJSON) {
-    if (
-      response instanceof GenerateContentResponse &&
-      typeof response.text === "string"
-    ) {
-      writeFileSync(cacheFileJSON, JSON.stringify(returnedResponse));
-    } else {
-      writeFileSync(cacheFileJSON, JSON.stringify(returnedResponse));
-    }
-    options.verbose && console.log("Response cached as JSON.");
-  } else if (options.cache && cacheFileText) {
-    writeFileSync(cacheFileText, returnedResponse);
-    options.verbose && console.log("Response cached as text.");
-  }
-
-  if (options.verbose) {
-    if (response instanceof GenerateContentResponse) {
-      const candidate: Candidate | undefined = response.candidates?.at(0);
-      const parts = candidate?.content?.parts ?? [];
-      for (const p of parts.filter((p) => p.thought)) {
-        console.log(`\nThought:`);
-        console.log(p.text);
-      }
-    } else if (response.message.thinking) {
-      console.log(`\nThought:`);
-      console.log(response.message.thinking);
-    }
-
-    console.log("\nResponse:");
-    console.log(returnedResponse);
+    console.log("Execution time:", prettyDuration(start), "\n");
   }
 
   return returnedResponse;
