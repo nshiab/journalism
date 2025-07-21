@@ -663,7 +663,7 @@ export default async function askAI(
     throw new Error(
       `Error parsing or cleaning response: ${
         error instanceof Error ? error.message : error
-      }.\nResponse\n: ${JSON.stringify(response)}`,
+      }.\nResponse\n: ${returnedResponse}`,
     );
   }
 
