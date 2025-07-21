@@ -638,12 +638,14 @@ export default async function askAI(
           "Response text is undefined. Please check the model and input.",
         );
       } else if (options.returnJson && options.parseJson) {
-        returnedResponse = JSON.parse(response.text);
+        returnedResponse = response.text;
+        returnedResponse = JSON.parse(returnedResponse);
       } else {
         returnedResponse = response.text.trim();
       }
     } else {
       if (options.returnJson && options.parseJson) {
+        returnedResponse = response.message.content;
         returnedResponse = JSON.parse(response.message.content);
       } else {
         returnedResponse = response.message.content.trim();
