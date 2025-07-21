@@ -480,7 +480,7 @@ async function askAI(
     verbose?: boolean;
     cache?: boolean;
     test?: ((response: unknown) => any) | ((response: unknown) => any)[];
-    clean?: (response: unknown) => any;
+    clean?: (response: string) => any;
     contextWindow?: number;
     thinkingBudget?: number;
   },
@@ -525,7 +525,7 @@ async function askAI(
 - **`options.verbose`**: - If `true`, enables detailed logging, including token
   usage and estimated costs. Defaults to `false`.
 - **`options.clean`**: - A function to process and clean the AI's response
-  before it is returned or tested.
+  before it is returned, tested or parsed to JSON.
 - **`options.test`**: - A function or an array of functions to validate the AI's
   response before it's returned.
 - **`options.contextWindow`**: - An option to specify the context window size
@@ -681,14 +681,15 @@ const europeanCountries = await askAI(
   `Give me a list of three countries in Northern Europe.`,
   {
     returnJson: true,
-    clean: (response) => {
+    clean: (response: string) => {
+      const parsedResponse = JSON.parse(response);
       // Example: Trim whitespace from each country name in the array
-      if (Array.isArray(response)) {
-        return response.map((item) =>
+      if (Array.isArray(parsedResponse)) {
+        return parsedResponse.map((item) =>
           typeof item === "string" ? item.trim() : item
         );
       }
-      return response;
+      return parsedResponse;
     },
     test: (response) => {
       if (!Array.isArray(response)) {
