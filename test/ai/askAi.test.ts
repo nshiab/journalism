@@ -11,6 +11,39 @@ if (typeof aiKey === "string" && aiKey !== "") {
     rmSync("./.journalism-cache", { recursive: true });
   }
 
+  Deno.test("should run the doc example", async () => {
+    const europeanCountries = await askAI(
+      `Give me a list of three countries in Northern Europe.`,
+      {
+        returnJson: true,
+        clean: (response: string) => {
+          const parsedResponse = JSON.parse(response);
+          // Example: Trim whitespace from each country name in the array
+          if (Array.isArray(parsedResponse)) {
+            return parsedResponse.map((item) =>
+              typeof item === "string" ? item.trim() : item
+            );
+          }
+          return parsedResponse;
+        },
+        test: (response) => {
+          if (!Array.isArray(response)) {
+            throw new Error("Response is not an array.");
+          }
+          if (response.length !== 3) {
+            throw new Error("Response does not contain exactly three items.");
+          }
+          console.log(
+            "Test passed: The response is a valid list of three countries.",
+          );
+        },
+      },
+    );
+    console.log(europeanCountries);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
   Deno.test("should use a simple prompt", async () => {
     const result = await askAI("What is the capital of France?", {
       verbose: true,

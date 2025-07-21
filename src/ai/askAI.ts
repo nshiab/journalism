@@ -168,12 +168,13 @@ import { chromium } from "playwright-chromium";
  *   `Give me a list of three countries in Northern Europe.`,
  *   {
  *     returnJson: true,
- *     clean: (response) => {
+ *     clean: (response: string) => {
+ *       const parsedResponse = JSON.parse(response);
  *       // Example: Trim whitespace from each country name in the array
- *       if (Array.isArray(response)) {
- *         return response.map(item => typeof item === 'string' ? item.trim() : item);
+ *       if (Array.isArray(parsedResponse)) {
+ *         return parsedResponse.map(item => typeof item === 'string' ? item.trim() : item);
  *       }
- *       return response;
+ *       return parsedResponse;
  *     },
  *     test: (response) => {
  *       if (!Array.isArray(response)) {
