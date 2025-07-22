@@ -605,7 +605,7 @@ export default async function askAI(
   }
 
   const response = client instanceof GoogleGenAI
-    ? await client.models.generateContent(params)
+    ? await client.models.generateContentStream(params)
     : await client.chat({
       model,
       messages: [message],
@@ -615,87 +615,131 @@ export default async function askAI(
         num_ctx: options.contextWindow,
       },
       think: (options.thinkingBudget ?? 0) > 0,
+      stream: true,
     });
 
-  if (options.verbose) {
-    if (response instanceof GenerateContentResponse) {
-      const candidate: Candidate | undefined = response.candidates?.at(0);
+  let thoughts = "";
+  let returnedResponse = "";
+  let startedThinking = false;
+  let finishedThinking = false;
+  let finalUsageMetadata: {
+    promptTokenCount?: number;
+    candidatesTokenCount?: number;
+  } | null = null;
+  let finalOllamaResponse:
+    | { prompt_eval_count: number; eval_count: number }
+    | null = null;
+
+  for await (const chunk of response) {
+    if (chunk instanceof GenerateContentResponse) {
+      const candidate: Candidate | undefined = chunk.candidates?.at(0);
       const parts = candidate?.content?.parts ?? [];
-      for (const p of parts.filter((p) => p.thought)) {
-        console.log(`\nThought:`);
-        console.log(p.text?.trim());
+
+      // Capture usage metadata from the final chunk
+      if (chunk.usageMetadata) {
+        finalUsageMetadata = chunk.usageMetadata;
       }
-    } else if (response.message.thinking) {
-      console.log(`\nThought:`);
-      console.log(response.message.thinking.trim());
+
+      for (const p of parts) {
+        if (!p.text) {
+          continue;
+        } else if (p.thought) {
+          if (options.verbose) {
+            if (!thoughts) {
+              process.stdout.write("\nThoughts:");
+            }
+            process.stdout.write(p.text);
+          }
+
+          thoughts += p.text;
+        } else {
+          if (options.verbose) {
+            if (!returnedResponse) {
+              process.stdout.write("\nResponse:\n");
+            }
+            process.stdout.write(p.text);
+          }
+
+          returnedResponse += p.text;
+        }
+      }
+    } else {
+      // This is an Ollama response chunk
+      finalOllamaResponse = chunk; // Keep updating with the latest chunk to get final metadata
+
+      if (chunk.message.thinking) {
+        if (chunk.message.thinking && !startedThinking) {
+          startedThinking = true;
+          if (options.verbose) {
+            process.stdout.write("\nThoughts:\n");
+          }
+        } else if (
+          chunk.message.content && startedThinking && !finishedThinking
+        ) {
+          finishedThinking = true;
+          process.stdout.write("\nResponse:\n");
+        }
+
+        if (chunk.message.thinking) {
+          if (options.verbose) {
+            process.stdout.write(chunk.message.thinking);
+          }
+        } else if (chunk.message.content) {
+          if (options.verbose) {
+            process.stdout.write(chunk.message.content);
+          }
+          returnedResponse += chunk.message.content;
+        }
+      }
     }
   }
 
-  let returnedResponse;
-  try {
-    if (response instanceof GenerateContentResponse) {
-      if (!response.text) {
-        throw new Error(
-          "Response text is undefined. Please check the model and input.",
-        );
-      } else {
-        returnedResponse = response.text.trim();
-      }
-    } else {
-      returnedResponse = response.message.content.trim();
-    }
+  let cleanedResponse: unknown = "";
+  if (options.clean) {
+    cleanedResponse = options.clean(returnedResponse);
+  } else {
+    cleanedResponse = returnedResponse;
+  }
 
-    if (options.clean) {
-      if (options.verbose) {
-        console.log("\nResponse before cleaning:");
-        console.log(returnedResponse, "\n");
-      }
-      returnedResponse = options.clean(returnedResponse);
+  if (options.returnJson && options.parseJson) {
+    try {
+      cleanedResponse = typeof cleanedResponse === "string"
+        ? JSON.parse(cleanedResponse)
+        : cleanedResponse;
+    } catch (error) {
+      throw new Error(
+        `Failed to parse response as JSON: ${error}.\nResponse: ${cleanedResponse}`,
+      );
     }
-
-    if (options.returnJson && options.parseJson) {
-      returnedResponse = typeof returnedResponse === "string"
-        ? JSON.parse(returnedResponse)
-        : returnedResponse;
-    }
-  } catch (error: unknown) {
-    throw new Error(
-      `Error parsing or cleaning response: ${
-        error instanceof Error ? error.message : error
-      }.\nResponse\n: ${returnedResponse}`,
-    );
   }
 
   if (options.test) {
     if (Array.isArray(options.test)) {
-      options.test.forEach((test) => test(returnedResponse));
+      options.test.forEach((test) => test(cleanedResponse));
     } else {
-      options.test(returnedResponse);
+      options.test(cleanedResponse);
     }
   }
 
   if (options.cache && options.returnJson && cacheFileJSON) {
-    if (
-      response instanceof GenerateContentResponse &&
-      typeof response.text === "string"
-    ) {
-      writeFileSync(cacheFileJSON, JSON.stringify(returnedResponse));
-    } else {
-      writeFileSync(cacheFileJSON, JSON.stringify(returnedResponse));
-    }
+    writeFileSync(cacheFileJSON, JSON.stringify(cleanedResponse));
     options.verbose && console.log("Response cached as JSON.");
   } else if (options.cache && cacheFileText) {
-    writeFileSync(cacheFileText, returnedResponse);
+    writeFileSync(cacheFileText, JSON.stringify(cleanedResponse));
     options.verbose && console.log("Response cached as text.");
   }
 
-  if (options.verbose) {
-    console.log("\nResponse:");
-    console.log(returnedResponse, "\n");
+  if (options.verbose && options.clean) {
+    console.log("\nCleaned response:");
+    console.log(cleanedResponse, "\n");
+  } else if (options.verbose && options.returnJson && options.parseJson) {
+    console.log("\nParsed JSON response:");
+    console.log(cleanedResponse, "\n");
   }
 
   if (options.verbose) {
-    if (response instanceof GenerateContentResponse) {
+    if (finalUsageMetadata) {
+      // Google GenAI streaming response
       const hasAudio = options.audio ? true : false;
 
       const pricing = [
@@ -750,9 +794,8 @@ export default async function askAI(
           }Model ${model} not found in pricing list.`,
         );
       } else {
-        const promptTokenCount = response.usageMetadata?.promptTokenCount ?? 0;
-        const outputTokenCount = response.usageMetadata?.candidatesTokenCount ??
-          0;
+        const promptTokenCount = finalUsageMetadata.promptTokenCount ?? 0;
+        const outputTokenCount = finalUsageMetadata.candidatesTokenCount ?? 0;
 
         let inputRate: number;
         let outputRate: number;
@@ -783,7 +826,7 @@ export default async function askAI(
               options.cache ? "" : "\n"
             }Invalid pricing structure for model ${model}.`,
           );
-          return;
+          return cleanedResponse;
         }
 
         const promptTokenCost = (promptTokenCount / 1_000_000) * inputRate;
@@ -812,17 +855,19 @@ export default async function askAI(
           }),
         );
       }
-    } else if (client instanceof Ollama) {
-      const totalTokens = response.prompt_eval_count + response.eval_count;
+    } else if (finalOllamaResponse) {
+      // Ollama streaming response
+      const totalTokens = finalOllamaResponse.prompt_eval_count +
+        finalOllamaResponse.eval_count;
       const durationSeconds = (Date.now() - start) / 1000;
       const tokensPerSecond = totalTokens / durationSeconds;
 
       console.log(
         `${options.cache ? "" : "\n"}Tokens in:`,
-        formatNumber(response.prompt_eval_count),
+        formatNumber(finalOllamaResponse.prompt_eval_count),
         "/",
         "Tokens out:",
-        formatNumber(response.eval_count),
+        formatNumber(finalOllamaResponse.eval_count),
         "/",
         "Tokens per second:",
         formatNumber(tokensPerSecond, { significantDigits: 1 }),
@@ -831,5 +876,5 @@ export default async function askAI(
     console.log("Execution time:", prettyDuration(start), "\n");
   }
 
-  return returnedResponse;
+  return cleanedResponse;
 }
