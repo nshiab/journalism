@@ -620,8 +620,6 @@ export default async function askAI(
 
   let thoughts = "";
   let returnedResponse = "";
-  let startedThinking = false;
-  let finishedThinking = false;
   let finalUsageMetadata: {
     promptTokenCount?: number;
     candidatesTokenCount?: number;
@@ -630,67 +628,67 @@ export default async function askAI(
     | { prompt_eval_count: number; eval_count: number }
     | null = null;
 
-  for await (const chunk of response) {
-    if (chunk instanceof GenerateContentResponse) {
-      const candidate: Candidate | undefined = chunk.candidates?.at(0);
-      const parts = candidate?.content?.parts ?? [];
+  try {
+    for await (const chunk of response) {
+      if (chunk instanceof GenerateContentResponse) {
+        const candidate: Candidate | undefined = chunk.candidates?.at(0);
+        const parts = candidate?.content?.parts ?? [];
 
-      // Capture usage metadata from the final chunk
-      if (chunk.usageMetadata) {
-        finalUsageMetadata = chunk.usageMetadata;
-      }
+        // Capture usage metadata from the final chunk
+        if (chunk.usageMetadata) {
+          finalUsageMetadata = chunk.usageMetadata;
+        }
 
-      for (const p of parts) {
-        if (!p.text) {
-          continue;
-        } else if (p.thought) {
+        for (const p of parts) {
+          if (!p.text) {
+            continue;
+          } else if (p.thought) {
+            if (options.verbose) {
+              if (!thoughts) {
+                process.stdout.write("\nThoughts:\n");
+              }
+              process.stdout.write(p.text);
+              thoughts += p.text;
+            }
+          } else {
+            if (options.verbose) {
+              if (!returnedResponse) {
+                process.stdout.write("\nResponse:\n");
+              }
+              process.stdout.write(p.text);
+            }
+            returnedResponse += p.text;
+          }
+        }
+      } else {
+        // This is an Ollama response chunk
+        finalOllamaResponse = chunk; // Keep updating with the latest chunk to get final metadata
+
+        if (chunk.message.thinking) {
           if (options.verbose) {
             if (!thoughts) {
-              process.stdout.write("\nThoughts:");
+              process.stdout.write("\nThoughts:\n");
             }
-            process.stdout.write(p.text);
+            process.stdout.write(chunk.message.thinking);
+            thoughts += chunk.message.thinking;
           }
-
-          thoughts += p.text;
-        } else {
+        } else if (
+          chunk.message.content
+        ) {
           if (options.verbose) {
             if (!returnedResponse) {
               process.stdout.write("\nResponse:\n");
             }
-            process.stdout.write(p.text);
-          }
-
-          returnedResponse += p.text;
-        }
-      }
-    } else {
-      // This is an Ollama response chunk
-      finalOllamaResponse = chunk; // Keep updating with the latest chunk to get final metadata
-
-      if (chunk.message.thinking) {
-        if (chunk.message.thinking && !startedThinking) {
-          startedThinking = true;
-          if (options.verbose) {
-            process.stdout.write("\nThoughts:\n");
-          }
-        } else if (
-          chunk.message.content && startedThinking && !finishedThinking
-        ) {
-          finishedThinking = true;
-          process.stdout.write("\nResponse:\n");
-        }
-
-        if (chunk.message.thinking) {
-          if (options.verbose) {
-            process.stdout.write(chunk.message.thinking);
-          }
-        } else if (chunk.message.content) {
-          if (options.verbose) {
             process.stdout.write(chunk.message.content);
           }
           returnedResponse += chunk.message.content;
         }
       }
+    }
+  } finally {
+    // Ensure the response stream is properly closed for Ollama streaming responses
+    if ("abort" in response && typeof response.abort === "function") {
+      response.abort();
     }
   }
 
@@ -723,10 +721,10 @@ export default async function askAI(
 
   if (options.cache && options.returnJson && cacheFileJSON) {
     writeFileSync(cacheFileJSON, JSON.stringify(cleanedResponse));
-    options.verbose && console.log("Response cached as JSON.");
+    options.verbose && console.log("\nResponse cached as JSON.");
   } else if (options.cache && cacheFileText) {
     writeFileSync(cacheFileText, JSON.stringify(cleanedResponse));
-    options.verbose && console.log("Response cached as text.");
+    options.verbose && console.log("\nResponse cached as text.");
   }
 
   if (options.verbose && options.clean) {
@@ -757,7 +755,7 @@ export default async function askAI(
         },
         {
           model: "gemini-2.5-flash-lite",
-          input: hasAudio ? 0.50 : 0.10,
+          input: hasAudio ? 0.30 : 0.10,
           output: 0.40,
         },
         {
@@ -789,9 +787,7 @@ export default async function askAI(
       const modelPricing = pricing.find((p) => p.model === model);
       if (!modelPricing) {
         console.log(
-          `${
-            options.cache ? "" : "\n"
-          }Model ${model} not found in pricing list.`,
+          `\nModel ${model} not found in pricing list.`,
         );
       } else {
         const promptTokenCount = finalUsageMetadata.promptTokenCount ?? 0;
@@ -813,7 +809,7 @@ export default async function askAI(
             : `≤ ${formatNumber(tier.threshold)} tokens`;
 
           console.log(
-            `${options.cache ? "" : "\n"}Pricing tier: ${tierDescription}${
+            `\nPricing tier: ${tierDescription}${
               hasAudio ? " (audio pricing applied)" : ""
             }`,
           );
@@ -838,7 +834,7 @@ export default async function askAI(
         const tokensPerSecond = totalTokens / durationSeconds;
 
         console.log(
-          `${options.cache ? "" : "\n"}Tokens in:`,
+          `\n\nTokens in:`,
           formatNumber(promptTokenCount),
           "/",
           "Tokens out:",
@@ -863,7 +859,7 @@ export default async function askAI(
       const tokensPerSecond = totalTokens / durationSeconds;
 
       console.log(
-        `${options.cache ? "" : "\n"}Tokens in:`,
+        `\n\nTokens in:`,
         formatNumber(finalOllamaResponse.prompt_eval_count),
         "/",
         "Tokens out:",
