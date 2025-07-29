@@ -116,7 +116,23 @@ export default async function getEnvironmentCanadaRecords(
     delay?: number;
     verbose?: boolean;
   } = {},
-) {
+): Promise<
+  {
+    [key: string]: unknown;
+    recordMonth: number;
+    recordDay: number;
+    recordVariable: string;
+    recordValue: number;
+    recordYear: number;
+    recordStationName: string;
+    recordStationId: string;
+    recordStationLat: number;
+    recordStationLon: number;
+    recordStationDistance: number;
+    recordStationRecordBegin: string;
+    recordStationRecordEnd: string | null;
+  }[]
+> {
   const delay = options.delay ?? 100; // Default delay in milliseconds
   const startDate = new Date(Date.UTC(
     parseInt(dateRange[0].split("-")[0]),
