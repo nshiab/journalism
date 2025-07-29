@@ -77,6 +77,7 @@ import deleteFromBucket from "./google/deleteFromBucket.ts";
 import inBucket from "./google/inBucket.ts";
 import downloadFromBucket from "./google/downloadFromBucket.ts";
 import filesInBucket from "./google/filesInBucket.ts";
+import getEnvironmentCanadaRecords from "./weather/getEnvironmentCanadaRecords.ts";
 
 export {
   addClusters,
@@ -103,6 +104,7 @@ export {
   getClosest,
   getCovarianceMatrix,
   getEmbedding,
+  getEnvironmentCanadaRecords,
   getGeoTiffDetails,
   getGeoTiffValues,
   getHtmlTable,
