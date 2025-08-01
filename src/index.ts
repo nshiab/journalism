@@ -1,7 +1,7 @@
 /**
  * @module
  *
- * The Journalism Library
+ * The Journalism library
  *
  * To install the library with Deno, use:
  * ```bash
