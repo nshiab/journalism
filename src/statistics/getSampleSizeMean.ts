@@ -43,7 +43,7 @@ export default function getSampleSizeMean(
   key: string,
   confidenceLevel: 90 | 95 | 99,
   marginOfError: number,
-) {
+): number {
   let zScore: number;
   if (confidenceLevel === 90) {
     zScore = 1.645;

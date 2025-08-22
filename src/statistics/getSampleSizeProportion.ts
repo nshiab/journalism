@@ -31,7 +31,7 @@ export default function getSampleSizeProportion(
   data: unknown[],
   confidenceLevel: 90 | 95 | 99,
   marginOfError: number,
-) {
+): number {
   let zScore: number;
   if (confidenceLevel === 90) {
     zScore = 1.645;
