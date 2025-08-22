@@ -1,3 +1,4 @@
+import { chromium } from "playwright-chromium";
 import { load } from "npm:cheerio@1";
 import { csvFormatRow, csvParse, type DSVRowArray } from "npm:d3-dsv@3";
 
@@ -36,8 +37,14 @@ export default async function getHtmlTable(
     index?: number;
   } = {},
 ): Promise<DSVRowArray<string>> {
-  const response = await fetch(url);
-  const html = await response.text();
+  const browser = await chromium.launch();
+  const page = await browser.newPage();
+  await page.goto(url, {
+    waitUntil: "networkidle",
+    timeout: 5000,
+  });
+  const html = await page.locator("body").innerHTML();
+  await browser.close();
 
   const $ = load(html);
 
