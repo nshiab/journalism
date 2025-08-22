@@ -46,6 +46,7 @@ import camelCase from "./format/camelCase.ts";
 import downloadFile from "./web-scraping/downloadFile.ts";
 import unzip from "./other/unzip.ts";
 import zip from "./other/zip.ts";
+import addSheetRows from "./google/addSheetRows.ts";
 import overwriteSheetData from "./google/overwriteSheetData.ts";
 import getSheetData from "./google/getSheetData.ts";
 import getGeoTiffDetails from "./geo/getGeoTiffDetails.ts";
@@ -82,6 +83,7 @@ import getEnvironmentCanadaRecords from "./weather/getEnvironmentCanadaRecords.t
 export {
   addClusters,
   addMahalanobisDistance,
+  addSheetRows,
   addZScore,
   adjustToInflation,
   arraysToData,
