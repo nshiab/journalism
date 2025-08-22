@@ -2530,6 +2530,60 @@ console.log(
 );
 ```
 
+## getSampleSizeProportion
+
+Calculates the required sample size for estimating a population proportion with
+a specified confidence level and margin of error.
+
+The function uses the finite population correction formula when the population
+size is known, which provides more accurate sample size calculations for smaller
+populations. It assumes a worst-case scenario proportion of 0.5 (50%) to ensure
+the calculated sample size is sufficient regardless of the actual population
+proportion.
+
+### Signature
+
+```typescript
+function getSampleSizeProportion(
+  data: unknown[],
+  confidenceLevel: 90 | 95 | 99,
+  marginOfError: number,
+): number;
+```
+
+### Parameters
+
+- **`data`**: - An array representing the population. The length of this array
+  is used as the population size in the finite population correction formula.
+- **`confidenceLevel`**: - The desired confidence level for the sample. Must be
+  90, 95, or 99. The higher the confidence level, the larger the returned sample
+  size.
+- **`marginOfError`**: - The acceptable margin of error as a percentage (1-100).
+  The smaller the margin of error, the larger the returned sample size.
+
+### Returns
+
+The minimum required sample size, rounded up to the nearest whole number.
+
+### Examples
+
+```ts
+// A journalist has a dataset of 1,000 records and wants to know how many
+// data points to manually double-check to ensure their analysis is accurate
+const datasetRecords = [...]; // Array of 1,000 data records from investigation
+const recordsToVerify = getSampleSizeProportion(datasetRecords, 95, 5);
+console.log(`You need to manually verify ${recordsToVerify} records to be 95% confident in your analysis with a 5% margin of error`); // 278
+```
+
+```ts
+// Example for survey planning
+const cityPopulation = new Array(50000).fill(0);
+const requiredSample = getSampleSizeProportion(cityPopulation, 95, 4);
+console.log(
+  `For a city survey with 95% confidence and 4% margin of error, you need ${requiredSample} respondents.`,
+); // 594
+```
+
 ## getSeason
 
 Determines the current season based on a given date, hemisphere, and season
