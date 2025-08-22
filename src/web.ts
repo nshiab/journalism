@@ -41,6 +41,7 @@ import sleep from "./other/sleep.ts";
 import DurationTracker from "./other/DurationTracker.ts";
 import downloadCSV from "./web/downloadCsv.ts";
 import zipToUrls from "./web/zipToUrls.ts";
+import getSampleSizeProportion from "./statistics/getSampleSizeProportion.ts";
 
 export {
   addClusters,
@@ -64,6 +65,7 @@ export {
   getHumidex,
   getId,
   getMahalanobisDistance,
+  getSampleSizeProportion,
   getSeason,
   invertMatrix,
   mortgageInsurancePremium,

@@ -79,7 +79,7 @@ import inBucket from "./google/inBucket.ts";
 import downloadFromBucket from "./google/downloadFromBucket.ts";
 import filesInBucket from "./google/filesInBucket.ts";
 import getEnvironmentCanadaRecords from "./weather/getEnvironmentCanadaRecords.ts";
-
+import getSampleSizeProportion from "./statistics/getSampleSizeProportion.ts";
 export {
   addClusters,
   addMahalanobisDistance,
@@ -113,6 +113,7 @@ export {
   getHumidex,
   getId,
   getMahalanobisDistance,
+  getSampleSizeProportion,
   getSeason,
   getSheetData,
   getStatCanTable,
