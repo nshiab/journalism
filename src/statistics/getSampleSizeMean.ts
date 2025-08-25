@@ -3,6 +3,17 @@
  *
  * The function uses the finite population correction formula. It calculates the sample standard deviation from the provided data to estimate the population standard deviation, which is then used in the sample size calculation.
  *
+ * **When to use this function:**
+ * - Use when you want to estimate the average (mean) value of a numeric variable in a population
+ * - When your outcome is continuous/numeric data (income, age, test scores, measurements, etc.)
+ * - When you need to answer questions like "What's the average household income?" or "What's the mean temperature?"
+ * - When you have existing data to calculate the standard deviation from
+ *
+ * **Use `getSampleSizeProportion` instead when:**
+ * - You want to estimate what percentage/proportion of a population has a certain characteristic
+ * - Your outcome is categorical (yes/no, present/absent, pass/fail, etc.)
+ * - You need to answer questions like "What percentage of people support this policy?" or "What proportion of records are accurate?"
+ *
  * @example
  * ```ts
  * // A journalist analyzing income data wants to know how many records to sample

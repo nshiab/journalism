@@ -3,6 +3,17 @@
  *
  * The function uses the finite population correction formula when the population size is known, which provides more accurate sample size calculations for smaller populations. It assumes a worst-case scenario proportion of 0.5 (50%) to ensure the calculated sample size is sufficient regardless of the actual population proportion.
  *
+ * **When to use this function:**
+ * - Use when you want to estimate what percentage/proportion of a population has a certain characteristic
+ * - When your outcome is categorical (yes/no, pass/fail, present/absent)
+ * - When you need to answer questions like "What percentage of voters support this candidate?" or "What proportion of records contain errors?"
+ * - When you don't know the actual proportion in advance (this function uses the conservative 50% assumption)
+ *
+ * **Use `getSampleSizeMean` instead when:**
+ * - You want to estimate an average value (mean) rather than a proportion
+ * - Your data is continuous/numeric (income, temperature, test scores, etc.)
+ * - You need to answer questions like "What's the average salary?" or "What's the mean test score?"
+ *
  * @example
  * ```ts
  * // A journalist has a dataset of 1,000 records and wants to know how many
