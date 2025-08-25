@@ -43,6 +43,7 @@ import downloadCSV from "./web/downloadCsv.ts";
 import zipToUrls from "./web/zipToUrls.ts";
 import getSampleSizeProportion from "./statistics/getSampleSizeProportion.ts";
 import getSampleSizeMean from "./statistics/getSampleSizeMean.ts";
+import performZTest from "./statistics/performZTest.ts";
 
 export {
   addClusters,
@@ -73,6 +74,7 @@ export {
   mortgageInsurancePremium,
   mortgageMaxAmount,
   mortgagePayments,
+  performZTest,
   prettyDuration,
   rewind,
   round,

@@ -81,6 +81,7 @@ import filesInBucket from "./google/filesInBucket.ts";
 import getEnvironmentCanadaRecords from "./weather/getEnvironmentCanadaRecords.ts";
 import getSampleSizeProportion from "./statistics/getSampleSizeProportion.ts";
 import getSampleSizeMean from "./statistics/getSampleSizeMean.ts";
+import performZTest from "./statistics/performZTest.ts";
 
 export {
   addClusters,
@@ -130,6 +131,7 @@ export {
   mortgageMaxAmount,
   mortgagePayments,
   overwriteSheetData,
+  performZTest,
   prettyDuration,
   publishChartDW,
   reencode,
