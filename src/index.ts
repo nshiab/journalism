@@ -82,6 +82,7 @@ import getEnvironmentCanadaRecords from "./weather/getEnvironmentCanadaRecords.t
 import getSampleSizeProportion from "./statistics/getSampleSizeProportion.ts";
 import getSampleSizeMean from "./statistics/getSampleSizeMean.ts";
 import performZTest from "./statistics/performZTest.ts";
+import performTTest from "./statistics/performTTest.ts";
 
 export {
   addClusters,
@@ -131,6 +132,7 @@ export {
   mortgageMaxAmount,
   mortgagePayments,
   overwriteSheetData,
+  performTTest,
   performZTest,
   prettyDuration,
   publishChartDW,
