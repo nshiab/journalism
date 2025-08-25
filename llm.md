@@ -2530,6 +2530,92 @@ console.log(
 );
 ```
 
+## getSampleSizeMean
+
+Calculates the required sample size for estimating a population mean with a
+specified confidence level and margin of error.
+
+The function uses the finite population correction formula. It calculates the
+sample standard deviation from the provided data to estimate the population
+standard deviation, which is then used in the sample size calculation.
+
+**When to use this function:**
+
+- Use when you want to estimate the average (mean) value of a numeric variable
+  in a population
+- When your outcome is continuous/numeric data (income, age, test scores,
+  measurements, etc.)
+- When you need to answer questions like "What's the average household income?"
+  or "What's the mean temperature?"
+- When you have existing data to calculate the standard deviation from
+
+**Use `getSampleSizeProportion` instead when:**
+
+- You want to estimate what percentage/proportion of a population has a certain
+  characteristic
+- Your outcome is categorical (yes/no, present/absent, pass/fail, etc.)
+- You need to answer questions like "What percentage of people support this
+  policy?" or "What proportion of records are accurate?"
+
+### Signature
+
+```typescript
+function getSampleSizeMean(
+  data: Record<string, unknown>[],
+  key: string,
+  confidenceLevel: 90 | 95 | 99,
+  marginOfError: number,
+): number;
+```
+
+### Parameters
+
+- **`data`**: - An array of objects representing the population data. Each
+  object must contain the specified key with numeric values.
+- **`key`**: - The key in each data object that contains the numeric values to
+  analyze for calculating the sample size.
+- **`confidenceLevel`**: - The desired confidence level for the sample. Must be
+  90, 95, or 99. The higher the confidence level, the larger the returned sample
+  size.
+- **`marginOfError`**: - The acceptable margin of error in the same units as the
+  data values. The smaller the margin of error, the larger the returned sample
+  size.
+
+### Returns
+
+The minimum required sample size, rounded up to the nearest whole number.
+
+### Examples
+
+```ts
+// A journalist analyzing income data wants to know how many records to sample
+// to estimate the average income with confidence
+const incomeData = [
+  { household_id: 1, annual_income: 45000 },
+  { household_id: 2, annual_income: 52000 },
+  { household_id: 3, annual_income: 38000 },
+  // ... thousands more records
+];
+const sampleSize = getSampleSizeMean(incomeData, "annual_income", 95, 2000);
+console.log(
+  `You need to analyze ${sampleSize} income records to estimate the average income within $2,000 with 95% confidence`,
+);
+```
+
+```ts
+// Example for analyzing test scores
+const testScores = [
+  { student_id: 1, score: 85 },
+  { student_id: 2, score: 92 },
+  { student_id: 3, score: 78 },
+  // ... more test data
+];
+const requiredSample = getSampleSizeMean(testScores, "score", 99, 5);
+console.log(
+  `For 99% confidence with a 5-point margin of error, sample ${requiredSample} test scores.`,
+);
+```
+
 ## getSampleSizeProportion
 
 Calculates the required sample size for estimating a population proportion with
@@ -2540,6 +2626,23 @@ size is known, which provides more accurate sample size calculations for smaller
 populations. It assumes a worst-case scenario proportion of 0.5 (50%) to ensure
 the calculated sample size is sufficient regardless of the actual population
 proportion.
+
+**When to use this function:**
+
+- Use when you want to estimate what percentage/proportion of a population has a
+  certain characteristic
+- When your outcome is categorical (yes/no, pass/fail, present/absent)
+- When you need to answer questions like "What percentage of voters support this
+  candidate?" or "What proportion of records contain errors?"
+- When you don't know the actual proportion in advance (this function uses the
+  conservative 50% assumption)
+
+**Use `getSampleSizeMean` instead when:**
+
+- You want to estimate an average value (mean) rather than a proportion
+- Your data is continuous/numeric (income, temperature, test scores, etc.)
+- You need to answer questions like "What's the average salary?" or "What's the
+  mean test score?"
 
 ### Signature
 
