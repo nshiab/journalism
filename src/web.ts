@@ -45,6 +45,8 @@ import getSampleSizeProportion from "./statistics/getSampleSizeProportion.ts";
 import getSampleSizeMean from "./statistics/getSampleSizeMean.ts";
 import performZTest from "./statistics/performZTest.ts";
 import performTTest from "./statistics/performTTest.ts";
+import performChiSquaredIndependenceTest from "./statistics/performChiSquaredIndependenceTest.ts";
+import performChiSquaredGoodnessOfFitTest from "./statistics/performChiSquaredGoodnessOfFitTest.ts";
 
 export {
   addClusters,
@@ -75,6 +77,8 @@ export {
   mortgageInsurancePremium,
   mortgageMaxAmount,
   mortgagePayments,
+  performChiSquaredGoodnessOfFitTest,
+  performChiSquaredIndependenceTest,
   performTTest,
   performZTest,
   prettyDuration,
