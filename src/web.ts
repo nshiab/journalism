@@ -42,6 +42,7 @@ import DurationTracker from "./other/DurationTracker.ts";
 import downloadCSV from "./web/downloadCsv.ts";
 import zipToUrls from "./web/zipToUrls.ts";
 import getSampleSizeProportion from "./statistics/getSampleSizeProportion.ts";
+import getSampleSizeMean from "./statistics/getSampleSizeMean.ts";
 
 export {
   addClusters,
@@ -65,6 +66,7 @@ export {
   getHumidex,
   getId,
   getMahalanobisDistance,
+  getSampleSizeMean,
   getSampleSizeProportion,
   getSeason,
   invertMatrix,
