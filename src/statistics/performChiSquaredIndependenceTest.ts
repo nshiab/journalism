@@ -1,13 +1,12 @@
 /**
- * Performs a Chi-Squared independence test to determine if two categorical variables are statistically independent.
+ * Performs a Chi-Squared independence test to determine if two categorical variables are statistically independent or associated.
  *
- * The Chi-Squared independence test examines whether there is a statistically significant association between two categorical variables by comparing observed frequencies in a contingency table against expected frequencies calculated under the assumption of independence.
+ * The Chi-Squared independence test examines whether there is a statistically significant association between two categorical variables by comparing observed frequencies against expected frequencies calculated under the assumption of independence.
  *
  * **When to use this function:**
  * - Use for testing independence between two categorical variables (e.g., gender vs voting preference)
  * - When you have categorical data organized in frequency counts
  * - When testing hypotheses about associations between variables
- * - For analyzing cross-tabulated survey data
  *
  * @example
  * ```ts
@@ -68,8 +67,8 @@
  * ```
  *
  * @param data - An array of objects containing the categorical data and frequency counts.
- * @param rowVariable - The key for the first categorical variable (rows in contingency table).
- * @param colVariable - The key for the second categorical variable (columns in contingency table).
+ * @param variable1Key - The key for the first categorical variable.
+ * @param variable2Key - The key for the second categorical variable.
  * @param countKey - The key containing the frequency count for each combination.
  * @returns An object containing the chi-squared statistic, degrees of freedom, p-value, contingency table details, and any warnings about test assumptions.
  *
@@ -77,22 +76,13 @@
  */
 export default function performChiSquaredIndependenceTest(
   data: { [key: string]: unknown }[],
-  rowVariable: string,
-  colVariable: string,
+  variable1Key: string,
+  variable2Key: string,
   countKey: string,
 ): {
   chiSquared: number;
   degreesOfFreedom: number;
   pValue: number;
-  observedFrequencies: { [key: string]: { [key: string]: number } };
-  expectedFrequencies: { [key: string]: { [key: string]: number } };
-  contingencyTable: {
-    rows: string[];
-    columns: string[];
-    rowTotals: number[];
-    colTotals: number[];
-    grandTotal: number;
-  };
   warnings: string[];
 } {
   // --- 1. Input validation ---
@@ -138,8 +128,8 @@ export default function performChiSquaredIndependenceTest(
   const colCategories = new Set<string>();
 
   data.forEach((item, index) => {
-    const rowValue = String(extractValue(item, rowVariable, index, "string"));
-    const colValue = String(extractValue(item, colVariable, index, "string"));
+    const rowValue = String(extractValue(item, variable1Key, index, "string"));
+    const colValue = String(extractValue(item, variable2Key, index, "string"));
     const count = extractValue(item, countKey, index, "number") as number;
 
     rowCategories.add(rowValue);
@@ -221,7 +211,7 @@ export default function performChiSquaredIndependenceTest(
     const belowFive = expectedValues.filter((freq) => freq < 5);
     if (belowFive.length > 0) {
       warnings.push(
-        `Warning: For 2×2 contingency tables, all expected frequencies should be ≥ 5. Found ${belowFive.length} frequencies below 5.`,
+        `Warning: For 2x2 contingency tables, all expected frequencies should be ≥ 5. Found ${belowFive.length} frequencies below 5.`,
       );
     }
   }
@@ -253,15 +243,6 @@ export default function performChiSquaredIndependenceTest(
     chiSquared,
     degreesOfFreedom,
     pValue,
-    observedFrequencies: contingencyData,
-    expectedFrequencies,
-    contingencyTable: {
-      rows,
-      columns,
-      rowTotals,
-      colTotals,
-      grandTotal,
-    },
     warnings,
   };
 }
@@ -284,6 +265,10 @@ function calculateChiSquaredPValue(
   // For very small chi-squared values, return 1 (no significance)
   if (chiSquared === 0) return 1;
 
+  // For very large chi-squared values, prevent underflow by returning a minimum p-value
+  // This represents extremely strong evidence against the null hypothesis
+  const MIN_P_VALUE = Number.MIN_VALUE; // Smallest positive number in JavaScript (~5e-324)
+
   // Use Wilson-Hilferty normal approximation for more robust calculation
   if (degreesOfFreedom >= 1) {
     // Wilson-Hilferty transformation
@@ -294,12 +279,17 @@ function calculateChiSquaredPValue(
     // Convert to p-value using normal distribution
     const pValue = 1 - normalCDF(z);
 
+    // Handle numerical issues: p-value should be positive and finite
+    if (pValue <= 0 || !isFinite(pValue)) {
+      return MIN_P_VALUE;
+    }
+
     // Ensure p-value is within valid range
-    return Math.max(0, Math.min(1, pValue));
+    return Math.max(MIN_P_VALUE, Math.min(1, pValue));
   }
 
-  // Fallback for edge cases
-  return chiSquared > 10 ? 0.01 : 0.1;
+  // This should never be reached for valid chi-squared tests (df >= 1)
+  throw new Error(`Unexpected degrees of freedom: ${degreesOfFreedom}`);
 }
 
 /**

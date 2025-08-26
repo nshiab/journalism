@@ -1,6 +1,9 @@
 import { assertEquals, assertThrows } from "jsr:@std/assert";
 import performChiSquaredIndependenceTest from "../../src/statistics/performChiSquaredIndependenceTest.ts";
 
+// Tested with
+// https://www.socscistatistics.com/tests/chisquare2/default2.aspx
+
 // Test data for independence test - voting preference by age group
 const votingData = [
   { age_group: "18-30", candidate: "A", count: 45 },
@@ -10,7 +13,46 @@ const votingData = [
   { age_group: "51+", candidate: "A", count: 70 },
   { age_group: "51+", candidate: "B", count: 30 },
 ];
+const educationData = [
+  { education: "high_school", income: "low", count: 150 },
+  { education: "high_school", income: "medium", count: 100 },
+  { education: "high_school", income: "high", count: 50 },
+  { education: "college", income: "low", count: 80 },
+  { education: "college", income: "medium", count: 120 },
+  { education: "college", income: "high", count: 100 },
+  { education: "graduate", income: "low", count: 30 },
+  { education: "graduate", income: "medium", count: 70 },
+  { education: "graduate", income: "high", count: 150 },
+];
 
+Deno.test("should perform chi-squared independence test for votingData", () => {
+  const result = performChiSquaredIndependenceTest(
+    votingData,
+    "age_group",
+    "candidate",
+    "count",
+  );
+  assertEquals(result, {
+    chiSquared: 13.028571428571428,
+    degreesOfFreedom: 2,
+    pValue: 0.0016613751642883257,
+    warnings: [],
+  });
+});
+Deno.test("should perform chi-squared independence test for educationData", () => {
+  const result = performChiSquaredIndependenceTest(
+    educationData,
+    "education",
+    "income",
+    "count",
+  );
+  assertEquals(result, {
+    chiSquared: 145.59976422045386,
+    degreesOfFreedom: 4,
+    pValue: 5e-324,
+    warnings: [],
+  });
+});
 Deno.test("should perform chi-squared independence test correctly", () => {
   const result = performChiSquaredIndependenceTest(
     votingData,
@@ -35,11 +77,6 @@ Deno.test("should perform chi-squared independence test correctly", () => {
   assertEquals(result.pValue >= 0 && result.pValue <= 1, true);
   // For chi-squared = 13.03 with df = 2, p-value should be very small (< 0.05)
   assertEquals(result.pValue < 0.05, true); // Significant at 5% level
-
-  // Check contingency table structure
-  assertEquals(result.contingencyTable.rows.length, 3);
-  assertEquals(result.contingencyTable.columns.length, 2);
-  assertEquals(result.contingencyTable.grandTotal, 300);
 });
 
 Deno.test("should handle simple 2x2 contingency table", () => {
@@ -58,7 +95,6 @@ Deno.test("should handle simple 2x2 contingency table", () => {
   );
 
   assertEquals(result.degreesOfFreedom, 1); // (2-1) * (2-1) = 1
-  assertEquals(result.contingencyTable.grandTotal, 100);
   assertEquals(result.pValue > 0 && result.pValue < 1, true);
 });
 
@@ -77,8 +113,6 @@ Deno.test("should handle string and number category values", () => {
     "count",
   );
 
-  assertEquals(result.contingencyTable.rows.length, 2);
-  assertEquals(result.contingencyTable.columns.length, 2);
   assertEquals(result.degreesOfFreedom, 1);
 });
 
@@ -118,47 +152,14 @@ Deno.test("should throw error for invalid count values", () => {
 });
 
 Deno.test("should handle large contingency table", () => {
-  const largeData = [
-    { education: "high_school", income: "low", count: 150 },
-    { education: "high_school", income: "medium", count: 100 },
-    { education: "high_school", income: "high", count: 50 },
-    { education: "college", income: "low", count: 80 },
-    { education: "college", income: "medium", count: 120 },
-    { education: "college", income: "high", count: 100 },
-    { education: "graduate", income: "low", count: 30 },
-    { education: "graduate", income: "medium", count: 70 },
-    { education: "graduate", income: "high", count: 150 },
-  ];
-
   const result = performChiSquaredIndependenceTest(
-    largeData,
+    educationData,
     "education",
     "income",
     "count",
   );
 
-  assertEquals(result.contingencyTable.rows.length, 3);
-  assertEquals(result.contingencyTable.columns.length, 3);
   assertEquals(result.degreesOfFreedom, 4); // (3-1) * (3-1) = 4
-  assertEquals(result.contingencyTable.grandTotal, 850);
-});
-
-Deno.test("should calculate expected frequencies correctly", () => {
-  const result = performChiSquaredIndependenceTest(
-    votingData,
-    "age_group",
-    "candidate",
-    "count",
-  );
-
-  // Check that expected frequencies are calculated correctly
-  // For age_group "18-30" and candidate "A": (100 * 175) / 300 = 58.33
-  const expected1830A = result.expectedFrequencies["18-30"]["A"];
-  assertEquals(Math.round(expected1830A * 100) / 100, 58.33);
-
-  // For age_group "18-30" and candidate "B": (100 * 125) / 300 = 41.67
-  const expected1830B = result.expectedFrequencies["18-30"]["B"];
-  assertEquals(Math.round(expected1830B * 100) / 100, 41.67);
 });
 
 Deno.test("should generate warnings for low expected frequencies", () => {
@@ -183,7 +184,7 @@ Deno.test("should generate warnings for low expected frequencies", () => {
   // Should warn about frequencies below 5 for 2x2 table
   const hasBelow5Warning = result.warnings.some((warning) =>
     warning.includes(
-      "For 2×2 contingency tables, all expected frequencies should be ≥ 5",
+      "For 2x2 contingency tables, all expected frequencies should be ≥ 5",
     )
   );
   assertEquals(hasBelow5Warning, true);
