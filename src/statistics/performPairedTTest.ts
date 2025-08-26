@@ -1,78 +1,77 @@
 /**
  * Performs a paired t-test to determine if there is a significant difference between two related samples.
  *
- * The paired t-test is used when comparing measurements from the same subjects before and after a treatment,
- * or when comparing two related conditions. It tests whether the mean difference between paired observations
- * is significantly different from zero (or a hypothesized difference).
+ * The paired t-test is used when comparing two measurements from the same subjects or entities,
+ * such as before and after an event, policy change, or intervention. It tests whether the mean difference between paired observations
+ * is significantly different from zero.
  *
  * **When to use this function:**
- * - Use when you have two measurements from the same subjects (before/after, pre/post treatment)
- * - When comparing two related conditions or matched pairs
+ * - Use when you have two measurements from the same subjects or entities (before/after an event, pre/post policy change)
+ * - When comparing two related conditions or matched pairs (same districts, candidates, regions, etc.)
  * - When you want to control for individual variation between subjects
  * - When data differences are approximately normally distributed
  *
  * **Test types:**
- * - **"two-tailed"** (default): Tests if the mean difference is significantly different from the hypothesized difference
- * - **"left-tailed"**: Tests if the mean difference is significantly less than the hypothesized difference
- * - **"right-tailed"**: Tests if the mean difference is significantly greater than the hypothesized difference
+ * - **"two-tailed"** (default): Tests if the mean difference is significantly different from zero
+ * - **"left-tailed"**: Tests if the mean difference is significantly less than zero
+ * - **"right-tailed"**: Tests if the mean difference is significantly greater than zero
  *
  * @example
  * ```ts
- * // A journalist investigating if a new education program improves test scores
- * const studentScores = [
- *   { student_id: 1, name: "Alice", before_score: 75, after_score: 82 },
- *   { student_id: 2, name: "Bob", before_score: 68, after_score: 71 },
- *   { student_id: 3, name: "Carol", before_score: 85, after_score: 89 },
- *   { student_id: 4, name: "David", before_score: 72, after_score: 78 },
- *   { student_id: 5, name: "Eve", before_score: 79, after_score: 84 },
- *   { student_id: 6, name: "Frank", before_score: 81, after_score: 83 },
+ * // A journalist investigating if parking fines increased after new enforcement policy
+ * const parkingFineData = [
+ *   { district_id: 1, fines_before: 125, fines_after: 142 },
+ *   { district_id: 2, fines_before: 98, fines_after: 108 },
+ *   { district_id: 3, fines_before: 156, fines_after: 175 },
+ *   { district_id: 4, fines_before: 87, fines_after: 95 },
+ *   { district_id: 5, fines_before: 203, fines_after: 228 },
+ *   { district_id: 6, fines_before: 134, fines_after: 149 },
  * ];
  *
- * const result = performPairedTTest(studentScores, "before_score", "after_score");
- * console.log(`Mean difference: ${result.meanDifference.toFixed(2)} points`);
+ * const result = performPairedTTest(parkingFineData, "fines_before", "fines_after");
+ * console.log(`Mean increase in fines: ${result.meanDifference.toFixed(2)} per month`);
  * console.log(`T-statistic: ${result.tStatistic.toFixed(3)}`);
  * console.log(`P-value: ${result.pValue.toFixed(4)}`);
  *
  * if (result.pValue < 0.05) {
- *   console.log("The education program shows a significant effect on test scores");
+ *   console.log("Parking fines increased significantly after the new policy");
  * } else {
- *   console.log("No significant difference found in test scores");
+ *   console.log("No significant change in parking fines");
  * }
  * ```
  *
  * @example
  * ```ts
- * // Testing if a new training program improves performance (right-tailed test)
- * const athletePerformance = [
- *   { athlete_id: 1, baseline_time: 12.5, trained_time: 11.8 }, // Lower time is better
- *   { athlete_id: 2, baseline_time: 13.2, trained_time: 12.9 },
- *   { athlete_id: 3, baseline_time: 11.9, trained_time: 11.3 },
- *   { athlete_id: 4, baseline_time: 14.1, trained_time: 13.6 },
- *   { athlete_id: 5, baseline_time: 12.8, trained_time: 12.2 },
+ * // Testing if campaign spending affects vote share (right-tailed test)
+ * const campaignData = [
+ *   { district_id: 1, before_ads: 32.5, after_ads: 38.2 },
+ *   { district_id: 2, before_ads: 28.9, after_ads: 34.1 },
+ *   { district_id: 3, before_ads: 41.3, after_ads: 43.7 },
+ *   { district_id: 4, before_ads: 25.6, after_ads: 31.9 },
+ *   { district_id: 5, before_ads: 36.8, after_ads: 40.3 },
  * ];
  *
- * // Test if baseline_time - trained_time > 0 (improvement)
+ * // Test if after_ads - before_ads > 0 (increase in vote share)
  * const testResult = performPairedTTest(
- *   athletePerformance,
- *   "baseline_time",
- *   "trained_time",
- *   { tail: "right-tailed", hypothesizedDifference: 0 }
+ *   campaignData,
+ *   "before_ads",
+ *   "after_ads",
+ *   { tail: "right-tailed" }
  * );
  *
- * console.log(`Mean improvement: ${testResult.meanDifference.toFixed(2)} seconds`);
+ * console.log(`Mean vote share increase: ${testResult.meanDifference.toFixed(2)}%`);
  * if (testResult.pValue < 0.05) {
- *   console.log("Training program shows significant improvement!");
+ *   console.log("Campaign ads show significant increase in vote share!");
  * } else {
- *   console.log("Training program doesn't show significant improvement");
+ *   console.log("Campaign ads don't show significant increase in vote share");
  * }
  * ```
  *
  * @param pairedData - An array of objects containing paired observations. Each object must contain both specified keys with numeric values.
- * @param firstKey - The key for the first measurement in each pair (e.g., "before", "pretest").
- * @param secondKey - The key for the second measurement in each pair (e.g., "after", "posttest").
+ * @param firstKey - The key for the first measurement in each pair (e.g., "before_event", "baseline", "pre_policy").
+ * @param secondKey - The key for the second measurement in each pair (e.g., "after_event", "follow_up", "post_policy").
  * @param options - Optional configuration object.
  * @param options.tail - The type of test to perform: "two-tailed" (default), "left-tailed", or "right-tailed".
- * @param options.hypothesizedDifference - The hypothesized difference between pairs (default: 0).
  * @returns An object containing comprehensive test results including sample statistics, differences, degrees of freedom, t-statistic, and p-value.
  *
  * @category Statistics
@@ -83,14 +82,12 @@ export default function performPairedTTest(
   secondKey: string,
   options: {
     tail?: "two-tailed" | "left-tailed" | "right-tailed";
-    hypothesizedDifference?: number;
   } = {},
 ): {
   sampleSize: number;
   firstMean: number;
   secondMean: number;
   meanDifference: number;
-  hypothesizedDifference: number;
   differenceStdDev: number;
   differenceVariance: number;
   degreesOfFreedom: number;
@@ -132,20 +129,7 @@ export default function performPairedTTest(
     return { first, second };
   };
 
-  // --- 2. Validate hypothesized difference ---
-  const { hypothesizedDifference = 0 } = options;
-  if (
-    typeof hypothesizedDifference !== "number" ||
-    !isFinite(hypothesizedDifference)
-  ) {
-    throw new Error(
-      `Invalid hypothesized difference. Expected a finite number, but received: ${
-        JSON.stringify(hypothesizedDifference)
-      }.`,
-    );
-  }
-
-  // --- 3. Extract paired values ---
+  // --- 2. Extract paired values ---
   const { first, second } = extractPairedNumericValues(
     pairedData,
     firstKey,
@@ -185,15 +169,15 @@ export default function performPairedTTest(
   );
   const differenceStdDev = Math.sqrt(differenceVariance);
 
-  // --- 7. Extract tail option with default ---
+  // --- 6. Extract tail option with default ---
   const { tail = "two-tailed" } = options;
 
-  // --- 8. Calculate t-statistic ---
+  // --- 7. Calculate t-statistic ---
   const standardError = differenceStdDev / Math.sqrt(sampleSize);
-  const tStatistic = (meanDifference - hypothesizedDifference) / standardError;
+  const tStatistic = meanDifference / standardError;
   const degreesOfFreedom = sampleSize - 1;
 
-  // --- 9. Calculate P-Value using t-distribution ---
+  // --- 8. Calculate P-Value using t-distribution ---
   // Implementation of the incomplete beta function for t-distribution CDF
   const betaIncomplete = (x: number, a: number, b: number): number => {
     if (x <= 0) return 0;
@@ -254,7 +238,7 @@ export default function performPairedTTest(
     return t > 0 ? 1 - prob : prob;
   };
 
-  // --- 10. Calculate P-Value based on tail type ---
+  // --- 9. Calculate P-Value based on tail type ---
   let pValue: number;
   if (tail === "two-tailed") {
     // Two-tailed: P(|T| > |t|) = 2 * P(T > |t|)
@@ -277,7 +261,6 @@ export default function performPairedTTest(
     firstMean,
     secondMean,
     meanDifference,
-    hypothesizedDifference,
     differenceStdDev,
     differenceVariance,
     degreesOfFreedom,

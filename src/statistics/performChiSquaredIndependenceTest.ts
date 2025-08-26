@@ -63,12 +63,14 @@
  *
  * if (result.pValue < 0.01) {
  *   console.log("Strong evidence that education and income are associated");
+ * } else {
+ *   console.log("No strong evidence of association between education and income");
  * }
  * ```
  *
  * @param data - An array of objects containing the categorical data and frequency counts.
- * @param variable1Key - The key for the first categorical variable.
- * @param variable2Key - The key for the second categorical variable.
+ * @param firstVariableKey - The key for the first categorical variable.
+ * @param secondVariableKey - The key for the second categorical variable.
  * @param countKey - The key containing the frequency count for each combination.
  * @returns An object containing the chi-squared statistic, degrees of freedom, p-value, contingency table details, and any warnings about test assumptions.
  *
@@ -76,8 +78,8 @@
  */
 export default function performChiSquaredIndependenceTest(
   data: { [key: string]: unknown }[],
-  variable1Key: string,
-  variable2Key: string,
+  firstVariableKey: string,
+  secondVariableKey: string,
   countKey: string,
 ): {
   chiSquared: number;
@@ -128,8 +130,12 @@ export default function performChiSquaredIndependenceTest(
   const colCategories = new Set<string>();
 
   data.forEach((item, index) => {
-    const rowValue = String(extractValue(item, variable1Key, index, "string"));
-    const colValue = String(extractValue(item, variable2Key, index, "string"));
+    const rowValue = String(
+      extractValue(item, firstVariableKey, index, "string"),
+    );
+    const colValue = String(
+      extractValue(item, secondVariableKey, index, "string"),
+    );
     const count = extractValue(item, countKey, index, "number") as number;
 
     rowCategories.add(rowValue);

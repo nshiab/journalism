@@ -1,91 +1,90 @@
 /**
  * Performs a paired z-test to determine if there is a significant difference between two related samples when the population standard deviation of differences is known.
  *
- * The paired z-test is used when comparing measurements from the same subjects before and after a treatment,
- * or when comparing two related conditions, and when the population standard deviation of the differences is known.
- * It tests whether the mean difference between paired observations is significantly different from zero (or a hypothesized difference).
+ * The paired z-test is used when comparing two measurements from the same subjects or entities,
+ * such as before and after an event, policy change, or intervention, and when the population standard deviation of the differences is known.
+ * It tests whether the mean difference between paired observations is significantly different from zero.
  *
  * **When to use this function:**
- * - Use when you have two measurements from the same subjects (before/after, pre/post treatment)
- * - When comparing two related conditions or matched pairs
+ * - Use when you have two measurements from the same subjects or entities (before/after an event, pre/post policy change)
+ * - When comparing two related conditions or matched pairs (same districts, candidates, regions, etc.)
  * - When the population standard deviation of differences is known
  * - When you have a large sample size (typically n ≥ 30) or when data differences are normally distributed
  * - When you want to control for individual variation between subjects
  *
  * **Test types:**
- * - **"two-tailed"** (default): Tests if the mean difference is significantly different from the hypothesized difference
- * - **"left-tailed"**: Tests if the mean difference is significantly less than the hypothesized difference
- * - **"right-tailed"**: Tests if the mean difference is significantly greater than the hypothesized difference
+ * - **"two-tailed"** (default): Tests if the mean difference is significantly different from zero
+ * - **"left-tailed"**: Tests if the mean difference is significantly less than zero
+ * - **"right-tailed"**: Tests if the mean difference is significantly greater than zero
  *
  * @example
  * ```ts
- * // A journalist investigating if a new fitness program improves performance scores
- * const fitnessScores = [
- *   { participant_id: 1, name: "Alice", before_score: 75, after_score: 82 },
- *   { participant_id: 2, name: "Bob", before_score: 68, after_score: 71 },
- *   { participant_id: 3, name: "Carol", before_score: 85, after_score: 89 },
- *   { participant_id: 4, name: "David", before_score: 72, after_score: 78 },
- *   { participant_id: 5, name: "Eve", before_score: 79, after_score: 84 },
- *   { participant_id: 6, name: "Frank", before_score: 81, after_score: 83 },
+ * // A journalist analyzing if property taxes increased after a new municipal budget
+ * const propertyTaxData = [
+ *   { property_id: 1, tax_2023: 4500, tax_2024: 4720 },
+ *   { property_id: 2, tax_2023: 3200, tax_2024: 3350 },
+ *   { property_id: 3, tax_2023: 5800, tax_2024: 6100 },
+ *   { property_id: 4, tax_2023: 2900, tax_2024: 3050 },
+ *   { property_id: 5, tax_2023: 6200, tax_2024: 6500 },
+ *   { property_id: 6, tax_2023: 4100, tax_2024: 4300 },
  * ];
  *
- * const knownPopulationStdDev = 5.2; // Known from previous studies
+ * const knownPopulationStdDev = 180; // Known standard deviation of tax differences from historical data. This represents typical year-to-year variation in property tax changes. Must be obtained from previous studies or municipal records. This is just an example value.
  *
  * const result = performPairedZTest(
- *   fitnessScores,
- *   "before_score",
- *   "after_score",
+ *   propertyTaxData,
+ *   "tax_2023",
+ *   "tax_2024",
  *   knownPopulationStdDev
  * );
  *
- * console.log(`Mean difference: ${result.meanDifference.toFixed(2)} points`);
+ * console.log(`Average tax increase: $${result.meanDifference.toFixed(2)}`);
  * console.log(`Z-statistic: ${result.zStatistic.toFixed(3)}`);
  * console.log(`P-value: ${result.pValue.toFixed(4)}`);
  *
  * if (result.pValue < 0.05) {
- *   console.log("The fitness program shows a significant effect on performance scores");
+ *   console.log("Property taxes increased significantly after the new budget");
  * } else {
- *   console.log("No significant difference found in performance scores");
+ *   console.log("No significant change in property taxes");
  * }
  * ```
  *
  * @example
  * ```ts
- * // Testing if a new medication reduces blood pressure (right-tailed test)
- * const bloodPressureData = [
- *   { patient_id: 1, before_bp: 140, after_bp: 132 },
- *   { patient_id: 2, before_bp: 155, after_bp: 148 },
- *   { patient_id: 3, before_bp: 138, after_bp: 135 },
- *   { patient_id: 4, before_bp: 162, after_bp: 151 },
- *   { patient_id: 5, before_bp: 145, after_bp: 139 },
+ * // Testing if campaign spending affects vote share (right-tailed test)
+ * const campaignData = [
+ *   { district_id: 1, before_ads: 32.5, after_ads: 38.2 },
+ *   { district_id: 2, before_ads: 28.9, after_ads: 34.1 },
+ *   { district_id: 3, before_ads: 41.3, after_ads: 43.7 },
+ *   { district_id: 4, before_ads: 25.6, after_ads: 31.9 },
+ *   { district_id: 5, before_ads: 36.8, after_ads: 40.3 },
  * ];
  *
- * const knownStdDev = 8.5; // Known population standard deviation of BP differences
+ * const knownStdDev = 4.2; // Known standard deviation of vote share differences from polling research. This represents typical variation in how much vote share changes before/after campaign events. Obtained from electoral studies or polling firms. This is just an example value.
  *
- * // Test if before_bp - after_bp > 0 (reduction in BP)
+ * // Test if after_ads - before_ads > 0 (increase in vote share)
  * const testResult = performPairedZTest(
- *   bloodPressureData,
- *   "before_bp",
- *   "after_bp",
+ *   campaignData,
+ *   "before_ads",
+ *   "after_ads",
  *   knownStdDev,
- *   { tail: "right-tailed", hypothesizedDifference: 0 }
+ *   { tail: "right-tailed" }
  * );
  *
- * console.log(`Mean BP reduction: ${testResult.meanDifference.toFixed(2)} mmHg`);
+ * console.log(`Mean vote share increase: ${testResult.meanDifference.toFixed(2)}%`);
  * if (testResult.pValue < 0.05) {
- *   console.log("Medication shows significant blood pressure reduction!");
+ *   console.log("Campaign ads show significant increase in vote share!");
  * } else {
- *   console.log("Medication doesn't show significant blood pressure reduction");
+ *   console.log("Campaign ads don't show significant increase in vote share");
  * }
  * ```
  *
  * @param pairedData - An array of objects containing paired observations. Each object must contain both specified keys with numeric values.
- * @param firstKey - The key for the first measurement in each pair (e.g., "before", "pretest").
- * @param secondKey - The key for the second measurement in each pair (e.g., "after", "posttest").
+ * @param firstKey - The key for the first measurement in each pair (e.g., "before_event", "baseline", "pre_policy").
+ * @param secondKey - The key for the second measurement in each pair (e.g., "after_event", "follow_up", "post_policy").
  * @param populationStdDev - The known population standard deviation of the differences.
  * @param options - Optional configuration object.
  * @param options.tail - The type of test to perform: "two-tailed" (default), "left-tailed", or "right-tailed".
- * @param options.hypothesizedDifference - The hypothesized difference between pairs (default: 0).
  * @returns An object containing comprehensive test results including sample statistics, differences, z-statistic, and p-value.
  *
  * @category Statistics
@@ -97,14 +96,12 @@ export default function performPairedZTest(
   populationStdDev: number,
   options: {
     tail?: "two-tailed" | "left-tailed" | "right-tailed";
-    hypothesizedDifference?: number;
   } = {},
 ): {
   sampleSize: number;
   firstMean: number;
   secondMean: number;
   meanDifference: number;
-  hypothesizedDifference: number;
   populationStdDev: number;
   zStatistic: number;
   pValue: number;
@@ -145,18 +142,6 @@ export default function performPairedZTest(
   };
 
   // --- 2. Validate inputs ---
-  const { hypothesizedDifference = 0 } = options;
-  if (
-    typeof hypothesizedDifference !== "number" ||
-    !isFinite(hypothesizedDifference)
-  ) {
-    throw new Error(
-      `Invalid hypothesized difference. Expected a finite number, but received: ${
-        JSON.stringify(hypothesizedDifference)
-      }.`,
-    );
-  }
-
   if (
     typeof populationStdDev !== "number" || !isFinite(populationStdDev) ||
     populationStdDev <= 0
@@ -199,7 +184,7 @@ export default function performPairedZTest(
 
   // --- 8. Calculate z-statistic ---
   const standardError = populationStdDev / Math.sqrt(sampleSize);
-  const zStatistic = (meanDifference - hypothesizedDifference) / standardError;
+  const zStatistic = meanDifference / standardError;
 
   // --- 9. Calculate P-Value using standard normal distribution ---
   const erf = (x: number): number => {
@@ -242,7 +227,6 @@ export default function performPairedZTest(
     firstMean,
     secondMean,
     meanDifference,
-    hypothesizedDifference,
     populationStdDev,
     zStatistic,
     pValue,
