@@ -1,14 +1,14 @@
 /**
- * Performs a paired t-test to determine if there is a significant difference between two related samples.
+ * Performs a paired t-test for dependent means to determine if there is a significant difference between two related samples.
  *
  * The paired t-test is used when comparing two measurements from the same subjects or entities,
  * such as before and after an event, policy change, or intervention. It tests whether the mean difference between paired observations
- * is significantly different from zero.
+ * is significantly different from zero. This is a test for **dependent means** (related samples), not independent groups.
  *
  * **When to use this function:**
  * - Use when you have two measurements from the same subjects or entities (before/after an event, pre/post policy change)
  * - When comparing two related conditions or matched pairs (same districts, candidates, regions, etc.)
- * - When you want to control for individual variation between subjects
+ * - When you want to control for individual variation between subjects (dependent means)
  * - When data differences are approximately normally distributed
  *
  * **Test types:**

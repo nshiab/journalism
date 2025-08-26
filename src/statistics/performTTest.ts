@@ -1,13 +1,15 @@
 /**
- * Performs a t-test to determine if a sample mean is significantly different from a hypothesized population mean.
+ * Performs a one-sample t-test for independent means to determine if a sample mean is significantly different from a hypothesized population mean.
  *
- * The function compares the mean of a sample against a hypothesized population mean when the population standard deviation is unknown. This is the most common scenario in real-world statistical analysis where we only have sample data and need to estimate the population parameters.
+ * The function compares the mean of a sample against a hypothesized population mean when the population standard deviation is unknown. This is the most common scenario in real-world statistical analysis where we only have sample data and need to estimate the population parameters. This is a test for **independent means** (sample vs population), not related/paired samples.
  *
  * **When to use this function:**
  * - Use when you have sample data and want to test if the sample mean differs significantly from a known or hypothesized value
  * - When the population standard deviation is unknown (most common case)
- * - When data is approximately normally distributed (especially important for small samples)
- * - Particularly appropriate for smaller sample sizes (n < 30), but works well for larger samples too
+ * - When data is approximately normally distributed OR when you have a large sample size (n ≥ 30-50)
+ * - **Robustness to non-normality**: Due to the Central Limit Theorem, the t-test becomes robust to violations of normality as sample size increases. For large samples (n ≥ 30-50), the sampling distribution of the mean approaches normality even if the underlying data is not normally distributed
+ * - **Small samples (n < 30)**: Normality assumption is more critical. Consider checking for normality or using non-parametric alternatives (like Wilcoxon signed-rank test) if data is heavily skewed or has extreme outliers
+ * - For independent observations (not paired or matched data)
  *
  * **Test types:**
  * - **"two-tailed"** (default): Tests if sample mean is significantly different (higher OR lower) than hypothesized mean

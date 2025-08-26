@@ -1,12 +1,13 @@
 /**
- * Performs a Z-test to determine if a sample mean is significantly different from a population mean.
+ * Performs a Z-test for independent means to determine if a sample mean is significantly different from a population mean.
  *
- * The function compares the mean of a sample against the mean of a known population to test the null hypothesis. It automatically applies the finite population correction (FPC) when the sample size exceeds 5% of the population size, which provides more accurate results for smaller populations.
+ * The function compares the mean of a sample against the mean of a known population to test the null hypothesis. It automatically applies the finite population correction (FPC) when the sample size exceeds 5% of the population size, which provides more accurate results for smaller populations. This is a test for **independent means** (sample vs population), not related/paired samples.
  *
  * **When to use this function:**
  * - Use when you have a complete population dataset and want to test if a sample represents that population
  * - When you need to validate whether observed differences between sample and population means are statistically significant
  * - When data is approximately normally distributed or sample size is large (Central Limit Theorem applies)
+ * - For independent observations (not paired or matched data)
  *
  * **Test types:**
  * - **"two-tailed"** (default): Tests if sample mean is significantly different (higher OR lower) than population mean
