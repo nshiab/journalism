@@ -83,6 +83,8 @@ import getSampleSizeProportion from "./statistics/getSampleSizeProportion.ts";
 import getSampleSizeMean from "./statistics/getSampleSizeMean.ts";
 import performZTest from "./statistics/performZTest.ts";
 import performTTest from "./statistics/performTTest.ts";
+import performPairedZTest from "./statistics/performPairedZTest.ts";
+import performPairedTTest from "./statistics/performPairedTTest.ts";
 import performChiSquaredIndependenceTest from "./statistics/performChiSquaredIndependenceTest.ts";
 import performChiSquaredGoodnessOfFitTest from "./statistics/performChiSquaredGoodnessOfFitTest.ts";
 
@@ -136,6 +138,8 @@ export {
   overwriteSheetData,
   performChiSquaredGoodnessOfFitTest,
   performChiSquaredIndependenceTest,
+  performPairedTTest,
+  performPairedZTest,
   performTTest,
   performZTest,
   prettyDuration,
