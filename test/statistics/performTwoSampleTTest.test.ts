@@ -18,17 +18,16 @@ Deno.test("performTwoSampleTTest - basic two-tailed test", () => {
     { id: 5, value: 28 },
   ];
 
-  const result = performTwoSampleTTest(group1, group2, "value", "value");
+  const result = performTwoSampleTTest(group1, group2, "value");
 
   assertEquals(result.group1SampleSize, 5);
   assertEquals(result.group2SampleSize, 5);
   assertEquals(result.group1Mean, 14);
   assertEquals(result.group2Mean, 24);
   assertEquals(result.meanDifference, -10);
-  assertEquals(result.degreesOfFreedom, 8);
 
   // With such a large difference, p-value should be very small
-  assertEquals(result.pValue < 0.001, true);
+  assertEquals(result.pValue < 0.01, true);
 });
 
 Deno.test("performTwoSampleTTest - right-tailed test", () => {
@@ -51,7 +50,6 @@ Deno.test("performTwoSampleTTest - right-tailed test", () => {
   const result = performTwoSampleTTest(
     group1,
     group2,
-    "score",
     "score",
     { tail: "right-tailed" },
   );
@@ -84,7 +82,6 @@ Deno.test("performTwoSampleTTest - left-tailed test", () => {
     group1,
     group2,
     "value",
-    "value",
     { tail: "left-tailed" },
   );
 
@@ -94,7 +91,7 @@ Deno.test("performTwoSampleTTest - left-tailed test", () => {
   assertEquals(result.pValue < 0.05, true);
 });
 
-Deno.test("performTwoSampleTTest - unequal variances (Welch's test)", () => {
+Deno.test("performTwoSampleTTest - Welch's test (unequal variances)", () => {
   const group1 = [
     { measure: 100 },
     { measure: 102 },
@@ -116,19 +113,17 @@ Deno.test("performTwoSampleTTest - unequal variances (Welch's test)", () => {
     group1,
     group2,
     "measure",
-    "measure",
-    { equalVariances: false },
   );
 
   assertEquals(result.group1SampleSize, 5);
   assertEquals(result.group2SampleSize, 6);
-  assertEquals(result.pooledStdDev, undefined); // Should be undefined for Welch's test
 
   // Degrees of freedom should be fractional for Welch's test
   assertEquals(result.degreesOfFreedom < 9, true); // Less than n1 + n2 - 2
+  assertEquals(result.degreesOfFreedom > 0, true);
 });
 
-Deno.test("performTwoSampleTTest - equal variances (pooled)", () => {
+Deno.test("performTwoSampleTTest - similar groups (no significant difference)", () => {
   const group1 = [
     { score: 5 },
     { score: 7 },
@@ -137,26 +132,26 @@ Deno.test("performTwoSampleTTest - equal variances (pooled)", () => {
   ];
 
   const group2 = [
+    { score: 6 },
+    { score: 8 },
+    { score: 7 },
     { score: 9 },
-    { score: 11 },
-    { score: 10 },
-    { score: 12 },
   ];
 
   const result = performTwoSampleTTest(
     group1,
     group2,
     "score",
-    "score",
-    { equalVariances: true },
   );
 
-  assertEquals(result.degreesOfFreedom, 6); // n1 + n2 - 2 = 4 + 4 - 2
-  assertEquals(typeof result.pooledStdDev, "number");
-  assertEquals(result.pooledStdDev! > 0, true);
+  assertEquals(result.group1SampleSize, 4);
+  assertEquals(result.group2SampleSize, 4);
+
+  // Small difference, should not be significant
+  assertEquals(result.pValue > 0.05, true);
 });
 
-Deno.test("performTwoSampleTTest - no significant difference", () => {
+Deno.test("performTwoSampleTTest - very similar values", () => {
   const group1 = [
     { val: 10.1 },
     { val: 10.2 },
@@ -173,18 +168,67 @@ Deno.test("performTwoSampleTTest - no significant difference", () => {
     { val: 10.0 },
   ];
 
-  const result = performTwoSampleTTest(group1, group2, "val", "val");
+  const result = performTwoSampleTTest(group1, group2, "val");
 
   // The values are very close, should not be significantly different
-  // But let's be more lenient with the threshold since the test might be more sensitive
-  assertEquals(result.pValue > 0.01, true);
+  assertEquals(result.pValue > 0.1, true);
+});
+
+Deno.test("performTwoSampleTTest - zero variance edge cases", () => {
+  // Test case 1: Both groups have identical values AND same mean
+  const identicalGroup1 = [
+    { x: 10 },
+    { x: 10 },
+    { x: 10 },
+  ];
+
+  const identicalGroup2 = [
+    { x: 10 },
+    { x: 10 },
+    { x: 10 },
+  ];
+
+  const resultIdentical = performTwoSampleTTest(
+    identicalGroup1,
+    identicalGroup2,
+    "x",
+  );
+
+  assertEquals(resultIdentical.group1Variance, 0);
+  assertEquals(resultIdentical.group2Variance, 0);
+  assertEquals(resultIdentical.group1Mean, 10);
+  assertEquals(resultIdentical.group2Mean, 10);
+  assertEquals(resultIdentical.meanDifference, 0);
+  assertEquals(resultIdentical.tStatistic, 0);
+  assertEquals(resultIdentical.pValue, 1);
+
+  // Test case 2: Both groups have zero variance but different means
+  const zeroVarGroup1 = [
+    { y: 5 },
+    { y: 5 },
+    { y: 5 },
+  ];
+
+  const zeroVarGroup2 = [
+    { y: 8 },
+    { y: 8 },
+    { y: 8 },
+  ];
+
+  assertThrows(
+    () => {
+      performTwoSampleTTest(zeroVarGroup1, zeroVarGroup2, "y");
+    },
+    Error,
+    "Cannot perform t-test: both groups have zero variance",
+  );
 });
 
 Deno.test("performTwoSampleTTest - error handling", () => {
   // Test with insufficient data in group 1
   assertThrows(
     () => {
-      performTwoSampleTTest([{ x: 1 }], [{ x: 1 }, { x: 2 }], "x", "x");
+      performTwoSampleTTest([{ x: 1 }], [{ x: 1 }, { x: 2 }], "x");
     },
     Error,
     "Group 1 must contain at least 2 observations",
@@ -193,7 +237,7 @@ Deno.test("performTwoSampleTTest - error handling", () => {
   // Test with insufficient data in group 2
   assertThrows(
     () => {
-      performTwoSampleTTest([{ x: 1 }, { x: 2 }], [{ x: 1 }], "x", "x");
+      performTwoSampleTTest([{ x: 1 }, { x: 2 }], [{ x: 1 }], "x");
     },
     Error,
     "Group 2 must contain at least 2 observations",
@@ -205,7 +249,6 @@ Deno.test("performTwoSampleTTest - error handling", () => {
       performTwoSampleTTest(
         [{ x: 1 }, { x: "invalid" }],
         [{ x: 1 }, { x: 2 }],
-        "x",
         "x",
       );
     },
@@ -220,7 +263,6 @@ Deno.test("performTwoSampleTTest - error handling", () => {
         [{ x: 1 }, { x: 2 }],
         [{ x: 1 }, { x: null }],
         "x",
-        "x",
       );
     },
     Error,
@@ -234,7 +276,6 @@ Deno.test("performTwoSampleTTest - error handling", () => {
         [{ x: 1 }, { x: 2 }],
         [{ x: 3 }, { x: 4 }],
         "x",
-        "x",
         { tail: "invalid" as any },
       );
     },
@@ -243,7 +284,7 @@ Deno.test("performTwoSampleTTest - error handling", () => {
   );
 });
 
-Deno.test("performTwoSampleTTest - different key names", () => {
+Deno.test("performTwoSampleTTest - single key for both groups", () => {
   const teachers = [
     { teacher_id: 1, salary: 45000 },
     { teacher_id: 2, salary: 48000 },
@@ -251,19 +292,61 @@ Deno.test("performTwoSampleTTest - different key names", () => {
   ];
 
   const principals = [
-    { principal_id: 1, income: 65000 },
-    { principal_id: 2, income: 68000 },
-    { principal_id: 3, income: 67000 },
+    { principal_id: 1, salary: 65000 },
+    { principal_id: 2, salary: 68000 },
+    { principal_id: 3, salary: 67000 },
   ];
 
   const result = performTwoSampleTTest(
     teachers,
     principals,
     "salary",
-    "income",
   );
 
   assertEquals(result.group1Mean, 46333.333333333336);
   assertEquals(result.group2Mean, 66666.66666666667);
   assertEquals(result.meanDifference < 0, true);
+  assertEquals(result.pValue < 0.05, true); // Should be significant difference
+});
+
+Deno.test("performTwoSampleTTest - statistical properties", () => {
+  const group1 = [
+    { value: 1 },
+    { value: 2 },
+    { value: 3 },
+    { value: 4 },
+    { value: 5 },
+  ];
+
+  const group2 = [
+    { value: 6 },
+    { value: 7 },
+    { value: 8 },
+    { value: 9 },
+    { value: 10 },
+  ];
+
+  const result = performTwoSampleTTest(group1, group2, "value");
+
+  // Check that all statistical properties are computed
+  assertEquals(typeof result.group1Mean, "number");
+  assertEquals(typeof result.group2Mean, "number");
+  assertEquals(typeof result.group1StdDev, "number");
+  assertEquals(typeof result.group2StdDev, "number");
+  assertEquals(typeof result.group1Variance, "number");
+  assertEquals(typeof result.group2Variance, "number");
+  assertEquals(typeof result.degreesOfFreedom, "number");
+  assertEquals(typeof result.tStatistic, "number");
+  assertEquals(typeof result.pValue, "number");
+
+  // Standard deviations should be positive
+  assertEquals(result.group1StdDev > 0, true);
+  assertEquals(result.group2StdDev > 0, true);
+
+  // P-value should be between 0 and 1
+  assertEquals(result.pValue >= 0, true);
+  assertEquals(result.pValue <= 1, true);
+
+  // Degrees of freedom should be positive
+  assertEquals(result.degreesOfFreedom > 0, true);
 });

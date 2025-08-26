@@ -3,6 +3,59 @@ import jstat from "jstat";
 // Extract just the t-distribution functions we need
 const { studentt } = jstat;
 
+// --- Helper functions hoisted outside main function for performance ---
+/**
+ * Safely extracts and validates numeric values from an array of objects
+ */
+const extractNumericValues = (
+  data: { [key: string]: unknown }[],
+  variableKey: string,
+): number[] => {
+  return data.map((item, index) => {
+    const value = item[variableKey];
+    if (typeof value !== "number" || !isFinite(value)) {
+      throw new Error(
+        `Invalid data in sample array at index ${index}. Expected a finite number for key "${
+          String(variableKey)
+        }", but received: ${JSON.stringify(value)}.`,
+      );
+    }
+    return value;
+  });
+};
+
+/**
+ * Calculates mean and variance in a single pass for optimal performance
+ * Uses Welford's online algorithm for numerical stability
+ */
+const calculateMeanAndVariance = (
+  data: number[],
+): { mean: number; variance: number } => {
+  if (data.length === 0) {
+    throw new Error("Cannot calculate statistics for empty array");
+  }
+
+  if (data.length === 1) {
+    return { mean: data[0], variance: 0 };
+  }
+
+  let mean = 0;
+  let m2 = 0; // Sum of squares of differences from current mean
+
+  // Welford's online algorithm - numerically stable single-pass calculation
+  for (let i = 0; i < data.length; i++) {
+    const delta = data[i] - mean;
+    mean += delta / (i + 1);
+    const delta2 = data[i] - mean;
+    m2 += delta * delta2;
+  }
+
+  // Sample variance (Bessel's correction: divide by n-1)
+  const variance = m2 / (data.length - 1);
+
+  return { mean, variance };
+};
+
 /**
  * Performs a one-sample t-test for independent means to determine if a sample mean is significantly different from a hypothesized population mean.
  *
@@ -77,7 +130,7 @@ const { studentt } = jstat;
  * ```
  *
  * @param sampleData - An array of objects representing the sample data. Each object must contain the specified key with numeric values.
- * @param key - The key in each data object that contains the numeric values to analyze for the statistical test.
+ * @param variableKey - The key in each data object that contains the numeric values to analyze for the statistical test.
  * @param hypothesizedMean - The hypothesized population mean to test against (null hypothesis value).
  * @param options - Optional configuration object.
  * @param options.tail - The type of test to perform: "two-tailed" (default), "left-tailed", or "right-tailed".
@@ -87,7 +140,7 @@ const { studentt } = jstat;
  */
 export default function performTTest(
   sampleData: { [key: string]: unknown }[],
-  key: string,
+  variableKey: string,
   hypothesizedMean: number,
   options: { tail?: "two-tailed" | "left-tailed" | "right-tailed" } = {},
 ): {
@@ -100,25 +153,7 @@ export default function performTTest(
   tStatistic: number;
   pValue: number;
 } {
-  // --- 1. Helper function to safely extract and validate numeric data ---
-  const extractNumericValues = (
-    data: { [key: string]: unknown }[],
-    sourceName: string,
-  ): number[] => {
-    return data.map((item, index) => {
-      const value = item[key];
-      if (typeof value !== "number" || !isFinite(value)) {
-        throw new Error(
-          `Invalid data in ${sourceName} array at index ${index}. Expected a finite number for key "${
-            String(key)
-          }", but received: ${JSON.stringify(value)}.`,
-        );
-      }
-      return value;
-    });
-  };
-
-  // --- 2. Validate hypothesized mean ---
+  // --- 1. Validate hypothesized mean ---
   if (typeof hypothesizedMean !== "number" || !isFinite(hypothesizedMean)) {
     throw new Error(
       `Invalid hypothesized mean. Expected a finite number, but received: ${
@@ -127,8 +162,8 @@ export default function performTTest(
     );
   }
 
-  // --- 3. Extract values and get sample size ---
-  const sampleValues = extractNumericValues(sampleData, "sample");
+  // --- 2. Extract and validate sample values ---
+  const sampleValues = extractNumericValues(sampleData, variableKey);
   const sampleSize = sampleValues.length;
 
   if (sampleSize < 2) {
@@ -137,33 +172,42 @@ export default function performTTest(
     );
   }
 
-  // --- 4. Calculation helpers ---
-  const calculateMean = (data: number[]): number =>
-    data.reduce((a, b) => a + b, 0) / data.length;
-
-  // Sample variance (with Bessel's correction: n-1 denominator)
-  const calculateSampleVariance = (data: number[], mean: number): number => {
-    const sumSquaredDeviations = data.reduce(
-      (sum, val) => sum + Math.pow(val - mean, 2),
-      0,
-    );
-    return sumSquaredDeviations / (data.length - 1);
-  };
-
-  // --- 5. Calculate sample statistics ---
-  const sampleMean = calculateMean(sampleValues);
-  const sampleVariance = calculateSampleVariance(sampleValues, sampleMean);
+  // --- 3. Calculate sample statistics using single-pass algorithm ---
+  const { mean: sampleMean, variance: sampleVariance } =
+    calculateMeanAndVariance(sampleValues);
   const sampleStdDev = Math.sqrt(sampleVariance);
 
-  // --- 6. Extract tail option with default ---
+  // --- 4. Extract tail option with default ---
   const { tail = "two-tailed" } = options;
 
-  // --- 7. Calculate t-statistic ---
+  // --- 5. Handle edge case: zero standard deviation ---
+  if (sampleStdDev === 0) {
+    // All sample values are identical
+    // If sample mean equals hypothesized mean, no difference (p = 1)
+    // If they differ, perfect significance (p = 0)
+    const pValue = sampleMean === hypothesizedMean ? 1 : 0;
+    const tStatistic = sampleMean === hypothesizedMean
+      ? 0
+      : (sampleMean > hypothesizedMean ? Infinity : -Infinity);
+
+    return {
+      sampleSize,
+      sampleMean,
+      sampleStdDev,
+      sampleVariance,
+      hypothesizedMean,
+      degreesOfFreedom: sampleSize - 1,
+      tStatistic,
+      pValue,
+    };
+  }
+
+  // --- 6. Calculate t-statistic ---
   const standardError = sampleStdDev / Math.sqrt(sampleSize);
   const tStatistic = (sampleMean - hypothesizedMean) / standardError;
   const degreesOfFreedom = sampleSize - 1;
 
-  // --- 8. Calculate P-Value using jStat's t-distribution ---
+  // --- 7. Calculate P-Value using jStat's t-distribution ---
   let pValue: number;
   if (tail === "two-tailed") {
     // Two-tailed: P(|T| > |t|) = 2 * P(T > |t|)

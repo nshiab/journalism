@@ -30,6 +30,26 @@
  *
  * @example
  * ```ts
+ * // Example with known population size - using a small sample to estimate standard deviation
+ * // but knowing the true population size for accurate sample size calculation
+ * const pilotData = [
+ *   { student_id: 1, score: 85 },
+ *   { student_id: 2, score: 92 },
+ *   { student_id: 3, score: 78 },
+ *   // Only 50 pilot records to estimate variability
+ * ];
+ * const requiredSample = getSampleSizeMean(
+ *   pilotData,
+ *   "score",
+ *   99,
+ *   5,
+ *   { populationSize: 10000 } // Total student population is 10,000
+ * );
+ * console.log(`For 99% confidence with a 5-point margin of error, sample ${requiredSample} test scores from the 10,000 students.`);
+ * ```
+ *
+ * @example
+ * ```ts
  * // Example for analyzing test scores
  * const testScores = [
  *   { student_id: 1, score: 85 },
@@ -41,10 +61,12 @@
  * console.log(`For 99% confidence with a 5-point margin of error, sample ${requiredSample} test scores.`);
  * ```
  *
- * @param data - An array of objects representing the population data. Each object must contain the specified key with numeric values.
+ * @param data - An array of objects used to calculate the sample standard deviation. Each object must contain the specified key with numeric values.
  * @param key - The key in each data object that contains the numeric values to analyze for calculating the sample size.
  * @param confidenceLevel - The desired confidence level for the sample. Must be 90, 95, or 99. The higher the confidence level, the larger the returned sample size.
  * @param marginOfError - The acceptable margin of error in the same units as the data values. The smaller the margin of error, the larger the returned sample size.
+ * @param options - Optional configuration object.
+ * @param options.populationSize - The total size of the population. If not provided, the function assumes the provided data represents the entire population and uses data.length as the population size.
  * @returns The minimum required sample size, rounded up to the nearest whole number.
  *
  * @category Statistics
@@ -54,6 +76,7 @@ export default function getSampleSizeMean(
   key: string,
   confidenceLevel: 90 | 95 | 99,
   marginOfError: number,
+  options?: { populationSize?: number },
 ): number {
   let zScore: number;
   if (confidenceLevel === 90) {
@@ -66,8 +89,14 @@ export default function getSampleSizeMean(
     throw new Error("Invalid confidence level. Use 90, 95, or 99.");
   }
 
-  if (marginOfError < 1 || marginOfError > 100) {
-    throw new Error("Invalid margin of error. Use a value between 1 and 100.");
+  if (marginOfError <= 0) {
+    throw new Error("Invalid margin of error. Must be greater than 0.");
+  }
+
+  if (data.length < 2) {
+    throw new Error(
+      "At least 2 data points are required to calculate sample standard deviation.",
+    );
   }
 
   const values = data.map((d) => {
@@ -96,7 +125,7 @@ export default function getSampleSizeMean(
   const initialSampleSize = numerator / denominator;
 
   const finalSampleSize = initialSampleSize /
-    (1 + ((initialSampleSize - 1) / data.length));
+    (1 + ((initialSampleSize - 1) / (options?.populationSize ?? data.length)));
 
   return Math.ceil(finalSampleSize);
 }

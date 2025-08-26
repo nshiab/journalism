@@ -94,7 +94,7 @@ const { studentt } = jstat;
  *
  * @param group1Data - An array of objects containing observations for the first group. Each object must contain the specified key with a numeric value.
  * @param group2Data - An array of objects containing observations for the second group. Each object must contain the specified key with a numeric value.
- * @param key - The key for the measurement in both group objects (e.g., "income", "score", "price").
+ * @param variableKey - The key for the measurement in both group objects (e.g., "income", "score", "price").
  * @param options - Optional configuration object.
  * @param options.tail - The type of test to perform: "two-tailed" (default), "left-tailed", or "right-tailed".
  * @returns An object containing comprehensive test results including sample statistics for both groups, mean difference, degrees of freedom, t-statistic, and p-value.
@@ -104,7 +104,7 @@ const { studentt } = jstat;
 export default function performTwoSampleTTest(
   group1Data: { [key: string]: unknown }[],
   group2Data: { [key: string]: unknown }[],
-  key: string,
+  variableKey: string,
   options: {
     tail?: "two-tailed" | "left-tailed" | "right-tailed";
   } = {},
@@ -148,8 +148,8 @@ export default function performTwoSampleTTest(
   };
 
   // --- 2. Extract values from both groups ---
-  const group1Values = extractNumericValues(group1Data, key, "group1");
-  const group2Values = extractNumericValues(group2Data, key, "group2");
+  const group1Values = extractNumericValues(group1Data, variableKey, "group1");
+  const group2Values = extractNumericValues(group2Data, variableKey, "group2");
 
   const group1SampleSize = group1Values.length;
   const group2SampleSize = group2Values.length;
@@ -183,10 +183,36 @@ export default function performTwoSampleTTest(
   const group2StdDev = Math.sqrt(group2Variance);
   const meanDifference = group1Mean - group2Mean;
 
-  // --- 5. Extract options with defaults ---
+  // --- 5. Check for zero variance in both groups (all values identical) ---
+  if (group1Variance === 0 && group2Variance === 0) {
+    if (group1Mean === group2Mean) {
+      // Groups are identical - no difference
+      return {
+        group1SampleSize,
+        group2SampleSize,
+        group1Mean,
+        group2Mean,
+        group1StdDev,
+        group2StdDev,
+        group1Variance,
+        group2Variance,
+        meanDifference,
+        degreesOfFreedom: group1SampleSize + group2SampleSize - 2,
+        tStatistic: 0,
+        pValue: 1,
+      };
+    } else {
+      // Means are different but no variance - infinite t-statistic
+      throw new Error(
+        "Cannot perform t-test: both groups have zero variance (all values are identical within each group) but different means. This indicates a perfect separation between groups.",
+      );
+    }
+  }
+
+  // --- 6. Extract options with defaults ---
   const { tail = "two-tailed" } = options;
 
-  // --- 6. Calculate t-statistic and degrees of freedom using Welch's t-test (unequal variances) ---
+  // --- 7. Calculate t-statistic and degrees of freedom using Welch's t-test (unequal variances) ---
   // Welch's t-test (unequal variances) - more robust and generally preferred
   const standardError = Math.sqrt(
     group1Variance / group1SampleSize + group2Variance / group2SampleSize,
@@ -203,7 +229,7 @@ export default function performTwoSampleTTest(
     Math.pow(group2Variance / group2SampleSize, 2) / (group2SampleSize - 1);
   const degreesOfFreedom = numerator / denominator;
 
-  // --- 7. Calculate P-Value using jStat's t-distribution ---
+  // --- 8. Calculate P-Value using jStat's t-distribution ---
   let pValue: number;
   if (tail === "two-tailed") {
     const absT = Math.abs(tStatistic);

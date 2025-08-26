@@ -25,10 +25,11 @@ Deno.test("should perform one-sample t-test with basketball data (two-tailed, de
     hypothesizedMean: 10,
     degreesOfFreedom: 5,
     tStatistic: 5.2915026221291805,
-    pValue: 0.0032074554244336806,
+    pValue: 0.0032144034085095363,
   });
 });
-Deno.test("should perform one-sample t-test with basketball data (left-tailed)", () => {
+
+Deno.test("should perform one-sample t-test with basketball data (right-tailed)", () => {
   const result = performTTest(basketballPlayers, "points_per_game", 10, {
     tail: "right-tailed",
   });
@@ -41,9 +42,10 @@ Deno.test("should perform one-sample t-test with basketball data (left-tailed)",
     hypothesizedMean: 10,
     degreesOfFreedom: 5,
     tStatistic: 5.2915026221291805,
-    pValue: 0.0016037277122168403,
+    pValue: 0.0016072017042547682,
   });
 });
+
 Deno.test("should perform one-sample t-test with basketball data (left-tailed)", () => {
   const result = performTTest(basketballPlayers, "points_per_game", 10, {
     tail: "left-tailed",
@@ -57,6 +59,73 @@ Deno.test("should perform one-sample t-test with basketball data (left-tailed)",
     hypothesizedMean: 10,
     degreesOfFreedom: 5,
     tStatistic: 5.2915026221291805,
-    pValue: 0.9983962722877832,
+    pValue: 0.9983927982957452,
+  });
+});
+
+// Test edge case: zero standard deviation (all values identical)
+Deno.test("should handle zero standard deviation when sample mean equals hypothesized mean", () => {
+  const identicalData = [
+    { value: 10 },
+    { value: 10 },
+    { value: 10 },
+    { value: 10 },
+  ];
+
+  const result = performTTest(identicalData, "value", 10);
+
+  assertEquals(result, {
+    sampleSize: 4,
+    sampleMean: 10,
+    sampleStdDev: 0,
+    sampleVariance: 0,
+    hypothesizedMean: 10,
+    degreesOfFreedom: 3,
+    tStatistic: 0,
+    pValue: 1,
+  });
+});
+
+Deno.test("should handle zero standard deviation when sample mean differs from hypothesized mean", () => {
+  const identicalData = [
+    { value: 15 },
+    { value: 15 },
+    { value: 15 },
+    { value: 15 },
+  ];
+
+  const result = performTTest(identicalData, "value", 10);
+
+  assertEquals(result, {
+    sampleSize: 4,
+    sampleMean: 15,
+    sampleStdDev: 0,
+    sampleVariance: 0,
+    hypothesizedMean: 10,
+    degreesOfFreedom: 3,
+    tStatistic: Infinity,
+    pValue: 0,
+  });
+});
+
+Deno.test("should handle zero standard deviation when sample mean is less than hypothesized mean", () => {
+  const identicalData = [
+    { value: 5 },
+    { value: 5 },
+    { value: 5 },
+    { value: 5 },
+  ];
+
+  const result = performTTest(identicalData, "value", 10);
+
+  assertEquals(result, {
+    sampleSize: 4,
+    sampleMean: 5,
+    sampleStdDev: 0,
+    sampleVariance: 0,
+    hypothesizedMean: 10,
+    degreesOfFreedom: 3,
+    tStatistic: -Infinity,
+    pValue: 0,
   });
 });

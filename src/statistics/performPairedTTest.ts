@@ -73,8 +73,8 @@ const { studentt } = jstat;
  * ```
  *
  * @param pairedData - An array of objects containing paired observations. Each object must contain both specified keys with numeric values.
- * @param firstKey - The key for the first measurement in each pair (e.g., "before_event", "baseline", "pre_policy").
- * @param secondKey - The key for the second measurement in each pair (e.g., "after_event", "follow_up", "post_policy").
+ * @param firstVariableKey - The key for the first measurement in each pair (e.g., "before_event", "baseline", "pre_policy").
+ * @param secondVariableKey - The key for the second measurement in each pair (e.g., "after_event", "follow_up", "post_policy").
  * @param options - Optional configuration object.
  * @param options.tail - The type of test to perform: "two-tailed" (default), "left-tailed", or "right-tailed".
  * @returns An object containing comprehensive test results including sample statistics, differences, degrees of freedom, t-statistic, and p-value.
@@ -83,8 +83,8 @@ const { studentt } = jstat;
  */
 export default function performPairedTTest(
   pairedData: { [key: string]: unknown }[],
-  firstKey: string,
-  secondKey: string,
+  firstVariableKey: string,
+  secondVariableKey: string,
   options: {
     tail?: "two-tailed" | "left-tailed" | "right-tailed";
   } = {},
@@ -137,8 +137,8 @@ export default function performPairedTTest(
   // --- 2. Extract paired values ---
   const { first, second } = extractPairedNumericValues(
     pairedData,
-    firstKey,
-    secondKey,
+    firstVariableKey,
+    secondVariableKey,
   );
   const sampleSize = first.length;
 
@@ -148,31 +148,65 @@ export default function performPairedTTest(
     );
   }
 
-  // --- 4. Calculation helpers ---
-  const calculateMean = (data: number[]): number =>
-    data.reduce((a, b) => a + b, 0) / data.length;
+  // --- 4. Calculate all statistics in a single pass for efficiency ---
+  let firstSum = 0;
+  let secondSum = 0;
+  let differenceSum = 0;
+  let differenceSumSquared = 0;
 
+  // Single pass through the data to calculate all necessary sums
+  for (let i = 0; i < sampleSize; i++) {
+    const difference = first[i] - second[i];
+
+    firstSum += first[i];
+    secondSum += second[i];
+    differenceSum += difference;
+    differenceSumSquared += difference * difference;
+  }
+
+  // Calculate means
+  const firstMean = firstSum / sampleSize;
+  const secondMean = secondSum / sampleSize;
+  const meanDifference = differenceSum / sampleSize;
+
+  // Calculate variance using the computational formula: Var = E[X²] - (E[X])²
   // Sample variance (with Bessel's correction: n-1 denominator)
-  const calculateSampleVariance = (data: number[], mean: number): number => {
-    const sumSquaredDeviations = data.reduce(
-      (sum, val) => sum + Math.pow(val - mean, 2),
-      0,
-    );
-    return sumSquaredDeviations / (data.length - 1);
-  };
-
-  // --- 5. Calculate differences (first - second) ---
-  const differences = first.map((val, i) => val - second[i]);
-
-  // --- 6. Calculate statistics ---
-  const firstMean = calculateMean(first);
-  const secondMean = calculateMean(second);
-  const meanDifference = calculateMean(differences);
-  const differenceVariance = calculateSampleVariance(
-    differences,
-    meanDifference,
-  );
+  const differenceVariance =
+    (differenceSumSquared - (differenceSum * differenceSum) / sampleSize) /
+    (sampleSize - 1);
   const differenceStdDev = Math.sqrt(differenceVariance);
+
+  // --- 5. Handle zero standard deviation edge case ---
+  if (differenceStdDev === 0) {
+    // All differences are identical
+    if (meanDifference === 0) {
+      // All differences are zero - no effect detected
+      return {
+        sampleSize,
+        firstMean,
+        secondMean,
+        meanDifference: 0,
+        differenceStdDev: 0,
+        differenceVariance: 0,
+        degreesOfFreedom: sampleSize - 1,
+        tStatistic: 0,
+        pValue: 1.0, // No evidence against null hypothesis
+      };
+    } else {
+      // All differences are the same non-zero value - perfect effect
+      return {
+        sampleSize,
+        firstMean,
+        secondMean,
+        meanDifference,
+        differenceStdDev: 0,
+        differenceVariance: 0,
+        degreesOfFreedom: sampleSize - 1,
+        tStatistic: meanDifference > 0 ? Infinity : -Infinity,
+        pValue: 0.0, // Strong evidence against null hypothesis
+      };
+    }
+  }
 
   // --- 6. Extract tail option with default ---
   const { tail = "two-tailed" } = options;
