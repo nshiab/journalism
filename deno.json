@@ -40,6 +40,7 @@
     "google-auth-library": "npm:google-auth-library@^10.2.1",
     "google-spreadsheet": "npm:google-spreadsheet@^5.0.2",
     "iconv-lite": "npm:iconv-lite@^0.7.0",
+    "jstat": "npm:jstat@^1.9.6",
     "ollama": "npm:ollama@^0.5.17",
     "playwright-chromium": "npm:playwright-chromium@^1.55.0"
   },

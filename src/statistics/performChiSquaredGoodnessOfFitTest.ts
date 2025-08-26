@@ -1,3 +1,8 @@
+import jstat from "jstat";
+
+// Extract just the chi-square distribution functions we need
+const { chisquare } = jstat;
+
 /**
  * Performs a Chi-Squared goodness of fit test to determine if observed frequencies match expected frequencies.
  *
@@ -268,7 +273,7 @@ export default function performChiSquaredGoodnessOfFitTest(
 }
 
 /**
- * Calculate the p-value for a chi-squared statistic using the chi-squared distribution.
+ * Calculate the p-value for a chi-squared statistic using jStat's chi-squared distribution.
  */
 function calculateChiSquaredPValue(
   chiSquared: number,
@@ -285,43 +290,10 @@ function calculateChiSquaredPValue(
   // For very small chi-squared values, return 1 (no significance)
   if (chiSquared === 0) return 1;
 
-  // Use Wilson-Hilferty normal approximation for more robust calculation
-  if (degreesOfFreedom >= 1) {
-    // Wilson-Hilferty transformation
-    const h = 2 / (9 * degreesOfFreedom);
-    const z = (Math.pow(chiSquared / degreesOfFreedom, 1 / 3) - (1 - h)) /
-      Math.sqrt(h);
+  // Use jStat's chi-square distribution CDF for accurate p-value calculation
+  // P-value = P(X >= chiSquared) = 1 - P(X <= chiSquared) = 1 - CDF(chiSquared)
+  const pValue = 1 - chisquare.cdf(chiSquared, degreesOfFreedom);
 
-    // Convert to p-value using normal distribution
-    const pValue = 1 - normalCDF(z);
-
-    // Ensure p-value is within valid range
-    return Math.max(0, Math.min(1, pValue));
-  }
-
-  // Fallback for edge cases
-  return chiSquared > 10 ? 0.01 : 0.1;
-}
-
-/**
- * Normal cumulative distribution function
- */
-function normalCDF(x: number): number {
-  return 0.5 * (1 + erf(x / Math.sqrt(2)));
-}
-
-// Error function helper
-function erf(x: number): number {
-  const a1 = 0.254829592;
-  const a2 = -0.284496736;
-  const a3 = 1.421413741;
-  const a4 = -1.453152027;
-  const a5 = 1.061405429;
-  const p = 0.3275911;
-  const sign = x >= 0 ? 1 : -1;
-  x = Math.abs(x);
-  const t = 1.0 / (1.0 + p * x);
-  const y = 1.0 -
-    (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-x * x);
-  return sign * y;
+  // Handle numerical issues: ensure p-value is within valid range [0, 1]
+  return Math.max(Number.MIN_VALUE, Math.min(1, pValue));
 }

@@ -1,3 +1,8 @@
+import jstat from "jstat";
+
+// Extract just the t-distribution functions we need
+const { studentt } = jstat;
+
 /**
  * Performs a two-sample t-test for independent means to determine if there is a significant difference between two independent groups.
  *
@@ -198,79 +203,15 @@ export default function performTwoSampleTTest(
     Math.pow(group2Variance / group2SampleSize, 2) / (group2SampleSize - 1);
   const degreesOfFreedom = numerator / denominator;
 
-  // --- 7. Calculate P-Value using t-distribution ---
-  // Implementation of the incomplete beta function for t-distribution CDF
-  const betaIncomplete = (x: number, a: number, b: number): number => {
-    if (x <= 0) return 0;
-    if (x >= 1) return 1;
-
-    // Use continued fraction approximation for the incomplete beta function
-    // This is a simplified implementation suitable for t-distribution calculations
-    const precision = 1e-10;
-    let result = 0;
-    let term = 1;
-    let n = 0;
-
-    // Series expansion for B(x;a,b)/B(a,b)
-    while (Math.abs(term) > precision && n < 1000) {
-      if (n === 0) {
-        term = Math.pow(x, a) * Math.pow(1 - x, b) / a;
-      } else {
-        term *= x * (a + n - 1) / (a + 2 * n - 1) * (b - n) / (n + 1);
-      }
-      result += term;
-      n++;
-    }
-
-    return result;
-  };
-
-  // t-distribution CDF using the relationship with incomplete beta function
-  const tCdf = (t: number, df: number): number => {
-    if (df <= 0) throw new Error("Degrees of freedom must be positive");
-
-    // For large degrees of freedom, approximate with standard normal
-    if (df > 1000) {
-      // Standard normal CDF approximation
-      const erf = (x: number): number => {
-        const a1 = 0.254829592;
-        const a2 = -0.284496736;
-        const a3 = 1.421413741;
-        const a4 = -1.453152027;
-        const a5 = 1.061405429;
-        const p = 0.3275911;
-        const sign = x >= 0 ? 1 : -1;
-        x = Math.abs(x);
-        const t = 1.0 / (1.0 + p * x);
-        const y = 1.0 -
-          (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t *
-            Math.exp(-x * x);
-        return sign * y;
-      };
-      return 0.5 * (1 + erf(t / Math.sqrt(2)));
-    }
-
-    // For small degrees of freedom, use the exact t-distribution formula
-    if (t === 0) return 0.5;
-
-    const x = df / (df + t * t);
-    const prob = 0.5 * betaIncomplete(x, df / 2, 0.5);
-
-    return t > 0 ? 1 - prob : prob;
-  };
-
-  // --- 8. Calculate P-Value based on tail type ---
+  // --- 7. Calculate P-Value using jStat's t-distribution ---
   let pValue: number;
   if (tail === "two-tailed") {
-    // Two-tailed: P(|T| > |t|) = 2 * P(T > |t|)
     const absT = Math.abs(tStatistic);
-    pValue = 2 * (1 - tCdf(absT, degreesOfFreedom));
+    pValue = 2 * (1 - studentt.cdf(absT, degreesOfFreedom));
   } else if (tail === "right-tailed") {
-    // Right-tailed: P(T > t) = 1 - P(T ≤ t)
-    pValue = 1 - tCdf(tStatistic, degreesOfFreedom);
+    pValue = 1 - studentt.cdf(tStatistic, degreesOfFreedom);
   } else if (tail === "left-tailed") {
-    // Left-tailed: P(T < t) = P(T ≤ t)
-    pValue = tCdf(tStatistic, degreesOfFreedom);
+    pValue = studentt.cdf(tStatistic, degreesOfFreedom);
   } else {
     throw new Error(
       `Invalid tail option: ${tail}. Use "two-tailed", "left-tailed", or "right-tailed".`,
