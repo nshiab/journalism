@@ -2565,13 +2565,14 @@ function getSampleSizeMean(
   key: string,
   confidenceLevel: 90 | 95 | 99,
   marginOfError: number,
+  options?: { populationSize?: number },
 ): number;
 ```
 
 ### Parameters
 
-- **`data`**: - An array of objects representing the population data. Each
-  object must contain the specified key with numeric values.
+- **`data`**: - An array of objects used to calculate the sample standard
+  deviation. Each object must contain the specified key with numeric values.
 - **`key`**: - The key in each data object that contains the numeric values to
   analyze for calculating the sample size.
 - **`confidenceLevel`**: - The desired confidence level for the sample. Must be
@@ -2580,6 +2581,10 @@ function getSampleSizeMean(
 - **`marginOfError`**: - The acceptable margin of error in the same units as the
   data values. The smaller the margin of error, the larger the returned sample
   size.
+- **`options`**: - Optional configuration object.
+- **`options.populationSize`**: - The total size of the population. If not
+  provided, the function assumes the provided data represents the entire
+  population and uses data.length as the population size.
 
 ### Returns
 
@@ -2599,6 +2604,27 @@ const incomeData = [
 const sampleSize = getSampleSizeMean(incomeData, "annual_income", 95, 2000);
 console.log(
   `You need to analyze ${sampleSize} income records to estimate the average income within $2,000 with 95% confidence`,
+);
+```
+
+```ts
+// Example with known population size - using a small sample to estimate standard deviation
+// but knowing the true population size for accurate sample size calculation
+const pilotData = [
+  { student_id: 1, score: 85 },
+  { student_id: 2, score: 92 },
+  { student_id: 3, score: 78 },
+  // Only 50 pilot records to estimate variability
+];
+const requiredSample = getSampleSizeMean(
+  pilotData,
+  "score",
+  99,
+  5,
+  { populationSize: 10000 }, // Total student population is 10,000
+);
+console.log(
+  `For 99% confidence with a 5-point margin of error, sample ${requiredSample} test scores from the 10,000 students.`,
 );
 ```
 
@@ -2648,7 +2674,7 @@ proportion.
 
 ```typescript
 function getSampleSizeProportion(
-  data: unknown[],
+  populationSize: number,
   confidenceLevel: 90 | 95 | 99,
   marginOfError: number,
 ): number;
@@ -2656,8 +2682,9 @@ function getSampleSizeProportion(
 
 ### Parameters
 
-- **`data`**: - An array representing the population. The length of this array
-  is used as the population size in the finite population correction formula.
+- **`populationSize`**: - The size of the population from which the sample will
+  be drawn. Used in the finite population correction formula for more accurate
+  sample size calculations.
 - **`confidenceLevel`**: - The desired confidence level for the sample. Must be
   90, 95, or 99. The higher the confidence level, the larger the returned sample
   size.
@@ -2673,15 +2700,15 @@ The minimum required sample size, rounded up to the nearest whole number.
 ```ts
 // A journalist has a dataset of 1,000 records and wants to know how many
 // data points to manually double-check to ensure their analysis is accurate
-const datasetRecords = [...]; // Array of 1,000 data records from investigation
-const recordsToVerify = getSampleSizeProportion(datasetRecords, 95, 5);
-console.log(`You need to manually verify ${recordsToVerify} records to be 95% confident in your analysis with a 5% margin of error`); // 278
+const recordsToVerify = getSampleSizeProportion(1000, 95, 5);
+console.log(
+  `You need to manually verify ${recordsToVerify} records to be 95% confident in your analysis with a 5% margin of error`,
+); // 278
 ```
 
 ```ts
 // Example for survey planning
-const cityPopulation = new Array(50000).fill(0);
-const requiredSample = getSampleSizeProportion(cityPopulation, 95, 4);
+const requiredSample = getSampleSizeProportion(50000, 95, 4);
 console.log(
   `For a city survey with 95% confidence and 4% margin of error, you need ${requiredSample} respondents.`,
 ); // 594
@@ -3926,6 +3953,798 @@ await overwriteSheetData(data, sheetUrl, {
   apiKey: "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n",
 });
 console.log("Sheet updated using custom API credentials.");
+```
+
+## performChiSquaredGoodnessOfFitTest
+
+Performs a Chi-Squared goodness of fit test to determine if observed frequencies
+match expected frequencies.
+
+The Chi-Squared goodness of fit test examines whether observed frequencies in
+categorical data differ significantly from expected frequencies. This test helps
+determine if a sample follows a particular theoretical distribution or pattern.
+
+**When to use this function:**
+
+- Use for goodness of fit tests to see if observed data matches expected
+  distribution
+- When testing if a sample follows a specific theoretical distribution
+- For validating assumptions about population proportions
+- When comparing actual results against theoretical models
+
+**Important Requirements:**
+
+- The sum of observed frequencies must equal the sum of expected frequencies
+  (within 0.1% tolerance)
+- All expected frequencies must be greater than 0
+- For reliable results, at least 80% of expected frequencies should be ≥ 5
+- For tests with 1 degree of freedom, all expected frequencies should be ≥ 5
+
+### Signature
+
+```typescript
+function performChiSquaredGoodnessOfFitTest(
+  data: Record<string, unknown>[],
+  categoryKey: string,
+  observedKey: string,
+  expectedKey: string,
+): {
+  chiSquared: number;
+  degreesOfFreedom: number;
+  pValue: number;
+  warnings: string[];
+};
+```
+
+### Parameters
+
+- **`data`**: - An array of objects containing the categorical data and
+  frequency counts.
+- **`categoryKey`**: - The key for the categorical variable.
+- **`observedKey`**: - The key containing the observed frequency count for each
+  category.
+- **`expectedKey`**: - The key containing the expected frequency count for each
+  category.
+
+### Returns
+
+An object containing the chi-squared statistic, degrees of freedom, p-value, and
+any warnings about test assumptions.
+
+### Examples
+
+```ts
+// Testing if observed crime types match expected distribution (goodness of fit)
+const crimeData = [
+  { crime_type: "theft", observed_count: 120, expected_count: 100 },
+  { crime_type: "assault", observed_count: 80, expected_count: 90 },
+  { crime_type: "fraud", observed_count: 45, expected_count: 50 },
+  { crime_type: "vandalism", observed_count: 55, expected_count: 60 },
+];
+// Note: Total observed = 300, Total expected = 300 ✓
+
+const testResult = performChiSquaredGoodnessOfFitTest(
+  crimeData,
+  "crime_type",
+  "observed_count",
+  "expected_count",
+);
+
+console.log(`Chi-squared: ${testResult.chiSquared.toFixed(3)}`);
+if (testResult.pValue < 0.05) {
+  console.log(
+    "Observed crime distribution differs significantly from expected",
+  );
+} else {
+  console.log("Observed crime distribution matches expected pattern");
+}
+
+// Check for any warnings about test assumptions
+if (testResult.warnings.length > 0) {
+  console.log("Test assumption warnings:");
+  testResult.warnings.forEach((warning) => console.log("- " + warning));
+}
+```
+
+```ts
+// Testing if dice rolls follow uniform distribution
+const diceData = [
+  { face: "1", observed: 18, expected: 20 },
+  { face: "2", observed: 22, expected: 20 },
+  { face: "3", observed: 16, expected: 20 },
+  { face: "4", observed: 25, expected: 20 },
+  { face: "5", observed: 19, expected: 20 },
+  { face: "6", observed: 20, expected: 20 },
+];
+// Note: Total observed = 120, Total expected = 120 ✓
+
+const result = performChiSquaredGoodnessOfFitTest(
+  diceData,
+  "face",
+  "observed",
+  "expected",
+);
+
+if (result.pValue > 0.05) {
+  console.log("Dice appears to be fair (follows uniform distribution)");
+} else {
+  console.log("Dice may be biased");
+}
+```
+
+```ts
+// Example that would throw an error due to mismatched totals
+const invalidData = [
+  { category: "A", observed: 50, expected: 40 }, // Total observed: 80
+  { category: "B", observed: 30, expected: 25 }, // Total expected: 65
+];
+
+try {
+  performChiSquaredGoodnessOfFitTest(
+    invalidData,
+    "category",
+    "observed",
+    "expected",
+  );
+} catch (error) {
+  console.log("Error:", error.message);
+  // "Total observed frequencies (80) must approximately equal total expected frequencies (65)"
+}
+```
+
+## performChiSquaredIndependenceTest
+
+Performs a Chi-Squared independence test to determine if two categorical
+variables are statistically independent or associated.
+
+The Chi-Squared independence test examines whether there is a statistically
+significant association between two categorical variables by comparing observed
+frequencies against expected frequencies calculated under the assumption of
+independence.
+
+**When to use this function:**
+
+- Use for testing independence between two categorical variables (e.g., gender
+  vs voting preference)
+- When you have categorical data organized in frequency counts
+- When testing hypotheses about associations between variables
+
+### Signature
+
+```typescript
+function performChiSquaredIndependenceTest(
+  data: Record<string, unknown>[],
+  firstVariableKey: string,
+  secondVariableKey: string,
+  countKey: string,
+): {
+  chiSquared: number;
+  degreesOfFreedom: number;
+  pValue: number;
+  warnings: string[];
+};
+```
+
+### Parameters
+
+- **`data`**: - An array of objects containing the categorical data and
+  frequency counts.
+- **`firstVariableKey`**: - The key for the first categorical variable.
+- **`secondVariableKey`**: - The key for the second categorical variable.
+- **`countKey`**: - The key containing the frequency count for each combination.
+
+### Returns
+
+An object containing the chi-squared statistic, degrees of freedom, p-value,
+contingency table details, and any warnings about test assumptions.
+
+### Examples
+
+```ts
+// A journalist investigating if voting preference is independent of age group
+const votingData = [
+  { age_group: "18-30", candidate: "A", count: 45 },
+  { age_group: "18-30", candidate: "B", count: 55 },
+  { age_group: "31-50", candidate: "A", count: 60 },
+  { age_group: "31-50", candidate: "B", count: 40 },
+  { age_group: "51+", candidate: "A", count: 70 },
+  { age_group: "51+", candidate: "B", count: 30 },
+];
+
+const result = performChiSquaredIndependenceTest(
+  votingData,
+  "age_group",
+  "candidate",
+  "count",
+);
+
+console.log(`Chi-squared statistic: ${result.chiSquared.toFixed(3)}`);
+console.log(`Degrees of freedom: ${result.degreesOfFreedom}`);
+console.log(`P-value: ${result.pValue.toFixed(4)}`);
+
+if (result.pValue < 0.05) {
+  console.log("Voting preference is significantly associated with age group");
+} else {
+  console.log("Voting preference is independent of age group");
+}
+
+// Check for any warnings about test assumptions
+if (result.warnings.length > 0) {
+  console.log("Test assumption warnings:");
+  result.warnings.forEach((warning) => console.log("- " + warning));
+}
+```
+
+```ts
+// Testing association between education level and income category
+const educationIncomeData = [
+  { education: "high_school", income: "low", count: 150 },
+  { education: "high_school", income: "medium", count: 100 },
+  { education: "high_school", income: "high", count: 50 },
+  { education: "college", income: "low", count: 80 },
+  { education: "college", income: "medium", count: 120 },
+  { education: "college", income: "high", count: 100 },
+  { education: "graduate", income: "low", count: 30 },
+  { education: "graduate", income: "medium", count: 70 },
+  { education: "graduate", income: "high", count: 150 },
+];
+
+const result = performChiSquaredIndependenceTest(
+  educationIncomeData,
+  "education",
+  "income",
+  "count",
+);
+
+if (result.pValue < 0.01) {
+  console.log("Strong evidence that education and income are associated");
+} else {
+  console.log("No strong evidence of association between education and income");
+}
+```
+
+## performPairedTTest
+
+Performs a paired t-test for dependent means to determine if there is a
+significant difference between two related samples.
+
+The paired t-test is used when comparing two measurements from the same subjects
+or entities, such as before and after an event, policy change, or intervention.
+It tests whether the mean difference between paired observations is
+significantly different from zero. This is a test for **dependent means**
+(related samples), not independent groups.
+
+**When to use this function:**
+
+- Use when you have two measurements from the same subjects or entities
+  (before/after an event, pre/post policy change)
+- When comparing two related conditions or matched pairs (same districts,
+  candidates, regions, etc.)
+- When you want to control for individual variation between subjects (dependent
+  means)
+- When data differences are approximately normally distributed
+
+**Test types:**
+
+- **"two-tailed"** (default): Tests if the mean difference is significantly
+  different from zero
+- **"left-tailed"**: Tests if the mean difference is significantly less than
+  zero
+- **"right-tailed"**: Tests if the mean difference is significantly greater than
+  zero
+
+### Signature
+
+```typescript
+function performPairedTTest(
+  pairedData: Record<string, unknown>[],
+  firstVariableKey: string,
+  secondVariableKey: string,
+  options?: { tail?: "two-tailed" | "left-tailed" | "right-tailed" },
+): {
+  sampleSize: number;
+  firstMean: number;
+  secondMean: number;
+  meanDifference: number;
+  differenceStdDev: number;
+  differenceVariance: number;
+  degreesOfFreedom: number;
+  tStatistic: number;
+  pValue: number;
+};
+```
+
+### Parameters
+
+- **`pairedData`**: - An array of objects containing paired observations. Each
+  object must contain both specified keys with numeric values.
+- **`firstVariableKey`**: - The key for the first measurement in each pair
+  (e.g., "before_event", "baseline", "pre_policy").
+- **`secondVariableKey`**: - The key for the second measurement in each pair
+  (e.g., "after_event", "follow_up", "post_policy").
+- **`options`**: - Optional configuration object.
+- **`options.tail`**: - The type of test to perform: "two-tailed" (default),
+  "left-tailed", or "right-tailed".
+
+### Returns
+
+An object containing comprehensive test results including sample statistics,
+differences, degrees of freedom, t-statistic, and p-value.
+
+### Examples
+
+```ts
+// A journalist investigating if parking fines increased after new enforcement policy
+const parkingFineData = [
+  { district_id: 1, fines_before: 125, fines_after: 142 },
+  { district_id: 2, fines_before: 98, fines_after: 108 },
+  { district_id: 3, fines_before: 156, fines_after: 175 },
+  { district_id: 4, fines_before: 87, fines_after: 95 },
+  { district_id: 5, fines_before: 203, fines_after: 228 },
+  { district_id: 6, fines_before: 134, fines_after: 149 },
+];
+
+const result = performPairedTTest(
+  parkingFineData,
+  "fines_before",
+  "fines_after",
+);
+console.log(
+  `Mean increase in fines: ${result.meanDifference.toFixed(2)} per month`,
+);
+console.log(`T-statistic: ${result.tStatistic.toFixed(3)}`);
+console.log(`P-value: ${result.pValue.toFixed(4)}`);
+
+if (result.pValue < 0.05) {
+  console.log("Parking fines increased significantly after the new policy");
+} else {
+  console.log("No significant change in parking fines");
+}
+```
+
+```ts
+// Testing if campaign spending affects vote share (right-tailed test)
+const campaignData = [
+  { district_id: 1, before_ads: 32.5, after_ads: 38.2 },
+  { district_id: 2, before_ads: 28.9, after_ads: 34.1 },
+  { district_id: 3, before_ads: 41.3, after_ads: 43.7 },
+  { district_id: 4, before_ads: 25.6, after_ads: 31.9 },
+  { district_id: 5, before_ads: 36.8, after_ads: 40.3 },
+];
+
+// Test if after_ads - before_ads > 0 (increase in vote share)
+const testResult = performPairedTTest(
+  campaignData,
+  "before_ads",
+  "after_ads",
+  { tail: "right-tailed" },
+);
+
+console.log(
+  `Mean vote share increase: ${testResult.meanDifference.toFixed(2)}%`,
+);
+if (testResult.pValue < 0.05) {
+  console.log("Campaign ads show significant increase in vote share!");
+} else {
+  console.log("Campaign ads don't show significant increase in vote share");
+}
+```
+
+## performTTest
+
+Performs a one-sample t-test for independent means to determine if a sample mean
+is significantly different from a hypothesized population mean.
+
+The function compares the mean of a sample against a hypothesized population
+mean when the population standard deviation is unknown. This is the most common
+scenario in real-world statistical analysis where we only have sample data and
+need to estimate the population parameters. This is a test for **independent
+means** (sample vs population), not related/paired samples.
+
+**When to use this function:**
+
+- Use when you have sample data and want to test if the sample mean differs
+  significantly from a known or hypothesized value
+- When the population standard deviation is unknown (most common case)
+- When data is approximately normally distributed OR when you have a large
+  sample size (n ≥ 30-50)
+- **Robustness to non-normality**: Due to the Central Limit Theorem, the t-test
+  becomes robust to violations of normality as sample size increases. For large
+  samples (n ≥ 30-50), the sampling distribution of the mean approaches
+  normality even if the underlying data is not normally distributed
+- **Small samples (n < 30)**: Normality assumption is more critical. Consider
+  checking for normality or using non-parametric alternatives (like Wilcoxon
+  signed-rank test) if data is heavily skewed or has extreme outliers
+- For independent observations (not paired or matched data)
+
+**Test types:**
+
+- **"two-tailed"** (default): Tests if sample mean is significantly different
+  (higher OR lower) than hypothesized mean
+- **"left-tailed"**: Tests if sample mean is significantly lower than
+  hypothesized mean
+- **"right-tailed"**: Tests if sample mean is significantly higher than
+  hypothesized mean
+
+### Signature
+
+```typescript
+function performTTest(
+  sampleData: Record<string, unknown>[],
+  variableKey: string,
+  hypothesizedMean: number,
+  options?: { tail?: "two-tailed" | "left-tailed" | "right-tailed" },
+): {
+  sampleSize: number;
+  sampleMean: number;
+  sampleStdDev: number;
+  sampleVariance: number;
+  hypothesizedMean: number;
+  degreesOfFreedom: number;
+  tStatistic: number;
+  pValue: number;
+};
+```
+
+### Parameters
+
+- **`sampleData`**: - An array of objects representing the sample data. Each
+  object must contain the specified key with numeric values.
+- **`variableKey`**: - The key in each data object that contains the numeric
+  values to analyze for the statistical test.
+- **`hypothesizedMean`**: - The hypothesized population mean to test against
+  (null hypothesis value).
+- **`options`**: - Optional configuration object.
+- **`options.tail`**: - The type of test to perform: "two-tailed" (default),
+  "left-tailed", or "right-tailed".
+
+### Returns
+
+An object containing comprehensive test results including sample statistics,
+degrees of freedom, t-statistic, and p-value.
+
+### Examples
+
+```ts
+// A journalist investigating if basketball players in a local league
+// score significantly different from the national average of 10 points per game
+const localPlayers = [
+  { player_id: 1, name: "John", points_per_game: 15 },
+  { player_id: 2, name: "Sarah", points_per_game: 12 },
+  { player_id: 3, name: "Mike", points_per_game: 18 },
+  { player_id: 4, name: "Lisa", points_per_game: 14 },
+  { player_id: 5, name: "Tom", points_per_game: 16 },
+  { player_id: 6, name: "Anna", points_per_game: 13 },
+];
+
+const nationalAverage = 10; // Known population mean
+
+const result = performTTest(localPlayers, "points_per_game", nationalAverage);
+console.log(`Sample mean: ${result.sampleMean.toFixed(2)} points per game`);
+console.log(`T-statistic: ${result.tStatistic.toFixed(3)}`);
+console.log(`P-value: ${result.pValue.toFixed(4)}`);
+
+if (result.pValue < 0.05) {
+  console.log(
+    "Local players score significantly different from national average",
+  );
+} else {
+  console.log("Local players' scoring is consistent with national average");
+}
+```
+
+```ts
+// Testing if a new training program improves performance (right-tailed test)
+const trainingResults = [
+  { athlete_id: 1, improvement_score: 8.5 },
+  { athlete_id: 2, improvement_score: 12.3 },
+  { athlete_id: 3, improvement_score: 6.7 },
+  { athlete_id: 4, improvement_score: 15.2 },
+  { athlete_id: 5, improvement_score: 9.8 },
+];
+
+const expectedImprovement = 5; // Null hypothesis: no significant improvement
+
+const testResult = performTTest(
+  trainingResults,
+  "improvement_score",
+  expectedImprovement,
+  { tail: "right-tailed" },
+);
+
+console.log(`Sample mean improvement: ${testResult.sampleMean.toFixed(2)}`);
+if (testResult.pValue < 0.05) {
+  console.log("Training program shows significant improvement!");
+} else {
+  console.log("Training program doesn't show significant improvement");
+}
+```
+
+## performTwoSampleTTest
+
+Performs a two-sample t-test for independent means to determine if there is a
+significant difference between two independent groups.
+
+The two-sample t-test compares the means of two independent groups when the
+population standard deviations are unknown. It tests whether the difference
+between the two group means is significantly different from zero. This is a test
+for **independent means** (unrelated groups), not paired/related samples.
+
+**When to use this function:**
+
+- Use when you have two separate, independent groups to compare
+- When comparing measurements from different subjects, entities, or populations
+- When the population standard deviations are unknown (most common case)
+- When data in both groups are approximately normally distributed OR when you
+  have large sample sizes (n ≥ 30-50 per group)
+- **Robustness to non-normality**: Due to the Central Limit Theorem, the
+  two-sample t-test becomes robust to violations of normality as sample sizes
+  increase. For large samples (n ≥ 30-50 per group), the sampling distribution
+  of the difference in means approaches normality even if the underlying data is
+  not normally distributed
+- **Small samples (n < 30 per group)**: Normality assumption is more critical
+  for both groups. Consider checking for normality or using non-parametric
+  alternatives (like Mann-Whitney U test) if data is heavily skewed or has
+  extreme outliers
+- For independent observations (not paired, matched, or related data)
+
+**Test types:**
+
+- **"two-tailed"** (default): Tests if the group means are significantly
+  different from each other
+- **"left-tailed"**: Tests if group 1 mean is significantly less than group 2
+  mean
+- **"right-tailed"**: Tests if group 1 mean is significantly greater than group
+  2 mean
+
+### Signature
+
+```typescript
+function performTwoSampleTTest(
+  group1Data: Record<string, unknown>[],
+  group2Data: Record<string, unknown>[],
+  variableKey: string,
+  options?: { tail?: "two-tailed" | "left-tailed" | "right-tailed" },
+): {
+  group1SampleSize: number;
+  group2SampleSize: number;
+  group1Mean: number;
+  group2Mean: number;
+  group1StdDev: number;
+  group2StdDev: number;
+  group1Variance: number;
+  group2Variance: number;
+  meanDifference: number;
+  degreesOfFreedom: number;
+  tStatistic: number;
+  pValue: number;
+};
+```
+
+### Parameters
+
+- **`group1Data`**: - An array of objects containing observations for the first
+  group. Each object must contain the specified key with a numeric value.
+- **`group2Data`**: - An array of objects containing observations for the second
+  group. Each object must contain the specified key with a numeric value.
+- **`variableKey`**: - The key for the measurement in both group objects (e.g.,
+  "income", "score", "price").
+- **`options`**: - Optional configuration object.
+- **`options.tail`**: - The type of test to perform: "two-tailed" (default),
+  "left-tailed", or "right-tailed".
+
+### Returns
+
+An object containing comprehensive test results including sample statistics for
+both groups, mean difference, degrees of freedom, t-statistic, and p-value.
+
+### Examples
+
+```ts
+// A journalist comparing average housing prices between two different cities
+const city1Prices = [
+  { property_id: 1, price: 450000 },
+  { property_id: 2, price: 520000 },
+  { property_id: 3, price: 380000 },
+  { property_id: 4, price: 610000 },
+  { property_id: 5, price: 475000 },
+];
+
+const city2Prices = [
+  { property_id: 101, price: 520000 },
+  { property_id: 102, price: 580000 },
+  { property_id: 103, price: 490000 },
+  { property_id: 104, price: 660000 },
+  { property_id: 105, price: 530000 },
+  { property_id: 106, price: 615000 },
+];
+
+const result = performTwoSampleTTest(city1Prices, city2Prices, "price");
+console.log(`City 1 average: $${result.group1Mean.toFixed(0)}`);
+console.log(`City 2 average: $${result.group2Mean.toFixed(0)}`);
+console.log(`Mean difference: $${result.meanDifference.toFixed(0)}`);
+console.log(`T-statistic: ${result.tStatistic.toFixed(3)}`);
+console.log(`P-value: ${result.pValue.toFixed(4)}`);
+
+if (result.pValue < 0.05) {
+  console.log("Significant difference in housing prices between cities");
+} else {
+  console.log("No significant difference in housing prices between cities");
+}
+```
+
+```ts
+// Testing if male candidates receive higher campaign donations than female candidates (right-tailed)
+const maleCandidates = [
+  { candidate_id: 1, donation_total: 25000 },
+  { candidate_id: 2, donation_total: 32000 },
+  { candidate_id: 3, donation_total: 18000 },
+  { candidate_id: 4, donation_total: 41000 },
+];
+
+const femaleCandidates = [
+  { candidate_id: 101, donation_total: 22000 },
+  { candidate_id: 102, donation_total: 28000 },
+  { candidate_id: 103, donation_total: 19000 },
+  { candidate_id: 104, donation_total: 35000 },
+  { candidate_id: 105, donation_total: 24000 },
+];
+
+// Test if male average > female average
+const testResult = performTwoSampleTTest(
+  maleCandidates,
+  femaleCandidates,
+  "donation_total",
+  { tail: "right-tailed" },
+);
+
+console.log(`Male average: $${testResult.group1Mean.toFixed(0)}`);
+console.log(`Female average: $${testResult.group2Mean.toFixed(0)}`);
+if (testResult.pValue < 0.05) {
+  console.log("Male candidates receive significantly higher donations");
+} else {
+  console.log("No significant difference in donation amounts by gender");
+}
+```
+
+## performZTest
+
+Performs a one-sample Z-test to determine if a sample mean is significantly
+different from a population mean.
+
+The function compares the mean of a sample against the mean of a known
+population to test the null hypothesis. It automatically applies the finite
+population correction (FPC) when the sample size exceeds 5% of the population
+size, which provides more accurate results for smaller populations. This is a
+**one-sample Z-test** comparing a sample against a known population, not a
+comparison between two independent samples.
+
+**When to use this function:**
+
+- Use when you have a complete population dataset and want to test if a sample
+  represents that population
+- When you need to validate whether observed differences between sample and
+  population means are statistically significant
+- When data is approximately normally distributed or sample size is large
+  (Central Limit Theorem applies)
+- For independent observations (not paired or matched data)
+
+**Test types:**
+
+- **"two-tailed"** (default): Tests if sample mean is significantly different
+  (higher OR lower) than population mean
+- **"left-tailed"**: Tests if sample mean is significantly lower than population
+  mean
+- **"right-tailed"**: Tests if sample mean is significantly higher than
+  population mean
+
+### Signature
+
+```typescript
+function performZTest(
+  populationData: Record<string, unknown>[],
+  sampleData: Record<string, unknown>[],
+  variableKey: string,
+  options?: { tail?: "two-tailed" | "left-tailed" | "right-tailed" },
+): {
+  populationSize: number;
+  sampleSize: number;
+  populationMean: number;
+  sampleMean: number;
+  populationStdDev: number;
+  populationVariance: number;
+  fpcApplied: boolean;
+  zScore: number;
+  pValue: number;
+};
+```
+
+### Parameters
+
+- **`populationData`**: - An array of objects representing the complete
+  population data. Each object must contain the specified key with numeric
+  values.
+- **`sampleData`**: - An array of objects representing the sample data to test
+  against the population. Each object must contain the specified key with
+  numeric values.
+- **`variableKey`**: - The key in each data object that contains the numeric
+  values to analyze for the statistical test.
+- **`options`**: - Optional configuration object.
+- **`options.tail`**: - The type of test to perform: "two-tailed" (default),
+  "left-tailed", or "right-tailed".
+
+### Returns
+
+An object containing comprehensive test results including population and sample
+statistics, population variance and standard deviation, test statistics
+(z-score), p-value, and whether finite population correction was applied.
+
+### Examples
+
+```ts
+// A journalist investigating if Democratic candidates receive significantly
+// different donation amounts compared to all political candidates (two-tailed test)
+const allCandidates = [
+  { candidate_id: 1, party: "Democratic", donation_amount: 2500 },
+  { candidate_id: 2, party: "Republican", donation_amount: 3200 },
+  { candidate_id: 3, party: "Independent", donation_amount: 1800 },
+  { candidate_id: 4, party: "Democratic", donation_amount: 2800 },
+  // ... complete population of all candidates (5,000 records)
+];
+
+const democraticCandidates = [
+  { candidate_id: 1, party: "Democratic", donation_amount: 2500 },
+  { candidate_id: 4, party: "Democratic", donation_amount: 2800 },
+  { candidate_id: 7, party: "Democratic", donation_amount: 3100 },
+  // ... all Democratic candidates (1,200 records)
+];
+
+const result = performZTest(
+  allCandidates,
+  democraticCandidates,
+  "donation_amount",
+);
+console.log(`Population mean donation: $${result.populationMean.toFixed(2)}`);
+console.log(`Democratic candidates mean: $${result.sampleMean.toFixed(2)}`);
+console.log(`P-value: ${result.pValue.toFixed(4)}`);
+if (result.pValue < 0.05) {
+  console.log(
+    "Democratic candidates receive significantly different donations than average",
+  );
+} else {
+  console.log(
+    "Democratic candidates' donations are consistent with overall average",
+  );
+}
+```
+
+```ts
+// Testing if corporate donors give MORE than average (right-tailed test)
+const allDonors = [
+  { donor_id: 1, type: "individual", amount: 500 },
+  { donor_id: 2, type: "corporate", amount: 5000 },
+  { donor_id: 3, type: "PAC", amount: 2500 },
+  // ... complete donor population
+];
+
+const corporateDonors = [
+  { donor_id: 2, type: "corporate", amount: 5000 },
+  { donor_id: 8, type: "corporate", amount: 7500 },
+  // ... all corporate donors
+];
+
+const testResult = performZTest(allDonors, corporateDonors, "amount", {
+  tail: "right-tailed",
+});
+console.log(
+  `All donors mean donation: $${testResult.populationMean.toFixed(2)}`,
+);
+console.log(`Corporate donors mean: $${testResult.sampleMean.toFixed(2)}`);
+if (testResult.pValue < 0.05) {
+  console.log("Corporate donors give significantly MORE than average");
+} else {
+  console.log("Corporate donors don't give significantly more than average");
+}
 ```
 
 ## prettyDuration
