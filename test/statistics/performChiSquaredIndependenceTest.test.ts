@@ -3,6 +3,7 @@ import performChiSquaredIndependenceTest from "../../src/statistics/performChiSq
 
 // Tested with
 // https://www.socscistatistics.com/tests/chisquare2/default2.aspx
+// and scipy (python)
 
 // Test data for independence test - voting preference by age group
 const votingData = [

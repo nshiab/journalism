@@ -2,6 +2,7 @@ import getSampleSizeMean from "../../src/statistics/getSampleSizeMean.ts";
 import { assertEquals } from "jsr:@std/assert";
 
 // Compared with https://select-statistics.co.uk/calculators/sample-size-calculator-population-mean/
+// and scipy (python)
 
 // List of 100 random student grades (0-100)
 const grades = [

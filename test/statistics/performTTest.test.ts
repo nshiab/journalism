@@ -3,6 +3,7 @@ import performTTest from "../../src/statistics/performTTest.ts";
 
 // Tested with
 // https://www.socscistatistics.com/tests/tsinglesample/default2.aspx
+// and scipy (python)
 
 // Test data based on the basketball example from the documentation
 const basketballPlayers = [

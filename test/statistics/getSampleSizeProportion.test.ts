@@ -2,6 +2,7 @@ import getSampleSizeProportion from "../../src/statistics/getSampleSizeProportio
 import { assertEquals, assertThrows } from "jsr:@std/assert";
 
 // Compared with https://www.surveymonkey.com/mp/sample-size-calculator/
+// and scipy (python)
 
 const populationSize = 1000;
 

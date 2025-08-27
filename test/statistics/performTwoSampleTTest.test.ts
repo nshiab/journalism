@@ -1,6 +1,9 @@
 import { assertEquals, assertThrows } from "jsr:@std/assert";
 import performTwoSampleTTest from "../../src/statistics/performTwoSampleTTest.ts";
 
+// Tested with
+// https://www.graphpad.com/quickcalcs/ttest2/
+
 Deno.test("performTwoSampleTTest - basic two-tailed test", () => {
   const group1 = [
     { id: 1, value: 10 },
@@ -20,14 +23,20 @@ Deno.test("performTwoSampleTTest - basic two-tailed test", () => {
 
   const result = performTwoSampleTTest(group1, group2, "value");
 
-  assertEquals(result.group1SampleSize, 5);
-  assertEquals(result.group2SampleSize, 5);
-  assertEquals(result.group1Mean, 14);
-  assertEquals(result.group2Mean, 24);
-  assertEquals(result.meanDifference, -10);
-
-  // With such a large difference, p-value should be very small
-  assertEquals(result.pValue < 0.01, true);
+  assertEquals(result, {
+    group1SampleSize: 5,
+    group2SampleSize: 5,
+    group1Mean: 14,
+    group2Mean: 24,
+    group1StdDev: 3.1622776601683795,
+    group2StdDev: 3.1622776601683795,
+    group1Variance: 10,
+    group2Variance: 10,
+    meanDifference: -10,
+    degreesOfFreedom: 8,
+    tStatistic: -5,
+    pValue: 0.0010528257934054874,
+  });
 });
 
 Deno.test("performTwoSampleTTest - right-tailed test", () => {
@@ -54,12 +63,20 @@ Deno.test("performTwoSampleTTest - right-tailed test", () => {
     { tail: "right-tailed" },
   );
 
-  assertEquals(result.group1Mean, 90);
-  assertEquals(result.group2Mean, 80.8);
-  assertEquals(result.meanDifference > 0, true);
-
-  // Group 1 should be significantly higher
-  assertEquals(result.pValue < 0.05, true);
+  assertEquals(result, {
+    group1SampleSize: 5,
+    group2SampleSize: 5,
+    group1Mean: 90,
+    group2Mean: 80.8,
+    group1StdDev: 3.8078865529319543,
+    group2StdDev: 2.7748873851023212,
+    group1Variance: 14.5,
+    group2Variance: 7.699999999999999,
+    meanDifference: 9.200000000000003,
+    degreesOfFreedom: 7.313793871039548,
+    tStatistic: 4.366126780461497,
+    pValue: 0.001481704382465976,
+  });
 });
 
 Deno.test("performTwoSampleTTest - left-tailed test", () => {
@@ -85,10 +102,20 @@ Deno.test("performTwoSampleTTest - left-tailed test", () => {
     { tail: "left-tailed" },
   );
 
-  assertEquals(result.meanDifference < 0, true);
-
-  // Group 1 should be significantly lower
-  assertEquals(result.pValue < 0.05, true);
+  assertEquals(result, {
+    group1SampleSize: 4,
+    group2SampleSize: 5,
+    group1Mean: 17.5,
+    group2Mean: 27.2,
+    group1StdDev: 2.0816659994661326,
+    group2StdDev: 1.9235384061671346,
+    group1Variance: 4.333333333333333,
+    group2Variance: 3.7,
+    meanDifference: -9.7,
+    degreesOfFreedom: 6.295249249586221,
+    tStatistic: -7.183543044794596,
+    pValue: 0.00014783740286633591,
+  });
 });
 
 Deno.test("performTwoSampleTTest - Welch's test (unequal variances)", () => {
@@ -115,12 +142,20 @@ Deno.test("performTwoSampleTTest - Welch's test (unequal variances)", () => {
     "measure",
   );
 
-  assertEquals(result.group1SampleSize, 5);
-  assertEquals(result.group2SampleSize, 6);
-
-  // Degrees of freedom should be fractional for Welch's test
-  assertEquals(result.degreesOfFreedom < 9, true); // Less than n1 + n2 - 2
-  assertEquals(result.degreesOfFreedom > 0, true);
+  assertEquals(result, {
+    group1SampleSize: 5,
+    group2SampleSize: 6,
+    group1Mean: 101,
+    group2Mean: 113.83333333333333,
+    group1StdDev: 1.5811388300841898,
+    group2StdDev: 7.626707459098367,
+    group1Variance: 2.5,
+    group2Variance: 58.166666666666664,
+    meanDifference: -12.833333333333329,
+    degreesOfFreedom: 5.510735970410618,
+    tStatistic: -4.019367282483479,
+    pValue: 0.008297784874405911,
+  });
 });
 
 Deno.test("performTwoSampleTTest - similar groups (no significant difference)", () => {

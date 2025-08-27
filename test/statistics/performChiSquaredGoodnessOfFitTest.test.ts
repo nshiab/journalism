@@ -3,6 +3,7 @@ import performChiSquaredGoodnessOfFitTest from "../../src/statistics/performChiS
 
 // Tested with
 // https://www.graphpad.com/quickcalcs/chisquared2/
+// and scipy (python)
 
 // Test data for goodness of fit test - crime distribution
 const crimeData = [
