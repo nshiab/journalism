@@ -33,7 +33,7 @@ Deno.test("should perform the chi-squared goodness of fit with crimeData", () =>
   assertEquals(result, {
     chiSquared: 6.027777777777778,
     degreesOfFreedom: 3,
-    pValue: 0.10854389506338813,
+    pValue: 0.11026656902388288,
     warnings: [],
   });
 });
@@ -47,7 +47,7 @@ Deno.test("should perform the chi-squared goodness of fit with diceData", () => 
   assertEquals(result, {
     chiSquared: 17.8,
     degreesOfFreedom: 5,
-    pValue: 0.003361920530810747,
+    pValue: 0.0032077920346053057,
     warnings: [],
   });
 });

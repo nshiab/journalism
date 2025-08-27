@@ -36,7 +36,7 @@ Deno.test("should perform chi-squared independence test for votingData", () => {
   assertEquals(result, {
     chiSquared: 13.028571428571428,
     degreesOfFreedom: 2,
-    pValue: 0.0016613751642883257,
+    pValue: 0.001482114174450766,
     warnings: [],
   });
 });
