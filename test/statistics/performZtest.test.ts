@@ -5,6 +5,7 @@ import performZTest from "../../src/statistics/performZTest.ts";
 // https://www.socscistatistics.com/tests/ztest_sample_mean/default2.aspx
 // http://vassarstats.net/tabs_z.html
 // https://www.omnicalculator.com/statistics/z-test
+// and scipy (python)
 
 // Test data sets for different scenarios
 const populationData = [

@@ -1,12 +1,13 @@
 /**
- * Performs a Z-test to determine if a sample mean is significantly different from a population mean.
+ * Performs a one-sample Z-test to determine if a sample mean is significantly different from a population mean.
  *
- * The function compares the mean of a sample against the mean of a known population to test the null hypothesis. It automatically applies the finite population correction (FPC) when the sample size exceeds 5% of the population size, which provides more accurate results for smaller populations.
+ * The function compares the mean of a sample against the mean of a known population to test the null hypothesis. It automatically applies the finite population correction (FPC) when the sample size exceeds 5% of the population size, which provides more accurate results for smaller populations. This is a **one-sample Z-test** comparing a sample against a known population, not a comparison between two independent samples.
  *
  * **When to use this function:**
  * - Use when you have a complete population dataset and want to test if a sample represents that population
  * - When you need to validate whether observed differences between sample and population means are statistically significant
  * - When data is approximately normally distributed or sample size is large (Central Limit Theorem applies)
+ * - For independent observations (not paired or matched data)
  *
  * **Test types:**
  * - **"two-tailed"** (default): Tests if sample mean is significantly different (higher OR lower) than population mean
@@ -71,7 +72,7 @@
  *
  * @param populationData - An array of objects representing the complete population data. Each object must contain the specified key with numeric values.
  * @param sampleData - An array of objects representing the sample data to test against the population. Each object must contain the specified key with numeric values.
- * @param key - The key in each data object that contains the numeric values to analyze for the statistical test.
+ * @param variableKey - The key in each data object that contains the numeric values to analyze for the statistical test.
  * @param options - Optional configuration object.
  * @param options.tail - The type of test to perform: "two-tailed" (default), "left-tailed", or "right-tailed".
  * @returns An object containing comprehensive test results including population and sample statistics, population variance and standard deviation, test statistics (z-score), p-value, and whether finite population correction was applied.
@@ -81,7 +82,7 @@
 export default function performZTest(
   populationData: { [key: string]: unknown }[],
   sampleData: { [key: string]: unknown }[],
-  key: string,
+  variableKey: string,
   options: { tail?: "two-tailed" | "left-tailed" | "right-tailed" } = {},
 ): {
   populationSize: number;
@@ -100,11 +101,11 @@ export default function performZTest(
     sourceName: string,
   ): number[] => {
     return data.map((item, index) => {
-      const value = item[key];
+      const value = item[variableKey];
       if (typeof value !== "number" || !isFinite(value)) {
         throw new Error(
           `Invalid data in ${sourceName} array at index ${index}. Expected a finite number for key "${
-            String(key)
+            String(variableKey)
           }", but received: ${JSON.stringify(value)}.`,
         );
       }

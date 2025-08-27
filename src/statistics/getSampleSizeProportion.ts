@@ -18,20 +18,18 @@
  * ```ts
  * // A journalist has a dataset of 1,000 records and wants to know how many
  * // data points to manually double-check to ensure their analysis is accurate
- * const datasetRecords = [...]; // Array of 1,000 data records from investigation
- * const recordsToVerify = getSampleSizeProportion(datasetRecords, 95, 5);
+ * const recordsToVerify = getSampleSizeProportion(1000, 95, 5);
  * console.log(`You need to manually verify ${recordsToVerify} records to be 95% confident in your analysis with a 5% margin of error`); // 278
  * ```
  *
  * @example
  * ```ts
  * // Example for survey planning
- * const cityPopulation = new Array(50000).fill(0);
- * const requiredSample = getSampleSizeProportion(cityPopulation, 95, 4);
+ * const requiredSample = getSampleSizeProportion(50000, 95, 4);
  * console.log(`For a city survey with 95% confidence and 4% margin of error, you need ${requiredSample} respondents.`); // 594
  * ```
  *
- * @param data - An array representing the population. The length of this array is used as the population size in the finite population correction formula.
+ * @param populationSize - The size of the population from which the sample will be drawn. Used in the finite population correction formula for more accurate sample size calculations.
  * @param confidenceLevel - The desired confidence level for the sample. Must be 90, 95, or 99. The higher the confidence level, the larger the returned sample size.
  * @param marginOfError - The acceptable margin of error as a percentage (1-100). The smaller the margin of error, the larger the returned sample size.
  * @returns The minimum required sample size, rounded up to the nearest whole number.
@@ -39,10 +37,14 @@
  * @category Statistics
  */
 export default function getSampleSizeProportion(
-  data: unknown[],
+  populationSize: number,
   confidenceLevel: 90 | 95 | 99,
   marginOfError: number,
 ): number {
+  if (populationSize <= 0) {
+    throw new Error("Population size must be greater than 0.");
+  }
+
   let zScore: number;
   if (confidenceLevel === 90) {
     zScore = 1.645;
@@ -65,7 +67,7 @@ export default function getSampleSizeProportion(
   const sampleSize = numerator / denominator;
 
   const finalSampleSize = sampleSize /
-    (1 + ((sampleSize - 1) / data.length));
+    (1 + ((sampleSize - 1) / populationSize));
 
   return Math.ceil(finalSampleSize);
 }
