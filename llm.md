@@ -2157,6 +2157,8 @@ Each object includes:
 - `recordValue`: The record value (temperature in °C, precipitation/snowfall in
   mm/cm)
 - `recordYear`: The year when the record was set
+- `previousRecordValue`: The previous record value before the current record
+- `previousRecordYear`: The year when the previous record was set
 - `recordStationName`: The name of the weather station where the record was
   measured
 - `recordStationId`: The unique identifier of the weather station
