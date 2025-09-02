@@ -11,8 +11,10 @@ Deno.test("should return the temperature records for the given locations without
     "DAILY MAXIMUM TEMPERATURE",
     ["2023-07-01", "2023-07-01"],
   );
-  records[0].recordValue = 36.1;
-  records[0].recordYear = 2023;
+  // records[0].recordValue = 36.1;
+  // records[0].recordYear = 2023;
+  // records[0].previousRecordValue = 35.6;
+  // records[0].previousRecordYear = 1955;
   assertEquals(records, [
     {
       lat: 45.52,
@@ -22,7 +24,9 @@ Deno.test("should return the temperature records for the given locations without
       recordDay: 1,
       recordVariable: "DAILY MAXIMUM TEMPERATURE",
       recordValue: 36.1,
-      recordYear: 2023,
+      recordYear: 1931,
+      previousRecordValue: 33.9,
+      previousRecordYear: 1913,
       recordStationName: "MONTRÉAL AREA",
       recordStationId: "VSQC147",
       recordStationLat: 45.52,
@@ -47,8 +51,10 @@ Deno.test("should return the temperature records for the given locations with op
       verbose: true,
     },
   );
-  records[0].recordValue = 40;
-  records[0].recordYear = 2023;
+  // records[0].recordValue = 40;
+  // records[0].recordYear = 2023;
+  // records[0].previousRecordValue = 38.9;
+  // records[0].previousRecordYear = 1921;
   assertEquals(records, [
     {
       lat: 45.52,
@@ -57,8 +63,10 @@ Deno.test("should return the temperature records for the given locations with op
       recordMonth: 7,
       recordDay: 1,
       recordVariable: "DAILY MAXIMUM TEMPERATURE",
-      recordValue: 40,
-      recordYear: 2023,
+      recordValue: 36.1,
+      recordYear: 1931,
+      previousRecordValue: 33.9,
+      previousRecordYear: 1913,
       recordStationName: "MONTRÉAL AREA",
       recordStationId: "VSQC147",
       recordStationLat: 45.52,
@@ -83,8 +91,10 @@ Deno.test("should return the precipitation records for the given locations with 
       verbose: true,
     },
   );
-  records[0].recordValue = 33;
-  records[0].recordYear = 1956;
+  // records[0].recordValue = 33;
+  // records[0].recordYear = 1956;
+  // records[0].previousRecordValue = 30.2;
+  // records[0].previousRecordYear = 1945;
   assertEquals(records, [
     {
       lat: 43.68,
@@ -95,6 +105,8 @@ Deno.test("should return the precipitation records for the given locations with 
       recordVariable: "DAILY TOTAL PRECIPITATION",
       recordValue: 33,
       recordYear: 1956,
+      previousRecordValue: 31.2,
+      previousRecordYear: 1953,
       recordStationName: "MISSISSAUGA AREA",
       recordStationId: "VSON24V",
       recordStationLat: 43.59,
@@ -105,7 +117,7 @@ Deno.test("should return the precipitation records for the given locations with 
     },
   ]);
 });
-Deno.test("should return the precipitation records for the given locations with options", async () => {
+Deno.test("should return the snow records for the given locations with options", async () => {
   const records = await getEnvironmentCanadaRecords(
     [{
       lat: 49.2,
@@ -119,8 +131,10 @@ Deno.test("should return the precipitation records for the given locations with 
       verbose: true,
     },
   );
-  records[0].recordValue = 0;
-  records[0].recordYear = 2025;
+  // records[0].recordValue = 0;
+  // records[0].recordYear = 2025;
+  // records[0].previousRecordValue = 0;
+  // records[0].previousRecordYear = 2024;
   assertEquals(records, [
     {
       lat: 49.2,
@@ -131,6 +145,8 @@ Deno.test("should return the precipitation records for the given locations with 
       recordVariable: "DAILY TOTAL SNOWFALL",
       recordValue: 0,
       recordYear: 2025,
+      previousRecordValue: 0,
+      previousRecordYear: 2024,
       recordStationName: "RICHMOND AREA",
       recordStationId: "VSBC96V",
       recordStationLat: 49.16,

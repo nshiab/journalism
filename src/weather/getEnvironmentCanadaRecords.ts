@@ -95,6 +95,8 @@ type Location = {
  *   - `recordVariable`: The weather variable that was requested
  *   - `recordValue`: The record value (temperature in °C, precipitation/snowfall in mm/cm)
  *   - `recordYear`: The year when the record was set
+ *   - `previousRecordValue`: The previous record value before the current record
+ *   - `previousRecordYear`: The year when the previous record was set
  *   - `recordStationName`: The name of the weather station where the record was measured
  *   - `recordStationId`: The unique identifier of the weather station
  *   - `recordStationLat`: The latitude of the weather station
@@ -124,6 +126,8 @@ export default async function getEnvironmentCanadaRecords(
     recordVariable: string;
     recordValue: number;
     recordYear: number;
+    previousRecordValue: number;
+    previousRecordYear: number;
     recordStationName: string;
     recordStationId: string;
     recordStationLat: number;
@@ -168,6 +172,8 @@ export default async function getEnvironmentCanadaRecords(
     recordVariable: string;
     recordValue: number;
     recordYear: number;
+    previousRecordValue: number;
+    previousRecordYear: number;
     recordStationName: string;
     recordStationId: string;
     recordStationLat: number;
@@ -244,21 +250,29 @@ export default async function getEnvironmentCanadaRecords(
       const record = await recordResponse.json();
       let recordValue: number;
       let recordYear: number;
+      let previousRecordValue: number;
+      let previousRecordYear: number;
       let recordStationRecordBegin: string;
       let recordStationRecordEnd: string | null = null;
       if (variable === "DAILY MAXIMUM TEMPERATURE") {
         recordValue = record.properties.RECORD_HIGH_MAX_TEMP;
         recordYear = record.properties.RECORD_HIGH_MAX_TEMP_YR;
+        previousRecordValue = record.properties.PREV_RECORD_HIGH_MAX_TEMP;
+        previousRecordYear = record.properties.PREV_RECORD_HIGH_MAX_TEMP_YR;
         recordStationRecordBegin = record.properties.MAX_TEMP_RECORD_BEGIN;
         recordStationRecordEnd = record.properties.MAX_TEMP_RECORD_END;
       } else if (variable === "DAILY TOTAL PRECIPITATION") {
         recordValue = record.properties.RECORD_PRECIPITATION;
         recordYear = record.properties.RECORD_PRECIPITATION_YR;
+        previousRecordValue = record.properties.PREV_RECORD_PRECIPITATION;
+        previousRecordYear = record.properties.PREV_RECORD_PRECIPITATION_YR;
         recordStationRecordBegin = record.properties.RECORD_BEGIN;
         recordStationRecordEnd = record.properties.RECORD_END;
       } else {
         recordValue = record.properties.RECORD_SNOWFALL;
         recordYear = record.properties.RECORD_SNOWFALL_YR;
+        previousRecordValue = record.properties.PREV_RECORD_SNOWFALL;
+        previousRecordYear = record.properties.PREV_RECORD_SNOWFALL_YR;
         recordStationRecordBegin = record.properties.RECORD_BEGIN;
         recordStationRecordEnd = record.properties.RECORD_END;
       }
@@ -269,6 +283,8 @@ export default async function getEnvironmentCanadaRecords(
         recordVariable: variable,
         recordValue,
         recordYear,
+        previousRecordValue,
+        previousRecordYear,
         recordStationName: record.properties.VIRTUAL_STATION_NAME_E,
         recordStationId: record.properties.VIRTUAL_CLIMATE_ID,
         recordStationLat: closestStation.lat,
