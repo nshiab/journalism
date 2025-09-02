@@ -13,6 +13,7 @@
     "npm:@observablehq/plot@~0.6.17": "0.6.17",
     "npm:@types/d3-geo@3": "3.1.0",
     "npm:@types/d3-geo@^3.1.0": "3.1.0",
+    "npm:@types/node@*": "24.2.0",
     "npm:adm-zip@0.5": "0.5.16",
     "npm:adm-zip@~0.5.16": "0.5.16",
     "npm:cheerio@1": "1.1.2",
@@ -28,8 +29,10 @@
     "npm:fflate@~0.8.2": "0.8.2",
     "npm:geotiff@2": "2.1.3",
     "npm:geotiff@^2.1.4-beta.0": "2.1.4-beta.0",
+    "npm:google-auth-library@9": "9.15.1",
     "npm:google-auth-library@^10.3.0": "10.3.0",
-    "npm:google-spreadsheet@^5.0.2": "5.0.2_google-auth-library@10.3.0",
+    "npm:google-spreadsheet@4": "4.1.5_google-auth-library@9.15.1",
+    "npm:google-spreadsheet@^5.0.2": "5.0.2_google-auth-library@10.3.0_google-auth-library@9.15.1",
     "npm:iconv-lite@0.6": "0.6.3",
     "npm:iconv-lite@0.7": "0.7.0",
     "npm:jstat@^1.9.6": "1.9.6",
@@ -142,7 +145,7 @@
         "@types/caseless",
         "@types/node",
         "@types/tough-cookie",
-        "form-data"
+        "form-data@2.5.5"
       ]
     },
     "@types/tough-cookie@4.0.5": {
@@ -177,6 +180,14 @@
     },
     "asynckit@0.4.0": {
       "integrity": "sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q=="
+    },
+    "axios@1.11.0": {
+      "integrity": "sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==",
+      "dependencies": [
+        "follow-redirects",
+        "form-data@4.0.4",
+        "proxy-from-env"
+      ]
     },
     "base64-js@1.5.1": {
       "integrity": "sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA=="
@@ -593,6 +604,9 @@
     "fflate@0.8.2": {
       "integrity": "sha512-cPJU47OaAoCbg0pBvzsgpTPhmhqI5eJjh/JIu8tPj5q+T7iLvW/JAYUqmE7KOB4R1ZyEhzBaIQpQpardBF5z8A=="
     },
+    "follow-redirects@1.15.11": {
+      "integrity": "sha512-deG2P0JfjrTxl50XGCDyfI97ZGVCxIpfKYmfyrQ54n5FO/0gfIES8C/Psl6kWVDolizcaaxZJnTS0QSMxvnsBQ=="
+    },
     "form-data@2.5.5": {
       "integrity": "sha512-jqdObeR2rxZZbPSGL+3VckHMYtu+f9//KXBsVny6JSX/pa38Fy+bGjuG8eW/H6USNQWhLi8Num++cU2yOCNz4A==",
       "dependencies": [
@@ -602,6 +616,16 @@
         "hasown",
         "mime-types",
         "safe-buffer"
+      ]
+    },
+    "form-data@4.0.4": {
+      "integrity": "sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==",
+      "dependencies": [
+        "asynckit",
+        "combined-stream",
+        "es-set-tostringtag",
+        "hasown",
+        "mime-types"
       ]
     },
     "formdata-polyfill@4.0.10": {
@@ -724,6 +748,17 @@
     "google-logging-utils@1.1.1": {
       "integrity": "sha512-rcX58I7nqpu4mbKztFeOAObbomBbHU2oIb/d3tJfF3dizGSApqtSwYJigGCooHdnMyQBIw8BrWyK96w3YXgr6A=="
     },
+    "google-spreadsheet@4.1.5_google-auth-library@9.15.1": {
+      "integrity": "sha512-6xx2yuo5LRHtpFdkluaOIpKSn5awGZa+uCDwgPMuMGnBi1bAoJHz5h5naGU7NoEEWzAdb0Pqlfv/J8KXQvkasQ==",
+      "dependencies": [
+        "axios",
+        "google-auth-library@9.15.1",
+        "lodash"
+      ],
+      "optionalPeers": [
+        "google-auth-library@9.15.1"
+      ]
+    },
     "google-spreadsheet@5.0.2_google-auth-library@10.3.0": {
       "integrity": "sha512-8ugGYGsy6BLl6d4z2zwllEv8hFB2IVcCNAUYT/seo4DU7Pk6m79qv+qRxE2cE8bxbf4S13T5fzrjcPhbk2ogsw==",
       "dependencies": [
@@ -733,6 +768,17 @@
       ],
       "optionalPeers": [
         "google-auth-library@10.3.0"
+      ]
+    },
+    "google-spreadsheet@5.0.2_google-auth-library@10.3.0_google-auth-library@9.15.1": {
+      "integrity": "sha512-8ugGYGsy6BLl6d4z2zwllEv8hFB2IVcCNAUYT/seo4DU7Pk6m79qv+qRxE2cE8bxbf4S13T5fzrjcPhbk2ogsw==",
+      "dependencies": [
+        "es-toolkit",
+        "google-auth-library@9.15.1",
+        "ky"
+      ],
+      "optionalPeers": [
+        "google-auth-library@9.15.1"
       ]
     },
     "gopd@1.2.0": {
@@ -861,6 +907,9 @@
     "lerc@3.0.0": {
       "integrity": "sha512-Rm4J/WaHhRa93nCN2mwWDZFoRVF18G1f47C+kvQWyHGEZxFpTUi73p7lMVSAndyxGt6lJ2/CFbOcf9ra5p8aww=="
     },
+    "lodash@4.17.21": {
+      "integrity": "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
+    },
     "math-intrinsics@1.1.0": {
       "integrity": "sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g=="
     },
@@ -958,6 +1007,9 @@
     "playwright-core@1.55.0": {
       "integrity": "sha512-GvZs4vU3U5ro2nZpeiwyb0zuFaqb9sUiAJuyrWpcGouD8y9/HLgGbNRjIph7zU9D3hnPaisMl9zG9CgFi/biIg==",
       "bin": true
+    },
+    "proxy-from-env@1.1.0": {
+      "integrity": "sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg=="
     },
     "quick-lru@6.1.2": {
       "integrity": "sha512-AAFUA5O1d83pIHEhJwWCq/RQcRukCkn/NSm2QsTEMle5f2hP0ChI2+3Xb051PZCkLryI/Ir1MVKviT2FIloaTQ=="
