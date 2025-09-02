@@ -248,7 +248,6 @@ export default async function getEnvironmentCanadaRecords(
       }
       const recordResponse = await fetch(url);
       const record = await recordResponse.json();
-      console.log(record);
       let recordValue: number;
       let recordYear: number;
       let previousRecordValue: number;
