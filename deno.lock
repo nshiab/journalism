@@ -35,6 +35,7 @@
     "npm:google-spreadsheet@^5.0.2": "5.0.2_google-auth-library@10.3.0_google-auth-library@9.15.1",
     "npm:iconv-lite@0.6": "0.6.3",
     "npm:iconv-lite@0.7": "0.7.0",
+    "npm:jsonrepair@^3.13.0": "3.13.0",
     "npm:jstat@^1.9.6": "1.9.6",
     "npm:ollama@~0.5.17": "0.5.17",
     "npm:playwright-chromium@^1.55.0": "1.55.0"
@@ -883,6 +884,10 @@
         "bignumber.js"
       ]
     },
+    "jsonrepair@3.13.0": {
+      "integrity": "sha512-5YRzlAQ7tuzV1nAJu3LvDlrKtBFIALHN2+a+I1MGJCt3ldRDBF/bZuvIPzae8Epot6KBXd0awRZZcuoeAsZ/mw==",
+      "bin": true
+    },
     "jstat@1.9.6": {
       "integrity": "sha512-rPBkJbK2TnA8pzs93QcDDPlKcrtZWuuCo2dVR0TFLOJSxhqfWOVCSp8aV3/oSbn+4uY4yw1URtLpHQedtmXfug=="
     },
@@ -1162,6 +1167,7 @@
       "npm:google-auth-library@^10.3.0",
       "npm:google-spreadsheet@^5.0.2",
       "npm:iconv-lite@0.7",
+      "npm:jsonrepair@^3.13.0",
       "npm:jstat@^1.9.6",
       "npm:ollama@~0.5.17",
       "npm:playwright-chromium@^1.55.0"

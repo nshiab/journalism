@@ -10,6 +10,7 @@ import { formatNumber, prettyDuration } from "../index.ts";
 import crypto from "node:crypto";
 import ollama, { Ollama } from "ollama";
 import { chromium } from "playwright-chromium";
+import { jsonrepair } from "jsonrepair";
 
 /**
  * Interacts with a Large Language Model (LLM) to perform a wide range of tasks, from answering questions to analyzing multimedia content. This function serves as a versatile interface to various AI models, including Google's Gemini and local models via Ollama.
@@ -701,9 +702,9 @@ export default async function askAI(
 
   if (options.returnJson && options.parseJson) {
     try {
-      cleanedResponse = typeof cleanedResponse === "string"
-        ? JSON.parse(cleanedResponse)
-        : cleanedResponse;
+      if (typeof cleanedResponse === "string") {
+        cleanedResponse = JSON.parse(jsonrepair(cleanedResponse));
+      }
     } catch (error) {
       throw new Error(
         `Failed to parse response as JSON: ${error}.\nResponse: ${cleanedResponse}`,
