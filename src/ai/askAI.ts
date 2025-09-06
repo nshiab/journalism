@@ -206,7 +206,7 @@ import { jsonrepair } from "jsonrepair";
  *   @param options.pdf - A path or GCS URL (or an array of them) to a PDF file.
  *   @param options.text - A path or GCS URL (or an array of them) to a text file.
  *   @param options.returnJson - If `true`, instructs the AI to return a JSON object. Defaults to `false`.
- *   @param options.parseJson - If `true`, automatically parses the AI's response as JSON. Defaults to `true` if `returnJson` is `true`.
+ *   @param options.parseJson - If `true`, automatically parses the AI's response as JSON. Defaults to `true` if `returnJson` is `true`, otherwise `false`.
  *   @param options.cache - If `true`, caches the response locally in a `.journalism-cache` directory. Defaults to `false`.
  *   @param options.verbose - If `true`, enables detailed logging, including token usage and estimated costs. Defaults to `false`.
  *   @param options.clean - A function to process and clean the AI's response before it is returned, tested or parsed to JSON.
@@ -247,7 +247,7 @@ export default async function askAI(
   let client;
   const ollamaVar = options.ollama === true ||
     options.ollama instanceof Ollama || process.env.OLLAMA;
-  const defaults = { parseJson: true };
+  const defaults = { parseJson: options.returnJson ?? false };
   options = { ...defaults, ...options };
 
   if (ollamaVar) {
@@ -700,7 +700,7 @@ export default async function askAI(
     cleanedResponse = returnedResponse;
   }
 
-  if (options.returnJson && options.parseJson) {
+  if (options.parseJson) {
     try {
       if (typeof cleanedResponse === "string") {
         cleanedResponse = JSON.parse(jsonrepair(cleanedResponse));
