@@ -720,7 +720,7 @@ export default async function askAI(
     }
   }
 
-  if (options.cache && options.returnJson && cacheFileJSON) {
+  if (options.cache && options.parseJson && cacheFileJSON) {
     writeFileSync(cacheFileJSON, JSON.stringify(cleanedResponse));
     options.verbose && console.log("\nResponse cached as JSON.");
   } else if (options.cache && cacheFileText) {
