@@ -731,7 +731,7 @@ export default async function askAI(
   if (options.verbose && options.clean) {
     console.log("\nCleaned response:");
     console.log(cleanedResponse, "\n");
-  } else if (options.verbose && options.returnJson && options.parseJson) {
+  } else if (options.verbose && options.parseJson) {
     console.log("\nParsed JSON response:");
     console.log(cleanedResponse, "\n");
   }
