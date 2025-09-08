@@ -49,7 +49,16 @@ point:
 ### Signature
 
 ```typescript
-function addClusters(data: T[], minDistance: number, minNeighbours: number, distance: (a: T, b: T) => any, options?: { reset?: boolean }): asserts data is ([0m[38;5;12mT[0m & { [0m[35m[0m[0m[1mclusterId[0m[0m[35m[0m: [0m[36mstring[0m | [0m[36mnull[0m; [0m[35m[0m[0m[1mclusterType[0m[0m[35m[0m: [0m[32m"core"[0m | [0m[32m"border"[0m | [0m[32m"noise"[0m; })[];
+function addClusters<T extends Record<string, unknown>>(
+  data: T[],
+  minDistance: number,
+  minNeighbours: number,
+  distance: (a: T, b: T) => number,
+  options?: { reset?: boolean },
+): asserts data is (T & {
+  clusterId: string | null;
+  clusterType: "core" | "border" | "noise";
+})[];
 ```
 
 ### Parameters
@@ -131,11 +140,11 @@ inverted covariance matrix.
 ### Signature
 
 ```typescript
-function addMahalanobisDistance(
+function addMahalanobisDistance<T extends Record<string, unknown>>(
   origin: Record<string, number>,
   data: T[],
   options: { similarity: true; matrix?: number[][] },
-): (any)[];
+): (T & { mahaDist: number; similarity: number })[];
 ```
 
 ### Parameters
@@ -219,11 +228,11 @@ specified origin point (without similarity scores).
 ### Signature
 
 ```typescript
-function addMahalanobisDistance(
+function addMahalanobisDistance<T extends Record<string, unknown>>(
   origin: Record<string, number>,
   data: T[],
   options?: { similarity?: false; matrix?: number[][] },
-): (any)[];
+): (T & { mahaDist: number })[];
 ```
 
 ### Parameters
@@ -354,11 +363,11 @@ using the `newKey` option.
 ### Signature
 
 ```typescript
-function addZScore(
+function addZScore<T extends Record<string, unknown>, K extends string>(
   data: T[],
   variable: string,
   options: { newKey: K },
-): (any)[];
+): (T & { [P in K]: number })[];
 ```
 
 ### Parameters
@@ -430,11 +439,11 @@ objects using the default 'zScore' key name.
 ### Signature
 
 ```typescript
-function addZScore(
+function addZScore<T extends Record<string, unknown>>(
   data: T[],
   variable: string,
   options?: { newKey?: undefined },
-): (any)[];
+): (T & { zScore: number })[];
 ```
 
 ### Parameters
@@ -518,7 +527,9 @@ It is assumed that all arrays in the input object have the same length.
 ### Signature
 
 ```typescript
-function arraysToData(data: T): Array<any>;
+function arraysToData<T extends Record<string, unknown[]>>(
+  data: T,
+): Array<{ [K in keyof T]: T[K][number] }>;
 ```
 
 ### Parameters
@@ -628,8 +639,8 @@ async function askAI(
     parseJson?: boolean;
     verbose?: boolean;
     cache?: boolean;
-    test?: ((response: unknown) => any) | ((response: unknown) => any)[];
-    clean?: (response: string) => any;
+    test?: ((response: unknown) => void) | ((response: unknown) => void)[];
+    clean?: (response: string) => unknown;
     contextWindow?: number;
     thinkingBudget?: number;
   },
@@ -1016,7 +1027,9 @@ format to a columnar format.
 ### Signature
 
 ```typescript
-function dataToArrays(data: T[]): any;
+function dataToArrays<T extends Record<string, unknown>>(
+  data: T[],
+): { [K in keyof T]: T[K][] };
 ```
 
 ### Parameters
@@ -1748,7 +1761,7 @@ function geoTo3D(
   lat: number,
   radius: number,
   options?: { decimals?: number; toArray?: boolean },
-): { x: number; y: number; z: number } | any;
+): { x: number; y: number; z: number } | [number, number, number];
 ```
 
 ### Parameters
@@ -1808,12 +1821,12 @@ be added directly to the item object.
 ### Signature
 
 ```typescript
-function getClosest(
+function getClosest<T>(
   lon: number,
   lat: number,
   geoItems: T[],
-  getItemLon: (item: T) => any,
-  getItemLat: (item: T) => any,
+  getItemLon: (item: T) => number,
+  getItemLat: (item: T) => number,
   options?: { addDistance?: false; decimals?: number },
 ): T;
 ```
@@ -1906,14 +1919,14 @@ to the properties object.
 ### Signature
 
 ```typescript
-function getClosest(
+function getClosest<T extends { properties: unknown }>(
   lon: number,
   lat: number,
   geoItems: T[],
-  getItemLon: (item: T) => any,
-  getItemLat: (item: T) => any,
+  getItemLon: (item: T) => number,
+  getItemLat: (item: T) => number,
   options: { addDistance: true; decimals?: number },
-): any;
+): T & { properties: T["properties"] & { distance: number } };
 ```
 
 ### Parameters
@@ -1937,14 +1950,14 @@ directly to the item.
 ### Signature
 
 ```typescript
-function getClosest(
+function getClosest<T>(
   lon: number,
   lat: number,
   geoItems: T[],
-  getItemLon: (item: T) => any,
-  getItemLat: (item: T) => any,
+  getItemLon: (item: T) => number,
+  getItemLat: (item: T) => number,
   options: { addDistance: true; decimals?: number },
-): any;
+): T & { distance: number };
 ```
 
 ### Parameters
@@ -2217,15 +2230,7 @@ your needs.
 ### Signature
 
 ```typescript
-async function getEnvironmentCanadaRecords(
-  locations: T[],
-  variable:
-    | "DAILY MAXIMUM TEMPERATURE"
-    | "DAILY TOTAL PRECIPITATION"
-    | "DAILY TOTAL SNOWFALL",
-  dateRange: any,
-  options?: { delay?: number; verbose?: boolean },
-): Promise<(any)[]>;
+async function getEnvironmentCanadaRecords<T extends Record<string, unknown>>(locations: T[], variable: "DAILY MAXIMUM TEMPERATURE" | "DAILY TOTAL PRECIPITATION" | "DAILY TOTAL SNOWFALL", dateRange: [${[0m[36mnumber[0m}-${[0m[36mnumber[0m}-${[0m[36mnumber[0m}, ${[0m[36mnumber[0m}-${[0m[36mnumber[0m}-${[0m[36mnumber[0m}], options?: { delay?: number; verbose?: boolean }): Promise<(T & { recordMonth: number; recordDay: number; recordVariable: string; recordValue: number; recordYear: number; previousRecordValue: number; previousRecordYear: number; recordStationName: string; recordStationId: string; recordStationLat: number; recordStationLon: number; recordStationDistance: number; recordStationRecordBegin: string; recordStationRecordEnd: string | null })[]>;
 ```
 
 ### Parameters
@@ -2665,9 +2670,9 @@ standard deviation, which is then used in the sample size calculation.
 ### Signature
 
 ```typescript
-function getSampleSizeMean(
+function getSampleSizeMean<T extends Record<string, unknown>>(
   data: T[],
-  key: any,
+  key: keyof T,
   confidenceLevel: 90 | 95 | 99,
   marginOfError: number,
   options?: { populationSize?: number },
@@ -3302,13 +3307,13 @@ order, though the function does not enforce this.
 ### Signature
 
 ```typescript
-function logBarChart(
+function logBarChart<T extends Record<string, unknown>>(
   data: T[],
-  labels: any,
-  values: any,
+  labels: keyof T,
+  values: keyof T,
   options?: {
-    formatLabels?: (d: any) => any;
-    formatValues?: (d: any) => any;
+    formatLabels?: (d: T[labels]) => string;
+    formatValues?: (d: T[values]) => string;
     width?: number;
     title?: string;
     totalLabel?: string;
@@ -3397,14 +3402,14 @@ values for proper rendering, it does not enforce this.
 ### Signature
 
 ```typescript
-function logDotChart(
+function logDotChart<T extends Record<string, unknown>>(
   data: T[],
-  x: any,
-  y: any,
+  x: keyof T,
+  y: keyof T,
   options?: {
-    formatX?: (d: any) => any;
-    formatY?: (d: any) => any;
-    smallMultiples?: any;
+    formatX?: (d: T[x]) => string;
+    formatY?: (d: T[y]) => string;
+    smallMultiples?: keyof T;
     fixedScales?: boolean;
     smallMultiplesPerRow?: number;
     width?: number;
@@ -3512,14 +3517,14 @@ values.
 ### Signature
 
 ```typescript
-function logLineChart(
+function logLineChart<T extends Record<string, unknown>>(
   data: T[],
-  x: any,
-  y: any,
+  x: keyof T,
+  y: keyof T,
   options?: {
-    formatX?: (d: any) => any;
-    formatY?: (d: any) => any;
-    smallMultiples?: any;
+    formatX?: (d: T[x]) => string;
+    formatY?: (d: T[y]) => string;
+    smallMultiples?: keyof T;
     fixedScales?: boolean;
     smallMultiplesPerRow?: number;
     width?: number;
@@ -4105,11 +4110,11 @@ determine if a sample follows a particular theoretical distribution or pattern.
 ### Signature
 
 ```typescript
-function performChiSquaredGoodnessOfFitTest(
+function performChiSquaredGoodnessOfFitTest<T extends Record<string, unknown>>(
   data: T[],
-  categoryKey: any,
-  observedKey: any,
-  expectedKey: any,
+  categoryKey: keyof T,
+  observedKey: keyof T,
+  expectedKey: keyof T,
 ): {
   chiSquared: number;
   degreesOfFreedom: number;
@@ -4234,11 +4239,11 @@ independence.
 ### Signature
 
 ```typescript
-function performChiSquaredIndependenceTest(
+function performChiSquaredIndependenceTest<T extends Record<string, unknown>>(
   data: T[],
-  firstVariableKey: any,
-  secondVariableKey: any,
-  countKey: any,
+  firstVariableKey: keyof T,
+  secondVariableKey: keyof T,
+  countKey: keyof T,
 ): {
   chiSquared: number;
   degreesOfFreedom: number;
@@ -4358,10 +4363,10 @@ significantly different from zero. This is a test for **dependent means**
 ### Signature
 
 ```typescript
-function performPairedTTest(
+function performPairedTTest<T extends Record<string, unknown>>(
   pairedData: T[],
-  firstVariableKey: any,
-  secondVariableKey: any,
+  firstVariableKey: keyof T,
+  secondVariableKey: keyof T,
   options?: { tail?: "two-tailed" | "left-tailed" | "right-tailed" },
 ): {
   sampleSize: number;
@@ -4491,9 +4496,9 @@ means** (sample vs population), not related/paired samples.
 ### Signature
 
 ```typescript
-function performTTest(
+function performTTest<T extends Record<string, unknown>>(
   sampleData: T[],
-  variableKey: any,
+  variableKey: keyof T,
   hypothesizedMean: number,
   options?: { tail?: "two-tailed" | "left-tailed" | "right-tailed" },
 ): {
@@ -4622,7 +4627,11 @@ for **independent means** (unrelated groups), not paired/related samples.
 ### Signature
 
 ```typescript
-function performTwoSampleTTest(
+function performTwoSampleTTest<
+  T1 extends Record<string, unknown>,
+  T2 extends Record<string, unknown>,
+  K extends keyof T1 & keyof T2,
+>(
   group1Data: T1[],
   group2Data: T2[],
   variableKey: K,
@@ -4763,10 +4772,10 @@ comparison between two independent samples.
 ### Signature
 
 ```typescript
-function performZTest(
+function performZTest<T extends Record<string, unknown>>(
   populationData: T[],
   sampleData: T[],
-  variableKey: any,
+  variableKey: keyof T,
   options?: { tail?: "two-tailed" | "left-tailed" | "right-tailed" },
 ): {
   populationSize: number;
@@ -5283,7 +5292,7 @@ When saving as an SVG, only the SVG elements will be captured.
 ```typescript
 async function saveChart(
   data: Data,
-  chart: (data: Data) => any,
+  chart: (data: Data) => SVGSVGElement | HTMLElement,
   path: string,
   options?: { style?: string; dark?: boolean },
 ): Promise<void>;
@@ -5512,7 +5521,7 @@ async function toBucket(
   options?: {
     project?: string;
     bucket?: string;
-    metadata?: any;
+    metadata?: UploadOptions["metadata"];
     overwrite?: boolean;
     skip?: boolean;
   },
