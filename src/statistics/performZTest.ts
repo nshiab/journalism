@@ -79,10 +79,10 @@
  *
  * @category Statistics
  */
-export default function performZTest(
-  populationData: { [key: string]: unknown }[],
-  sampleData: { [key: string]: unknown }[],
-  variableKey: string,
+export default function performZTest<T extends Record<string, unknown>>(
+  populationData: T[],
+  sampleData: T[],
+  variableKey: keyof T,
   options: { tail?: "two-tailed" | "left-tailed" | "right-tailed" } = {},
 ): {
   populationSize: number;
@@ -97,7 +97,7 @@ export default function performZTest(
 } {
   // --- 1. Helper function to safely extract and validate numeric data ---
   const extractNumericValues = (
-    data: { [key: string]: unknown }[],
+    data: T[],
     sourceName: string,
   ): number[] => {
     return data.map((item, index) => {

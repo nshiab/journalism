@@ -81,10 +81,10 @@ const { studentt } = jstat;
  *
  * @category Statistics
  */
-export default function performPairedTTest(
-  pairedData: { [key: string]: unknown }[],
-  firstVariableKey: string,
-  secondVariableKey: string,
+export default function performPairedTTest<T extends Record<string, unknown>>(
+  pairedData: T[],
+  firstVariableKey: keyof T,
+  secondVariableKey: keyof T,
   options: {
     tail?: "two-tailed" | "left-tailed" | "right-tailed";
   } = {},
@@ -101,9 +101,9 @@ export default function performPairedTTest(
 } {
   // --- 1. Helper function to safely extract and validate numeric data ---
   const extractPairedNumericValues = (
-    data: { [key: string]: unknown }[],
-    key1: string,
-    key2: string,
+    data: T[],
+    key1: keyof T,
+    key2: keyof T,
   ): { first: number[]; second: number[] } => {
     const first: number[] = [];
     const second: number[] = [];
@@ -114,16 +114,16 @@ export default function performPairedTTest(
 
       if (typeof value1 !== "number" || !isFinite(value1)) {
         throw new Error(
-          `Invalid data at index ${index}. Expected a finite number for key "${key1}", but received: ${
-            JSON.stringify(value1)
-          }.`,
+          `Invalid data at index ${index}. Expected a finite number for key "${
+            String(key1)
+          }", but received: ${JSON.stringify(value1)}.`,
         );
       }
       if (typeof value2 !== "number" || !isFinite(value2)) {
         throw new Error(
-          `Invalid data at index ${index}. Expected a finite number for key "${key2}", but received: ${
-            JSON.stringify(value2)
-          }.`,
+          `Invalid data at index ${index}. Expected a finite number for key "${
+            String(key2)
+          }", but received: ${JSON.stringify(value2)}.`,
         );
       }
 

@@ -101,10 +101,14 @@ const { studentt } = jstat;
  *
  * @category Statistics
  */
-export default function performTwoSampleTTest(
-  group1Data: { [key: string]: unknown }[],
-  group2Data: { [key: string]: unknown }[],
-  variableKey: string,
+export default function performTwoSampleTTest<
+  T1 extends Record<string, unknown>,
+  T2 extends Record<string, unknown>,
+  K extends keyof T1 & keyof T2,
+>(
+  group1Data: T1[],
+  group2Data: T2[],
+  variableKey: K,
   options: {
     tail?: "two-tailed" | "left-tailed" | "right-tailed";
   } = {},
@@ -123,9 +127,9 @@ export default function performTwoSampleTTest(
   pValue: number;
 } {
   // --- 1. Helper function to safely extract and validate numeric data ---
-  const extractNumericValues = (
-    data: { [key: string]: unknown }[],
-    key: string,
+  const extractNumericValues = <T extends Record<string, unknown>>(
+    data: T[],
+    key: keyof T,
     groupName: string,
   ): number[] => {
     const values: number[] = [];
@@ -135,9 +139,9 @@ export default function performTwoSampleTTest(
 
       if (typeof value !== "number" || !isFinite(value)) {
         throw new Error(
-          `Invalid data in ${groupName} at index ${index}. Expected a finite number for key "${key}", but received: ${
-            JSON.stringify(value)
-          }.`,
+          `Invalid data in ${groupName} at index ${index}. Expected a finite number for key "${
+            String(key)
+          }", but received: ${JSON.stringify(value)}.`,
         );
       }
 

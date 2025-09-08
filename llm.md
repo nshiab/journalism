@@ -49,13 +49,7 @@ point:
 ### Signature
 
 ```typescript
-function addClusters(
-  data: Record<string, unknown>[],
-  minDistance: number,
-  minNeighbours: number,
-  distance: (a: Record<string, unknown>, b: Record<string, unknown>) => any,
-  options?: { reset?: boolean },
-): void;
+function addClusters(data: T[], minDistance: number, minNeighbours: number, distance: (a: T, b: T) => any, options?: { reset?: boolean }): asserts data is ([0m[38;5;12mT[0m & { [0m[35m[0m[0m[1mclusterId[0m[0m[35m[0m: [0m[36mstring[0m | [0m[36mnull[0m; [0m[35m[0m[0m[1mclusterType[0m[0m[35m[0m: [0m[32m"core"[0m | [0m[32m"border"[0m | [0m[32m"noise"[0m; })[];
 ```
 
 ### Parameters
@@ -139,9 +133,9 @@ inverted covariance matrix.
 ```typescript
 function addMahalanobisDistance(
   origin: Record<string, number>,
-  data: Record<string, unknown>[],
-  options?: { similarity?: boolean; matrix?: number[][] },
-): Record<string, unknown>[];
+  data: T[],
+  options: { similarity: true; matrix?: number[][] },
+): (any)[];
 ```
 
 ### Parameters
@@ -216,6 +210,32 @@ console.log(wines);
 //   { 'fixed acidity': 6.3, 'alcohol': 10.5, mahaDist: 2.079, similarity: 0 }
 // ]
 ```
+
+## addMahalanobisDistance
+
+Calculates the Mahalanobis distance for each object in an array relative to a
+specified origin point (without similarity scores).
+
+### Signature
+
+```typescript
+function addMahalanobisDistance(
+  origin: Record<string, number>,
+  data: T[],
+  options?: { similarity?: false; matrix?: number[][] },
+): (any)[];
+```
+
+### Parameters
+
+- **`origin`**: - An object defining the reference point for the distance
+  calculation.
+- **`data`**: - An array of objects to be analyzed.
+- **`options`**: - Optional parameters (similarity defaults to false).
+
+### Returns
+
+The input data array with mahaDist properties added to each object.
 
 ## addSheetRows
 
@@ -335,10 +355,10 @@ using the `newKey` option.
 
 ```typescript
 function addZScore(
-  data: Record<string, unknown>[],
+  data: T[],
   variable: string,
-  options?: { newKey?: string },
-): Record<string, unknown>[];
+  options: { newKey: K },
+): (any)[];
 ```
 
 ### Parameters
@@ -401,6 +421,34 @@ console.log(studentData);
 //   { student: 'Eve', grade: 62, gradeZScore: -1.83 }
 // ]
 ```
+
+## addZScore
+
+Calculates the Z-score for a specific numeric variable within an array of
+objects using the default 'zScore' key name.
+
+### Signature
+
+```typescript
+function addZScore(
+  data: T[],
+  variable: string,
+  options?: { newKey?: undefined },
+): (any)[];
+```
+
+### Parameters
+
+- **`data`**: - An array of objects. Each object should contain the variable for
+  which the Z-score is to be calculated.
+- **`variable`**: - The key (as a string) of the numeric variable for which the
+  Z-score will be computed.
+- **`options`**: - Optional settings (newKey defaults to undefined, using
+  'zScore').
+
+### Returns
+
+The input data array with zScore properties added to each object.
 
 ## adjustToInflation
 
@@ -470,9 +518,7 @@ It is assumed that all arrays in the input object have the same length.
 ### Signature
 
 ```typescript
-function arraysToData(
-  data: Record<string, unknown[]>,
-): Record<string, unknown>[];
+function arraysToData(data: T): Array<any>;
 ```
 
 ### Parameters
@@ -622,7 +668,7 @@ async function askAI(
 - **`options.returnJson`**: - If `true`, instructs the AI to return a JSON
   object. Defaults to `false`.
 - **`options.parseJson`**: - If `true`, automatically parses the AI's response
-  as JSON. Defaults to `true` if `returnJson` is `true`.
+  as JSON. Defaults to `true` if `returnJson` is `true`, otherwise `false`.
 - **`options.cache`**: - If `true`, caches the response locally in a
   `.journalism-cache` directory. Defaults to `false`.
 - **`options.verbose`**: - If `true`, enables detailed logging, including token
@@ -970,9 +1016,7 @@ format to a columnar format.
 ### Signature
 
 ```typescript
-function dataToArrays(
-  data: Record<string, unknown>[],
-): Record<string, unknown[]>;
+function dataToArrays(data: T[]): any;
 ```
 
 ### Parameters
@@ -1767,14 +1811,11 @@ be added directly to the item object.
 function getClosest(
   lon: number,
   lat: number,
-  geoItems: Array<unknown>,
-  getItemLon: (d: unknown) => any,
-  getItemLat: (d: unknown) => any,
-  options?: { addDistance?: boolean; decimals?: number },
-): {
-  properties?: { distance?: number | undefined } | undefined;
-  distance?: number | undefined;
-};
+  geoItems: T[],
+  getItemLon: (item: T) => any,
+  getItemLat: (item: T) => any,
+  options?: { addDistance?: false; decimals?: number },
+): T;
 ```
 
 ### Parameters
@@ -1856,6 +1897,68 @@ const closestPark = getClosest(
 console.log(closestPark);
 // Expected output: { type: "Feature", properties: { name: "Park B", distance: ... }, geometry: { ... } }
 ```
+
+## getClosest
+
+Finds the geographical item closest to a given reference point and adds distance
+to the properties object.
+
+### Signature
+
+```typescript
+function getClosest(
+  lon: number,
+  lat: number,
+  geoItems: T[],
+  getItemLon: (item: T) => any,
+  getItemLat: (item: T) => any,
+  options: { addDistance: true; decimals?: number },
+): any;
+```
+
+### Parameters
+
+- **`lon`**: - The longitude of the reference point.
+- **`lat`**: - The latitude of the reference point.
+- **`geoItems`**: - An array of geographical items with properties objects.
+- **`getItemLon`**: - A function that returns longitude from an item.
+- **`getItemLat`**: - A function that returns latitude from an item.
+- **`options`**: - Settings with addDistance: true for items with properties.
+
+### Returns
+
+The closest item with distance added to its properties object.
+
+## getClosest
+
+Finds the geographical item closest to a given reference point and adds distance
+directly to the item.
+
+### Signature
+
+```typescript
+function getClosest(
+  lon: number,
+  lat: number,
+  geoItems: T[],
+  getItemLon: (item: T) => any,
+  getItemLat: (item: T) => any,
+  options: { addDistance: true; decimals?: number },
+): any;
+```
+
+### Parameters
+
+- **`lon`**: - The longitude of the reference point.
+- **`lat`**: - The latitude of the reference point.
+- **`geoItems`**: - An array of geographical items without properties objects.
+- **`getItemLon`**: - A function that returns longitude from an item.
+- **`getItemLat`**: - A function that returns latitude from an item.
+- **`options`**: - Settings with addDistance: true for items without properties.
+
+### Returns
+
+The closest item with distance added directly to the item.
 
 ## getCovarianceMatrix
 
@@ -2115,14 +2218,14 @@ your needs.
 
 ```typescript
 async function getEnvironmentCanadaRecords(
-  locations: Record<string, unknown>[],
+  locations: T[],
   variable:
     | "DAILY MAXIMUM TEMPERATURE"
     | "DAILY TOTAL PRECIPITATION"
     | "DAILY TOTAL SNOWFALL",
   dateRange: any,
   options?: { delay?: number; verbose?: boolean },
-): Promise<Record<string, unknown>[]>;
+): Promise<(any)[]>;
 ```
 
 ### Parameters
@@ -2563,8 +2666,8 @@ standard deviation, which is then used in the sample size calculation.
 
 ```typescript
 function getSampleSizeMean(
-  data: Record<string, unknown>[],
-  key: string,
+  data: T[],
+  key: any,
   confidenceLevel: 90 | 95 | 99,
   marginOfError: number,
   options?: { populationSize?: number },
@@ -2813,15 +2916,10 @@ refer to the `node-google-spreadsheet` authentication guide:
 ### Signature
 
 ```typescript
-async function getSheetData(
+function getSheetData(
   sheetUrl: string,
-  options?: {
-    csv?: boolean;
-    skip?: number;
-    apiEmail?: string;
-    apiKey?: string;
-  },
-): Promise<Record<string, string>[] | string>;
+  options: { csv: true; skip?: number; apiEmail?: string; apiKey?: string },
+): Promise<string>;
 ```
 
 ### Parameters
@@ -2892,6 +2990,28 @@ const dataWithCustomCredentials = await getSheetData(sheetUrl, {
 });
 console.log(dataWithCustomCredentials);
 ```
+
+## getSheetData
+
+Retrieves data from a Google Sheet and returns it as an array of objects.
+
+### Signature
+
+```typescript
+function getSheetData(
+  sheetUrl: string,
+  options?: { csv?: false; skip?: number; apiEmail?: string; apiKey?: string },
+): Promise<Record<string, string>[]>;
+```
+
+### Parameters
+
+- **`sheetUrl`**: - The URL of the Google Sheet from which to retrieve data.
+- **`options`**: - Optional configuration options (csv defaults to false).
+
+### Returns
+
+A Promise that resolves to an array of objects representing the sheet data.
 
 ## getStatCanTable
 
@@ -3183,12 +3303,12 @@ order, though the function does not enforce this.
 
 ```typescript
 function logBarChart(
-  data: Record<string, unknown>[],
-  labels: string,
-  values: string,
+  data: T[],
+  labels: any,
+  values: any,
   options?: {
-    formatLabels?: (d: unknown) => any;
-    formatValues?: (d: number) => any;
+    formatLabels?: (d: any) => any;
+    formatValues?: (d: any) => any;
     width?: number;
     title?: string;
     totalLabel?: string;
@@ -3278,18 +3398,18 @@ values for proper rendering, it does not enforce this.
 
 ```typescript
 function logDotChart(
-  data: Record<string, unknown>[],
-  x: string,
-  y: string,
+  data: T[],
+  x: any,
+  y: any,
   options?: {
-    formatX?: (d: unknown) => any;
-    formatY?: (d: unknown) => any;
-    smallMultiples?: string;
+    formatX?: (d: any) => any;
+    formatY?: (d: any) => any;
+    smallMultiples?: any;
     fixedScales?: boolean;
     smallMultiplesPerRow?: number;
     width?: number;
     height?: number;
-    title?: number;
+    title?: string;
   },
 ): void;
 ```
@@ -3393,13 +3513,13 @@ values.
 
 ```typescript
 function logLineChart(
-  data: Record<string, unknown>[],
-  x: string,
-  y: string,
+  data: T[],
+  x: any,
+  y: any,
   options?: {
-    formatX?: (d: unknown) => any;
-    formatY?: (d: unknown) => any;
-    smallMultiples?: string;
+    formatX?: (d: any) => any;
+    formatY?: (d: any) => any;
+    smallMultiples?: any;
     fixedScales?: boolean;
     smallMultiplesPerRow?: number;
     width?: number;
@@ -3986,10 +4106,10 @@ determine if a sample follows a particular theoretical distribution or pattern.
 
 ```typescript
 function performChiSquaredGoodnessOfFitTest(
-  data: Record<string, unknown>[],
-  categoryKey: string,
-  observedKey: string,
-  expectedKey: string,
+  data: T[],
+  categoryKey: any,
+  observedKey: any,
+  expectedKey: any,
 ): {
   chiSquared: number;
   degreesOfFreedom: number;
@@ -4115,10 +4235,10 @@ independence.
 
 ```typescript
 function performChiSquaredIndependenceTest(
-  data: Record<string, unknown>[],
-  firstVariableKey: string,
-  secondVariableKey: string,
-  countKey: string,
+  data: T[],
+  firstVariableKey: any,
+  secondVariableKey: any,
+  countKey: any,
 ): {
   chiSquared: number;
   degreesOfFreedom: number;
@@ -4239,9 +4359,9 @@ significantly different from zero. This is a test for **dependent means**
 
 ```typescript
 function performPairedTTest(
-  pairedData: Record<string, unknown>[],
-  firstVariableKey: string,
-  secondVariableKey: string,
+  pairedData: T[],
+  firstVariableKey: any,
+  secondVariableKey: any,
   options?: { tail?: "two-tailed" | "left-tailed" | "right-tailed" },
 ): {
   sampleSize: number;
@@ -4372,8 +4492,8 @@ means** (sample vs population), not related/paired samples.
 
 ```typescript
 function performTTest(
-  sampleData: Record<string, unknown>[],
-  variableKey: string,
+  sampleData: T[],
+  variableKey: any,
   hypothesizedMean: number,
   options?: { tail?: "two-tailed" | "left-tailed" | "right-tailed" },
 ): {
@@ -4503,9 +4623,9 @@ for **independent means** (unrelated groups), not paired/related samples.
 
 ```typescript
 function performTwoSampleTTest(
-  group1Data: Record<string, unknown>[],
-  group2Data: Record<string, unknown>[],
-  variableKey: string,
+  group1Data: T1[],
+  group2Data: T2[],
+  variableKey: K,
   options?: { tail?: "two-tailed" | "left-tailed" | "right-tailed" },
 ): {
   group1SampleSize: number;
@@ -4644,9 +4764,9 @@ comparison between two independent samples.
 
 ```typescript
 function performZTest(
-  populationData: Record<string, unknown>[],
-  sampleData: Record<string, unknown>[],
-  variableKey: string,
+  populationData: T[],
+  sampleData: T[],
+  variableKey: any,
   options?: { tail?: "two-tailed" | "left-tailed" | "right-tailed" },
 ): {
   populationSize: number;

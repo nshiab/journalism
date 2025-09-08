@@ -103,11 +103,13 @@ const { chisquare } = jstat;
  *
  * @category Statistics
  */
-export default function performChiSquaredGoodnessOfFitTest(
-  data: { [key: string]: unknown }[],
-  categoryKey: string,
-  observedKey: string,
-  expectedKey: string,
+export default function performChiSquaredGoodnessOfFitTest<
+  T extends Record<string, unknown>,
+>(
+  data: T[],
+  categoryKey: keyof T,
+  observedKey: keyof T,
+  expectedKey: keyof T,
 ): {
   chiSquared: number;
   degreesOfFreedom: number;
@@ -156,9 +158,21 @@ export default function performChiSquaredGoodnessOfFitTest(
   const expectedFreqs: { [category: string]: number } = {};
 
   data.forEach((item, index) => {
-    const category = String(extractValue(item, categoryKey, index, "string"));
-    const observed = extractValue(item, observedKey, index, "number") as number;
-    const expected = extractValue(item, expectedKey, index, "number") as number;
+    const category = String(
+      extractValue(item, String(categoryKey), index, "string"),
+    );
+    const observed = extractValue(
+      item,
+      String(observedKey),
+      index,
+      "number",
+    ) as number;
+    const expected = extractValue(
+      item,
+      String(expectedKey),
+      index,
+      "number",
+    ) as number;
 
     if (!observedFreqs[category]) {
       observedFreqs[category] = 0;

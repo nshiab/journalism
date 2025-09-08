@@ -46,13 +46,13 @@ import makeBars from "./helpers/makeBars.ts";
  * @returns {void}
  * @category Dataviz
  */
-export default function logBarChart(
-  data: { [key: string]: unknown }[],
-  labels: string,
-  values: string,
+export default function logBarChart<T extends Record<string, unknown>>(
+  data: T[],
+  labels: keyof T,
+  values: keyof T,
   options: {
-    formatLabels?: (d: unknown) => string;
-    formatValues?: (d: number) => string;
+    formatLabels?: (d: T[typeof labels]) => string;
+    formatValues?: (d: T[typeof values]) => string;
     width?: number;
     title?: string;
     totalLabel?: string;
@@ -62,26 +62,26 @@ export default function logBarChart(
   if (options.title) {
     console.log(`\n${options.title}`);
   } else {
-    console.log(`\nBar chart of "${values}" per "${labels}":`);
+    console.log(`\nBar chart of "${String(values)}" per "${String(labels)}":`);
   }
 
   const formatLabels = options.formatLabels ??
-    function (d) {
+    function (d: T[typeof labels]) {
       return String(d);
     };
   const formatValues = options.formatValues ??
-    function (d) {
-      return formatNumber(d);
+    function (d: T[typeof values]) {
+      return formatNumber(d as number);
     };
   const width = options.width ?? 40;
 
   const chartData = makeBars(
     data,
     "\x1b[38;5;55m", // Darker purple color
-    labels,
-    values,
-    formatLabels,
-    formatValues,
+    String(labels),
+    String(values),
+    (d: unknown) => formatLabels(d as T[typeof labels]),
+    (d: number) => formatValues(d as T[typeof values]),
     width,
     options.compact ?? false,
     options.totalLabel,

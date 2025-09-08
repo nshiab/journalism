@@ -68,30 +68,43 @@ import prepChart from "./helpers/prepChart.ts";
  * @returns {void}
  * @category Dataviz
  */
-export default function logDotChart(
-  data: { [key: string]: unknown }[],
-  x: string,
-  y: string,
+export default function logDotChart<T extends Record<string, unknown>>(
+  data: T[],
+  x: keyof T,
+  y: keyof T,
   options: {
-    formatX?: (d: unknown) => string;
-    formatY?: (d: unknown) => string;
-    smallMultiples?: string;
+    formatX?: (d: T[typeof x]) => string;
+    formatY?: (d: T[typeof y]) => string;
+    smallMultiples?: keyof T;
     fixedScales?: boolean;
     smallMultiplesPerRow?: number;
     width?: number;
     height?: number;
-    title?: number;
+    title?: string;
   } = {},
 ): void {
   if (options.title) {
     console.log(`\n${options.title}`);
   } else {
     console.log(
-      `\nDot chart of "${y}" over "${x}"${
-        options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""
+      `\nDot chart of "${String(y)}" over "${String(x)}"${
+        options.smallMultiples
+          ? `, for each "${String(options.smallMultiples)}"`
+          : ""
       }:`,
     );
   }
 
-  prepChart("dot", data, x, y, addDots, options);
+  prepChart("dot", data, String(x), String(y), addDots, {
+    ...options,
+    formatX: options.formatX
+      ? (d: unknown) => options.formatX!(d as T[typeof x])
+      : undefined,
+    formatY: options.formatY
+      ? (d: unknown) => options.formatY!(d as T[typeof y])
+      : undefined,
+    smallMultiples: options.smallMultiples
+      ? String(options.smallMultiples)
+      : undefined,
+  });
 }

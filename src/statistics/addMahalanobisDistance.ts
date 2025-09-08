@@ -73,7 +73,14 @@ export default function addMahalanobisDistance<
   similarity: number;
 })[];
 
-// Function overload: when similarity is false or undefined, return type includes only mahaDist
+/**
+ * Calculates the Mahalanobis distance for each object in an array relative to a specified origin point (without similarity scores).
+ *
+ * @param origin - An object defining the reference point for the distance calculation.
+ * @param data - An array of objects to be analyzed.
+ * @param options - Optional parameters (similarity defaults to false).
+ * @returns The input data array with mahaDist properties added to each object.
+ */
 export default function addMahalanobisDistance<
   T extends Record<string, unknown>,
 >(

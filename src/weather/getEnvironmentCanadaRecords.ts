@@ -107,20 +107,24 @@ type Location = {
  *
  * @category Weather
  */
-export default async function getEnvironmentCanadaRecords(
-  locations: { lat: number; lon: number; [key: string]: unknown }[],
+export default async function getEnvironmentCanadaRecords<
+  T extends { lat: number; lon: number; [key: string]: unknown },
+>(
+  locations: T[],
   variable:
     | "DAILY MAXIMUM TEMPERATURE"
     | "DAILY TOTAL PRECIPITATION"
     | "DAILY TOTAL SNOWFALL",
-  dateRange: [string, string],
+  dateRange: [
+    `${number}-${number}-${number}`,
+    `${number}-${number}-${number}`,
+  ],
   options: {
     delay?: number;
     verbose?: boolean;
   } = {},
 ): Promise<
-  {
-    [key: string]: unknown;
+  (T & {
     recordMonth: number;
     recordDay: number;
     recordVariable: string;
@@ -135,7 +139,7 @@ export default async function getEnvironmentCanadaRecords(
     recordStationDistance: number;
     recordStationRecordBegin: string;
     recordStationRecordEnd: string | null;
-  }[]
+  })[]
 > {
   const delay = options.delay ?? 100; // Default delay in milliseconds
   const startDate = new Date(Date.UTC(
@@ -166,7 +170,7 @@ export default async function getEnvironmentCanadaRecords(
     lon: number;
     name: string;
   }[] = [];
-  const returnedData: {
+  const returnedData: (T & {
     recordMonth: number;
     recordDay: number;
     recordVariable: string;
@@ -181,8 +185,7 @@ export default async function getEnvironmentCanadaRecords(
     recordStationDistance: number;
     recordStationRecordBegin: string;
     recordStationRecordEnd: string | null;
-    [key: string]: unknown;
-  }[] = [];
+  })[] = [];
   for (const station of allStationsWithVariable) {
     if (
       !stationsIdsAndCoordinates.some(
@@ -276,23 +279,40 @@ export default async function getEnvironmentCanadaRecords(
         recordStationRecordBegin = record.properties.RECORD_BEGIN;
         recordStationRecordEnd = record.properties.RECORD_END;
       }
-      returnedData.push({
-        ...location,
-        recordMonth: month,
-        recordDay: day,
-        recordVariable: variable,
-        recordValue,
-        recordYear,
-        previousRecordValue,
-        previousRecordYear,
-        recordStationName: record.properties.VIRTUAL_STATION_NAME_E,
-        recordStationId: record.properties.VIRTUAL_CLIMATE_ID,
-        recordStationLat: closestStation.lat,
-        recordStationLon: closestStation.lon,
-        recordStationDistance: closestStation.distance,
-        recordStationRecordBegin,
-        recordStationRecordEnd,
-      });
+      returnedData.push(
+        {
+          ...location,
+          recordMonth: month,
+          recordDay: day,
+          recordVariable: variable,
+          recordValue,
+          recordYear,
+          previousRecordValue,
+          previousRecordYear,
+          recordStationName: record.properties.VIRTUAL_STATION_NAME_E,
+          recordStationId: record.properties.VIRTUAL_CLIMATE_ID,
+          recordStationLat: closestStation.lat,
+          recordStationLon: closestStation.lon,
+          recordStationDistance: closestStation.distance,
+          recordStationRecordBegin,
+          recordStationRecordEnd,
+        } as T & {
+          recordMonth: number;
+          recordDay: number;
+          recordVariable: string;
+          recordValue: number;
+          recordYear: number;
+          previousRecordValue: number;
+          previousRecordYear: number;
+          recordStationName: string;
+          recordStationId: string;
+          recordStationLat: number;
+          recordStationLon: number;
+          recordStationDistance: number;
+          recordStationRecordBegin: string;
+          recordStationRecordEnd: string | null;
+        },
+      );
       await sleep(delay);
     }
   }
