@@ -9,7 +9,7 @@
     "jsr:@std/internal@^1.0.9": "1.0.10",
     "jsr:@std/path@^1.1.1": "1.1.1",
     "npm:@google-cloud/storage@^7.17.0": "7.17.0",
-    "npm:@google/genai@^1.16.0": "1.16.0",
+    "npm:@google/genai@^1.17.0": "1.17.0",
     "npm:@observablehq/plot@~0.6.17": "0.6.17",
     "npm:@types/d3-geo@3": "3.1.0",
     "npm:@types/d3-geo@^3.1.0": "3.1.0",
@@ -101,8 +101,8 @@
         "uuid@8.3.2"
       ]
     },
-    "@google/genai@1.16.0": {
-      "integrity": "sha512-hdTYu39QgDFxv+FB6BK2zi4UIJGWhx2iPc0pHQ0C5Q/RCi+m+4gsryIzTGO+riqWcUA8/WGYp6hpqckdOBNysw==",
+    "@google/genai@1.17.0": {
+      "integrity": "sha512-r/OZWN9D8WvYrte3bcKPoLODrZ+2TjfxHm5OOyVHUbdFYIp1C4yJaXX4+sCS8I/+CbN9PxLjU5zm1cgmS7qz+A==",
       "dependencies": [
         "google-auth-library@9.15.1",
         "ws"
@@ -906,8 +906,8 @@
         "safe-buffer"
       ]
     },
-    "ky@1.9.1": {
-      "integrity": "sha512-WGzpBn57klhxsqRTEABAqF4tqTtqCuxoTIv9m6nIZtMMFTVcrHp7bRDWblzFIfqkb47+OhTztOgHn6A4xItmqg=="
+    "ky@1.10.0": {
+      "integrity": "sha512-YRPCzHEWZffbfvmRrfwa+5nwBHwZuYiTrfDX0wuhGBPV0pA/zCqcOq93MDssON/baIkpYbvehIX5aLpMxrRhaA=="
     },
     "lerc@3.0.0": {
       "integrity": "sha512-Rm4J/WaHhRa93nCN2mwWDZFoRVF18G1f47C+kvQWyHGEZxFpTUi73p7lMVSAndyxGt6lJ2/CFbOcf9ra5p8aww=="
@@ -1153,7 +1153,7 @@
       "jsr:@std/assert@^1.0.14",
       "jsr:@std/dotenv@~0.225.5",
       "npm:@google-cloud/storage@^7.17.0",
-      "npm:@google/genai@^1.16.0",
+      "npm:@google/genai@^1.17.0",
       "npm:@observablehq/plot@~0.6.17",
       "npm:@types/d3-geo@^3.1.0",
       "npm:adm-zip@~0.5.16",
