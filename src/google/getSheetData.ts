@@ -70,7 +70,13 @@ export default function getSheetData(
   },
 ): Promise<string>;
 
-// When csv is false or undefined, return an array of objects
+/**
+ * Retrieves data from a Google Sheet and returns it as an array of objects.
+ *
+ * @param sheetUrl - The URL of the Google Sheet from which to retrieve data.
+ * @param options - Optional configuration options (csv defaults to false).
+ * @returns A Promise that resolves to an array of objects representing the sheet data.
+ */
 export default function getSheetData(
   sheetUrl: string,
   options?: {

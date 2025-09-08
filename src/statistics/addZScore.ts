@@ -67,7 +67,14 @@ export default function addZScore<
   }
 )[];
 
-// Function overload: when no custom key is provided, defaults to 'zScore'
+/**
+ * Calculates the Z-score for a specific numeric variable within an array of objects using the default 'zScore' key name.
+ *
+ * @param data - An array of objects. Each object should contain the variable for which the Z-score is to be calculated.
+ * @param variable - The key (as a string) of the numeric variable for which the Z-score will be computed.
+ * @param options - Optional settings (newKey defaults to undefined, using 'zScore').
+ * @returns The input data array with zScore properties added to each object.
+ */
 export default function addZScore<T extends Record<string, unknown>>(
   data: T[],
   variable: string,

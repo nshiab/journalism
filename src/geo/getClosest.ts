@@ -81,7 +81,17 @@ export default function getClosest<T>(
   },
 ): T;
 
-// When addDistance is true and item has properties, distance goes in properties
+/**
+ * Finds the geographical item closest to a given reference point and adds distance to the properties object.
+ *
+ * @param lon - The longitude of the reference point.
+ * @param lat - The latitude of the reference point.
+ * @param geoItems - An array of geographical items with properties objects.
+ * @param getItemLon - A function that returns longitude from an item.
+ * @param getItemLat - A function that returns latitude from an item.
+ * @param options - Settings with addDistance: true for items with properties.
+ * @returns The closest item with distance added to its properties object.
+ */
 export default function getClosest<T extends { properties: unknown }>(
   lon: number,
   lat: number,
@@ -94,7 +104,17 @@ export default function getClosest<T extends { properties: unknown }>(
   },
 ): T & { properties: T["properties"] & { distance: number } };
 
-// When addDistance is true and item has no properties, distance goes at root level
+/**
+ * Finds the geographical item closest to a given reference point and adds distance directly to the item.
+ *
+ * @param lon - The longitude of the reference point.
+ * @param lat - The latitude of the reference point.
+ * @param geoItems - An array of geographical items without properties objects.
+ * @param getItemLon - A function that returns longitude from an item.
+ * @param getItemLat - A function that returns latitude from an item.
+ * @param options - Settings with addDistance: true for items without properties.
+ * @returns The closest item with distance added directly to the item.
+ */
 export default function getClosest<T>(
   lon: number,
   lat: number,
