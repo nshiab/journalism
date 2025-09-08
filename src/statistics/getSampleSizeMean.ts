@@ -71,9 +71,9 @@
  *
  * @category Statistics
  */
-export default function getSampleSizeMean(
-  data: { [key: string]: unknown }[],
-  key: string,
+export default function getSampleSizeMean<T extends Record<string, unknown>>(
+  data: T[],
+  key: keyof T,
   confidenceLevel: 90 | 95 | 99,
   marginOfError: number,
   options?: { populationSize?: number },
@@ -103,7 +103,9 @@ export default function getSampleSizeMean(
     const value = d[key];
     if (typeof value !== "number") {
       throw new Error(
-        `Invalid value for key "${key}": ${value}. Values must be numbers.`,
+        `Invalid value for key "${
+          String(key)
+        }": ${value}. Values must be numbers.`,
       );
     }
     return value;

@@ -7,9 +7,9 @@ const { studentt } = jstat;
 /**
  * Safely extracts and validates numeric values from an array of objects
  */
-const extractNumericValues = (
-  data: { [key: string]: unknown }[],
-  variableKey: string,
+const extractNumericValues = <T extends Record<string, unknown>>(
+  data: T[],
+  variableKey: keyof T,
 ): number[] => {
   return data.map((item, index) => {
     const value = item[variableKey];
@@ -138,9 +138,9 @@ const calculateMeanAndVariance = (
  *
  * @category Statistics
  */
-export default function performTTest(
-  sampleData: { [key: string]: unknown }[],
-  variableKey: string,
+export default function performTTest<T extends Record<string, unknown>>(
+  sampleData: T[],
+  variableKey: keyof T,
   hypothesizedMean: number,
   options: { tail?: "two-tailed" | "left-tailed" | "right-tailed" } = {},
 ): {

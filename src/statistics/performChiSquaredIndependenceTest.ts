@@ -81,11 +81,13 @@ const { chisquare } = jstat;
  *
  * @category Statistics
  */
-export default function performChiSquaredIndependenceTest(
-  data: { [key: string]: unknown }[],
-  firstVariableKey: string,
-  secondVariableKey: string,
-  countKey: string,
+export default function performChiSquaredIndependenceTest<
+  T extends Record<string, unknown>,
+>(
+  data: T[],
+  firstVariableKey: keyof T,
+  secondVariableKey: keyof T,
+  countKey: keyof T,
 ): {
   chiSquared: number;
   degreesOfFreedom: number;
@@ -136,12 +138,17 @@ export default function performChiSquaredIndependenceTest(
 
   data.forEach((item, index) => {
     const rowValue = String(
-      extractValue(item, firstVariableKey, index, "string"),
+      extractValue(item, String(firstVariableKey), index, "string"),
     );
     const colValue = String(
-      extractValue(item, secondVariableKey, index, "string"),
+      extractValue(item, String(secondVariableKey), index, "string"),
     );
-    const count = extractValue(item, countKey, index, "number") as number;
+    const count = extractValue(
+      item,
+      String(countKey),
+      index,
+      "number",
+    ) as number;
 
     rowCategories.add(rowValue);
     colCategories.add(colValue);

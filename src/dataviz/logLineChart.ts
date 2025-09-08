@@ -67,14 +67,14 @@ import prepChart from "./helpers/prepChart.ts";
  * @returns {void}
  * @category Dataviz
  */
-export default function logLineChart(
-  data: { [key: string]: unknown }[],
-  x: string,
-  y: string,
+export default function logLineChart<T extends Record<string, unknown>>(
+  data: T[],
+  x: keyof T,
+  y: keyof T,
   options: {
-    formatX?: (d: unknown) => string;
-    formatY?: (d: unknown) => string;
-    smallMultiples?: string;
+    formatX?: (d: T[typeof x]) => string;
+    formatY?: (d: T[typeof y]) => string;
+    smallMultiples?: keyof T;
     fixedScales?: boolean;
     smallMultiplesPerRow?: number;
     width?: number;
@@ -86,11 +86,24 @@ export default function logLineChart(
     console.log(`\n${options.title}`);
   } else {
     console.log(
-      `\nLine chart of "${y}" over "${x}"${
-        options.smallMultiples ? `, for each "${options.smallMultiples}"` : ""
+      `\nLine chart of "${String(y)}" over "${String(x)}"${
+        options.smallMultiples
+          ? `, for each "${String(options.smallMultiples)}"`
+          : ""
       }:`,
     );
   }
 
-  prepChart("line", data, x, y, addLines, options);
+  prepChart("line", data, String(x), String(y), addLines, {
+    ...options,
+    formatX: options.formatX
+      ? (d: unknown) => options.formatX!(d as T[typeof x])
+      : undefined,
+    formatY: options.formatY
+      ? (d: unknown) => options.formatY!(d as T[typeof y])
+      : undefined,
+    smallMultiples: options.smallMultiples
+      ? String(options.smallMultiples)
+      : undefined,
+  });
 }
