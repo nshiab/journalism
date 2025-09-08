@@ -1,28 +1,6 @@
 import { assertEquals } from "jsr:@std/assert";
 import getClosest from "../../src/geo/getClosest.ts";
 
-type item = {
-  name: string;
-  lon: number;
-  lat: number;
-};
-
-type itemDistance = {
-  name: string;
-  lon: number;
-  lat: number;
-  distance: number;
-};
-
-type itemDistanceProperties = {
-  name: string;
-  lon: number;
-  lat: number;
-  properties: {
-    distance: number;
-  };
-};
-
 const geoItems = [
   { name: "Montreal", lon: -73.66, lat: 45.51 },
   { name: "Toronto", lon: -79.43, lat: 43.66 },
@@ -34,9 +12,9 @@ Deno.test("should return the closest city from Ottawa", () => {
     ottawa.lon,
     ottawa.lat,
     geoItems,
-    (d) => (d as item).lon,
-    (d) => (d as item).lat,
-  ) as item;
+    (d) => d.lon,
+    (d) => d.lat,
+  );
   assertEquals(closest, {
     name: "Montreal",
     lon: -73.66,
@@ -48,10 +26,10 @@ Deno.test("should return the closest city from Ottawa with the distance in km in
     ottawa.lon,
     ottawa.lat,
     geoItems,
-    (d) => (d as item).lon,
-    (d) => (d as item).lat,
+    (d) => d.lon,
+    (d) => d.lat,
     { addDistance: true },
-  ) as itemDistance;
+  );
   assertEquals(closest, {
     name: "Montreal",
     lon: -73.66,
@@ -64,10 +42,10 @@ Deno.test("should return the closest city from Ottawa with the rounded distance 
     ottawa.lon,
     ottawa.lat,
     geoItems,
-    (d) => (d as item).lon,
-    (d) => (d as item).lat,
+    (d) => d.lon,
+    (d) => d.lat,
     { addDistance: true, decimals: 0 },
-  ) as itemDistance;
+  );
   assertEquals(closest, {
     name: "Montreal",
     lon: -73.66,
@@ -80,10 +58,10 @@ Deno.test("should return the closest city from Ottawa with the distance in km wi
     ottawa.lon,
     ottawa.lat,
     geoItems,
-    (d) => (d as item).lon,
-    (d) => (d as item).lat,
+    (d) => d.lon,
+    (d) => d.lat,
     { addDistance: true, decimals: 3 },
-  ) as itemDistance;
+  );
   assertEquals(closest, {
     name: "Montreal",
     lon: -73.66,
@@ -101,10 +79,10 @@ Deno.test("should return the closest city from Ottawa with the distance in km wi
     ottawa.lon,
     ottawa.lat,
     geoItemsWithProperties,
-    (d) => (d as item).lon,
-    (d) => (d as item).lat,
+    (d) => d.lon,
+    (d) => d.lat,
     { addDistance: true, decimals: 3 },
-  ) as itemDistanceProperties;
+  );
   assertEquals(closest, {
     name: "Montreal",
     lon: -73.66,

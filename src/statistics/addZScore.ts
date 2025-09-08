@@ -52,11 +52,39 @@
  * @category Statistics
  */
 
-export default function addZScore(
-  data: Record<string, unknown>[],
+// Function overload: when a custom newKey is provided
+export default function addZScore<
+  T extends Record<string, unknown>,
+  K extends string,
+>(
+  data: T[],
   variable: string,
-  options: { newKey?: string } = {},
-): Record<string, unknown>[] {
+  options: { newKey: K },
+): (
+  & T
+  & {
+    [P in K]: number;
+  }
+)[];
+
+// Function overload: when no custom key is provided, defaults to 'zScore'
+export default function addZScore<T extends Record<string, unknown>>(
+  data: T[],
+  variable: string,
+  options?: { newKey?: undefined },
+): (T & {
+  zScore: number;
+})[];
+
+// Implementation
+export default function addZScore<
+  T extends Record<string, unknown>,
+  K extends string = "zScore",
+>(
+  data: T[],
+  variable: string,
+  options: { newKey?: K } = {},
+): (T & { [P in K]: number })[] {
   // Average
   let sum = 0;
   for (let i = 0; i < data.length; i++) {
@@ -76,10 +104,11 @@ export default function addZScore(
   const stdDev = Math.sqrt(sqdDistFromMean / data.length);
 
   // Z-Score
-  const newKey = typeof options.newKey === "string" ? options.newKey : "zScore";
+  const newKey = (options.newKey ?? "zScore") as K;
   for (let i = 0; i < data.length; i++) {
-    data[i][newKey] = ((data[i][variable] as number) - mean) / stdDev; // we checked the type above
+    (data[i] as Record<string, unknown>)[newKey] =
+      ((data[i][variable] as number) - mean) / stdDev; // we checked the type above
   }
 
-  return data;
+  return data as (T & { [P in K]: number })[];
 }

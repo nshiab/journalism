@@ -18,7 +18,7 @@ Deno.test("should add the Mahalanobis distance with two variables (example from 
   const origin = { "fixed acidity": 7.2, alcohol: 11.3 };
 
   const dataWithDist = addMahalanobisDistance(origin, data).sort(
-    (a, b) => (a.mahaDist as number) - (b.mahaDist as number),
+    (a, b) => a.mahaDist - b.mahaDist,
   );
 
   assertEquals(dataWithDist, [
@@ -50,7 +50,7 @@ Deno.test("should add the Mahalanobis distance and the similarity with two varia
 
   const dataWithDist = addMahalanobisDistance(origin, data, {
     similarity: true,
-  }).sort((a, b) => (a.mahaDist as number) - (b.mahaDist as number));
+  }).sort((a, b) => a.mahaDist - b.mahaDist);
 
   assertEquals(dataWithDist, [
     { "fixed acidity": 7.2, alcohol: 11.3, mahaDist: 0, similarity: 1 },
@@ -98,7 +98,7 @@ Deno.test("should add the Mahalanobis distance with a precomputed matrix with tw
   const dataWithDist = addMahalanobisDistance(origin, data, {
     similarity: true,
     matrix,
-  }).sort((a, b) => (a.mahaDist as number) - (b.mahaDist as number));
+  }).sort((a, b) => a.mahaDist - b.mahaDist);
 
   assertEquals(dataWithDist, [
     { "fixed acidity": 7.2, alcohol: 11.3, mahaDist: 0, similarity: 1 },
@@ -139,7 +139,7 @@ Deno.test("should add the Mahalanobis distance with two variables", () => {
 
   assertEquals(
     winesTwoVariables
-      .sort((a, b) => (a.mahaDist as number) - (b.mahaDist as number))
+      .sort((a, b) => a.mahaDist - b.mahaDist)
       .slice(0, 20),
     [
       { "fixed acidity": 7.2, alcohol: 11.3, mahaDist: 0 },
@@ -233,7 +233,7 @@ Deno.test("should add the Mahalanobis distance with three variables", () => {
 
   assertEquals(
     winesThreeVariables
-      .sort((a, b) => (a.mahaDist as number) - (b.mahaDist as number))
+      .sort((a, b) => a.mahaDist - b.mahaDist)
       .slice(0, 20),
     [
       {
@@ -377,7 +377,7 @@ Deno.test("should add the Mahalanobis distance with four variables", () => {
 
   assertEquals(
     winesFourVariables
-      .sort((a, b) => (a.mahaDist as number) - (b.mahaDist as number))
+      .sort((a, b) => a.mahaDist - b.mahaDist)
       .slice(0, 20),
     [
       {

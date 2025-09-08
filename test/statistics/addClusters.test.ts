@@ -8,10 +8,10 @@ import euclideanDistance from "../../src/statistics/euclidianDistance.ts";
 Deno.test("should add clusterId and clusterType to each point", () => {
   addClusters(dataForClusters, 0.3, 10, (a, b) =>
     euclideanDistance(
-      a.x as number,
-      a.y as number,
-      b.x as number,
-      b.y as number,
+      a.x,
+      a.y,
+      b.x,
+      b.y,
     ));
 
   const dataWithClusters = dataForClusters as {

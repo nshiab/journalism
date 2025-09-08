@@ -68,24 +68,57 @@ import distance from "./distance.ts";
  * @category Geo
  */
 
-export default function getClosest(
+// When addDistance is false or undefined, return the original type
+export default function getClosest<T>(
   lon: number,
   lat: number,
-  geoItems: Array<unknown>,
-  getItemLon: (d: unknown) => number,
-  getItemLat: (d: unknown) => number,
+  geoItems: T[],
+  getItemLon: (item: T) => number,
+  getItemLat: (item: T) => number,
+  options?: {
+    addDistance?: false;
+    decimals?: number;
+  },
+): T;
+
+// When addDistance is true and item has properties, distance goes in properties
+export default function getClosest<T extends { properties: unknown }>(
+  lon: number,
+  lat: number,
+  geoItems: T[],
+  getItemLon: (item: T) => number,
+  getItemLat: (item: T) => number,
+  options: {
+    addDistance: true;
+    decimals?: number;
+  },
+): T & { properties: T["properties"] & { distance: number } };
+
+// When addDistance is true and item has no properties, distance goes at root level
+export default function getClosest<T>(
+  lon: number,
+  lat: number,
+  geoItems: T[],
+  getItemLon: (item: T) => number,
+  getItemLat: (item: T) => number,
+  options: {
+    addDistance: true;
+    decimals?: number;
+  },
+): T & { distance: number };
+
+// Implementation signature (most general)
+export default function getClosest<T>(
+  lon: number,
+  lat: number,
+  geoItems: T[],
+  getItemLon: (item: T) => number,
+  getItemLat: (item: T) => number,
   options: {
     addDistance?: boolean;
     decimals?: number;
   } = {},
-): {
-  properties?:
-    | {
-      distance?: number | undefined;
-    }
-    | undefined;
-  distance?: number | undefined;
-} {
+): T | (T & { distance: number; properties?: unknown }) {
   const distances = [];
 
   for (let i = 0; i < geoItems.length; i++) {
@@ -96,17 +129,27 @@ export default function getClosest(
   }
 
   const distanceMinIndex = minIndex(distances);
-  const closest = geoItems[distanceMinIndex] as {
-    properties?: { distance?: number };
-    distance?: number;
-  };
+  const closest = geoItems[distanceMinIndex];
 
   if (options.addDistance) {
-    if (typeof closest.properties === "object") {
-      closest.properties.distance = distances[distanceMinIndex];
-    } else {
-      closest.distance = distances[distanceMinIndex];
+    if (typeof closest !== "object" || closest === null) {
+      throw new Error("Cannot add distance property to non-object item");
     }
+
+    const result = { ...closest } as T & { distance?: number };
+
+    if (
+      "properties" in result && typeof result.properties === "object" &&
+      result.properties !== null
+    ) {
+      result.properties = {
+        ...result.properties,
+        distance: distances[distanceMinIndex],
+      };
+    } else {
+      result.distance = distances[distanceMinIndex];
+    }
+    return result as T & { distance: number; properties?: unknown };
   }
 
   return closest;

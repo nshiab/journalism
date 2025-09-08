@@ -9,13 +9,10 @@ Deno.test("should compute the zScore", () => {
     { grade: 2 },
     { grade: 6 },
   ];
-  addZScore(data, "grade");
+  const dataWithZScore = addZScore(data, "grade");
 
   assertEquals(
-    data as {
-      grade: number;
-      zScore: number;
-    }[],
+    dataWithZScore,
     [
       { grade: 1, zScore: -1.3155870289605438 },
       { grade: 4, zScore: 0 },
@@ -33,13 +30,10 @@ Deno.test("should compute the zScore and add a specific key", () => {
     { grade: 2 },
     { grade: 6 },
   ];
-  addZScore(data, "grade", { newKey: "zScoreGrade" });
+  const dataWithZScore = addZScore(data, "grade", { newKey: "zScoreGrade" });
 
   assertEquals(
-    data as {
-      grade: number;
-      zScoreGrade: number;
-    }[],
+    dataWithZScore,
     [
       { grade: 1, zScoreGrade: -1.3155870289605438 },
       { grade: 4, zScoreGrade: 0 },
@@ -70,10 +64,10 @@ Deno.test("should compute the Z-Score and return the same values as SDA", () => 
   ];
   const dataWithScore = addZScore(data, "age");
   dataWithScore.sort(
-    (a, b) => (a.zScore as number) - (b.zScore as number),
+    (a, b) => a.zScore - b.zScore,
   );
 
-  assertEquals(data as { name: "string"; age: number; zScore: number }[], [
+  assertEquals(dataWithScore, [
     { name: "Evangeline", age: 21, zScore: -1.2869460097256922 },
     { name: "Amelia", age: 29, zScore: -0.7149700054031624 },
     { name: "Marie", age: 30, zScore: -0.6434730048628461 },

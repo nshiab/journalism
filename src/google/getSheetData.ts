@@ -58,6 +58,30 @@ import logToSheet from "./helpers/logToSheet.ts";
  * ```
  * @category Google
  */
+
+// When csv is true, return a CSV string
+export default function getSheetData(
+  sheetUrl: string,
+  options: {
+    csv: true;
+    skip?: number;
+    apiEmail?: string;
+    apiKey?: string;
+  },
+): Promise<string>;
+
+// When csv is false or undefined, return an array of objects
+export default function getSheetData(
+  sheetUrl: string,
+  options?: {
+    csv?: false;
+    skip?: number;
+    apiEmail?: string;
+    apiKey?: string;
+  },
+): Promise<Record<string, string>[]>;
+
+// Implementation signature
 export default async function getSheetData(
   sheetUrl: string,
   options: {

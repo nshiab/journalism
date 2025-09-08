@@ -46,12 +46,12 @@
  * @category Formatting
  */
 
-export default function dataToArrays(data: { [key: string]: unknown }[]): {
-  [key: string]: unknown[];
-} {
-  const newData: { [key: string]: unknown[] } = {};
+export default function dataToArrays<T extends Record<string, unknown>>(
+  data: T[],
+): { [K in keyof T]: T[K][] } {
+  const newData = {} as { [K in keyof T]: T[K][] };
 
-  const keys = Object.keys(data[0]);
+  const keys = Object.keys(data[0]) as Array<keyof T>;
 
   for (const key of keys) {
     newData[key] = data.map((d) => d[key]);

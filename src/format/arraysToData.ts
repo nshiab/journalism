@@ -49,17 +49,17 @@
  * @category Formatting
  */
 
-export default function arraysToData(data: {
-  [key: string]: unknown[];
-}): { [key: string]: unknown }[] {
-  const keys = Object.keys(data);
+export default function arraysToData<T extends Record<string, unknown[]>>(
+  data: T,
+): Array<{ [K in keyof T]: T[K][number] }> {
+  const keys = Object.keys(data) as Array<keyof T>;
   const nbItems = data[keys[0]].length;
 
-  const newData = [];
+  const newData: Array<{ [K in keyof T]: T[K][number] }> = [];
   for (let i = 0; i < nbItems; i++) {
-    const newItem: { [key: string]: unknown } = {};
+    const newItem = {} as { [K in keyof T]: T[K][number] };
     for (const key of keys) {
-      newItem[key] = data[key][i];
+      newItem[key] = data[key][i] as T[typeof key][number];
     }
     newData.push(newItem);
   }

@@ -61,20 +61,23 @@
  * ```
  * @category Statistics
  */
-export default function addClusters(
-  data: { [key: string]: unknown }[],
+
+type DataPointWithClusterInfo<T> = T & {
+  clusterId: string | null;
+  clusterType: "core" | "border" | "noise";
+};
+
+export default function addClusters<T extends Record<string, unknown>>(
+  data: T[],
   minDistance: number,
   minNeighbours: number,
-  distance: (
-    a: { [key: string]: unknown },
-    b: { [key: string]: unknown },
-  ) => number,
+  distance: (a: T, b: T) => number,
   options: { reset?: boolean } = {},
-): void {
+): asserts data is DataPointWithClusterInfo<T>[] {
   if (options.reset) {
     data.forEach((d) => {
-      d.clusterId = undefined;
-      d.clusterType = undefined;
+      delete (d as Record<string, unknown>).clusterId;
+      delete (d as Record<string, unknown>).clusterType;
     });
   }
 
@@ -82,75 +85,78 @@ export default function addClusters(
 
   for (const point of data) {
     // Skip points that are already assigned to a cluster.
-    if (point.clusterId !== undefined) continue;
+    if ((point as DataPointWithClusterInfo<T>).clusterId !== undefined) {
+      continue;
+    }
 
     // Find the neighbours of the current point.
     const neighbours = getNeighbours(point);
 
     // If the point has less than minPts neighbours, it's noise or a border point.
     if (neighbours.length < minNeighbours) {
-      point.clusterId = null;
+      (point as DataPointWithClusterInfo<T>).clusterId = null;
       // We mark the point as noise initially. We double-check later if it's a border point.
-      point.clusterType = "noise";
+      (point as DataPointWithClusterInfo<T>).clusterType = "noise";
     } else {
       // We know that the point is a core point, so we assign it to a new cluster and we look for more points to add to the cluster.
       clusterId++;
       const clusterLabel = `cluster${clusterId}`;
-      point.clusterId = clusterLabel;
-      point.clusterType = "core";
+      (point as DataPointWithClusterInfo<T>).clusterId = clusterLabel;
+      (point as DataPointWithClusterInfo<T>).clusterType = "core";
       expandCluster(neighbours, clusterLabel);
     }
   }
 
   // Assign border points to a cluster if they are reachable from a core point.
   for (const point of data) {
-    if (point.clusterId === null) {
+    if ((point as DataPointWithClusterInfo<T>).clusterId === null) {
       const neighbours = getNeighbours(point);
       const clusterNeighbours = neighbours.find(
-        (n) => n.clusterType === "core",
+        (n) => (n as DataPointWithClusterInfo<T>).clusterType === "core",
       );
       if (clusterNeighbours) {
-        point.clusterId = clusterNeighbours.clusterId;
-        point.clusterType = "border";
+        (point as DataPointWithClusterInfo<T>).clusterId =
+          (clusterNeighbours as DataPointWithClusterInfo<T>).clusterId;
+        (point as DataPointWithClusterInfo<T>).clusterType = "border";
       }
     }
   }
 
   // Find the neighbours of a point.
-  function getNeighbours(point: {
-    [key: string]: unknown;
-  }): { [key: string]: unknown }[] {
+  function getNeighbours(point: T): T[] {
     return data.filter((p) => distance(point, p) <= minDistance);
   }
 
   // Add a point and its neighbours to the same cluster.
   function expandCluster(
-    neighbours: { [key: string]: unknown }[],
+    neighbours: T[],
     clusterLabel: string,
   ): void {
     for (let i = 0; i < neighbours.length; i++) {
       const neighbour = neighbours[i];
 
-      if (neighbour.clusterId === undefined) {
+      if ((neighbour as DataPointWithClusterInfo<T>).clusterId === undefined) {
         // If the neighbour is not assigned to a cluster, we add it to the cluster.
-        neighbour.clusterId = clusterLabel;
+        (neighbour as DataPointWithClusterInfo<T>).clusterId = clusterLabel;
 
         const newNeighbours = getNeighbours(neighbour);
 
         // If the neighbour is a core point, we add its neighbours to the list of points to be checked.
         if (newNeighbours.length >= minNeighbours) {
-          neighbour.clusterType = "core";
+          (neighbour as DataPointWithClusterInfo<T>).clusterType = "core";
           neighbours.push(
             ...newNeighbours.filter((n) => !neighbours.includes(n)),
           );
         } else {
           // If not core, it's a border point
-          neighbour.clusterType = "border";
+          (neighbour as DataPointWithClusterInfo<T>).clusterType = "border";
         }
-      } else if (neighbour.clusterId === null) {
+      } else if (
+        (neighbour as DataPointWithClusterInfo<T>).clusterId === null
+      ) {
         // If the neighbour is a border point, we add it to the cluster.
-        neighbour.clusterId = clusterLabel;
-        neighbour.clusterType = "border";
+        (neighbour as DataPointWithClusterInfo<T>).clusterId = clusterLabel;
+        (neighbour as DataPointWithClusterInfo<T>).clusterType = "border";
       }
     }
   }

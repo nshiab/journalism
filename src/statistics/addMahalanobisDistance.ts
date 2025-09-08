@@ -61,11 +61,39 @@ import getMahalanobisDistance from "./getMahalanobisDistance.ts";
  * @category Statistics
  */
 
-export default function addMahalanobisDistance(
+// Function overload: when similarity is true, return type includes similarity
+export default function addMahalanobisDistance<
+  T extends Record<string, unknown>,
+>(
   origin: Record<string, number>,
-  data: Record<string, unknown>[],
+  data: T[],
+  options: { similarity: true; matrix?: number[][] },
+): (T & {
+  mahaDist: number;
+  similarity: number;
+})[];
+
+// Function overload: when similarity is false or undefined, return type includes only mahaDist
+export default function addMahalanobisDistance<
+  T extends Record<string, unknown>,
+>(
+  origin: Record<string, number>,
+  data: T[],
+  options?: { similarity?: false; matrix?: number[][] },
+): (T & {
+  mahaDist: number;
+})[];
+
+// Implementation
+export default function addMahalanobisDistance<
+  T extends Record<string, unknown>,
+>(
+  origin: Record<string, number>,
+  data: T[],
   options: { similarity?: boolean; matrix?: number[][] } = {},
-): Record<string, unknown>[] {
+):
+  | (T & { mahaDist: number })[]
+  | (T & { mahaDist: number; similarity: number })[] {
   const variables = Object.keys(origin);
   const originArray = variables.map((v) => origin[v]);
   const dataArray = data.map((d) => variables.map((v) => d[v]));
@@ -80,7 +108,9 @@ export default function addMahalanobisDistance(
     );
 
   data.forEach(
-    (d) => (d.mahaDist = getMahalanobisDistance(
+    (
+      d,
+    ) => ((d as T & { mahaDist: number }).mahaDist = getMahalanobisDistance(
       originArray,
       variables.map((v) => d[v] as number), // types checked in getCovarianceMatrix
       invertedCovarianceMatrix,
@@ -88,11 +118,18 @@ export default function addMahalanobisDistance(
   );
 
   if (options.similarity) {
-    const maxDist = Math.max(...data.map((d) => d.mahaDist as number));
+    const maxDist = Math.max(
+      ...data.map((d) => (d as T & { mahaDist: number }).mahaDist),
+    );
     data.forEach(
-      (d) => (d.similarity = 1 - (d.mahaDist as number) / maxDist),
+      (
+        d,
+      ) => ((d as T & { mahaDist: number; similarity: number }).similarity = 1 -
+        (d as T & { mahaDist: number }).mahaDist / maxDist),
     );
   }
 
-  return data;
+  return data as
+    | (T & { mahaDist: number })[]
+    | (T & { mahaDist: number; similarity: number })[];
 }
