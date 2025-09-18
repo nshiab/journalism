@@ -1,4 +1,4 @@
-import type { GeoTIFFImage, TypedArray } from "npm:geotiff@2";
+import type { GeoTIFFImage, TypedArray } from "geotiff";
 
 /**
  * Extracts values at specific latitude and longitude coordinates from a GeoTIFF image. This function works in conjunction with the `getGeoTiffDetails` function, using the details returned by it.

@@ -1,9 +1,9 @@
 // Based on https://observablehq.com/@fil/rewind
 
 // @deno-types="npm:@types/d3-geo@3"
-import { geoArea, geoContains, geoStream, geoTransform } from "npm:d3-geo@3";
+import { geoArea, geoContains, geoStream, geoTransform } from "d3-geo";
 // @deno-types="npm:@types/d3-geo@3"
-import type { GeoPermissibleObjects } from "npm:d3-geo@3";
+import type { GeoPermissibleObjects } from "d3-geo";
 
 /**
  * Rewinds the winding order of the specified GeoJSON object to be clockwise. It is based on the D3-geo library's winding order conventions.

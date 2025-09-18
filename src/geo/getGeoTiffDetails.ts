@@ -1,5 +1,5 @@
-import { fromFile } from "npm:geotiff@2";
-import type { GeoTIFFImage } from "npm:geotiff@2";
+import { fromFile } from "geotiff";
+import type { GeoTIFFImage } from "geotiff";
 
 /**
  * Extracts detailed information from a GeoTIFF file, which can then be used with the `getGeoTiffValues` function.

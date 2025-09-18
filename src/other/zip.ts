@@ -1,4 +1,4 @@
-import AdmZip from "npm:adm-zip@0.5";
+import AdmZip from "adm-zip";
 import createDirectory from "./createDirectory.ts";
 
 /**

@@ -1,4 +1,4 @@
-import { minIndex } from "npm:d3-array@3";
+import { minIndex } from "d3-array";
 import distance from "./distance.ts";
 
 /**

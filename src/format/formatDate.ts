@@ -1,6 +1,6 @@
 import dateToCBCStyle from "./helpers/dateToCBCStyle.ts";
 import dateToRCStyle from "./helpers/dateToRCStyle.ts";
-import { format as formatFns, toZonedTime } from "npm:date-fns-tz@3";
+import { format as formatFns, toZonedTime } from "date-fns-tz";
 import isValid from "./helpers/isValidDate.ts";
 
 /**
