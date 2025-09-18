@@ -1,4 +1,5 @@
 import process from "node:process";
+import { existsSync, readFileSync } from "node:fs";
 
 import { JWT } from "google-auth-library";
 import {
@@ -22,8 +23,21 @@ export default async function logToSheet(
 
   const emailVar = options.apiEmail ?? "GOOGLE_SERVICE_ACCOUNT_EMAIL";
   const keyVar = options.apiKey ?? "GOOGLE_PRIVATE_KEY";
-  const email = process.env[emailVar];
-  const key = process.env[keyVar];
+  let email = process.env[emailVar];
+  let key = process.env[keyVar];
+
+  // Support GOOGLE_APPLICATION_CREDENTIALS
+  if (
+    process.env.GOOGLE_APPLICATION_CREDENTIALS !== undefined &&
+    process.env.GOOGLE_APPLICATION_CREDENTIALS !== "" &&
+    existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)
+  ) {
+    const creds = JSON.parse(
+      readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS, "utf-8"),
+    );
+    email = creds.client_email;
+    key = creds.private_key;
+  }
 
   if (email === undefined || email === "") {
     throw new Error(`process.env.${emailVar} is undefined or ''.`);

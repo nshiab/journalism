@@ -7,7 +7,7 @@ import logToSheet from "./helpers/logToSheet.ts";
  *
  * The function automatically infers column headers from the keys of the first object in your `data` array. It supports various options for customizing the update process, including adding a timestamp of the last update, prepending custom text, and controlling how Google Sheets interprets the data types.
  *
- * By default, authentication is handled via environment variables (`GOOGLE_PRIVATE_KEY` and `GOOGLE_SERVICE_ACCOUNT_EMAIL`). For detailed setup instructions, refer to the `node-google-spreadsheet` authentication guide: [https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
+ * By default, authentication is handled via environment variables (`GOOGLE_PRIVATE_KEY` and `GOOGLE_SERVICE_ACCOUNT_EMAIL`). Alternatively, you can use `GOOGLE_APPLICATION_CREDENTIALS` pointing to a service account JSON file. For detailed setup instructions, refer to the `node-google-spreadsheet` authentication guide: [https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
  *
  * @param data - An array of objects to be written to the Google Sheet. The keys of the first object in this array will be used as column headers.
  * @param sheetUrl - The URL of the Google Sheet to be updated. This URL should point to a specific sheet (e.g., ending with `#gid=0`).
