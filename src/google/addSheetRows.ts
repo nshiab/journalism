@@ -6,7 +6,7 @@ import logToSheet from "./helpers/logToSheet.ts";
  *
  * The function expects the data to be an array of objects, where the keys of these objects correspond to the column headers in your Google Sheet.
  *
- * By default, authentication is handled via environment variables (`GOOGLE_PRIVATE_KEY` and `GOOGLE_SERVICE_ACCOUNT_EMAIL`). For detailed setup instructions, refer to the `node-google-spreadsheet` authentication guide: [https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
+ * By default, authentication is handled via environment variables (`GOOGLE_PRIVATE_KEY` and `GOOGLE_SERVICE_ACCOUNT_EMAIL`). Alternatively, you can use `GOOGLE_APPLICATION_CREDENTIALS` pointing to a service account JSON file. For detailed setup instructions, refer to the `node-google-spreadsheet` authentication guide: [https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
  *
  * @param data - An array of objects, where each object represents a row to be appended to the sheet. The keys of the objects should match the existing column headers in the sheet.
  * @param sheetUrl - The URL of the Google Sheet to which rows will be appended. This URL should point to a specific sheet (e.g., ending with `#gid=0`).

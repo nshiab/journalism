@@ -1,5 +1,5 @@
 import process from "node:process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 
 import { JWT } from "google-auth-library";
 import {
@@ -26,10 +26,11 @@ export default async function logToSheet(
   let email = process.env[emailVar];
   let key = process.env[keyVar];
 
-  // Support GOOGLE_APPLICATION_CREDENTIALS for compatibility with other Google libraries
+  // Support GOOGLE_APPLICATION_CREDENTIALS
   if (
     process.env.GOOGLE_APPLICATION_CREDENTIALS !== undefined &&
-    process.env.GOOGLE_APPLICATION_CREDENTIALS !== ""
+    process.env.GOOGLE_APPLICATION_CREDENTIALS !== "" &&
+    existsSync(process.env.GOOGLE_APPLICATION_CREDENTIALS)
   ) {
     const creds = JSON.parse(
       readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS, "utf-8"),
