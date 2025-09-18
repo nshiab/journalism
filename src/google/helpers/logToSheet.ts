@@ -31,7 +31,9 @@ export default async function logToSheet(
     process.env.GOOGLE_APPLICATION_CREDENTIALS !== undefined &&
     process.env.GOOGLE_APPLICATION_CREDENTIALS !== ""
   ) {
-    const creds = JSON.parse( readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS, "utf-8") );
+    const creds = JSON.parse(
+      readFileSync(process.env.GOOGLE_APPLICATION_CREDENTIALS, "utf-8"),
+    );
     email = creds.client_email;
     key = creds.private_key;
   }
