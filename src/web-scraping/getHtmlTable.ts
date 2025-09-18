@@ -1,6 +1,6 @@
 import { chromium } from "playwright-chromium";
-import { load } from "npm:cheerio@1";
-import { csvFormatRow, csvParse, type DSVRowArray } from "npm:d3-dsv@3";
+import { load } from "cheerio";
+import { csvFormatRow, csvParse, type DSVRowArray } from "d3-dsv";
 
 /**
  * Extracts tabular data from an HTML table on a given URL and returns it as an array of objects. This function is particularly useful for scraping structured data from web pages.

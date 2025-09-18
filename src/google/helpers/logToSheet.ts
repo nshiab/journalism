@@ -1,11 +1,11 @@
 import process from "node:process";
 import { readFileSync } from "node:fs";
 
-import { JWT } from "npm:google-auth-library@9";
+import { JWT } from "google-auth-library";
 import {
   GoogleSpreadsheet,
   type GoogleSpreadsheetWorksheet,
-} from "npm:google-spreadsheet@4";
+} from "google-spreadsheet";
 
 /**
  * Authenticates with Google Sheets and returns a worksheet object.

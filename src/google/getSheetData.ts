@@ -1,4 +1,4 @@
-import { csvParse } from "npm:d3-dsv@3";
+import { csvParse } from "d3-dsv";
 import logToSheet from "./helpers/logToSheet.ts";
 
 /**
