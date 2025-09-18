@@ -257,8 +257,10 @@ The function expects the data to be an array of objects, where the keys of these
 objects correspond to the column headers in your Google Sheet.
 
 By default, authentication is handled via environment variables
-(`GOOGLE_PRIVATE_KEY` and `GOOGLE_SERVICE_ACCOUNT_EMAIL`). For detailed setup
-instructions, refer to the `node-google-spreadsheet` authentication guide:
+(`GOOGLE_PRIVATE_KEY` and `GOOGLE_SERVICE_ACCOUNT_EMAIL`). Alternatively, you
+can use `GOOGLE_APPLICATION_CREDENTIALS` pointing to a service account JSON
+file. For detailed setup instructions, refer to the `node-google-spreadsheet`
+authentication guide:
 [https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
 
 ### Signature
@@ -2914,8 +2916,10 @@ Retrieves data from a Google Sheet.
 
 By default, this function attempts to authenticate using environment variables
 (`GOOGLE_PRIVATE_KEY` for the API key and `GOOGLE_SERVICE_ACCOUNT_EMAIL` for the
-service account email). For detailed instructions on setting up credentials,
-refer to the `node-google-spreadsheet` authentication guide:
+service account email). Alternatively, you can use
+`GOOGLE_APPLICATION_CREDENTIALS` pointing to a service account JSON file. For
+detailed instructions on setting up credentials, refer to the
+`node-google-spreadsheet` authentication guide:
 [https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
 
 ### Signature
@@ -3958,8 +3962,10 @@ update process, including adding a timestamp of the last update, prepending
 custom text, and controlling how Google Sheets interprets the data types.
 
 By default, authentication is handled via environment variables
-(`GOOGLE_PRIVATE_KEY` and `GOOGLE_SERVICE_ACCOUNT_EMAIL`). For detailed setup
-instructions, refer to the `node-google-spreadsheet` authentication guide:
+(`GOOGLE_PRIVATE_KEY` and `GOOGLE_SERVICE_ACCOUNT_EMAIL`). Alternatively, you
+can use `GOOGLE_APPLICATION_CREDENTIALS` pointing to a service account JSON
+file. For detailed setup instructions, refer to the `node-google-spreadsheet`
+authentication guide:
 [https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
 
 ### Signature
