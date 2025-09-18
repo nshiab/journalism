@@ -1,4 +1,4 @@
-import { csvFormat } from "npm:d3-dsv@3";
+import { csvFormat } from "d3-dsv";
 
 /**
  * Converts an array of objects into a CSV (Comma-Separated Values) string.

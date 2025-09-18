@@ -1,5 +1,5 @@
-import AdmZip from "npm:adm-zip@0.5";
-import { csvParse, type DSVRowArray } from "npm:d3-dsv@3";
+import AdmZip from "adm-zip";
+import { csvParse, type DSVRowArray } from "d3-dsv";
 import { Buffer } from "node:buffer";
 
 /**
