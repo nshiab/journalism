@@ -51,7 +51,7 @@ export default function dateToCBCStyle(
         .replace("February", "Feb.")
         // same for March, April, May, June, July
         .replace("August", "Aug.")
-        .replace("September", "Sep.")
+        .replace("September", "Sept.")
         .replace("October", "Oct.")
         .replace("November", "Nov.")
         .replace("December", "Dec.")
