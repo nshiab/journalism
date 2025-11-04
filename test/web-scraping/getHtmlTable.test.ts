@@ -64,7 +64,7 @@ Deno.test("should return an array of objects from an HTML table with a selector 
 Deno.test("should return an array of objects from an HTML table with an index option", async function () {
   const data = await getHtmlTable(
     "https://en.wikipedia.org/wiki/Medieval_demography",
-    { index: 3 },
+    { index: 0 },
   );
 
   assertEquals(data, [
