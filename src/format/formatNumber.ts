@@ -16,7 +16,7 @@ import { transformPositionToRcStyle } from "./helpers/transformPositionToRcStyle
  * @param options.significantDigits The number of significant digits to round to.
  * @param options.fixed If `true`, the number will be displayed with a fixed number of decimal places as specified by `decimals`, padding with zeros if necessary. Defaults to `false`.
  * @param options.nearestInteger The base to which the number should be rounded (e.g., 10 for rounding to the nearest ten, 100 for nearest hundred).
- * @param options.abreviation If `true`, the number will be abbreviated (e.g., 1,200,000 becomes "1.2M"). Defaults to `false`.
+ * @param options.abbreviation If `true`, the number will be abbreviated (e.g., 1,200,000 becomes "1.2M"). Defaults to `false`.
  * @param options.prefix A string to prepend before the formatted number.
  * @param options.suffix A string to append after the formatted number.
  * @param options.position If `true`, formats the number as an ordinal position (e.g., "1st", "2nd" in English, "1er", "2e" in French).
@@ -38,7 +38,7 @@ import { transformPositionToRcStyle } from "./helpers/transformPositionToRcStyle
  * @example
  * ```ts
  * // French style with abbreviation.
- * const num3 = formatNumber(1234567, { style: "rc", abreviation: true });
+ * const num3 = formatNumber(1234567, { style: "rc", abbreviation: true });
  * console.log(num3); // "1,2 M"
  * ```
  * @example
@@ -69,7 +69,7 @@ export default function formatNumber(
     significantDigits?: number;
     fixed?: boolean;
     nearestInteger?: number;
-    abreviation?: boolean;
+    abbreviation?: boolean;
     prefix?: string;
     suffix?: string;
     position?: boolean;
@@ -93,7 +93,7 @@ export default function formatNumber(
     round: boolean;
     decimals?: number;
     nearestInteger?: number;
-    abreviation?: boolean;
+    abbreviation?: boolean;
     significantDigits?: number;
     fixed: boolean;
     prefix: string;
@@ -109,7 +109,7 @@ export default function formatNumber(
   };
 
   let abbreviation = "";
-  if (mergedOptions.abreviation && number !== 0) {
+  if (mergedOptions.abbreviation && number !== 0) {
     const abbreviations = ["", "K", "M", "B", "T"];
     const index = Math.floor(
       Math.log10(Math.abs(number)) / 3,
@@ -173,5 +173,20 @@ export default function formatNumber(
     formattedNumber = formattedNumber.replace(/^[-+]/, "");
   }
 
-  return `${mergedOptions.prefix}${formattedNumber}${abbreviation}${mergedOptions.suffix}`;
+  // Handle dollar sign prefix placement
+  if (mergedOptions.prefix === "$") {
+    if (formattedNumber.startsWith("-")) {
+      return `-${mergedOptions.prefix}${
+        formattedNumber.slice(1)
+      }${abbreviation}${mergedOptions.suffix}`;
+    } else if (formattedNumber.startsWith("+")) {
+      return `+${mergedOptions.prefix}${
+        formattedNumber.slice(1)
+      }${abbreviation}${mergedOptions.suffix}`;
+    } else {
+      return `${mergedOptions.prefix}${formattedNumber}${abbreviation}${mergedOptions.suffix}`;
+    }
+  } else {
+    return `${mergedOptions.prefix}${formattedNumber}${abbreviation}${mergedOptions.suffix}`;
+  }
 }
