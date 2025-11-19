@@ -59,7 +59,6 @@ import logToSheet from "./helpers/logToSheet.ts";
  * @category Google
  */
 
-// When csv is true, return a CSV string
 export default function getSheetData(
   sheetUrl: string,
   options: {
@@ -69,14 +68,6 @@ export default function getSheetData(
     apiKey?: string;
   },
 ): Promise<string>;
-
-/**
- * Retrieves data from a Google Sheet and returns it as an array of objects.
- *
- * @param sheetUrl - The URL of the Google Sheet from which to retrieve data.
- * @param options - Optional configuration options (csv defaults to false).
- * @returns A Promise that resolves to an array of objects representing the sheet data.
- */
 export default function getSheetData(
   sheetUrl: string,
   options?: {
@@ -86,8 +77,6 @@ export default function getSheetData(
     apiKey?: string;
   },
 ): Promise<Record<string, string>[]>;
-
-// Implementation signature
 export default async function getSheetData(
   sheetUrl: string,
   options: {
