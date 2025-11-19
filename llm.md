@@ -1669,7 +1669,7 @@ function formatNumber(
     significantDigits?: number;
     fixed?: boolean;
     nearestInteger?: number;
-    abreviation?: boolean;
+    abbreviation?: boolean;
     prefix?: string;
     suffix?: string;
     position?: boolean;
@@ -1696,7 +1696,7 @@ function formatNumber(
   necessary. Defaults to `false`.
 - **`options.nearestInteger`**: The base to which the number should be rounded
   (e.g., 10 for rounding to the nearest ten, 100 for nearest hundred).
-- **`options.abreviation`**: If `true`, the number will be abbreviated (e.g.,
+- **`options.abbreviation`**: If `true`, the number will be abbreviated (e.g.,
   1,200,000 becomes "1.2M"). Defaults to `false`.
 - **`options.prefix`**: A string to prepend before the formatted number.
 - **`options.suffix`**: A string to append after the formatted number.
@@ -1723,7 +1723,7 @@ console.log(num2); // "+1,235"
 
 ```ts
 // French style with abbreviation.
-const num3 = formatNumber(1234567, { style: "rc", abreviation: true });
+const num3 = formatNumber(1234567, { style: "rc", abbreviation: true });
 console.log(num3); // "1,2 M"
 ```
 
@@ -1745,6 +1745,124 @@ console.log(position1); // "1st"
 
 const position2 = formatNumber(2, { position: true, style: "rc" });
 console.log(position2); // "2e"
+```
+
+## geoTo3D
+
+Converts geographical coordinates (longitude and latitude) into 3D Cartesian (x,
+y, z) coordinates based on a specified radius.
+
+The conversion assumes a spherical Earth model. The `radius` parameter
+determines the size of the sphere on which the points are projected.
+
+### Signature
+
+```typescript
+function geoTo3D(
+  lon: number,
+  lat: number,
+  radius: number,
+  options: { decimals?: number; toArray: true },
+): [number, number, number];
+```
+
+### Parameters
+
+- **`lon`**: The longitude of the geographical point, in degrees.
+- **`lat`**: The latitude of the geographical point, in degrees.
+- **`radius`**: The radius of the sphere on which to project the coordinates.
+- **`options`**: Optional settings for the conversion.
+- **`options.decimals`**: The number of decimal places to round the x, y, and z
+  coordinates to. If not specified, no rounding is applied.
+- **`options.toArray`**: If `true`, the function will return the coordinates as
+  an array `[x, y, z]` instead of an object `{ x, y, z }`. Defaults to `false`.
+
+### Returns
+
+An object `{ x, y, z }` or an array `[x, y, z]` representing the 3D Cartesian
+coordinates.
+
+### Examples
+
+```ts
+// Basic usage: Convert geographical coordinates to 3D object coordinates.
+// Longitude: -73.5674 (Montreal), Latitude: 45.5019 (Montreal), Radius: 1
+const coordsObject = geoTo3D(-73.5674, 45.5019, 1, { decimals: 2 });
+console.log(coordsObject); // Expected output: { x: -0.67, y: 0.71, z: 0.2 }
+```
+
+```ts
+// Convert geographical coordinates to 3D array coordinates.
+const coordsArray = geoTo3D(-73.5674, 45.5019, 1, {
+  decimals: 2,
+  toArray: true,
+});
+console.log(coordsArray); // Expected output: [-0.67, 0.71, 0.2]
+```
+
+```ts
+// Using a larger radius for visualization purposes.
+const earthCoords = geoTo3D(0, 0, 6371, { decimals: 0 }); // Earth's approximate radius in km
+console.log(earthCoords); // Expected output: { x: 0, y: 6371, z: 0 } (for 0,0 lat/lon)
+```
+
+## geoTo3D
+
+Converts geographical coordinates (longitude and latitude) into 3D Cartesian (x,
+y, z) coordinates based on a specified radius.
+
+The conversion assumes a spherical Earth model. The `radius` parameter
+determines the size of the sphere on which the points are projected.
+
+### Signature
+
+```typescript
+function geoTo3D(
+  lon: number,
+  lat: number,
+  radius: number,
+  options?: { decimals?: number; toArray?: false },
+): { x: number; y: number; z: number };
+```
+
+### Parameters
+
+- **`lon`**: The longitude of the geographical point, in degrees.
+- **`lat`**: The latitude of the geographical point, in degrees.
+- **`radius`**: The radius of the sphere on which to project the coordinates.
+- **`options`**: Optional settings for the conversion.
+- **`options.decimals`**: The number of decimal places to round the x, y, and z
+  coordinates to. If not specified, no rounding is applied.
+- **`options.toArray`**: If `true`, the function will return the coordinates as
+  an array `[x, y, z]` instead of an object `{ x, y, z }`. Defaults to `false`.
+
+### Returns
+
+An object `{ x, y, z }` or an array `[x, y, z]` representing the 3D Cartesian
+coordinates.
+
+### Examples
+
+```ts
+// Basic usage: Convert geographical coordinates to 3D object coordinates.
+// Longitude: -73.5674 (Montreal), Latitude: 45.5019 (Montreal), Radius: 1
+const coordsObject = geoTo3D(-73.5674, 45.5019, 1, { decimals: 2 });
+console.log(coordsObject); // Expected output: { x: -0.67, y: 0.71, z: 0.2 }
+```
+
+```ts
+// Convert geographical coordinates to 3D array coordinates.
+const coordsArray = geoTo3D(-73.5674, 45.5019, 1, {
+  decimals: 2,
+  toArray: true,
+});
+console.log(coordsArray); // Expected output: [-0.67, 0.71, 0.2]
+```
+
+```ts
+// Using a larger radius for visualization purposes.
+const earthCoords = geoTo3D(0, 0, 6371, { decimals: 0 }); // Earth's approximate radius in km
+console.log(earthCoords); // Expected output: { x: 0, y: 6371, z: 0 } (for 0,0 lat/lon)
 ```
 
 ## geoTo3D
@@ -3002,7 +3120,15 @@ console.log(dataWithCustomCredentials);
 
 ## getSheetData
 
-Retrieves data from a Google Sheet and returns it as an array of objects.
+Retrieves data from a Google Sheet.
+
+By default, this function attempts to authenticate using environment variables
+(`GOOGLE_PRIVATE_KEY` for the API key and `GOOGLE_SERVICE_ACCOUNT_EMAIL` for the
+service account email). Alternatively, you can use
+`GOOGLE_APPLICATION_CREDENTIALS` pointing to a service account JSON file. For
+detailed instructions on setting up credentials, refer to the
+`node-google-spreadsheet` authentication guide:
+[https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
 
 ### Signature
 
@@ -3016,11 +3142,166 @@ function getSheetData(
 ### Parameters
 
 - **`sheetUrl`**: - The URL of the Google Sheet from which to retrieve data.
-- **`options`**: - Optional configuration options (csv defaults to false).
+  This URL should point to a specific sheet (e.g., ending with `#gid=0`).
+- **`options`**: - An optional object with configuration options:
+- **`options.skip`**: - The number of rows to skip from the beginning of the
+  sheet before parsing the data. This is useful for sheets that have metadata at
+  the top. Defaults to `0`.
+- **`options.csv`**: - If `true`, the function will return the raw data as a CSV
+  string. If `false` or omitted, it will return an array of objects, where each
+  object represents a row and keys correspond to column headers. Defaults to
+  `false`.
+- **`options.apiEmail`**: - Optional. Your Google Service Account email. If
+  provided, this will override the `GOOGLE_SERVICE_ACCOUNT_EMAIL` environment
+  variable.
+- **`options.apiKey`**: - Optional. Your Google Service Account private key. If
+  provided, this will override the `GOOGLE_PRIVATE_KEY` environment variable.
 
 ### Returns
 
-A Promise that resolves to an array of objects representing the sheet data.
+A Promise that resolves to either an array of objects
+(`Record<string, string>[]`) if `options.csv` is `false`, or a CSV string
+(`string`) if `options.csv` is `true`.
+
+### Examples
+
+```ts
+// Fake URL used as an example.
+const sheetUrl =
+  "https://docs.google.com/spreadsheets/d/nrqo3oP4KMWYbELScQa8W1nHZPfIrA7LIz9UmcRE4GyJN/edit#gid=0";
+
+// Returning the data as an array of objects.
+const data = await getSheetData(sheetUrl);
+console.log(data);
+// Expected output (example):
+// [
+//   { Header1: 'Value1', Header2: 'Value2' },
+//   { Header1: 'Value3', Header2: 'Value4' }
+// ]
+```
+
+```ts
+// Retrieve data, skipping the first row (e.g., if it contains metadata).
+const dataSkippingFirstRow = await getSheetData(sheetUrl, { skip: 1 });
+console.log(dataSkippingFirstRow);
+// Expected output (example, assuming first row was metadata):
+// [
+//   { Header1: 'Value1', Header2: 'Value2' },
+//   { Header1: 'Value3', Header2: 'Value4' }
+// ]
+```
+
+```ts
+// Return the data as a raw CSV string, useful for direct writing to files or other systems.
+const csvString = await getSheetData(sheetUrl, { csv: true });
+console.log(csvString);
+// Expected output (example):
+// "Header1,Header2\nValue1,Value2\nValue3,Value4"
+```
+
+```ts
+// Use custom environment variable names for API email and key.
+const dataWithCustomCredentials = await getSheetData(sheetUrl, {
+  apiEmail: "GG_EMAIL",
+  apiKey: "GG_KEY",
+});
+console.log(dataWithCustomCredentials);
+```
+
+## getSheetData
+
+Retrieves data from a Google Sheet.
+
+By default, this function attempts to authenticate using environment variables
+(`GOOGLE_PRIVATE_KEY` for the API key and `GOOGLE_SERVICE_ACCOUNT_EMAIL` for the
+service account email). Alternatively, you can use
+`GOOGLE_APPLICATION_CREDENTIALS` pointing to a service account JSON file. For
+detailed instructions on setting up credentials, refer to the
+`node-google-spreadsheet` authentication guide:
+[https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication](https://theoephraim.github.io/node-google-spreadsheet/#/guides/authentication).
+
+### Signature
+
+```typescript
+async function getSheetData(
+  sheetUrl: string,
+  options?: {
+    csv?: boolean;
+    skip?: number;
+    apiEmail?: string;
+    apiKey?: string;
+  },
+): Promise<Record<string, string>[] | string>;
+```
+
+### Parameters
+
+- **`sheetUrl`**: - The URL of the Google Sheet from which to retrieve data.
+  This URL should point to a specific sheet (e.g., ending with `#gid=0`).
+- **`options`**: - An optional object with configuration options:
+- **`options.skip`**: - The number of rows to skip from the beginning of the
+  sheet before parsing the data. This is useful for sheets that have metadata at
+  the top. Defaults to `0`.
+- **`options.csv`**: - If `true`, the function will return the raw data as a CSV
+  string. If `false` or omitted, it will return an array of objects, where each
+  object represents a row and keys correspond to column headers. Defaults to
+  `false`.
+- **`options.apiEmail`**: - Optional. Your Google Service Account email. If
+  provided, this will override the `GOOGLE_SERVICE_ACCOUNT_EMAIL` environment
+  variable.
+- **`options.apiKey`**: - Optional. Your Google Service Account private key. If
+  provided, this will override the `GOOGLE_PRIVATE_KEY` environment variable.
+
+### Returns
+
+A Promise that resolves to either an array of objects
+(`Record<string, string>[]`) if `options.csv` is `false`, or a CSV string
+(`string`) if `options.csv` is `true`.
+
+### Examples
+
+```ts
+// Fake URL used as an example.
+const sheetUrl =
+  "https://docs.google.com/spreadsheets/d/nrqo3oP4KMWYbELScQa8W1nHZPfIrA7LIz9UmcRE4GyJN/edit#gid=0";
+
+// Returning the data as an array of objects.
+const data = await getSheetData(sheetUrl);
+console.log(data);
+// Expected output (example):
+// [
+//   { Header1: 'Value1', Header2: 'Value2' },
+//   { Header1: 'Value3', Header2: 'Value4' }
+// ]
+```
+
+```ts
+// Retrieve data, skipping the first row (e.g., if it contains metadata).
+const dataSkippingFirstRow = await getSheetData(sheetUrl, { skip: 1 });
+console.log(dataSkippingFirstRow);
+// Expected output (example, assuming first row was metadata):
+// [
+//   { Header1: 'Value1', Header2: 'Value2' },
+//   { Header1: 'Value3', Header2: 'Value4' }
+// ]
+```
+
+```ts
+// Return the data as a raw CSV string, useful for direct writing to files or other systems.
+const csvString = await getSheetData(sheetUrl, { csv: true });
+console.log(csvString);
+// Expected output (example):
+// "Header1,Header2\nValue1,Value2\nValue3,Value4"
+```
+
+```ts
+// Use custom environment variable names for API email and key.
+const dataWithCustomCredentials = await getSheetData(sheetUrl, {
+  apiEmail: "GG_EMAIL",
+  apiKey: "GG_KEY",
+});
+console.log(dataWithCustomCredentials);
+```
 
 ## getStatCanTable
 
