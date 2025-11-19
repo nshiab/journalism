@@ -40,6 +40,24 @@ export default function geoTo3D(
   radius: number,
   options: {
     decimals?: number;
+    toArray: true;
+  },
+): [number, number, number];
+export default function geoTo3D(
+  lon: number,
+  lat: number,
+  radius: number,
+  options?: {
+    decimals?: number;
+    toArray?: false;
+  },
+): { x: number; y: number; z: number };
+export default function geoTo3D(
+  lon: number,
+  lat: number,
+  radius: number,
+  options: {
+    decimals?: number;
     toArray?: boolean;
   } = {},
 ): { x: number; y: number; z: number } | [number, number, number] {
