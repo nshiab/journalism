@@ -190,6 +190,24 @@ import { jsonrepair } from "jsonrepair";
  * );
  * console.log(europeanCountries);
  * ```
+ * @example
+ * ```ts
+ * // Track cumulative metrics across multiple AI requests.
+ * const metrics = {
+ *   totalCost: 0,
+ *   totalInputTokens: 0,
+ *   totalOutputTokens: 0,
+ *   totalRequests: 0,
+ * };
+ *
+ * await askAI("What is the capital of France?", { metrics });
+ * await askAI("What is the population of Paris?", { metrics });
+ *
+ * console.log("Total cost:", metrics.totalCost);
+ * console.log("Total input tokens:", metrics.totalInputTokens);
+ * console.log("Total output tokens:", metrics.totalOutputTokens);
+ * console.log("Total requests:", metrics.totalRequests);
+ * ```
  * @param prompt - The primary text input for the AI model.
  * @param options - A comprehensive set of options.
  *   @param options.model - The specific AI model to use (e.g., 'gemini-1.5-flash'). Defaults to the `AI_MODEL` environment variable.
@@ -213,6 +231,7 @@ import { jsonrepair } from "jsonrepair";
  *   @param options.test - A function or an array of functions to validate the AI's response before it's returned.
  *   @param options.contextWindow - An option to specify the context window size for Ollama models. By default, Ollama sets this depending on the model, which can be lower than the actual maximum context window size of the model.
  *   @param options.thinkingBudget - Sets the reasoning token budget: 0 to disable (default, though some models may reason regardless), -1 for a dynamic budget, or > 0 for a fixed budget. For Ollama models, any non-zero value simply enables reasoning, ignoring the specific budget amount.
+ *   @param options.metrics - An object to track cumulative metrics across multiple AI requests. Pass an object with `totalCost`, `totalInputTokens`, `totalOutputTokens`, and `totalRequests` properties (all initialized to 0). The function will update these values after each request. Note: `totalCost` is only calculated for Google GenAI models, not for Ollama.
  * @return {Promise<unknown>} A Promise that resolves to the AI's response.
  *
  * @category AI
@@ -241,6 +260,12 @@ export default async function askAI(
     clean?: (response: string) => unknown;
     contextWindow?: number;
     thinkingBudget?: number;
+    metrics?: {
+      totalCost: number;
+      totalInputTokens: number;
+      totalOutputTokens: number;
+      totalRequests: number;
+    };
   } = {},
 ): Promise<unknown> {
   const start = Date.now();
@@ -736,75 +761,78 @@ export default async function askAI(
     console.log(cleanedResponse, "\n");
   }
 
-  if (options.verbose) {
-    if (finalUsageMetadata) {
-      // Google GenAI streaming response
-      const hasAudio = options.audio ? true : false;
+  // Calculate metrics and token usage
+  if ((options.verbose || options.metrics) && finalUsageMetadata) {
+    // Google GenAI streaming response
+    const hasAudio = options.audio ? true : false;
 
-      const pricing = [
-        {
-          model: "gemini-2.5-pro",
-          tiers: [
-            { threshold: 200_000, input: 1.25, output: 10.00 },
-            { threshold: Infinity, input: 2.50, output: 15.00 },
-          ],
-        },
-        {
-          model: "gemini-2.5-flash",
-          input: hasAudio ? 1.00 : 0.30,
-          output: 2.50,
-        },
-        {
-          model: "gemini-2.5-flash-lite",
-          input: hasAudio ? 0.30 : 0.10,
-          output: 0.40,
-        },
-        {
-          model: "gemini-2.0-flash",
-          input: hasAudio ? 0.70 : 0.10,
-          output: 0.40,
-        },
-        {
-          model: "gemini-2.0-flash-lite",
-          input: 0.075,
-          output: 0.30,
-        },
-        {
-          model: "gemini-1.5-pro",
-          tiers: [
-            { threshold: 128_000, input: 1.25, output: 5.00 },
-            { threshold: Infinity, input: 2.50, output: 10.00 },
-          ],
-        },
-        {
-          model: "gemini-1.5-flash",
-          tiers: [
-            { threshold: 128_000, input: 0.075, output: 0.30 },
-            { threshold: Infinity, input: 0.15, output: 0.60 },
-          ],
-        },
-      ];
+    const pricing = [
+      {
+        model: "gemini-2.5-pro",
+        tiers: [
+          { threshold: 200_000, input: 1.25, output: 10.00 },
+          { threshold: Infinity, input: 2.50, output: 15.00 },
+        ],
+      },
+      {
+        model: "gemini-2.5-flash",
+        input: hasAudio ? 1.00 : 0.30,
+        output: 2.50,
+      },
+      {
+        model: "gemini-2.5-flash-lite",
+        input: hasAudio ? 0.30 : 0.10,
+        output: 0.40,
+      },
+      {
+        model: "gemini-2.0-flash",
+        input: hasAudio ? 0.70 : 0.10,
+        output: 0.40,
+      },
+      {
+        model: "gemini-2.0-flash-lite",
+        input: 0.075,
+        output: 0.30,
+      },
+      {
+        model: "gemini-1.5-pro",
+        tiers: [
+          { threshold: 128_000, input: 1.25, output: 5.00 },
+          { threshold: Infinity, input: 2.50, output: 10.00 },
+        ],
+      },
+      {
+        model: "gemini-1.5-flash",
+        tiers: [
+          { threshold: 128_000, input: 0.075, output: 0.30 },
+          { threshold: Infinity, input: 0.15, output: 0.60 },
+        ],
+      },
+    ];
 
-      const modelPricing = pricing.find((p) => p.model === model);
-      if (!modelPricing) {
+    const modelPricing = pricing.find((p) => p.model === model);
+    if (!modelPricing) {
+      if (options.verbose) {
         console.log(
           `\nModel ${model} not found in pricing list.`,
         );
-      } else {
-        const promptTokenCount = finalUsageMetadata.promptTokenCount ?? 0;
-        const outputTokenCount = finalUsageMetadata.candidatesTokenCount ?? 0;
+      }
+    } else {
+      const promptTokenCount = finalUsageMetadata.promptTokenCount ?? 0;
+      const outputTokenCount = finalUsageMetadata.candidatesTokenCount ?? 0;
 
-        let inputRate: number;
-        let outputRate: number;
+      let inputRate: number;
+      let outputRate: number;
 
-        if ("tiers" in modelPricing && modelPricing.tiers) {
-          // Find the appropriate tier based on prompt token count
-          const tier = modelPricing.tiers.find((t) =>
-            promptTokenCount <= t.threshold
-          ) || modelPricing.tiers[modelPricing.tiers.length - 1];
-          inputRate = tier.input;
-          outputRate = tier.output;
+      if ("tiers" in modelPricing && modelPricing.tiers) {
+        // Find the appropriate tier based on prompt token count
+        const tier = modelPricing.tiers.find((t) =>
+          promptTokenCount <= t.threshold
+        ) || modelPricing.tiers[modelPricing.tiers.length - 1];
+        inputRate = tier.input;
+        outputRate = tier.output;
 
+        if (options.verbose) {
           const tierDescription = tier.threshold === Infinity
             ? `> ${formatNumber(modelPricing.tiers[0].threshold)} tokens`
             : `≤ ${formatNumber(tier.threshold)} tokens`;
@@ -814,26 +842,37 @@ export default async function askAI(
               hasAudio ? " (audio pricing applied)" : ""
             }`,
           );
-        } else if ("input" in modelPricing && "output" in modelPricing) {
-          inputRate = modelPricing.input;
-          outputRate = modelPricing.output;
-        } else {
+        }
+      } else if ("input" in modelPricing && "output" in modelPricing) {
+        inputRate = modelPricing.input;
+        outputRate = modelPricing.output;
+      } else {
+        if (options.verbose) {
           console.log(
             `${
               options.cache ? "" : "\n"
             }Invalid pricing structure for model ${model}.`,
           );
-          return cleanedResponse;
         }
+        return cleanedResponse;
+      }
 
-        const promptTokenCost = (promptTokenCount / 1_000_000) * inputRate;
-        const outputTokenCost = (outputTokenCount / 1_000_000) * outputRate;
-        const estimatedCost = promptTokenCost + outputTokenCost;
+      const promptTokenCost = (promptTokenCount / 1_000_000) * inputRate;
+      const outputTokenCost = (outputTokenCount / 1_000_000) * outputRate;
+      const estimatedCost = promptTokenCost + outputTokenCost;
 
-        const totalTokens = promptTokenCount + outputTokenCount;
-        const durationSeconds = (Date.now() - start) / 1000;
-        const tokensPerSecond = totalTokens / durationSeconds;
+      const totalTokens = promptTokenCount + outputTokenCount;
+      const durationSeconds = (Date.now() - start) / 1000;
+      const tokensPerSecond = totalTokens / durationSeconds;
 
+      if (options.metrics) {
+        options.metrics.totalCost += estimatedCost;
+        options.metrics.totalInputTokens += promptTokenCount;
+        options.metrics.totalOutputTokens += outputTokenCount;
+        options.metrics.totalRequests += 1;
+      }
+
+      if (options.verbose) {
         console.log(
           `\n\nTokens in:`,
           formatNumber(promptTokenCount),
@@ -852,24 +891,37 @@ export default async function askAI(
           }),
         );
       }
-    } else if (finalOllamaResponse) {
-      // Ollama streaming response
-      const totalTokens = finalOllamaResponse.prompt_eval_count +
-        finalOllamaResponse.eval_count;
+    }
+  } else if ((options.verbose || options.metrics) && finalOllamaResponse) {
+    // Ollama streaming response
+    const promptTokenCount = finalOllamaResponse.prompt_eval_count;
+    const outputTokenCount = finalOllamaResponse.eval_count;
+
+    if (options.metrics) {
+      options.metrics.totalInputTokens += promptTokenCount;
+      options.metrics.totalOutputTokens += outputTokenCount;
+      options.metrics.totalRequests += 1;
+    }
+
+    if (options.verbose) {
+      const totalTokens = promptTokenCount + outputTokenCount;
       const durationSeconds = (Date.now() - start) / 1000;
       const tokensPerSecond = totalTokens / durationSeconds;
 
       console.log(
         `\n\nTokens in:`,
-        formatNumber(finalOllamaResponse.prompt_eval_count),
+        formatNumber(promptTokenCount),
         "/",
         "Tokens out:",
-        formatNumber(finalOllamaResponse.eval_count),
+        formatNumber(outputTokenCount),
         "/",
         "Tokens per second:",
         formatNumber(tokensPerSecond, { significantDigits: 1 }),
       );
     }
+  }
+
+  if (options.verbose) {
     console.log("Execution time:", prettyDuration(start), "\n");
   }
 
