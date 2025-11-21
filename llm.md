@@ -645,6 +645,12 @@ async function askAI(
     clean?: (response: string) => unknown;
     contextWindow?: number;
     thinkingBudget?: number;
+    metrics?: {
+      totalCost: number;
+      totalInputTokens: number;
+      totalOutputTokens: number;
+      totalRequests: number;
+    };
   },
 ): Promise<unknown>;
 ```
@@ -697,6 +703,11 @@ async function askAI(
   (default, though some models may reason regardless), -1 for a dynamic budget,
   or > 0 for a fixed budget. For Ollama models, any non-zero value simply
   enables reasoning, ignoring the specific budget amount.
+- **`options.metrics`**: - An object to track cumulative metrics across multiple
+  AI requests. Pass an object with `totalCost`, `totalInputTokens`,
+  `totalOutputTokens`, and `totalRequests` properties (all initialized to 0).
+  The function will update these values after each request. Note: `totalCost` is
+  only calculated for Google GenAI models, not for Ollama.
 
 ### Returns
 
@@ -867,6 +878,24 @@ const europeanCountries = await askAI(
   },
 );
 console.log(europeanCountries);
+```
+
+```ts
+// Track cumulative metrics across multiple AI requests.
+const metrics = {
+  totalCost: 0,
+  totalInputTokens: 0,
+  totalOutputTokens: 0,
+  totalRequests: 0,
+};
+
+await askAI("What is the capital of France?", { metrics });
+await askAI("What is the population of Paris?", { metrics });
+
+console.log("Total cost:", metrics.totalCost);
+console.log("Total input tokens:", metrics.totalInputTokens);
+console.log("Total output tokens:", metrics.totalOutputTokens);
+console.log("Total requests:", metrics.totalRequests);
 ```
 
 ## camelCase
