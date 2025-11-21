@@ -53,6 +53,64 @@ if (typeof aiKey === "string" && aiKey !== "") {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
+  Deno.test("should process multiple prompts with metrics option whith verbose false", async () => {
+    const metrics = {
+      totalCost: 0,
+      totalInputTokens: 0,
+      totalOutputTokens: 0,
+      totalRequests: 0,
+    };
+    const result = await askAI("What is the capital of France?", {
+      verbose: false,
+      metrics,
+    });
+    console.log(result);
+    console.log(metrics);
+    const result2 = await askAI("What is the capital of Canada?", {
+      verbose: false,
+      metrics,
+    });
+    console.log(result2);
+    console.log(metrics);
+    const result3 = await askAI("What is the capital of Spain?", {
+      verbose: false,
+      metrics,
+    });
+    console.log(result3);
+    console.log(metrics);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should process multiple prompts with metrics option whith verbose true", async () => {
+    const metrics = {
+      totalCost: 0,
+      totalInputTokens: 0,
+      totalOutputTokens: 0,
+      totalRequests: 0,
+    };
+    const result = await askAI("What is the capital of France?", {
+      verbose: true,
+      metrics,
+    });
+    console.log(result);
+    console.log(metrics);
+    const result2 = await askAI("What is the capital of Canada?", {
+      verbose: true,
+      metrics,
+    });
+    console.log(result2);
+    console.log(metrics);
+    const result3 = await askAI("What is the capital of Spain?", {
+      verbose: true,
+      metrics,
+    });
+    console.log(result3);
+    console.log(metrics);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
   Deno.test("should use a simple prompt with thinking", async () => {
     const result = await askAI("What is the capital of France?", {
       thinkingBudget: 500,
