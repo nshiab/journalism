@@ -169,13 +169,13 @@ import { jsonrepair } from "jsonrepair";
  *   `Give me a list of three countries in Northern Europe.`,
  *   {
  *     returnJson: true,
- *     clean: (response: string) => {
- *       const parsedResponse = JSON.parse(response);
+ *     clean: (response: unknown) => {
+ *       // Response is already parsed as JSON when clean is called
  *       // Example: Trim whitespace from each country name in the array
- *       if (Array.isArray(parsedResponse)) {
- *         return parsedResponse.map(item => typeof item === 'string' ? item.trim() : item);
+ *       if (Array.isArray(response)) {
+ *         return response.map(item => typeof item === 'string' ? item.trim() : item);
  *       }
- *       return parsedResponse;
+ *       return response;
  *     },
  *     test: (response) => {
  *       if (!Array.isArray(response)) {
@@ -227,7 +227,7 @@ import { jsonrepair } from "jsonrepair";
  *   @param options.parseJson - If `true`, automatically parses the AI's response as JSON. Defaults to `true` if `returnJson` is `true`, otherwise `false`.
  *   @param options.cache - If `true`, caches the response locally in a `.journalism-cache` directory. Defaults to `false`.
  *   @param options.verbose - If `true`, enables detailed logging, including token usage and estimated costs. Defaults to `false`.
- *   @param options.clean - A function to process and clean the AI's response before it is returned, tested or parsed to JSON.
+ *   @param options.clean - A function to process and clean the AI's response before it is returned or tested. This function is called after JSON parsing (if `parseJson` is `true`).
  *   @param options.test - A function or an array of functions to validate the AI's response before it's returned.
  *   @param options.contextWindow - An option to specify the context window size for Ollama models. By default, Ollama sets this depending on the model, which can be lower than the actual maximum context window size of the model.
  *   @param options.thinkingBudget - Sets the reasoning token budget: 0 to disable (default, though some models may reason regardless), -1 for a dynamic budget, or > 0 for a fixed budget. For Ollama models, any non-zero value simply enables reasoning, ignoring the specific budget amount.
@@ -718,23 +718,24 @@ export default async function askAI(
     }
   }
 
-  let cleanedResponse: unknown = "";
+  if (options.parseJson) {
+    try {
+      if (typeof returnedResponse === "string") {
+        returnedResponse = JSON.parse(jsonrepair(returnedResponse));
+      }
+    } catch (error) {
+      throw new Error(
+        `Failed to parse response as JSON: ${error}.\nResponse: ${returnedResponse}`,
+      );
+    }
+  }
+
+  let cleanedResponse: unknown = returnedResponse;
+
   if (options.clean) {
     cleanedResponse = options.clean(returnedResponse);
   } else {
     cleanedResponse = returnedResponse;
-  }
-
-  if (options.parseJson) {
-    try {
-      if (typeof cleanedResponse === "string") {
-        cleanedResponse = JSON.parse(jsonrepair(cleanedResponse));
-      }
-    } catch (error) {
-      throw new Error(
-        `Failed to parse response as JSON: ${error}.\nResponse: ${cleanedResponse}`,
-      );
-    }
   }
 
   if (options.test) {
