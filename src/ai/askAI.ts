@@ -170,7 +170,6 @@ import { jsonrepair } from "jsonrepair";
  *   {
  *     returnJson: true,
  *     clean: (response: unknown) => {
- *       // Response is already parsed as JSON when clean is called
  *       // Example: Trim whitespace from each country name in the array
  *       if (Array.isArray(response)) {
  *         return response.map(item => typeof item === 'string' ? item.trim() : item);
@@ -227,7 +226,7 @@ import { jsonrepair } from "jsonrepair";
  *   @param options.parseJson - If `true`, automatically parses the AI's response as JSON. Defaults to `true` if `returnJson` is `true`, otherwise `false`.
  *   @param options.cache - If `true`, caches the response locally in a `.journalism-cache` directory. Defaults to `false`.
  *   @param options.verbose - If `true`, enables detailed logging, including token usage and estimated costs. Defaults to `false`.
- *   @param options.clean - A function to process and clean the AI's response before it is returned or tested. This function is called after JSON parsing (if `parseJson` is `true`).
+ *   @param options.clean - A function to process and clean the AI's response before it is returned or tested. This function is called after JSON parsing (if `parseJson` is `true`). The response parameter will be the parsed JSON object if `parseJson` is true, or a string otherwise.
  *   @param options.test - A function or an array of functions to validate the AI's response before it's returned.
  *   @param options.contextWindow - An option to specify the context window size for Ollama models. By default, Ollama sets this depending on the model, which can be lower than the actual maximum context window size of the model.
  *   @param options.thinkingBudget - Sets the reasoning token budget: 0 to disable (default, though some models may reason regardless), -1 for a dynamic budget, or > 0 for a fixed budget. For Ollama models, any non-zero value simply enables reasoning, ignoring the specific budget amount.
@@ -257,7 +256,7 @@ export default async function askAI(
     verbose?: boolean;
     cache?: boolean;
     test?: ((response: unknown) => void) | ((response: unknown) => void)[];
-    clean?: (response: string) => unknown;
+    clean?: (response: unknown) => unknown;
     contextWindow?: number;
     thinkingBudget?: number;
     metrics?: {

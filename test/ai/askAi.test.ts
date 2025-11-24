@@ -16,15 +16,16 @@ if (typeof aiKey === "string" && aiKey !== "") {
       `Give me a list of three countries in Northern Europe.`,
       {
         returnJson: true,
-        clean: (response: string) => {
-          const parsedResponse = JSON.parse(response);
+        clean: (response: unknown) => {
+          // When parseJson is true, response is the parsed JSON object/array
+          // When parseJson is false, response is a string
           // Example: Trim whitespace from each country name in the array
-          if (Array.isArray(parsedResponse)) {
-            return parsedResponse.map((item) =>
+          if (Array.isArray(response)) {
+            return response.map((item) =>
               typeof item === "string" ? item.trim() : item
             );
           }
-          return parsedResponse;
+          return response;
         },
         test: (response) => {
           if (!Array.isArray(response)) {
@@ -507,7 +508,10 @@ if (ollama) {
         verbose: true,
         thinkingBudget: 1,
         returnJson: true,
-        clean: (response) => response.replace(`{"{"`, `{"`),
+        clean: (response) =>
+          typeof response === "string"
+            ? response.replace(`{"{"`, `{"`)
+            : response,
       },
     );
     console.log(result);
@@ -593,10 +597,14 @@ if (ollama) {
       {
         returnJson: true,
         cache: true,
-        clean: (response: string) => {
-          const parsed =
-            (JSON.parse(response) as { genders: string[] }).genders;
-          return parsed;
+        clean: (response: unknown) => {
+          if (
+            typeof response === "object" && response !== null &&
+            "genders" in response
+          ) {
+            return (response as { genders: string[] }).genders;
+          }
+          return response;
         },
         test: (response: unknown) => {
           if (
