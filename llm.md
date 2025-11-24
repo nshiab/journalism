@@ -642,7 +642,7 @@ async function askAI(
     verbose?: boolean;
     cache?: boolean;
     test?: ((response: unknown) => void) | ((response: unknown) => void)[];
-    clean?: (response: string) => unknown;
+    clean?: (response: unknown) => unknown;
     contextWindow?: number;
     thinkingBudget?: number;
     metrics?: {
@@ -694,7 +694,8 @@ async function askAI(
   usage and estimated costs. Defaults to `false`.
 - **`options.clean`**: - A function to process and clean the AI's response
   before it is returned or tested. This function is called after JSON parsing
-  (if `parseJson` is `true`).
+  (if `parseJson` is `true`). The response parameter will be the parsed JSON
+  object if `parseJson` is true, or a string otherwise.
 - **`options.test`**: - A function or an array of functions to validate the AI's
   response before it's returned.
 - **`options.contextWindow`**: - An option to specify the context window size
@@ -856,7 +857,6 @@ const europeanCountries = await askAI(
   {
     returnJson: true,
     clean: (response: unknown) => {
-      // Response is already parsed as JSON when clean is called
       // Example: Trim whitespace from each country name in the array
       if (Array.isArray(response)) {
         return response.map((item) =>
