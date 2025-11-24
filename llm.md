@@ -693,7 +693,8 @@ async function askAI(
 - **`options.verbose`**: - If `true`, enables detailed logging, including token
   usage and estimated costs. Defaults to `false`.
 - **`options.clean`**: - A function to process and clean the AI's response
-  before it is returned, tested or parsed to JSON.
+  before it is returned or tested. This function is called after JSON parsing
+  (if `parseJson` is `true`).
 - **`options.test`**: - A function or an array of functions to validate the AI's
   response before it's returned.
 - **`options.contextWindow`**: - An option to specify the context window size
@@ -854,15 +855,15 @@ const europeanCountries = await askAI(
   `Give me a list of three countries in Northern Europe.`,
   {
     returnJson: true,
-    clean: (response: string) => {
-      const parsedResponse = JSON.parse(response);
+    clean: (response: unknown) => {
+      // Response is already parsed as JSON when clean is called
       // Example: Trim whitespace from each country name in the array
-      if (Array.isArray(parsedResponse)) {
-        return parsedResponse.map((item) =>
+      if (Array.isArray(response)) {
+        return response.map((item) =>
           typeof item === "string" ? item.trim() : item
         );
       }
-      return parsedResponse;
+      return response;
     },
     test: (response) => {
       if (!Array.isArray(response)) {
