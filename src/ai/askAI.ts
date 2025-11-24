@@ -723,8 +723,11 @@ export default async function askAI(
         returnedResponse = JSON.parse(jsonrepair(returnedResponse));
       }
     } catch (error) {
+      const displayResponse = returnedResponse === ""
+        ? "[empty string]"
+        : returnedResponse;
       throw new Error(
-        `Failed to parse response as JSON: ${error}.\nResponse: ${returnedResponse}`,
+        `Failed to parse response as JSON: ${error}.\nResponse: ${displayResponse}`,
       );
     }
   }
