@@ -645,6 +645,7 @@ async function askAI(
     clean?: (response: unknown) => unknown;
     contextWindow?: number;
     thinkingBudget?: number;
+    includeThoughts?: boolean;
     metrics?: {
       totalCost: number;
       totalInputTokens: number;
@@ -705,6 +706,8 @@ async function askAI(
   (default, though some models may reason regardless), -1 for a dynamic budget,
   or > 0 for a fixed budget. For Ollama models, any non-zero value simply
   enables reasoning, ignoring the specific budget amount.
+- **`options.includeThoughts`**: - If `true`, includes the AI's reasoning
+  thoughts in the output when using a thinking budget. Defaults to `false`.
 - **`options.metrics`**: - An object to track cumulative metrics across multiple
   AI requests. Pass an object with `totalCost`, `totalInputTokens`,
   `totalOutputTokens`, and `totalRequests` properties (all initialized to 0).

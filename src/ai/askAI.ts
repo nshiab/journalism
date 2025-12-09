@@ -260,6 +260,7 @@ export default async function askAI(
     clean?: (response: unknown) => unknown;
     contextWindow?: number;
     thinkingBudget?: number;
+    includeThoughts?: boolean;
     metrics?: {
       totalCost: number;
       totalInputTokens: number;
@@ -566,18 +567,17 @@ export default async function askAI(
     config: {
       temperature: 0,
       responseMimeType: options.returnJson ? "application/json" : undefined,
-      thinkingConfig:
-        typeof options.thinkingBudget === "number"
-          ? {
-              thinkingBudget: options.thinkingBudget ?? 0,
-              // we could do a check here if thinkingBudget === 0 -> force false, but 
-              // let's trust the user options .. what could go wrong?
-              includeThoughts: options.includeThoughts ?? false,
-            }
-          : {
-              thinkingBudget: 0,
-              includeThoughts: false,
-            },
+      thinkingConfig: typeof options.thinkingBudget === "number"
+        ? {
+          thinkingBudget: options.thinkingBudget ?? 0,
+          // we could do a check here if thinkingBudget === 0 -> force false, but
+          // let's trust the user options .. what could go wrong?
+          includeThoughts: options.includeThoughts ?? false,
+        }
+        : {
+          thinkingBudget: 0,
+          includeThoughts: false,
+        },
     },
   };
 
