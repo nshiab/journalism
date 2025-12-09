@@ -112,10 +112,43 @@ if (typeof aiKey === "string" && aiKey !== "") {
     // Just making sure it doesn't crash for now.
     assertEquals(true, true);
   });
+  Deno.test("should use a simple prompt with undefined thinking", async () => {
+    const result = await askAI("What is the capital of France?", {
+      verbose: true,
+      model: "gemini-2.5-flash",
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt without thinking", async () => {
+    const result = await askAI("What is the capital of France?", {
+      thinkingBudget: 0,
+      verbose: true,
+      model: "gemini-2.5-flash",
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
   Deno.test("should use a simple prompt with thinking", async () => {
     const result = await askAI("What is the capital of France?", {
       thinkingBudget: 500,
       verbose: true,
+      model: "gemini-2.5-flash",
+    });
+    console.log(result);
+
+    // Just making sure it doesn't crash for now.
+    assertEquals(true, true);
+  });
+  Deno.test("should use a simple prompt without thinking and returning JSON", async () => {
+    const result = await askAI("What is the capital of France?", {
+      thinkingBudget: 0,
+      verbose: true,
+      returnJson: true,
       model: "gemini-2.5-flash",
     });
     console.log(result);
