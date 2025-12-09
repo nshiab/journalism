@@ -230,6 +230,7 @@ import { jsonrepair } from "jsonrepair";
  *   @param options.test - A function or an array of functions to validate the AI's response before it's returned.
  *   @param options.contextWindow - An option to specify the context window size for Ollama models. By default, Ollama sets this depending on the model, which can be lower than the actual maximum context window size of the model.
  *   @param options.thinkingBudget - Sets the reasoning token budget: 0 to disable (default, though some models may reason regardless), -1 for a dynamic budget, or > 0 for a fixed budget. For Ollama models, any non-zero value simply enables reasoning, ignoring the specific budget amount.
+ *   @param options.includeThoughts - If `true`, includes the AI's reasoning thoughts in the output when using a thinking budget. Defaults to `false`.
  *   @param options.metrics - An object to track cumulative metrics across multiple AI requests. Pass an object with `totalCost`, `totalInputTokens`, `totalOutputTokens`, and `totalRequests` properties (all initialized to 0). The function will update these values after each request. Note: `totalCost` is only calculated for Google GenAI models, not for Ollama.
  * @return {Promise<unknown>} A Promise that resolves to the AI's response.
  *
@@ -565,12 +566,18 @@ export default async function askAI(
     config: {
       temperature: 0,
       responseMimeType: options.returnJson ? "application/json" : undefined,
-      thinkingConfig: typeof options.thinkingBudget === "number"
-        ? {
-          thinkingBudget: options.thinkingBudget ?? 0,
-          includeThoughts: true,
-        }
-        : undefined,
+      thinkingConfig:
+        typeof options.thinkingBudget === "number"
+          ? {
+              thinkingBudget: options.thinkingBudget ?? 0,
+              // we could do a check here if thinkingBudget === 0 -> force false, but 
+              // let's trust the user options .. what could go wrong?
+              includeThoughts: options.includeThoughts ?? false,
+            }
+          : {
+              thinkingBudget: 0,
+              includeThoughts: false,
+            },
     },
   };
 
