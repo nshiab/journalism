@@ -6,50 +6,30 @@
     "./web": "./src/web.ts"
   },
   "tasks": {
-    "all-tests": "deno install --allow-scripts=npm:playwright-chromium && deno fmt --check && deno lint && deno check src/index.ts && deno doc --lint src/index.ts && deno publish --allow-dirty --dry-run && TZ=America/Toronto deno test -A --fail-fast && deno task llm",
+    "all-tests": "deno install --allow-scripts=npm:playwright-chromium && deno fmt --check && deno lint && deno check src/index.ts && deno doc --lint src/index.ts && deno publish --allow-dirty --dry-run && deno task llm",
     "llm": "deno doc --json src/index.ts > docs.json && deno run -A src/generateLlmMd.ts && deno fmt llm.md",
-    "test-coverage": "deno test -A --fail-fast --coverage=cov_profile && deno coverage cov_profile",
-    "patch-no-tests": "deno run -A src/incrementVersion.ts patch",
-    "minor-no-tests": "deno run -A src/incrementVersion.ts minor",
-    "patch": "deno task all-tests && deno run -A src/incrementVersion.ts patch",
-    "minor": "deno task all-tests && deno run -A src/incrementVersion.ts minor",
-    "major": "deno task all-tests && deno run -A src/incrementVersion.ts major"
+    "patch": "deno run -A src/incrementVersion.ts patch",
+    "minor": "deno run -A src/incrementVersion.ts minor",
+    "major": "deno run -A src/incrementVersion.ts major"
   },
   "publish": {
     "exclude": [
-      "test",
       ".github"
     ]
   },
   "nodeModulesDir": "auto",
   "imports": {
-    "@google-cloud/storage": "npm:@google-cloud/storage@^7.18.0",
-    "@google/genai": "npm:@google/genai@^1.33.0",
-    "@observablehq/plot": "npm:@observablehq/plot@^0.6.17",
-    "@std/assert": "jsr:@std/assert@^1.0.16",
-    "@std/dotenv": "jsr:@std/dotenv@^0.225.5",
-    "@types/d3-geo": "npm:@types/d3-geo@^3.1.0",
-    "adm-zip": "npm:adm-zip@^0.5.16",
-    "cheerio": "npm:cheerio@^1.1.2",
-    "d3-array": "npm:d3-array@^3.2.4",
-    "d3-dsv": "npm:d3-dsv@^3.0.1",
-    "d3-geo": "npm:d3-geo@^3.1.1",
-    "date-fns-tz": "npm:date-fns-tz@^3.2.0",
-    "fflate": "npm:fflate@^0.8.2",
-    "geotiff": "npm:geotiff@^2.1.4-beta.1",
-    "google-auth-library": "npm:google-auth-library@^10.5.0",
-    "google-spreadsheet": "npm:google-spreadsheet@^5.0.2",
-    "iconv-lite": "npm:iconv-lite@^0.7.0",
-    "jsonrepair": "npm:jsonrepair@^3.13.1",
-    "jstat": "npm:jstat@^1.9.6",
-    "ollama": "npm:ollama@^0.6.3",
-    "playwright-chromium": "npm:playwright-chromium@^1.57.0"
-  },
-  "fmt": {
-    "exclude": [
-      "test/output",
-      "src/dataviz/imports"
-    ]
+    "@nshiab/journalism-ai": "jsr:@nshiab/journalism-ai@^1.0.0",
+    "@nshiab/journalism-climate": "jsr:@nshiab/journalism-climate@^1.0.3",
+    "@nshiab/journalism-dataviz": "jsr:@nshiab/journalism-dataviz@^1.0.1",
+    "@nshiab/journalism-extras": "jsr:@nshiab/journalism-extras@^1.0.1",
+    "@nshiab/journalism-finance": "jsr:@nshiab/journalism-finance@^1.0.1",
+    "@nshiab/journalism-format": "jsr:@nshiab/journalism-format@^1.0.2",
+    "@nshiab/journalism-geo": "jsr:@nshiab/journalism-geo@^1.0.2",
+    "@nshiab/journalism-google": "jsr:@nshiab/journalism-google@^1.0.0",
+    "@nshiab/journalism-statistics": "jsr:@nshiab/journalism-statistics@^1.0.1",
+    "@nshiab/journalism-web": "jsr:@nshiab/journalism-web@^1.0.1",
+    "@nshiab/journalism-web-scraping": "jsr:@nshiab/journalism-web-scraping@^1.0.1"
   },
   "compilerOptions": {
     "lib": [
@@ -60,9 +40,7 @@
   "lint": {
     "include": [
       "src/**/*.ts"
-    ],
-    "exclude": [
-      "src/dataviz/imports"
     ]
-  }
+  },
+  "allowScripts": ["npm:playwright-chromium@1"]
 }
