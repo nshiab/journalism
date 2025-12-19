@@ -6,11 +6,11 @@
     "./web": "./src/web.ts"
   },
   "tasks": {
-    "all-tests": "deno install --allow-scripts=npm:playwright-chromium && deno fmt --check && deno lint && deno check src/index.ts && deno doc --lint src/index.ts && deno publish --allow-dirty --dry-run && deno task llm",
+    "all-tests": "deno fmt --check && deno lint && deno check src/index.ts && deno doc --lint src/index.ts && deno publish --allow-dirty --dry-run && deno task llm",
     "llm": "deno doc --json src/index.ts > docs.json && deno run -A src/generateLlmMd.ts && deno fmt llm.md",
-    "patch": "deno run -A src/incrementVersion.ts patch",
-    "minor": "deno run -A src/incrementVersion.ts minor",
-    "major": "deno run -A src/incrementVersion.ts major"
+    "patch": "deno task all-tests && deno run -A src/incrementVersion.ts patch",
+    "minor": "deno task all-tests && deno run -A src/incrementVersion.ts minor",
+    "major": "deno task all-tests && deno run -A src/incrementVersion.ts major"
   },
   "publish": {
     "exclude": [
