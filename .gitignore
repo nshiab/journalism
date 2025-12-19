@@ -1,7 +1,5 @@
 node_modules
-test/output/
 .DS_Store
 .env
 cov_profile
-.journalism-cache
 docs.json

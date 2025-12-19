@@ -10,6 +10,21 @@ The documentation is also available as the markdown file
 passed as context to improve the use of the library by AI coding assistants or
 agents.
 
+The library is a collection of the following modules. Note that the functions
+are tested at the module level.
+
+- [journalism-ai](https://github.com/nshiab/journalism-ai)
+- [journalism-climate](https://github.com/nshiab/journalism-climate)
+- [journalism-dataviz](https://github.com/nshiab/journalism-dataviz)
+- [journalism-finance](https://github.com/nshiab/journalism-finance)
+- [journalism-format](https://github.com/nshiab/journalism-format)
+- [journalism-geo](https://github.com/nshiab/journalism-geo)
+- [journalism-google](https://github.com/nshiab/journalism-google)
+- [journalism-statistics](https://github.com/nshiab/journalism-statistics)
+- [journalism-web](https://github.com/nshiab/journalism-web)
+- [journalism-web-scraping](https://github.com/nshiab/journalism-web-scraping)
+- [journalism-extras](https://github.com/nshiab/journalism-extras)
+
 The library is maintained by [Nael Shiab](http://naelshiab.com/), computational
 journalist and senior data producer for [CBC News](https://www.cbc.ca/news).
 
