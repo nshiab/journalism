@@ -1297,6 +1297,271 @@ if (result.estimatedCost) {
 }
 ```
 
+## askAIPool
+
+Processes multiple AI requests concurrently using a pool of workers. This
+function wraps {@link askAI} and manages parallel execution, retries, progress
+logging, and error handling for batch operations.
+
+Each request in the array is processed by a worker from the pool. The pool size
+controls how many requests run simultaneously. Results and errors are returned
+separately, sorted by their original index, making it easy to match outputs back
+to inputs.
+
+### Signature
+
+```typescript
+async function askAIPool(
+  requests: {
+    id?: string;
+    prompt: string;
+    options?: {
+      model?: string;
+      apiKey?: string;
+      vertex?: boolean;
+      project?: string;
+      location?: string;
+      ollama?: boolean | Ollama;
+      HTMLFrom?: string | string[];
+      screenshotFrom?: string | string[];
+      image?: string | string[];
+      video?: string | string[];
+      audio?: string | string[];
+      pdf?: string | string[];
+      text?: string | string[];
+      returnJson?: boolean;
+      parseJson?: boolean;
+      verbose?: boolean;
+      cache?: boolean;
+      test?: ((response: unknown) => void) | ((response: unknown) => void)[];
+      clean?: (response: unknown) => unknown;
+      contextWindow?: number;
+      thinkingBudget?: number;
+      includeThoughts?: boolean;
+      geminiParameters?: Partial<GenerateContentParameters>;
+      ollamaParameters?: Partial<ChatRequest>;
+    };
+  }[],
+  poolOptions: {
+    poolSize: number;
+    logProgress?: boolean;
+    retry?: number;
+    retryCheck?: (error: unknown) => Promise<boolean> | boolean;
+    minRequestDurationMs?: number;
+    metrics?: {
+      totalCost: number;
+      totalInputTokens: number;
+      totalOutputTokens: number;
+      totalRequests: number;
+    };
+  },
+): Promise<
+  {
+    results: {
+      index: number;
+      request: {
+        id?: string;
+        prompt: string;
+        options?: {
+          model?: string;
+          apiKey?: string;
+          vertex?: boolean;
+          project?: string;
+          location?: string;
+          ollama?: boolean | Ollama;
+          HTMLFrom?: string | string[];
+          screenshotFrom?: string | string[];
+          image?: string | string[];
+          video?: string | string[];
+          audio?: string | string[];
+          pdf?: string | string[];
+          text?: string | string[];
+          returnJson?: boolean;
+          parseJson?: boolean;
+          verbose?: boolean;
+          cache?: boolean;
+          test?:
+            | ((response: unknown) => void)
+            | ((response: unknown) => void)[];
+          clean?: (response: unknown) => unknown;
+          contextWindow?: number;
+          thinkingBudget?: number;
+          includeThoughts?: boolean;
+          geminiParameters?: Partial<GenerateContentParameters>;
+          ollamaParameters?: Partial<ChatRequest>;
+        };
+      };
+      result: unknown;
+    }[];
+    errors: Array<
+      {
+        index: number;
+        request: {
+          id?: string;
+          prompt: string;
+          options?: {
+            model?: string;
+            apiKey?: string;
+            vertex?: boolean;
+            project?: string;
+            location?: string;
+            ollama?: boolean | Ollama;
+            HTMLFrom?: string | string[];
+            screenshotFrom?: string | string[];
+            image?: string | string[];
+            video?: string | string[];
+            audio?: string | string[];
+            pdf?: string | string[];
+            text?: string | string[];
+            returnJson?: boolean;
+            parseJson?: boolean;
+            verbose?: boolean;
+            cache?: boolean;
+            test?:
+              | ((response: unknown) => void)
+              | ((response: unknown) => void)[];
+            clean?: (response: unknown) => unknown;
+            contextWindow?: number;
+            thinkingBudget?: number;
+            includeThoughts?: boolean;
+            geminiParameters?: Partial<GenerateContentParameters>;
+            ollamaParameters?: Partial<ChatRequest>;
+          };
+        };
+        error: unknown;
+      }
+    >;
+  }
+>;
+```
+
+### Parameters
+
+- **`requests`**: - An array of request objects to process.
+- **`requests[].id`**: - An optional identifier for the request, useful for
+  matching results back to inputs.
+- **`requests[].prompt`**: - The primary text input for the AI model.
+- **`requests[].options`**: - Options passed to {@link askAI} for each
+  individual request. See {@link askAI} for the full list of available options.
+- **`poolOptions`**: - Configuration for the pool execution.
+- **`poolOptions.poolSize`**: - The number of concurrent workers processing
+  requests.
+- **`poolOptions.logProgress`**: - If `true`, logs progress to the console after
+  each completed or failed request. Defaults to `false`.
+- **`poolOptions.retry`**: - The maximum number of retry attempts for a failed
+  request. Defaults to `0` (no retries).
+- **`poolOptions.retryCheck`**: - A function that receives the error and returns
+  whether the request should be retried. If not provided, all failed requests
+  are retried up to the `retry` limit.
+- **`poolOptions.minRequestDurationMs`**: - A minimum duration in milliseconds
+  for each request. If a request completes faster, the worker will wait before
+  picking up the next one. Useful for rate limiting.
+- **`poolOptions.metrics`**: - An object to track cumulative metrics across all
+  requests in the pool. Pass an object with `totalCost`, `totalInputTokens`,
+  `totalOutputTokens`, and `totalRequests` properties (all initialized to 0).
+
+### Returns
+
+A Promise that resolves to an object with `results` (successful responses with
+their index and request) and `errors` (failed requests with their index,
+request, and error), both sorted by original index.
+
+### Examples
+
+```ts
+// Basic usage: Process a batch of prompts with a pool of 5 concurrent workers.
+const { results, errors } = await askAIPool(
+  [
+    { prompt: "What is the capital of France?" },
+    { prompt: "What is the capital of Germany?" },
+    { prompt: "What is the capital of Italy?" },
+  ],
+  { poolSize: 5 },
+);
+for (const r of results) {
+  console.log(r.result);
+}
+```
+
+```ts
+// Use an id to easily identify each request in the results.
+const { results, errors } = await askAIPool(
+  [
+    { id: "france", prompt: "What is the capital of France?" },
+    { id: "germany", prompt: "What is the capital of Germany?" },
+  ],
+  { poolSize: 2 },
+);
+for (const r of results) {
+  console.log(r.request.id, r.result);
+}
+```
+
+```ts
+// Enable progress logging and retries.
+const { results, errors } = await askAIPool(
+  [
+    {
+      prompt: "Summarize this article.",
+      options: { text: "./article1.txt", returnJson: true },
+    },
+    {
+      prompt: "Summarize this article.",
+      options: { text: "./article2.txt", returnJson: true },
+    },
+  ],
+  {
+    poolSize: 3,
+    logProgress: true,
+    retry: 2,
+  },
+);
+console.log(`${results.length} succeeded, ${errors.length} failed`);
+```
+
+```ts
+// Track cumulative metrics and enforce a minimum request duration to respect rate limits.
+const metrics = {
+  totalCost: 0,
+  totalInputTokens: 0,
+  totalOutputTokens: 0,
+  totalRequests: 0,
+};
+const { results } = await askAIPool(
+  [
+    { prompt: "What is 2+2?" },
+    { prompt: "What is 3+3?" },
+  ],
+  {
+    poolSize: 2,
+    minRequestDurationMs: 1000,
+    metrics,
+  },
+);
+console.log("Total cost:", metrics.totalCost);
+console.log("Total requests:", metrics.totalRequests);
+```
+
+```ts
+// Use retryCheck to only retry on specific errors.
+const { results, errors } = await askAIPool(
+  [
+    {
+      prompt: "Analyze this image.",
+      options: { image: "./photo.jpg", returnJson: true },
+    },
+  ],
+  {
+    poolSize: 1,
+    retry: 3,
+    retryCheck: (error) => {
+      // Only retry on rate limit errors
+      return error instanceof Error && error.message.includes("429");
+    },
+  },
+);
+```
+
 ## camelCase
 
 Converts a string into camelCase. This is useful for creating variable names or
@@ -2886,7 +3151,7 @@ async function getGeoTiffValues(
     bboxWidth: number;
     bboxHeight: number;
   },
-): Promise<number | TypedArray>;
+): Promise<TypedArray>;
 ```
 
 ### Parameters
@@ -4485,7 +4750,7 @@ enabling debug logging.
 
 ```typescript
 function mortgagePayments(
-  mortageAmount: number,
+  mortgageAmount: number,
   rate: number,
   paymentFrequency:
     | "weekly"
@@ -4517,7 +4782,7 @@ function mortgagePayments(
 
 ### Parameters
 
-- **`mortageAmount`**: - The total amount of the mortgage loan.
+- **`mortgageAmount`**: - The total amount of the mortgage loan.
 - **`rate`**: - The annual interest rate of the mortgage (e.g., `6.00` for
   6.00%).
 - **`paymentFrequency`**: - The frequency at which mortgage payments are made.
@@ -6712,6 +6977,109 @@ await updateNotesDW(customApiKeyChartID, customNote, { apiKey: "DW_KEY" });
 console.log(
   `Notes updated for chart ${customApiKeyChartID} using custom API key.`,
 );
+```
+
+## variableMortgagePayments
+
+Calculates and returns a detailed schedule of variable-rate monthly mortgage
+payments (VRM). This function models a Variable Rate Mortgage where the payment
+amount stays FIXED for the term, but rate changes affect how much goes to
+interest vs. principal. If rates rise too high, payments may not cover interest,
+causing negative amortization (balance increases).
+
+### Signature
+
+```typescript
+function variableMortgagePayments(
+  mortgageAmount: number,
+  rates: number[],
+  term: number,
+  amortizationPeriod: number,
+  options?: {
+    id?: string;
+    decimals?: number;
+    annualCompounding?: number;
+    debug?: boolean;
+  },
+): {
+  id?: string | undefined;
+  paymentId: number;
+  payment: number;
+  interest: number;
+  capital: number;
+  balance: number;
+  amountPaid: number;
+  interestPaid: number;
+  capitalPaid: number;
+  rate: number;
+}[];
+```
+
+### Parameters
+
+- **`mortgageAmount`**: - The total amount of the mortgage loan.
+- **`rates`**: - An array of annual interest rates (e.g.,
+  `[6.00, 6.00, 5.50, 5.50, ...]` for rates in percentages). The array must
+  contain at least as many rates as there are payments in the term. Each element
+  corresponds to the rate for that payment period (0-based index).
+- **`term`**: - The term of the mortgage in years. This is the length of the
+  current mortgage contract.
+- **`amortizationPeriod`**: - The total amortization period of the mortgage in
+  years. This is the total time it will take to pay off the mortgage.
+- **`options`**: - Additional options for customizing the mortgage calculation
+  and output.
+- **`options.id`**: - An optional string ID to be added to each payment object
+  in the returned array. Useful for tracking payments related to a specific
+  mortgage.
+- **`options.decimals`**: - The number of decimal places to round the financial
+  values (payment, interest, capital, balance) to. Defaults to `2`.
+- **`options.annualCompounding`**: - The number of times the mortgage interest
+  should be compounded per year. Defaults to `12` (monthly compounding). Set to
+  `2` for semi-annual compounding as is standard in Canada.
+- **`options.debug`**: - If `true`, enables debug logging to the console,
+  providing additional insights into the calculation process. Defaults to
+  `false`.
+
+### Returns
+
+An array of objects, where each object represents a single mortgage payment and
+contains:
+
+- `paymentId`: A 0-based index for the payment.
+- `payment`: The total amount of the payment (fixed for the term).
+- `interest`: The portion that goes towards interest (varies with rate changes).
+- `capital`: The portion that goes towards the principal (can be negative during
+  negative amortization).
+- `balance`: The remaining mortgage balance after the payment (can increase if
+  interest exceeds payment).
+- `amountPaid`: The cumulative total amount paid so far.
+- `interestPaid`: The cumulative total interest paid so far.
+- `capitalPaid`: The cumulative total capital reimbursed so far (can be
+  negative).
+- `rate`: The annual interest rate in effect for this payment.
+- `id` (optional): The ID provided in `options.id`.
+
+### Throws
+
+- **`Error`**: If the `amortizationPeriod` is less than the `term`, as this is
+  an invalid mortgage configuration.
+- **`Error`**: If the `rates` array does not contain enough rates for all
+  payments in the term.
+
+### Examples
+
+```ts
+// VRM: Payment stays fixed, but rate changes affect interest/principal split
+// If rates rise high enough, balance can increase (negative amortization)
+const rates = [
+  ...Array(12).fill(6), // Months 0-11 at 6%
+  ...Array(12).fill(5.5), // Months 12-23 at 5.5% (more goes to principal)
+  ...Array(36).fill(7.5), // Months 24-59 at 7.5% (might trigger negative amortization)
+];
+const payments = variableMortgagePayments(250_000, rates, 5, 25);
+console.log(payments[0]); // Payment amount set based on initial rate
+console.log(payments[12]); // Same payment, but less interest (rate dropped)
+console.log(payments[24]); // Same payment, but more interest (rate increased)
 ```
 
 ## zip
