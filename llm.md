@@ -1312,36 +1312,7 @@ to inputs.
 
 ```typescript
 async function askAIPool(
-  requests: {
-    id?: string;
-    prompt: string;
-    options?: {
-      model?: string;
-      apiKey?: string;
-      vertex?: boolean;
-      project?: string;
-      location?: string;
-      ollama?: boolean | Ollama;
-      HTMLFrom?: string | string[];
-      screenshotFrom?: string | string[];
-      image?: string | string[];
-      video?: string | string[];
-      audio?: string | string[];
-      pdf?: string | string[];
-      text?: string | string[];
-      returnJson?: boolean;
-      parseJson?: boolean;
-      verbose?: boolean;
-      cache?: boolean;
-      test?: ((response: unknown) => void) | ((response: unknown) => void)[];
-      clean?: (response: unknown) => unknown;
-      contextWindow?: number;
-      thinkingBudget?: number;
-      includeThoughts?: boolean;
-      geminiParameters?: Partial<GenerateContentParameters>;
-      ollamaParameters?: Partial<ChatRequest>;
-    };
-  }[],
+  requests: askAIRequest[],
   poolOptions: {
     poolSize: number;
     logProgress?: boolean;
@@ -1357,80 +1328,8 @@ async function askAIPool(
   },
 ): Promise<
   {
-    results: {
-      index: number;
-      request: {
-        id?: string;
-        prompt: string;
-        options?: {
-          model?: string;
-          apiKey?: string;
-          vertex?: boolean;
-          project?: string;
-          location?: string;
-          ollama?: boolean | Ollama;
-          HTMLFrom?: string | string[];
-          screenshotFrom?: string | string[];
-          image?: string | string[];
-          video?: string | string[];
-          audio?: string | string[];
-          pdf?: string | string[];
-          text?: string | string[];
-          returnJson?: boolean;
-          parseJson?: boolean;
-          verbose?: boolean;
-          cache?: boolean;
-          test?:
-            | ((response: unknown) => void)
-            | ((response: unknown) => void)[];
-          clean?: (response: unknown) => unknown;
-          contextWindow?: number;
-          thinkingBudget?: number;
-          includeThoughts?: boolean;
-          geminiParameters?: Partial<GenerateContentParameters>;
-          ollamaParameters?: Partial<ChatRequest>;
-        };
-      };
-      result: unknown;
-    }[];
-    errors: Array<
-      {
-        index: number;
-        request: {
-          id?: string;
-          prompt: string;
-          options?: {
-            model?: string;
-            apiKey?: string;
-            vertex?: boolean;
-            project?: string;
-            location?: string;
-            ollama?: boolean | Ollama;
-            HTMLFrom?: string | string[];
-            screenshotFrom?: string | string[];
-            image?: string | string[];
-            video?: string | string[];
-            audio?: string | string[];
-            pdf?: string | string[];
-            text?: string | string[];
-            returnJson?: boolean;
-            parseJson?: boolean;
-            verbose?: boolean;
-            cache?: boolean;
-            test?:
-              | ((response: unknown) => void)
-              | ((response: unknown) => void)[];
-            clean?: (response: unknown) => unknown;
-            contextWindow?: number;
-            thinkingBudget?: number;
-            includeThoughts?: boolean;
-            geminiParameters?: Partial<GenerateContentParameters>;
-            ollamaParameters?: Partial<ChatRequest>;
-          };
-        };
-        error: unknown;
-      }
-    >;
+    results: { index: number; request: askAIRequest; result: unknown }[];
+    errors: Array<{ index: number; request: askAIRequest; error: unknown }>;
   }
 >;
 ```
