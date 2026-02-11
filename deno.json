@@ -19,7 +19,7 @@
   },
   "nodeModulesDir": "auto",
   "imports": {
-    "@nshiab/journalism-ai": "jsr:@nshiab/journalism-ai@^1.2.0",
+    "@nshiab/journalism-ai": "jsr:@nshiab/journalism-ai@^1.2.1",
     "@nshiab/journalism-climate": "jsr:@nshiab/journalism-climate@^1.0.4",
     "@nshiab/journalism-dataviz": "jsr:@nshiab/journalism-dataviz@^1.0.3",
     "@nshiab/journalism-extras": "jsr:@nshiab/journalism-extras@^1.0.2",
