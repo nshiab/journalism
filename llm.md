@@ -618,6 +618,14 @@ caching, set the `cache` option to `true`.
 Google Cloud Storage (GCS). Simply provide the file path or the `gs://` URL.
 Note that Ollama only supports local files.
 
+**Web Search Grounding**: For Gemini models, you can enable web search grounding
+by setting `webSearch` to `true`. This allows the AI to search the web for
+current information and ground its responses in real-time data. Note that this
+feature incurs additional API costs.
+
+Temperature is set at 0 by default to encourage more deterministic responses.
+Safety and content filters are disabled by default for Gemini.
+
 ### Signature
 
 ```typescript
@@ -630,6 +638,7 @@ async function askAI(
     project?: string;
     location?: string;
     ollama?: boolean | Ollama;
+    webSearch?: boolean;
     HTMLFrom?: string | string[];
     screenshotFrom?: string | string[];
     image?: string | string[];
@@ -639,6 +648,7 @@ async function askAI(
     text?: string | string[];
     returnJson?: boolean;
     parseJson?: boolean;
+    schemaJson?: unknown;
     verbose?: boolean;
     cache?: boolean;
     test?: ((response: unknown) => void) | ((response: unknown) => void)[];
@@ -692,6 +702,9 @@ async function askAI(
 - **`options.ollama`**: - Set to `true` to use a local Ollama model. Defaults to
   the `OLLAMA` environment variable. If you want your Ollama instance to be
   used, you can pass it here too.
+- **`options.webSearch`**: - (Gemini only) If `true`, enables web search
+  grounding for the AI's responses. Be careful of extra costs. Defaults to
+  `false`.
 - **`options.HTMLFrom`**: - A URL or an array of URLs to scrape HTML content
   from. The content is appended to the prompt.
 - **`options.screenshotFrom`**: - A URL or an array of URLs to take a screenshot
@@ -708,6 +721,9 @@ async function askAI(
   object. Defaults to `false`.
 - **`options.parseJson`**: - If `true`, automatically parses the AI's response
   as JSON. Defaults to `true` if `returnJson` is `true`, otherwise `false`.
+- **`options.schemaJson`**: - A Zod JSON schema object to enforce structured
+  output. When provided, the AI will return data that conforms to the specified
+  schema. Automatically enables `returnJson` and `parseJson`.
 - **`options.cache`**: - If `true`, caches the response locally in a
   `.journalism-cache` directory. Defaults to `false`.
 - **`options.verbose`**: - If `true`, enables detailed logging, including token
@@ -776,6 +792,36 @@ const vertexResponse = await askAI("What is the capital of France?", {
   vertex: true,
   project: "your_project_id",
   location: "us-central1",
+});
+```
+
+```ts
+// Combine web search with other features for fact-checking.
+const factCheck = await askAI(
+  `Based on current web sources, verify the following claim and provide supporting evidence: "Renewable energy now accounts for over 30% of global electricity generation."`,
+  {
+    webSearch: true,
+  },
+);
+console.log(factCheck);
+```
+
+```ts
+// Return a response that conforms to a specific JSON schema.
+import * as z from "zod";
+
+const schema = z.toJSONSchema(
+  z.array(z.object({
+    name: z.string(),
+    age: z.number(),
+    gender: z.enum(["man", "woman"]),
+  })),
+);
+
+await askAI("Give me 10 random people.", {
+  verbose: true,
+  cache: true,
+  schemaJson: schema,
 });
 ```
 
@@ -982,6 +1028,14 @@ caching, set the `cache` option to `true`.
 Google Cloud Storage (GCS). Simply provide the file path or the `gs://` URL.
 Note that Ollama only supports local files.
 
+**Web Search Grounding**: For Gemini models, you can enable web search grounding
+by setting `webSearch` to `true`. This allows the AI to search the web for
+current information and ground its responses in real-time data. Note that this
+feature incurs additional API costs.
+
+Temperature is set at 0 by default to encourage more deterministic responses.
+Safety and content filters are disabled by default for Gemini.
+
 ### Signature
 
 ```typescript
@@ -994,6 +1048,7 @@ async function askAI(
     project?: string;
     location?: string;
     ollama?: boolean | Ollama;
+    webSearch?: boolean;
     HTMLFrom?: string | string[];
     screenshotFrom?: string | string[];
     image?: string | string[];
@@ -1003,6 +1058,7 @@ async function askAI(
     text?: string | string[];
     returnJson?: boolean;
     parseJson?: boolean;
+    schemaJson?: unknown;
     verbose?: boolean;
     cache?: boolean;
     test?: ((response: unknown) => void) | ((response: unknown) => void)[];
@@ -1040,6 +1096,9 @@ async function askAI(
 - **`options.ollama`**: - Set to `true` to use a local Ollama model. Defaults to
   the `OLLAMA` environment variable. If you want your Ollama instance to be
   used, you can pass it here too.
+- **`options.webSearch`**: - (Gemini only) If `true`, enables web search
+  grounding for the AI's responses. Be careful of extra costs. Defaults to
+  `false`.
 - **`options.HTMLFrom`**: - A URL or an array of URLs to scrape HTML content
   from. The content is appended to the prompt.
 - **`options.screenshotFrom`**: - A URL or an array of URLs to take a screenshot
@@ -1056,6 +1115,9 @@ async function askAI(
   object. Defaults to `false`.
 - **`options.parseJson`**: - If `true`, automatically parses the AI's response
   as JSON. Defaults to `true` if `returnJson` is `true`, otherwise `false`.
+- **`options.schemaJson`**: - A Zod JSON schema object to enforce structured
+  output. When provided, the AI will return data that conforms to the specified
+  schema. Automatically enables `returnJson` and `parseJson`.
 - **`options.cache`**: - If `true`, caches the response locally in a
   `.journalism-cache` directory. Defaults to `false`.
 - **`options.verbose`**: - If `true`, enables detailed logging, including token
@@ -1124,6 +1186,36 @@ const vertexResponse = await askAI("What is the capital of France?", {
   vertex: true,
   project: "your_project_id",
   location: "us-central1",
+});
+```
+
+```ts
+// Combine web search with other features for fact-checking.
+const factCheck = await askAI(
+  `Based on current web sources, verify the following claim and provide supporting evidence: "Renewable energy now accounts for over 30% of global electricity generation."`,
+  {
+    webSearch: true,
+  },
+);
+console.log(factCheck);
+```
+
+```ts
+// Return a response that conforms to a specific JSON schema.
+import * as z from "zod";
+
+const schema = z.toJSONSchema(
+  z.array(z.object({
+    name: z.string(),
+    age: z.number(),
+    gender: z.enum(["man", "woman"]),
+  })),
+);
+
+await askAI("Give me 10 random people.", {
+  verbose: true,
+  cache: true,
+  schemaJson: schema,
 });
 ```
 
@@ -1458,6 +1550,39 @@ const { results, errors } = await askAIPool(
     },
   },
 );
+```
+
+```ts
+// Use schemaJson to enforce structured output with a specific schema.
+import * as z from "zod";
+
+const schema = z.toJSONSchema(
+  z.object({
+    people: z.array(z.object({
+      name: z.string(),
+      age: z.number(),
+      gender: z.enum(["man", "woman"]),
+    })),
+  }),
+);
+
+const { results, errors } = await askAIPool(
+  [
+    {
+      prompt: "Give me 5 characters from Harry Potter.",
+      options: { schemaJson: schema },
+    },
+    {
+      prompt: "Give me 5 characters from Lord of the Rings.",
+      options: { schemaJson: schema },
+    },
+  ],
+  2,
+);
+// Each result will conform to the specified schema
+for (const r of results) {
+  console.log(r.result); // { people: [{ name: "...", age: ..., gender: "..." }, ...] }
+}
 ```
 
 ## camelCase
