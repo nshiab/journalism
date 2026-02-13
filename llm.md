@@ -655,6 +655,7 @@ async function askAI(
     clean?: (response: unknown) => unknown;
     contextWindow?: number;
     thinkingBudget?: number;
+    thinkingLevel?: "minimal" | "low" | "medium" | "high";
     includeThoughts?: boolean;
     detailedResponse: true;
     geminiParameters?: Partial<GenerateContentParameters>;
@@ -740,9 +741,15 @@ async function askAI(
 - **`options.thinkingBudget`**: - Sets the reasoning token budget: 0 to disable
   (default, though some models may reason regardless), -1 for a dynamic budget,
   or > 0 for a fixed budget. For Ollama models, any non-zero value simply
-  enables reasoning, ignoring the specific budget amount.
+  enables reasoning, ignoring the specific budget amount. Note: `thinkingLevel`
+  takes precedence over `thinkingBudget` if both are provided.
+- **`options.thinkingLevel`**: - Sets the thinking level for reasoning:
+  "minimal", "low", "medium", or "high", which some models expect instead of
+  `thinkingBudget`. Takes precedence over `thinkingBudget` if both are provided.
+  For Ollama models, any value enables reasoning.
 - **`options.includeThoughts`**: - If `true`, includes the AI's reasoning
-  thoughts in the output when using a thinking budget. Defaults to `false`.
+  thoughts in the output when using a thinking budget or thinking level.
+  Defaults to `false`.
 - **`options.detailedResponse`**: - If `true`, returns an object containing both
   the response and metadata (tokens, cost, duration, etc.). Defaults to `false`.
 - **`options.geminiParameters`**: - Additional parameters to pass to the Gemini
@@ -1065,6 +1072,7 @@ async function askAI(
     clean?: (response: unknown) => unknown;
     contextWindow?: number;
     thinkingBudget?: number;
+    thinkingLevel?: "minimal" | "low" | "medium" | "high";
     includeThoughts?: boolean;
     detailedResponse?: false;
     geminiParameters?: Partial<GenerateContentParameters>;
@@ -1134,9 +1142,15 @@ async function askAI(
 - **`options.thinkingBudget`**: - Sets the reasoning token budget: 0 to disable
   (default, though some models may reason regardless), -1 for a dynamic budget,
   or > 0 for a fixed budget. For Ollama models, any non-zero value simply
-  enables reasoning, ignoring the specific budget amount.
+  enables reasoning, ignoring the specific budget amount. Note: `thinkingLevel`
+  takes precedence over `thinkingBudget` if both are provided.
+- **`options.thinkingLevel`**: - Sets the thinking level for reasoning:
+  "minimal", "low", "medium", or "high", which some models expect instead of
+  `thinkingBudget`. Takes precedence over `thinkingBudget` if both are provided.
+  For Ollama models, any value enables reasoning.
 - **`options.includeThoughts`**: - If `true`, includes the AI's reasoning
-  thoughts in the output when using a thinking budget. Defaults to `false`.
+  thoughts in the output when using a thinking budget or thinking level.
+  Defaults to `false`.
 - **`options.detailedResponse`**: - If `true`, returns an object containing both
   the response and metadata (tokens, cost, duration, etc.). Defaults to `false`.
 - **`options.geminiParameters`**: - Additional parameters to pass to the Gemini
