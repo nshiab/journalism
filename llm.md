@@ -658,6 +658,7 @@ async function askAI(
     thinkingBudget?: number;
     thinkingLevel?: "minimal" | "low" | "medium" | "high";
     includeThoughts?: boolean;
+    temperature?: number;
     detailedResponse: true;
     geminiParameters?: Partial<GenerateContentParameters>;
     ollamaParameters?: Partial<ChatRequest>;
@@ -754,6 +755,10 @@ async function askAI(
 - **`options.includeThoughts`**: - If `true`, includes the AI's reasoning
   thoughts in the output when using a thinking budget or thinking level.
   Defaults to `false`.
+- **`options.temperature`**: - Sets the temperature for response generation,
+  controlling the randomness of the output. A value of 0 (default) makes the
+  output more deterministic, while higher values (e.g., 0.7) increase creativity
+  and variability.`.
 - **`options.detailedResponse`**: - If `true`, returns an object containing both
   the response and metadata (tokens, cost, duration, etc.). Defaults to `false`.
 - **`options.geminiParameters`**: - Additional parameters to pass to the Gemini
@@ -1079,6 +1084,7 @@ async function askAI(
     thinkingBudget?: number;
     thinkingLevel?: "minimal" | "low" | "medium" | "high";
     includeThoughts?: boolean;
+    temperature?: number;
     detailedResponse?: false;
     geminiParameters?: Partial<GenerateContentParameters>;
     ollamaParameters?: Partial<ChatRequest>;
@@ -1159,6 +1165,10 @@ async function askAI(
 - **`options.includeThoughts`**: - If `true`, includes the AI's reasoning
   thoughts in the output when using a thinking budget or thinking level.
   Defaults to `false`.
+- **`options.temperature`**: - Sets the temperature for response generation,
+  controlling the randomness of the output. A value of 0 (default) makes the
+  output more deterministic, while higher values (e.g., 0.7) increase creativity
+  and variability.`.
 - **`options.detailedResponse`**: - If `true`, returns an object containing both
   the response and metadata (tokens, cost, duration, etc.). Defaults to `false`.
 - **`options.geminiParameters`**: - Additional parameters to pass to the Gemini
