@@ -1,7 +1,7 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@nshiab/journalism-ai@^1.2.11": "1.2.11",
+    "jsr:@nshiab/journalism-ai@^1.2.12": "1.2.12",
     "jsr:@nshiab/journalism-climate@^1.0.4": "1.0.4",
     "jsr:@nshiab/journalism-dataviz@^1.0.3": "1.0.3",
     "jsr:@nshiab/journalism-extras@^1.0.2": "1.0.2",
@@ -34,8 +34,8 @@
     "npm:playwright-chromium@^1.58.2": "1.58.2"
   },
   "jsr": {
-    "@nshiab/journalism-ai@1.2.11": {
-      "integrity": "50c0fdf8ad1725c0f0cc4ae6901e45cb873d10326377d323e88482e388257a4b",
+    "@nshiab/journalism-ai@1.2.12": {
+      "integrity": "851e416a6ad6353d3814e6dbee88341bcf7bf81b0cd277a21425b615ff69f9bb",
       "dependencies": [
         "jsr:@nshiab/journalism-format@^1.0.3",
         "npm:@google/genai",
@@ -1405,7 +1405,7 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@nshiab/journalism-ai@^1.2.11",
+      "jsr:@nshiab/journalism-ai@^1.2.12",
       "jsr:@nshiab/journalism-climate@^1.0.4",
       "jsr:@nshiab/journalism-dataviz@^1.0.3",
       "jsr:@nshiab/journalism-extras@^1.0.2",
