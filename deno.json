@@ -1,6 +1,6 @@
 {
   "name": "@nshiab/journalism",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "exports": {
     ".": "./src/index.ts",
     "./web": "./src/web.ts"
@@ -24,7 +24,7 @@
     "@nshiab/journalism-dataviz": "jsr:@nshiab/journalism-dataviz@^1.0.3",
     "@nshiab/journalism-extras": "jsr:@nshiab/journalism-extras@^1.0.2",
     "@nshiab/journalism-finance": "jsr:@nshiab/journalism-finance@^1.1.0",
-    "@nshiab/journalism-format": "jsr:@nshiab/journalism-format@^1.1.0",
+    "@nshiab/journalism-format": "jsr:@nshiab/journalism-format@^1.1.1",
     "@nshiab/journalism-geo": "jsr:@nshiab/journalism-geo@^1.0.3",
     "@nshiab/journalism-google": "jsr:@nshiab/journalism-google@^1.0.4",
     "@nshiab/journalism-statistics": "jsr:@nshiab/journalism-statistics@^1.0.2",
