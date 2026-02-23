@@ -6,8 +6,9 @@
     "jsr:@nshiab/journalism-dataviz@^1.0.3": "1.0.3",
     "jsr:@nshiab/journalism-extras@^1.0.2": "1.0.2",
     "jsr:@nshiab/journalism-finance@^1.1.0": "1.1.0",
-    "jsr:@nshiab/journalism-format@^1.0.2": "1.0.3",
-    "jsr:@nshiab/journalism-format@^1.0.3": "1.0.3",
+    "jsr:@nshiab/journalism-format@^1.0.2": "1.1.0",
+    "jsr:@nshiab/journalism-format@^1.0.3": "1.1.0",
+    "jsr:@nshiab/journalism-format@^1.1.0": "1.1.0",
     "jsr:@nshiab/journalism-geo@^1.0.3": "1.0.3",
     "jsr:@nshiab/journalism-google@^1.0.4": "1.0.4",
     "jsr:@nshiab/journalism-statistics@^1.0.2": "1.0.2",
@@ -26,7 +27,7 @@
     "npm:fflate@~0.8.2": "0.8.2",
     "npm:geotiff@^3.0.2": "3.0.2",
     "npm:google-auth-library@^10.5.0": "10.5.0",
-    "npm:google-spreadsheet@^5.1.0": "5.1.0_google-auth-library@10.5.0",
+    "npm:google-spreadsheet@^5.1.0": "5.2.0_google-auth-library@10.5.0",
     "npm:iconv-lite@~0.7.2": "0.7.2",
     "npm:jsonrepair@^3.13.2": "3.13.2",
     "npm:jstat@^1.9.6": "1.9.6",
@@ -75,8 +76,8 @@
         "jsr:@nshiab/journalism-format@^1.0.2"
       ]
     },
-    "@nshiab/journalism-format@1.0.3": {
-      "integrity": "27959c59abe5c2ccce74160b13f6260db9de4bc99cc1ada06501df5718f88ceb",
+    "@nshiab/journalism-format@1.1.0": {
+      "integrity": "22d26a7c3fa166963a0f28b0aa11c618be2f38bf77d65a9afb94ca10be4ea55b",
       "dependencies": [
         "npm:d3-dsv",
         "npm:date-fns-tz"
@@ -894,8 +895,8 @@
     "google-logging-utils@1.1.3": {
       "integrity": "sha512-eAmLkjDjAFCVXg7A1unxHsLf961m6y17QFqXqAXGj/gVkKFrEICfStRfwUlGNfeCEjNRa32JEWOUTlYXPyyKvA=="
     },
-    "google-spreadsheet@5.1.0_google-auth-library@10.5.0": {
-      "integrity": "sha512-RODtEsyKaMhhDP2d9uMkK1VTEn07EHl76B+OSLygc/TgewgK7oSImTbyfPhma+Q5a1ttBmM6Hd9jRAA3seCY5w==",
+    "google-spreadsheet@5.2.0_google-auth-library@10.5.0": {
+      "integrity": "sha512-sqQN+o0fxR5tfjFYKOuqgNFYKI/3uYT1TjLVUnN5SRckcR931szYjmvRvgN1QJ8VE2R6TlDuiFZ7LmfXvEKTyA==",
       "dependencies": [
         "es-toolkit",
         "google-auth-library@10.5.0",
@@ -1410,7 +1411,7 @@
       "jsr:@nshiab/journalism-dataviz@^1.0.3",
       "jsr:@nshiab/journalism-extras@^1.0.2",
       "jsr:@nshiab/journalism-finance@^1.1.0",
-      "jsr:@nshiab/journalism-format@^1.0.3",
+      "jsr:@nshiab/journalism-format@^1.1.0",
       "jsr:@nshiab/journalism-geo@^1.0.3",
       "jsr:@nshiab/journalism-google@^1.0.4",
       "jsr:@nshiab/journalism-statistics@^1.0.2",
