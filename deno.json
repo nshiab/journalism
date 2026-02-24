@@ -1,6 +1,6 @@
 {
   "name": "@nshiab/journalism",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "exports": {
     ".": "./src/index.ts",
     "./web": "./src/web.ts"
@@ -19,7 +19,7 @@
   },
   "nodeModulesDir": "auto",
   "imports": {
-    "@nshiab/journalism-ai": "jsr:@nshiab/journalism-ai@^1.2.12",
+    "@nshiab/journalism-ai": "jsr:@nshiab/journalism-ai@^1.2.13",
     "@nshiab/journalism-climate": "jsr:@nshiab/journalism-climate@^1.0.4",
     "@nshiab/journalism-dataviz": "jsr:@nshiab/journalism-dataviz@^1.0.3",
     "@nshiab/journalism-extras": "jsr:@nshiab/journalism-extras@^1.0.2",
