@@ -4923,6 +4923,40 @@ try {
 }
 ```
 
+## normalizeString
+
+Normalizes a string by converting it to lowercase, stripping accents, and
+trimming whitespace.
+
+### Signature
+
+```typescript
+function normalizeString(string: string): string;
+```
+
+### Parameters
+
+- **`string`**: The string to be normalized.
+
+### Returns
+
+A new string with characters in lowercase, without accents, and without leading
+or trailing whitespace.
+
+### Examples
+
+```ts
+// Basic usage
+const normalized = normalizeString("Évènement");
+console.log(normalized); // "evenement"
+```
+
+```ts
+// With accents and uppercase
+const normalized = normalizeString("Niño");
+console.log(normalized); // "nino"
+```
+
 ## overwriteSheetData
 
 Clears the content of a Google Sheet and then populates it with new data. This

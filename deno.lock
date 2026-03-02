@@ -6,9 +6,9 @@
     "jsr:@nshiab/journalism-dataviz@^1.0.3": "1.0.3",
     "jsr:@nshiab/journalism-extras@^1.0.2": "1.0.2",
     "jsr:@nshiab/journalism-finance@^1.1.0": "1.1.0",
-    "jsr:@nshiab/journalism-format@^1.0.2": "1.1.1",
-    "jsr:@nshiab/journalism-format@^1.0.3": "1.1.1",
-    "jsr:@nshiab/journalism-format@^1.1.1": "1.1.1",
+    "jsr:@nshiab/journalism-format@^1.0.2": "1.1.2",
+    "jsr:@nshiab/journalism-format@^1.0.3": "1.1.2",
+    "jsr:@nshiab/journalism-format@^1.1.2": "1.1.2",
     "jsr:@nshiab/journalism-geo@^1.0.3": "1.0.3",
     "jsr:@nshiab/journalism-google@^1.0.4": "1.0.4",
     "jsr:@nshiab/journalism-statistics@^1.0.2": "1.0.2",
@@ -76,8 +76,8 @@
         "jsr:@nshiab/journalism-format@^1.0.2"
       ]
     },
-    "@nshiab/journalism-format@1.1.1": {
-      "integrity": "930199305d3310a9b12f366435994b37dadd0b5c46cd5199fe596cf32e0ba4c1",
+    "@nshiab/journalism-format@1.1.2": {
+      "integrity": "a1fe1d250872dfa94e9d3b162c4bce9a5b2ba7279d53195b03cdccc443f4760d",
       "dependencies": [
         "npm:d3-dsv",
         "npm:date-fns-tz"
@@ -1076,8 +1076,8 @@
       "integrity": "sha512-jSCU7/VB1loIWBZe14aEYHU/+1UMEHoaO7qxCOVJOw9GgH72VAWppxNcjU+x9a2k3GSIBXNKxXQFqRvvZ7vr3A==",
       "bin": true
     },
-    "minimatch@9.0.5": {
-      "integrity": "sha512-G6T0ZX48xgozx7587koeX9Ys2NYy6Gmv//P89sEte9V9whIapMNF4idKxnW2QtCcLiTWlb/wfCabAtAFWhhBow==",
+    "minimatch@9.0.9": {
+      "integrity": "sha512-OBwBN9AL4dqmETlpS2zasx+vTeWclWzkblfZk7KTA5j3jeOONz/tRCnZomUyvNg83wL5Zv9Ss6HMJXAgL8R2Yg==",
       "dependencies": [
         "brace-expansion"
       ]
@@ -1411,7 +1411,7 @@
       "jsr:@nshiab/journalism-dataviz@^1.0.3",
       "jsr:@nshiab/journalism-extras@^1.0.2",
       "jsr:@nshiab/journalism-finance@^1.1.0",
-      "jsr:@nshiab/journalism-format@^1.1.1",
+      "jsr:@nshiab/journalism-format@^1.1.2",
       "jsr:@nshiab/journalism-geo@^1.0.3",
       "jsr:@nshiab/journalism-google@^1.0.4",
       "jsr:@nshiab/journalism-statistics@^1.0.2",
