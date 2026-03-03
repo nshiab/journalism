@@ -11,7 +11,7 @@
     "jsr:@nshiab/journalism-format@^1.1.2": "1.1.2",
     "jsr:@nshiab/journalism-geo@^1.0.3": "1.0.3",
     "jsr:@nshiab/journalism-google@^1.0.4": "1.0.4",
-    "jsr:@nshiab/journalism-statistics@^1.1.0": "1.1.0",
+    "jsr:@nshiab/journalism-statistics@^1.1.1": "1.1.1",
     "jsr:@nshiab/journalism-web-scraping@^1.0.2": "1.0.2",
     "jsr:@nshiab/journalism-web@^1.0.1": "1.0.1",
     "npm:@google-cloud/storage@^7.19.0": "7.19.0",
@@ -100,8 +100,8 @@
         "npm:google-spreadsheet"
       ]
     },
-    "@nshiab/journalism-statistics@1.1.0": {
-      "integrity": "f0fb0a995aabc45d75c7a0740471c0cb5fc9c572226059018e9f37e1f4ee1d0d",
+    "@nshiab/journalism-statistics@1.1.1": {
+      "integrity": "31038871be7904862d45c020eb8cb5ebaaf2f3a8842fe3a297bd885993b08bc1",
       "dependencies": [
         "npm:jstat"
       ]
@@ -1414,7 +1414,7 @@
       "jsr:@nshiab/journalism-format@^1.1.2",
       "jsr:@nshiab/journalism-geo@^1.0.3",
       "jsr:@nshiab/journalism-google@^1.0.4",
-      "jsr:@nshiab/journalism-statistics@^1.1.0",
+      "jsr:@nshiab/journalism-statistics@^1.1.1",
       "jsr:@nshiab/journalism-web-scraping@^1.0.2",
       "jsr:@nshiab/journalism-web@^1.0.1"
     ]
