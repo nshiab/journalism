@@ -2523,7 +2523,7 @@ function generateCirPath(
   b: number,
   sigma: number,
   years: number,
-  periodsPerYear?: number,
+  periodsPerYear: number,
 ): number[];
 ```
 
@@ -2536,7 +2536,7 @@ function generateCirPath(
 - **`sigma`**: - The volatility of the process.
 - **`years`**: - The number of years to simulate.
 - **`periodsPerYear`**: - The number of simulation steps per year (e.g., 12 for
-  monthly). Defaults to 12.
+  monthly).
 
 ### Returns
 
