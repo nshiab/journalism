@@ -2499,6 +2499,68 @@ const position2 = formatNumber(2, { position: true, style: "rc" });
 console.log(position2); // "2e"
 ```
 
+## generateCirPath
+
+Generates a path of values following the Cox-Ingersoll-Ross (CIR) model.
+
+The CIR model is a mean-reverting stochastic process used to model variables
+that tend to return to a long-term average over time, such as interest rates or
+volatility.
+
+**When to use this function:**
+
+- To simulate future interest rate paths for financial modeling.
+- To test how a mean-reverting system might evolve over time.
+- When you have parameters (`a`, `b`, `sigma`) and wish to generate potential
+  future scenarios.
+
+### Signature
+
+```typescript
+function generateCirPath(
+  startValue: number,
+  a: number,
+  b: number,
+  sigma: number,
+  years: number,
+  periodsPerYear?: number,
+): number[];
+```
+
+### Parameters
+
+- **`startValue`**: - The initial value of the process (e.g., current interest
+  rate).
+- **`a`**: - The speed of mean reversion.
+- **`b`**: - The long-term mean to which the process reverts.
+- **`sigma`**: - The volatility of the process.
+- **`years`**: - The number of years to simulate.
+- **`periodsPerYear`**: - The number of simulation steps per year (e.g., 12 for
+  monthly). Defaults to 12.
+
+### Returns
+
+An array representing the simulated path of values.
+
+### Throws
+
+- **`Error`**: If parameters are invalid (e.g. negative values where prohibited
+  or zero simulation length).
+
+### Examples
+
+```ts
+const rates = [0.02, 0.021, 0.019, 0.022, 0.023];
+const periodsPerYear = 12;
+
+// First, estimate parameters from historical data
+const { a, b, sigma } = getCirParameters(rates, periodsPerYear);
+
+// Then, generate a future path
+const initialRate = rates[rates.length - 1];
+const path = generateCirPath(initialRate, a, b, sigma, 1, 12);
+```
+
 ## generateGbmPath
 
 Generates a simulated path for an asset using the Geometric Brownian Motion
@@ -2735,68 +2797,6 @@ const rates = [0.02, 0.021, 0.019, 0.022, 0.023];
 const periodsPerYear = 12; // Monthly data
 
 const { a, b, sigma } = getCirParameters(rates, periodsPerYear);
-```
-
-## getCirPath
-
-Generates a path of values following the Cox-Ingersoll-Ross (CIR) model.
-
-The CIR model is a mean-reverting stochastic process used to model variables
-that tend to return to a long-term average over time, such as interest rates or
-volatility.
-
-**When to use this function:**
-
-- To simulate future interest rate paths for financial modeling.
-- To test how a mean-reverting system might evolve over time.
-- When you have parameters (`a`, `b`, `sigma`) and wish to generate potential
-  future scenarios.
-
-### Signature
-
-```typescript
-function getCirPath(
-  startValue: number,
-  a: number,
-  b: number,
-  sigma: number,
-  years: number,
-  periodsPerYear?: number,
-): number[];
-```
-
-### Parameters
-
-- **`startValue`**: - The initial value of the process (e.g., current interest
-  rate).
-- **`a`**: - The speed of mean reversion.
-- **`b`**: - The long-term mean to which the process reverts.
-- **`sigma`**: - The volatility of the process.
-- **`years`**: - The number of years to simulate.
-- **`periodsPerYear`**: - The number of simulation steps per year (e.g., 12 for
-  monthly). Defaults to 12.
-
-### Returns
-
-An array representing the simulated path of values.
-
-### Throws
-
-- **`Error`**: If parameters are invalid (e.g. negative values where prohibited
-  or zero simulation length).
-
-### Examples
-
-```ts
-const rates = [0.02, 0.021, 0.019, 0.022, 0.023];
-const periodsPerYear = 12;
-
-// First, estimate parameters from historical data
-const { a, b, sigma } = getCirParameters(rates, periodsPerYear);
-
-// Then, generate a future path
-const initialRate = rates[rates.length - 1];
-const path = getCirPath(initialRate, a, b, sigma, 1, 12);
 ```
 
 ## getClosest
