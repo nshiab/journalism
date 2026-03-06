@@ -2681,6 +2681,124 @@ const earthCoords = geoTo3D(0, 0, 6371, { decimals: 0 }); // Earth's approximate
 console.log(earthCoords); // Expected output: { x: 0, y: 6371, z: 0 } (for 0,0 lat/lon)
 ```
 
+## getCirParameters
+
+Estimates the parameters of the Cox-Ingersoll-Ross (CIR) model based on
+historical values using ordinary least squares on the discretized process.
+
+The CIR model is a mean-reverting stochastic process often used to model
+interest rates or other variables that tend to move toward a long-term average.
+This function returns the speed of mean reversion (`a`), the long-term mean
+(`b`), and the volatility (`sigma`).
+
+**When to use this function:**
+
+- To model interest rates, where rates are likely to revert to a mean but stay
+  positive.
+- When you need to estimate the behavior of a mean-reverting process from
+  historical data points.
+- To determine parameters for simulating potential future paths using
+  `getCirPath`.
+
+### Signature
+
+```typescript
+function getCirParameters(
+  values: number[],
+  periodsPerYear: number,
+): { a: number; b: number; sigma: number };
+```
+
+### Parameters
+
+- **`values`**: - An array of numerical data points (e.g., historical interest
+  rates).
+- **`periodsPerYear`**: - The number of data points per year (e.g., 252 for
+  daily, 12 for monthly).
+
+### Returns
+
+An object containing the estimated speed of mean reversion (`a`), long-term mean
+(`b`), and volatility (`sigma`). Note that `a` is silently clamped to a minimum
+of 0.001 and `b` to a minimum of 0.
+
+### Throws
+
+- **`Error`**: If `values` contains fewer than four data points, if
+  `periodsPerYear` is not positive, if any value is negative, or if the data is
+  degenerate (collinear).
+
+### Examples
+
+```ts
+const rates = [0.02, 0.021, 0.019, 0.022, 0.023];
+const periodsPerYear = 12; // Monthly data
+
+const { a, b, sigma } = getCirParameters(rates, periodsPerYear);
+```
+
+## getCirPath
+
+Generates a path of values following the Cox-Ingersoll-Ross (CIR) model.
+
+The CIR model is a mean-reverting stochastic process used to model variables
+that tend to return to a long-term average over time, such as interest rates or
+volatility.
+
+**When to use this function:**
+
+- To simulate future interest rate paths for financial modeling.
+- To test how a mean-reverting system might evolve over time.
+- When you have parameters (`a`, `b`, `sigma`) and wish to generate potential
+  future scenarios.
+
+### Signature
+
+```typescript
+function getCirPath(
+  startValue: number,
+  a: number,
+  b: number,
+  sigma: number,
+  years: number,
+  periodsPerYear?: number,
+): number[];
+```
+
+### Parameters
+
+- **`startValue`**: - The initial value of the process (e.g., current interest
+  rate).
+- **`a`**: - The speed of mean reversion.
+- **`b`**: - The long-term mean to which the process reverts.
+- **`sigma`**: - The volatility of the process.
+- **`years`**: - The number of years to simulate.
+- **`periodsPerYear`**: - The number of simulation steps per year (e.g., 12 for
+  monthly). Defaults to 12.
+
+### Returns
+
+An array representing the simulated path of values.
+
+### Throws
+
+- **`Error`**: If parameters are invalid (e.g. negative values where prohibited
+  or zero simulation length).
+
+### Examples
+
+```ts
+const rates = [0.02, 0.021, 0.019, 0.022, 0.023];
+const periodsPerYear = 12;
+
+// First, estimate parameters from historical data
+const { a, b, sigma } = getCirParameters(rates, periodsPerYear);
+
+// Then, generate a future path
+const initialRate = rates[rates.length - 1];
+const path = getCirPath(initialRate, a, b, sigma, 1, 12);
+```
+
 ## getClosest
 
 Finds the geographical item closest to a given reference point (longitude and
