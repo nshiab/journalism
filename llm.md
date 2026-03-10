@@ -3684,6 +3684,80 @@ console.log(
 );
 ```
 
+## getMortgagePenalty
+
+Calculates the mortgage prepayment penalty.
+
+For variable mortgages, the penalty is typically three months of interest. For
+fixed mortgages, the penalty is usually the greater of three months of interest
+or the Interest Rate Differential (IRD).
+
+### Signature
+
+```typescript
+function getMortgagePenalty(
+  parameters: {
+    remainingMonthsToTerm: number;
+    mortgageBalance: number;
+    postedInterestRate: number;
+    rateDiscount: number;
+    rateMargin: number;
+    currentPostedRates: Record<number, number>;
+    mortgageType: "fixed" | "variable";
+  },
+): number;
+```
+
+### Parameters
+
+- **`parameters`**: - The mortgage details.
+- **`parameters.remainingMonthsToTerm`**: - Number of months left in the current
+  mortgage term.
+- **`parameters.mortgageBalance`**: - The current outstanding mortgage balance.
+- **`parameters.postedInterestRate`**: - The original posted interest rate when
+  the mortgage was signed.
+- **`parameters.rateDiscount`**: - The discount received from the posted rate
+  (as a decimal, e.g., 0.01 for 1%).
+- **`parameters.rateMargin`**: - Any additional margin added to the rate.
+- **`parameters.currentPostedRates`**: - A record mapping term lengths (in
+  years) to current posted interest rates.
+- **`parameters.mortgageType`**: - Either "fixed" or "variable".
+
+### Returns
+
+The calculated mortgage penalty rounded to 2 decimal places.
+
+### Throws
+
+- **`null`**: Error if no current posted rate is found for the remaining term
+  length.
+
+### Examples
+
+```ts
+const penalty = getMortgagePenalty({
+  remainingMonthsToTerm: 24,
+  mortgageBalance: 300000,
+  postedInterestRate: 0.05,
+  rateDiscount: 0.0125,
+  rateMargin: 0,
+  currentPostedRates: { 1: 0.045, 2: 0.0475, 3: 0.05, 4: 0.0525, 5: 0.055 },
+  mortgageType: "fixed",
+});
+```
+
+```ts
+const penalty = getMortgagePenalty({
+  remainingMonthsToTerm: 36,
+  mortgageBalance: 250000,
+  postedInterestRate: 0.06,
+  rateDiscount: 0.01,
+  rateMargin: 0.0025,
+  currentPostedRates: {}, // Not used for variable
+  mortgageType: "variable",
+});
+```
+
 ## getSampleSizeMean
 
 Calculates the required sample size for estimating a population mean with a
@@ -4316,6 +4390,7 @@ async function getYahooFinanceData(
   endDate: Date,
   variable: "open" | "high" | "low" | "close" | "adjclose" | "volume",
   interval: "1d" | "1h" | "1m",
+  useBrowser?: boolean,
 ): Promise<{ timestamp: number; value: number }[]>;
 ```
 
@@ -4335,6 +4410,9 @@ async function getYahooFinanceData(
   for the period.
 - **`interval`**: - The time interval for the data points. Can be one of: -
   `"1d"`: Daily data. - `"1h"`: Hourly data. - `"1m"`: Minute-by-minute data.
+- **`useBrowser`**: - If true, the function will use Playwright to fetch the
+  data. This can be useful when facing rate limiting issues with the traditional
+  fetch.
 
 ### Returns
 
@@ -6675,6 +6753,547 @@ const darkPath = "output/line-chart-dark.jpeg";
 
 await saveChart(dataForDark, chartForDark, darkPath, { dark: true });
 console.log(`Chart saved to ${darkPath}`);
+```
+
+## simulateRentVsBuy
+
+Simulates and compares the financial outcomes of renting versus buying a home
+over a specified number of years. This comprehensive simulation accounts for
+various factors including mortgage payments (fixed and variable), property
+taxes, maintenance costs, condo fees, insurance, rent increases, market returns
+on savings, and the eventual sale of the property. Tailored for a Canadian
+context, it includes specific features like tax-free TFSA contributions and
+standard Canadian mortgage structures.
+
+The simulation tracks three scenarios:
+
+1. **Renter**: Pays rent and invests the difference between their expenses and
+   the buyer's expenses into the market.
+2. **Buyer (Fixed)**: Purchases a home using a fixed-rate mortgage and invests
+   any remaining surplus.
+3. **Buyer (Variable)**: Purchases a home using a variable-rate mortgage and
+   invests any remaining surplus.
+
+It provides a detailed breakdown of monthly expenses, gains, assets, and a final
+summary including the net balance after selling the property and paying all
+associated costs (taxes, commissions, penalties).
+
+### Signature
+
+```typescript
+function simulateRentVsBuy(
+  parameters: {
+    startingYear: number;
+    numberOfYears: number;
+    tfsaContributions: boolean;
+    combinedTaxRate: number;
+    renter: {
+      startingMonthlyRent: number;
+      securityDeposit: number;
+      startingMonthlyInsurance: number;
+    };
+    buyer: {
+      downPayment: number;
+      purchasePrice: number;
+      fixedRateDiscount: number;
+      variableRateMargin: number;
+      purchaseFixedFees: number;
+      startingAnnualMaintenanceCost: number;
+      startingAnnualPropertyTax: number;
+      startingMonthlyCondoFees: number;
+      startingMonthlyInsurance: number;
+      sellingFixedFees: number;
+      sellingCommissionRate: number;
+    };
+    rates: {
+      marketReturnRate: number[];
+      rentIncrease: number[];
+      ownerInsuranceIncrease: number[];
+      renterInsuranceIncrease: number[];
+      maintenanceIncrease: number[];
+      propertyTaxIncrease: number[];
+      condoFeeIncrease: number[];
+      fiveYearInterestRates: number[];
+      fourYearInterestRates: number[];
+      threeYearInterestRates: number[];
+      twoYearInterestRates: number[];
+      oneYearInterestRates: number[];
+      variableInterestRates: number[];
+      appreciationIncrease: number[];
+      sellingFixedFeesIncrease: number[];
+    };
+  },
+  options?: { finalBalanceOnly?: boolean },
+): (
+  & {
+    year: number;
+    month: number;
+    monthIndex: number;
+    date: Date;
+    amount: number;
+    category: "renter" | "buyerFixed" | "buyerVariable";
+  }
+  & (
+    | {
+      group: "monthlyExpenses" | "cumulativeExpenses";
+      variable:
+        | "rent"
+        | "insurance"
+        | "securityDeposit"
+        | "mortgageCapital"
+        | "mortgageInterests"
+        | "maintenance"
+        | "propertyTax"
+        | "condoFees"
+        | "downPayment"
+        | "purchaseFixedFees"
+        | "insurancePremium";
+      effectiveInterestRate?: number;
+      postedInterestRate?: number;
+      fixedRateDiscount?: number;
+      variableRateMargin?: number;
+    }
+    | {
+      group: "monthlyGains" | "cumulativeGains";
+      variable:
+        | "tfsaGains"
+        | "tfsaContribution"
+        | "stocksGains"
+        | "newStocks"
+        | "homeEquityGains";
+      homeValue?: number;
+    }
+    | {
+      group: "assets";
+      variable: "tfsa" | "stocks" | "securityDeposit" | "homeEquity";
+    }
+    | { group: "summary"; variable: "balance" }
+    | {
+      group: "summaryCumulative";
+      variable: "balance" | "balanceAfterSelling";
+    }
+    | {
+      group: "saleCosts";
+      variable:
+        | "stockTaxes"
+        | "homeSellingCommission"
+        | "homeSellingFixedFees"
+        | "mortgagePenalty"
+        | "mortgageBalance";
+    }
+    | {
+      group: "saleNetGains";
+      variable:
+        | "stockSellingGains"
+        | "tfsaSellingGains"
+        | "homeSellingGains"
+        | "securityDeposit";
+    }
+  )
+)[];
+```
+
+### Parameters
+
+- **`parameters`**: - The input parameters for the simulation.
+- **`parameters.startingYear`**: - The year the simulation begins.
+- **`parameters.numberOfYears`**: - The duration of the simulation in years.
+- **`parameters.tfsaContributions`**: - Whether to prioritize TFSA contributions
+  for investments (tax-free gains).
+- **`parameters.combinedTaxRate`**: - The combined marginal tax rate used for
+  calculating taxes on investment gains.
+- **`parameters.renter`**: - Configuration for the renter scenario.
+- **`parameters.renter.startingMonthlyRent`**: - The initial monthly rent
+  payment.
+- **`parameters.renter.securityDeposit`**: - The initial security deposit.
+- **`parameters.renter.startingMonthlyInsurance`**: - The initial monthly
+  renter's insurance.
+- **`parameters.buyer`**: - Configuration for the buyer scenarios.
+- **`parameters.buyer.downPayment`**: - The down payment amount.
+- **`parameters.buyer.purchasePrice`**: - The purchase price of the home.
+- **`parameters.buyer.fixedRateDiscount`**: - The discount applied to the posted
+  fixed mortgage rate.
+- **`parameters.buyer.variableRateMargin`**: - The margin added to the variable
+  mortgage rate.
+- **`parameters.buyer.purchaseFixedFees`**: - Fixed fees associated with the
+  purchase (e.g., notary, land transfer tax).
+- **`parameters.buyer.startingAnnualMaintenanceCost`**: - The initial annual
+  maintenance cost.
+- **`parameters.buyer.startingAnnualPropertyTax`**: - The initial annual
+  property tax.
+- **`parameters.buyer.startingMonthlyCondoFees`**: - The initial monthly condo
+  fees.
+- **`parameters.buyer.startingMonthlyInsurance`**: - The initial monthly
+  homeowner's insurance.
+- **`parameters.buyer.sellingFixedFees`**: - Fixed fees associated with selling
+  the home.
+- **`parameters.buyer.sellingCommissionRate`**: - The real estate commission
+  rate for selling the home (e.g., 0.05 for 5%).
+- **`parameters.rates`**: - Annualized rates and their values over the
+  simulation period. Each array should have a length of `numberOfYears * 12`.
+  These can be historical or projected rates.
+- **`parameters.rates.marketReturnRate`**: - Monthly market return rates.
+- **`parameters.rates.rentIncrease`**: - Monthly rent increase rates.
+- **`parameters.rates.ownerInsuranceIncrease`**: - Monthly homeowner's insurance
+  increase rates.
+- **`parameters.rates.renterInsuranceIncrease`**: - Monthly renter's insurance
+  increase rates.
+- **`parameters.rates.maintenanceIncrease`**: - Monthly maintenance cost
+  increase rates.
+- **`parameters.rates.propertyTaxIncrease`**: - Monthly property tax increase
+  rates.
+- **`parameters.rates.condoFeeIncrease`**: - Monthly condo fee increase rates.
+- **`parameters.rates.fiveYearInterestRates`**: - Monthly 5-year fixed mortgage
+  interest rates.
+- **`parameters.rates.fourYearInterestRates`**: - Monthly 4-year fixed mortgage
+  interest rates.
+- **`parameters.rates.threeYearInterestRates`**: - Monthly 3-year fixed mortgage
+  interest rates.
+- **`parameters.rates.twoYearInterestRates`**: - Monthly 2-year fixed mortgage
+  interest rates.
+- **`parameters.rates.oneYearInterestRates`**: - Monthly 1-year fixed mortgage
+  interest rates.
+- **`parameters.rates.variableInterestRates`**: - Monthly variable mortgage
+  interest rates.
+- **`parameters.rates.appreciationIncrease`**: - Monthly home appreciation
+  rates.
+- **`parameters.rates.sellingFixedFeesIncrease`**: - Monthly increase rates for
+  selling fixed fees.
+- **`options`**: - Additional simulation options.
+- **`options.finalBalanceOnly`**: - If `true`, the returned results will only
+  include the final month's summary and sale data for each scenario. Defaults to
+  `false`.
+
+### Returns
+
+A detailed array of monthly results for each scenario (renter, buyerFixed,
+buyerVariable). Each object in the array represents a specific data point
+(expense, gain, asset, or summary) for a given month.
+
+### Examples
+
+```ts
+const rates = {
+  marketReturnRate: new Array(120).fill(0.005), // 0.5% monthly
+  rentIncrease: new Array(120).fill(0.002),
+  ownerInsuranceIncrease: new Array(120).fill(0.002),
+  renterInsuranceIncrease: new Array(120).fill(0.002),
+  maintenanceIncrease: new Array(120).fill(0.002),
+  propertyTaxIncrease: new Array(120).fill(0.002),
+  condoFeeIncrease: new Array(120).fill(0.002),
+  fiveYearInterestRates: new Array(120).fill(0.05),
+  fourYearInterestRates: new Array(120).fill(0.05),
+  threeYearInterestRates: new Array(120).fill(0.05),
+  twoYearInterestRates: new Array(120).fill(0.05),
+  oneYearInterestRates: new Array(120).fill(0.05),
+  variableInterestRates: new Array(120).fill(0.06),
+  appreciationIncrease: new Array(120).fill(0.003),
+  sellingFixedFeesIncrease: new Array(120).fill(0.002),
+};
+
+const results = simulateRentVsBuy({
+  startingYear: 2024,
+  numberOfYears: 10,
+  tfsaContributions: true,
+  combinedTaxRate: 0.4,
+  renter: {
+    startingMonthlyRent: 2000,
+    securityDeposit: 2000,
+    startingMonthlyInsurance: 30,
+  },
+  buyer: {
+    downPayment: 100000,
+    purchasePrice: 500000,
+    fixedRateDiscount: 1.5,
+    variableRateMargin: -0.5,
+    purchaseFixedFees: 5000,
+    startingAnnualMaintenanceCost: 2000,
+    startingAnnualPropertyTax: 3000,
+    startingMonthlyCondoFees: 300,
+    startingMonthlyInsurance: 100,
+    sellingFixedFees: 2000,
+    sellingCommissionRate: 0.05,
+  },
+  rates,
+}, { finalBalanceOnly: true });
+```
+
+## simulateRentVsBuyMonteCarlo
+
+Performs a Monte Carlo simulation for a rent versus buy analysis tailored for a
+Canadian context. This function runs multiple iterations of the
+`simulateRentVsBuy` function, using stochastic paths for various economic
+factors like market returns, interest rates, and inflation-related costs. It
+helps evaluate the probability of different financial outcomes under
+uncertainty.
+
+The simulation uses:
+
+- **Geometric Brownian Motion (GBM)** for paths like market returns, rent
+  increases, and home appreciation.
+- **Cox-Ingersoll-Ross (CIR)** models for interest rate paths.
+
+Parameters for these models can be generated from historical data using
+`getCirParameters` and `getGbmParameters` from `@nshiab/journalism`.
+
+### Signature
+
+```typescript
+function simulateRentVsBuyMonteCarlo(
+  parameters: {
+    iterations: number;
+    startingYear: number;
+    numberOfYears: number;
+    tfsaContributions: boolean;
+    combinedTaxRate: number;
+    renter: {
+      startingMonthlyRent: number;
+      securityDeposit: number;
+      startingMonthlyInsurance: number;
+    };
+    buyer: {
+      downPayment: number;
+      purchasePrice: number;
+      fixedRateDiscount: number;
+      variableRateMargin: number;
+      purchaseFixedFees: number;
+      startingAnnualMaintenanceCost: number;
+      startingAnnualPropertyTax: number;
+      startingMonthlyCondoFees: number;
+      startingMonthlyInsurance: number;
+      sellingFixedFees: number;
+      sellingCommissionRate: number;
+    };
+    gbmParameters: {
+      market: { startValue: number; mu: number; sigma: number };
+      rent: { startValue: number; mu: number; sigma: number };
+      ownerInsurance: { startValue: number; mu: number; sigma: number };
+      renterInsurance: { startValue: number; mu: number; sigma: number };
+      maintenance: { startValue: number; mu: number; sigma: number };
+      propertyTax: { startValue: number; mu: number; sigma: number };
+      condoFee: { startValue: number; mu: number; sigma: number };
+      appreciation: { startValue: number; mu: number; sigma: number };
+      sellingFixedFees: { startValue: number; mu: number; sigma: number };
+      fiveYearInterestRates: {
+        a: number;
+        b: number;
+        sigma: number;
+        startValue: number;
+      };
+      fourYearInterestRates: {
+        a: number;
+        b: number;
+        sigma: number;
+        startValue: number;
+      };
+      threeYearInterestRates: {
+        a: number;
+        b: number;
+        sigma: number;
+        startValue: number;
+      };
+      twoYearInterestRates: {
+        a: number;
+        b: number;
+        sigma: number;
+        startValue: number;
+      };
+      oneYearInterestRates: {
+        a: number;
+        b: number;
+        sigma: number;
+        startValue: number;
+      };
+      variableInterestRates: {
+        a: number;
+        b: number;
+        sigma: number;
+        startValue: number;
+      };
+    };
+  },
+  options?: {
+    verbose?: boolean;
+    verboseStep?: number;
+    values?: boolean;
+    rates?: boolean;
+  },
+): {
+  values: {
+    iteration: string;
+    variable: string;
+    value: number;
+    month: number;
+  }[];
+  rates: {
+    iteration: string;
+    variable: string;
+    value: number;
+    month: number;
+  }[];
+  winners: {
+    year: number;
+    month: number;
+    monthIndex: number;
+    date: Date;
+    amount: number;
+    category: "renter" | "buyerFixed" | "buyerVariable";
+    group: "summaryCumulative";
+    variable: "balanceAfterSelling";
+  }[];
+};
+```
+
+### Parameters
+
+- **`parameters`**: - The input parameters for the Monte Carlo simulation.
+- **`parameters.iterations`**: - The number of simulation iterations to run.
+- **`parameters.startingYear`**: - The year the simulation begins.
+- **`parameters.numberOfYears`**: - The duration of each simulation in years.
+- **`parameters.tfsaContributions`**: - Whether to prioritize TFSA contributions
+  for investments (tax-free gains).
+- **`parameters.combinedTaxRate`**: - The combined marginal tax rate used for
+  calculating taxes on investment gains.
+- **`parameters.renter`**: - Configuration for the renter scenario.
+- **`parameters.renter.startingMonthlyRent`**: - The initial monthly rent
+  payment.
+- **`parameters.renter.securityDeposit`**: - The initial security deposit (e.g.,
+  last month's rent).
+- **`parameters.renter.startingMonthlyInsurance`**: - The initial monthly
+  renter's (tenant) insurance cost.
+- **`parameters.buyer`**: - Configuration for the buyer scenarios.
+- **`parameters.buyer.downPayment`**: - The total down payment amount paid at
+  the start.
+- **`parameters.buyer.purchasePrice`**: - The initial purchase price of the
+  home.
+- **`parameters.buyer.fixedRateDiscount`**: - The discount applied to the posted
+  fixed mortgage rate (e.g., `1.5` for 1.5% off).
+- **`parameters.buyer.variableRateMargin`**: - The margin added or subtracted
+  from the variable mortgage rate.
+- **`parameters.buyer.purchaseFixedFees`**: - One-time costs at purchase
+  (notary, land transfer tax, etc.).
+- **`parameters.buyer.startingAnnualMaintenanceCost`**: - Initial annual cost
+  for home maintenance.
+- **`parameters.buyer.startingAnnualPropertyTax`**: - Initial annual property
+  tax amount.
+- **`parameters.buyer.startingMonthlyCondoFees`**: - Initial monthly condo fees
+  (if applicable).
+- **`parameters.buyer.startingMonthlyInsurance`**: - Initial monthly homeowner's
+  insurance cost.
+- **`parameters.buyer.sellingFixedFees`**: - One-time fixed costs when selling
+  the property.
+- **`parameters.buyer.sellingCommissionRate`**: - The commission rate paid to
+  real estate agents upon sale (e.g., `0.05` for 5%).
+- **`parameters.gbmParameters`**: - Parameters for the Geometric Brownian Motion
+  models. Each sub-object (market, rent, etc.) requires: - `startValue`: The
+  initial annual rate (e.g., 0.05 for 5%). - `mu`: The drift or expected annual
+  growth rate. - `sigma`: The annual volatility.
+- **`parameters.gbmParameters.market`**: - Market return rates for savings.
+- **`parameters.gbmParameters.rent`**: - Rent increase rates.
+- **`parameters.gbmParameters.ownerInsurance`**: - Homeowner's insurance
+  increase rates.
+- **`parameters.gbmParameters.renterInsurance`**: - Renter's insurance increase
+  rates.
+- **`parameters.gbmParameters.maintenance`**: - Maintenance cost increase rates.
+- **`parameters.gbmParameters.propertyTax`**: - Property tax increase rates.
+- **`parameters.gbmParameters.condoFee`**: - Condo fee increase rates.
+- **`parameters.gbmParameters.appreciation`**: - Home value appreciation rates.
+- **`parameters.gbmParameters.sellingFixedFees`**: - Selling fixed fees increase
+  rates.
+- **`parameters.gbmParameters.fiveYearInterestRates`**: - Parameters for the CIR
+  model for 5-year fixed rates. Requires `a` (speed of mean reversion), `b`
+  (long-term mean), `sigma` (volatility), and `startValue`.
+- **`parameters.gbmParameters.fourYearInterestRates`**: - Parameters for the CIR
+  model for 4-year fixed rates.
+- **`parameters.gbmParameters.threeYearInterestRates`**: - Parameters for the
+  CIR model for 3-year fixed rates.
+- **`parameters.gbmParameters.twoYearInterestRates`**: - Parameters for the CIR
+  model for 2-year fixed rates.
+- **`parameters.gbmParameters.oneYearInterestRates`**: - Parameters for the CIR
+  model for 1-year fixed rates.
+- **`parameters.gbmParameters.variableInterestRates`**: - Parameters for the CIR
+  model for variable rates.
+- **`options`**: - Additional simulation options.
+- **`options.verbose`**: - If `true`, logs the simulation's progress to the
+  console, including the current iteration and estimated time remaining. Useful
+  for long-running simulations.
+- **`options.verboseStep`**: - The frequency of progress logging. For example,
+  setting this to `50` will log progress every 50 iterations. Defaults to `1` if
+  `verbose` is true.
+- **`options.values`**: - If `true`, the function will capture and return
+  detailed monthly financial data (such as asset balances and net gains) for
+  every iteration of the simulation. Be cautious with high iteration counts as
+  this can consume significant memory.
+- **`options.rates`**: - If `true`, the function will capture and return the
+  exact stochastic interest and appreciation rates generated for every
+  iteration. Useful for auditing the simulation's statistical properties.
+
+### Returns
+
+An object containing the simulation results:
+
+- `winners`: An array of strings ("renter", "buyerFixed", or "buyerVariable")
+  indicating which scenario yielded the highest final net balance (after house
+  sale) for each iteration.
+- `values`: (Optional) If `options.values` is `true`, an array of objects
+  containing detailed monthly financial data for each iteration. Each object
+  includes `iteration`, `variable` (e.g., "balance"), `value`, and `month`.
+- `rates`: (Optional) If `options.rates` is `true`, an array of objects
+  containing the generated rate paths for each iteration. Each object includes
+  `iteration`, `variable` (e.g., "marketReturnRate"), `value`, and `month`.
+
+### Examples
+
+```ts
+const results = simulateRentVsBuyMonteCarlo({
+  iterations: 1000,
+  startingYear: 2024,
+  numberOfYears: 25,
+  tfsaContributions: true,
+  combinedTaxRate: 0.4,
+  renter: {
+    startingMonthlyRent: 1500,
+    securityDeposit: 1500,
+    startingMonthlyInsurance: 25,
+  },
+  buyer: {
+    downPayment: 50000,
+    purchasePrice: 400000,
+    fixedRateDiscount: 1.0,
+    variableRateMargin: 0,
+    purchaseFixedFees: 3000,
+    startingAnnualMaintenanceCost: 1500,
+    startingAnnualPropertyTax: 2500,
+    startingMonthlyCondoFees: 0,
+    startingMonthlyInsurance: 80,
+    sellingFixedFees: 1500,
+    sellingCommissionRate: 0.05,
+  },
+  gbmParameters: {
+    market: { startValue: 0.07, mu: 0.07, sigma: 0.15 },
+    rent: { startValue: 0.03, mu: 0.03, sigma: 0.02 },
+    ownerInsurance: { startValue: 0.03, mu: 0.03, sigma: 0.05 },
+    renterInsurance: { startValue: 0.03, mu: 0.03, sigma: 0.05 },
+    maintenance: { startValue: 0.02, mu: 0.02, sigma: 0.05 },
+    propertyTax: { startValue: 0.02, mu: 0.02, sigma: 0.02 },
+    condoFee: { startValue: 0.03, mu: 0.03, sigma: 0.05 },
+    appreciation: { startValue: 0.04, mu: 0.04, sigma: 0.10 },
+    sellingFixedFees: { startValue: 0.02, mu: 0.02, sigma: 0.05 },
+    fiveYearInterestRates: { startValue: 0.05, a: 0.2, b: 0.05, sigma: 0.02 },
+    fourYearInterestRates: { startValue: 0.048, a: 0.2, b: 0.048, sigma: 0.02 },
+    threeYearInterestRates: {
+      startValue: 0.045,
+      a: 0.2,
+      b: 0.045,
+      sigma: 0.02,
+    },
+    twoYearInterestRates: { startValue: 0.042, a: 0.2, b: 0.042, sigma: 0.02 },
+    oneYearInterestRates: { startValue: 0.04, a: 0.2, b: 0.04, sigma: 0.02 },
+    variableInterestRates: { startValue: 0.06, a: 0.3, b: 0.055, sigma: 0.03 },
+  },
+}, { verbose: true, verboseStep: 100 });
+
+console.log(results.winners.length); // 1000
 ```
 
 ## sleep
