@@ -3758,6 +3758,59 @@ const penalty = getMortgagePenalty({
 });
 ```
 
+## getSalesTax
+
+Calculates the Canadian sales tax for a given amount and province. Rates as of
+March 2026.
+
+### Signature
+
+```typescript
+function getSalesTax(
+  amount: number,
+  province:
+    | "Alberta"
+    | "British Columbia"
+    | "Manitoba"
+    | "New Brunswick"
+    | "Newfoundland and Labrador"
+    | "Nova Scotia"
+    | "Northwest Territories"
+    | "Nunavut"
+    | "Ontario"
+    | "Prince Edward Island"
+    | "Quebec"
+    | "Saskatchewan"
+    | "Yukon",
+): {
+  gst: number;
+  pst: number;
+  hst: number;
+  totalTax: number;
+  totalAmount: number;
+};
+```
+
+### Parameters
+
+- **`amount`**: - The base amount before tax.
+- **`province`**: - The province or territory.
+
+### Returns
+
+An object containing the breakdown of taxes and the total amount.
+
+### Examples
+
+```ts
+const salesTax = getSalesTax(100, "QC");
+console.log(salesTax);
+// { gst: 5, pst: 9.975, hst: 0, totalTax: 14.975, totalAmount: 114.975 }
+```
+
+Reference:
+https://www.retailcouncil.org/resources/quick-facts/sales-tax-rates-by-province/
+
 ## getSampleSizeMean
 
 Calculates the required sample size for estimating a population mean with a
@@ -6776,7 +6829,7 @@ The simulation tracks three scenarios:
 
 It provides a detailed breakdown of monthly expenses, gains, assets, and a final
 summary including the net balance after selling the property and paying all
-associated costs (taxes, commissions, penalties).
+associated costs (taxes, legal fees, penalties).
 
 ### Signature
 
@@ -6787,6 +6840,20 @@ function simulateRentVsBuy(
     numberOfYears: number;
     tfsaContributions: boolean;
     combinedTaxRate: number;
+    province:
+      | "Alberta"
+      | "British Columbia"
+      | "Manitoba"
+      | "New Brunswick"
+      | "Newfoundland and Labrador"
+      | "Nova Scotia"
+      | "Northwest Territories"
+      | "Nunavut"
+      | "Ontario"
+      | "Prince Edward Island"
+      | "Quebec"
+      | "Saskatchewan"
+      | "Yukon";
     renter: {
       startingMonthlyRent: number;
       securityDeposit: number;
@@ -6902,6 +6969,8 @@ function simulateRentVsBuy(
   for investments (tax-free gains).
 - **`parameters.combinedTaxRate`**: - The combined marginal tax rate used for
   calculating taxes on investment gains.
+- **`parameters.province`**: - The province used to calculate sales tax on the
+  selling fixed fees and commission when selling the home.
 - **`parameters.renter`**: - Configuration for the renter scenario.
 - **`parameters.renter.startingMonthlyRent`**: - The initial monthly rent
   payment.
@@ -6926,7 +6995,7 @@ function simulateRentVsBuy(
 - **`parameters.buyer.startingMonthlyInsurance`**: - The initial monthly
   homeowner's insurance.
 - **`parameters.buyer.sellingFixedFees`**: - Fixed fees associated with selling
-  the home.
+  the home (before sales tax).
 - **`parameters.buyer.sellingCommissionRate`**: - The real estate commission
   rate for selling the home (e.g., 0.05 for 5%).
 - **`parameters.rates`**: - Annualized rates and their values over the
@@ -6996,6 +7065,7 @@ const results = simulateRentVsBuy({
   numberOfYears: 10,
   tfsaContributions: true,
   combinedTaxRate: 0.4,
+  province: "Ontario",
   renter: {
     startingMonthlyRent: 2000,
     securityDeposit: 2000,
@@ -7046,6 +7116,20 @@ function simulateRentVsBuyMonteCarlo(
     numberOfYears: number;
     tfsaContributions: boolean;
     combinedTaxRate: number;
+    province:
+      | "Alberta"
+      | "British Columbia"
+      | "Manitoba"
+      | "New Brunswick"
+      | "Newfoundland and Labrador"
+      | "Nova Scotia"
+      | "Northwest Territories"
+      | "Nunavut"
+      | "Ontario"
+      | "Prince Edward Island"
+      | "Quebec"
+      | "Saskatchewan"
+      | "Yukon";
     renter: {
       startingMonthlyRent: number;
       securityDeposit: number;
@@ -7154,6 +7238,8 @@ function simulateRentVsBuyMonteCarlo(
   for investments (tax-free gains).
 - **`parameters.combinedTaxRate`**: - The combined marginal tax rate used for
   calculating taxes on investment gains.
+- **`parameters.province`**: - The Canadian province or territory, used for
+  calculating sales taxes.
 - **`parameters.renter`**: - Configuration for the renter scenario.
 - **`parameters.renter.startingMonthlyRent`**: - The initial monthly rent
   payment.
@@ -7181,7 +7267,7 @@ function simulateRentVsBuyMonteCarlo(
 - **`parameters.buyer.startingMonthlyInsurance`**: - Initial monthly homeowner's
   insurance cost.
 - **`parameters.buyer.sellingFixedFees`**: - One-time fixed costs when selling
-  the property.
+  the property (before sales tax).
 - **`parameters.buyer.sellingCommissionRate`**: - The commission rate paid to
   real estate agents upon sale (e.g., `0.05` for 5%).
 - **`parameters.gbmParameters`**: - Parameters for the Geometric Brownian Motion
@@ -7251,6 +7337,7 @@ const results = simulateRentVsBuyMonteCarlo({
   numberOfYears: 25,
   tfsaContributions: true,
   combinedTaxRate: 0.4,
+  province: "Ontario",
   renter: {
     startingMonthlyRent: 1500,
     securityDeposit: 1500,
