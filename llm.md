@@ -7030,14 +7030,22 @@ function simulateRentVsBuy(
   selling fixed fees.
 - **`options`**: - Additional simulation options.
 - **`options.finalBalanceOnly`**: - If `true`, the returned results will only
-  include the final month's summary and sale data for each scenario. Defaults to
-  `false`.
+  include the final balance (before and after selling) for each scenario.
+  Defaults to `false`.
 
 ### Returns
 
 A detailed array of monthly results for each scenario (renter, buyerFixed,
-buyerVariable). Each object in the array represents a specific data point
-(expense, gain, asset, or summary) for a given month.
+buyerVariable). Each object in the array represents a specific data point for a
+given month, categorized by:
+
+- `monthlyExpenses` or `cumulativeExpenses` (e.g., rent, mortgage payments)
+- `monthlyGains` or `cumulativeGains` (e.g., investment gains)
+- `assets` (e.g., home equity, TFSA)
+- `summary` (monthly balance)
+- `summaryCumulative` (cumulative balance, final balance after selling)
+- `saleCosts` (costs incurred upon selling)
+- `saleNetGains` (gains realized upon selling)
 
 ### Examples
 
@@ -7225,6 +7233,16 @@ function simulateRentVsBuyMonteCarlo(
     group: "summaryCumulative";
     variable: "balanceAfterSelling";
   }[];
+  winnersBeforeSelling: {
+    year: number;
+    month: number;
+    monthIndex: number;
+    date: Date;
+    amount: number;
+    category: "renter" | "buyerFixed" | "buyerVariable";
+    group: "summaryCumulative";
+    variable: "balance";
+  }[];
 };
 ```
 
@@ -7318,15 +7336,17 @@ function simulateRentVsBuyMonteCarlo(
 
 An object containing the simulation results:
 
-- `winners`: An array of strings ("renter", "buyerFixed", or "buyerVariable")
-  indicating which scenario yielded the highest final net balance (after house
-  sale) for each iteration.
-- `values`: (Optional) If `options.values` is `true`, an array of objects
-  containing detailed monthly financial data for each iteration. Each object
-  includes `iteration`, `variable` (e.g., "balance"), `value`, and `month`.
-- `rates`: (Optional) If `options.rates` is `true`, an array of objects
-  containing the generated rate paths for each iteration. Each object includes
-  `iteration`, `variable` (e.g., "marketReturnRate"), `value`, and `month`.
+- `winners`: An array of objects indicating which scenario yielded the highest
+  final net balance (after house and investment sale) for each iteration. Each
+  object includes the `amount`, `category` (renter, buyerFixed, buyerVariable),
+  and the `iteration` details.
+- `winnersBeforeSelling`: An array of objects indicating which scenario yielded
+  the highest final asset balance (before house and investment sale) for each
+  iteration. Contains similar details to `winners`.
+- `values`: An array of objects containing the generated values paths for each
+  iteration. Returns an empty array unless `options.values` is `true`.
+- `rates`: An array of objects containing the generated rate paths for each
+  iteration. Returns an empty array unless `options.rates` is `true`.
 
 ### Examples
 

@@ -5,7 +5,7 @@
     "jsr:@nshiab/journalism-climate@^1.0.4": "1.0.4",
     "jsr:@nshiab/journalism-dataviz@^1.0.3": "1.0.3",
     "jsr:@nshiab/journalism-extras@^1.0.2": "1.0.2",
-    "jsr:@nshiab/journalism-finance@^1.3.0": "1.3.0",
+    "jsr:@nshiab/journalism-finance@^1.3.1": "1.3.1",
     "jsr:@nshiab/journalism-format@^1.0.3": "1.1.2",
     "jsr:@nshiab/journalism-format@^1.1.2": "1.1.2",
     "jsr:@nshiab/journalism-geo@^1.0.3": "1.0.3",
@@ -14,7 +14,7 @@
     "jsr:@nshiab/journalism-web-scraping@^1.0.2": "1.0.2",
     "jsr:@nshiab/journalism-web@^1.0.1": "1.0.1",
     "npm:@google-cloud/storage@^7.19.0": "7.19.0",
-    "npm:@google/genai@^1.41.0": "1.44.0",
+    "npm:@google/genai@^1.41.0": "1.45.0",
     "npm:@observablehq/plot@~0.6.17": "0.6.17",
     "npm:@types/d3-geo@3": "3.1.0",
     "npm:adm-zip@~0.5.16": "0.5.16",
@@ -70,8 +70,8 @@
         "npm:iconv-lite"
       ]
     },
-    "@nshiab/journalism-finance@1.3.0": {
-      "integrity": "dd95b1fbf0bfb3bd753ac739ace2f7b28d29bc4c898f4cf95a1f9a85feadee1a",
+    "@nshiab/journalism-finance@1.3.1": {
+      "integrity": "ef76743b28c1402bbad1d59f3abbfe19d0913dd680b183424a9e3c4714f25187",
       "dependencies": [
         "jsr:@nshiab/journalism-format@^1.1.2",
         "jsr:@nshiab/journalism-statistics",
@@ -160,8 +160,8 @@
         "uuid@8.3.2"
       ]
     },
-    "@google/genai@1.44.0": {
-      "integrity": "sha512-kRt9ZtuXmz+tLlcNntN/VV4LRdpl6ZOu5B1KbfNgfR65db15O6sUQcwnwLka8sT/V6qysD93fWrgJHF2L7dA9A==",
+    "@google/genai@1.45.0": {
+      "integrity": "sha512-+sNRWhKiRibVgc4OKi7aBJJ0A7RcoVD8tGG+eFkqxAWRjASDW+ktS9lLwTDnAxZICzCVoeAdu8dYLJVTX60N9w==",
       "dependencies": [
         "google-auth-library@10.6.1",
         "p-retry",
@@ -243,8 +243,8 @@
     "@types/geojson@7946.0.16": {
       "integrity": "sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg=="
     },
-    "@types/node@25.4.0": {
-      "integrity": "sha512-9wLpoeWuBlcbBpOY3XmzSTG3oscB6xjBEEtn+pYXTfhyXhIxC5FsBer2KTopBlvKEiW9l13po9fq+SJY/5lkhw==",
+    "@types/node@25.5.0": {
+      "integrity": "sha512-jp2P3tQMSxWugkCUKLRPVUpGaL5MVFwF8RDuSRztfwgN1wmqJeMSbKlnEtQqU8UrhTmzEmZdu2I6v2dpp7XIxw==",
       "dependencies": [
         "undici-types"
       ]
@@ -745,14 +745,14 @@
     "extend@3.0.2": {
       "integrity": "sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g=="
     },
-    "fast-xml-builder@1.1.0": {
-      "integrity": "sha512-7mtITW/we2/wTUZqMyBOR2F8xP4CRxMiSEcQxPIqdRWdO2L/HZSOlzoNyghmyDwNB8BDxePooV1ZTJpkOUhdRg==",
+    "fast-xml-builder@1.1.3": {
+      "integrity": "sha512-1o60KoFw2+LWKQu3IdcfcFlGTW4dpqEWmjhYec6H82AYZU2TVBXep6tMl8Z1Y+wM+ZrzCwe3BZ9Vyd9N2rIvmg==",
       "dependencies": [
         "path-expression-matcher"
       ]
     },
-    "fast-xml-parser@5.5.1": {
-      "integrity": "sha512-JTpMz8P5mDoNYzXTmTT/xzWjFiCWi0U+UQTJtrFH9muXsr2RqtXZPbnCW5h2mKsOd4u3XcPWCvDSrnaBPlUcMQ==",
+    "fast-xml-parser@5.5.5": {
+      "integrity": "sha512-NLY+V5NNbdmiEszx9n14mZBseJTC50bRq1VHsaxOmR72JDuZt+5J1Co+dC/4JPnyq+WrIHNM69r0sqf7BMb3Mg==",
       "dependencies": [
         "fast-xml-builder",
         "path-expression-matcher",
@@ -1173,8 +1173,8 @@
         "entities@6.0.1"
       ]
     },
-    "path-expression-matcher@1.1.2": {
-      "integrity": "sha512-LXWqJmcpp2BKOEmgt4CyuESFmBfPuhJlAHKJsFzuJU6CxErWk75BrO+Ni77M9OxHN6dCYKM4vj+21Z6cOL96YQ=="
+    "path-expression-matcher@1.1.3": {
+      "integrity": "sha512-qdVgY8KXmVdJZRSS1JdEPOKPdTiEK/pi0RkcT2sw1RhXxohdujUlJFPuS1TSkevZ9vzd3ZlL7ULl1MHGTApKzQ=="
     },
     "path-key@3.1.1": {
       "integrity": "sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q=="
@@ -1432,7 +1432,7 @@
       "jsr:@nshiab/journalism-climate@^1.0.4",
       "jsr:@nshiab/journalism-dataviz@^1.0.3",
       "jsr:@nshiab/journalism-extras@^1.0.2",
-      "jsr:@nshiab/journalism-finance@^1.3.0",
+      "jsr:@nshiab/journalism-finance@^1.3.1",
       "jsr:@nshiab/journalism-format@^1.1.2",
       "jsr:@nshiab/journalism-geo@^1.0.3",
       "jsr:@nshiab/journalism-google@^1.0.4",
