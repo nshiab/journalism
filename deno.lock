@@ -6,8 +6,9 @@
     "jsr:@nshiab/journalism-dataviz@^1.0.3": "1.0.3",
     "jsr:@nshiab/journalism-extras@^1.0.2": "1.0.2",
     "jsr:@nshiab/journalism-finance@^1.3.1": "1.3.1",
-    "jsr:@nshiab/journalism-format@^1.0.3": "1.1.2",
-    "jsr:@nshiab/journalism-format@^1.1.2": "1.1.2",
+    "jsr:@nshiab/journalism-format@^1.0.3": "1.1.3",
+    "jsr:@nshiab/journalism-format@^1.1.2": "1.1.3",
+    "jsr:@nshiab/journalism-format@^1.1.3": "1.1.3",
     "jsr:@nshiab/journalism-geo@^1.0.3": "1.0.3",
     "jsr:@nshiab/journalism-google@^1.0.4": "1.0.4",
     "jsr:@nshiab/journalism-statistics@^1.2.2": "1.2.2",
@@ -79,8 +80,8 @@
         "npm:playwright"
       ]
     },
-    "@nshiab/journalism-format@1.1.2": {
-      "integrity": "a1fe1d250872dfa94e9d3b162c4bce9a5b2ba7279d53195b03cdccc443f4760d",
+    "@nshiab/journalism-format@1.1.3": {
+      "integrity": "4019271dd851340b9cbd4056ede4e120c0bde5b96a7b928a2095ab7a3b617382",
       "dependencies": [
         "npm:d3-dsv",
         "npm:date-fns-tz"
@@ -1433,7 +1434,7 @@
       "jsr:@nshiab/journalism-dataviz@^1.0.3",
       "jsr:@nshiab/journalism-extras@^1.0.2",
       "jsr:@nshiab/journalism-finance@^1.3.1",
-      "jsr:@nshiab/journalism-format@^1.1.2",
+      "jsr:@nshiab/journalism-format@^1.1.3",
       "jsr:@nshiab/journalism-geo@^1.0.3",
       "jsr:@nshiab/journalism-google@^1.0.4",
       "jsr:@nshiab/journalism-statistics@^1.2.2",

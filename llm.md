@@ -5287,36 +5287,67 @@ try {
 
 ## normalizeString
 
-Normalizes a string by converting it to lowercase, stripping accents, and
-trimming whitespace.
+Normalizes a string by converting it to lowercase, stripping accents,
+punctuation (optional), and trimming whitespace.
 
 ### Signature
 
 ```typescript
-function normalizeString(string: string): string;
+function normalizeString(
+  string: string,
+  options?: { stripPunctuation?: boolean },
+): string;
 ```
 
 ### Parameters
 
 - **`string`**: The string to be normalized.
+- **`options`**: An optional object with options.
+- **`options.stripPunctuation`**: If true, punctuation and underscores will be
+  stripped. Defaults to true.
 
 ### Returns
 
-A new string with characters in lowercase, without accents, and without leading
-or trailing whitespace.
+A new string with characters in lowercase, without accents, without punctuation
+(if specified), with single spaces between words, and without leading or
+trailing whitespace.
 
 ### Examples
 
 ```ts
-// Basic usage
-const normalized = normalizeString("Évènement");
-console.log(normalized); // "evenement"
+// Basic usage (strips punctuation by default)
+const normalized = normalizeString("Évènement!  de  test");
+console.log(normalized); // "evenement de test"
 ```
 
 ```ts
-// With accents and uppercase
-const normalized = normalizeString("Niño");
+// Keeping punctuation
+const normalized = normalizeString("Évènement!", { stripPunctuation: false });
+console.log(normalized); // "evenement!"
+```
+
+```ts
+// With accents, punctuation, and uppercase
+const normalized = normalizeString("¡Niño!");
 console.log(normalized); // "nino"
+```
+
+```ts
+// Handling multiple types of whitespace and symbols
+const normalized = normalizeString("Hello,  World!\t100%");
+console.log(normalized); // "hello world 100"
+```
+
+```ts
+// Stripping hyphens and underscores
+const normalized = normalizeString("multi-word_example");
+console.log(normalized); // "multiwordexample"
+```
+
+```ts
+// Handling emails (strips @ and .)
+const normalized = normalizeString("email@example.com");
+console.log(normalized); // "emailexamplecom"
 ```
 
 ## overwriteSheetData
