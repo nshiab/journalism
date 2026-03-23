@@ -49,16 +49,7 @@ point:
 ### Signature
 
 ```typescript
-function addClusters<T extends Record<string, unknown>>(
-  data: T[],
-  minDistance: number,
-  minNeighbours: number,
-  distance: (a: T, b: T) => number,
-  options?: { reset?: boolean },
-): asserts data is (T & {
-  clusterId: string | null;
-  clusterType: "core" | "border" | "noise";
-})[];
+function addClusters<T extends Record<string, unknown>>(data: T[], minDistance: number, minNeighbours: number, distance: (a: T, b: T) => number, options?: { reset?: boolean }): asserts data is ;
 ```
 
 ### Parameters
@@ -149,18 +140,18 @@ function addMahalanobisDistance<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`origin`**: - An object defining the reference point for the distance
+- **`origin`**: An object defining the reference point for the distance
   calculation. The keys of this object represent the variables (dimensions) to
   be used, and the values are their corresponding coordinates.
-- **`data`**: - An array of objects to be analyzed. Each object should contain
-  the same keys as the `origin` object, and their values for these keys should
-  be numbers.
-- **`options`**: - Optional parameters to customize the function's behavior.
-- **`options.similarity`**: - If `true`, a `similarity` property will be added
-  to each object in the `data` array. The similarity is calculated as
+- **`data`**: An array of objects to be analyzed. Each object should contain the
+  same keys as the `origin` object, and their values for these keys should be
+  numbers.
+- **`options`**: Optional parameters to customize the function's behavior.
+- **`options.similarity`**: If `true`, a `similarity` property will be added to
+  each object in the `data` array. The similarity is calculated as
   `1 - (mahaDist / maxMahaDist)`, providing an intuitive measure of closeness to
   the origin.
-- **`options.matrix`**: - A pre-computed inverted covariance matrix. Providing
+- **`options.matrix`**: A pre-computed inverted covariance matrix. Providing
   this can significantly speed up calculations, as it avoids re-computing the
   matrix for each call. This matrix should be obtained from
   `getCovarianceMatrix` with `invert: true`.
@@ -237,10 +228,10 @@ function addMahalanobisDistance<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`origin`**: - An object defining the reference point for the distance
+- **`origin`**: An object defining the reference point for the distance
   calculation.
-- **`data`**: - An array of objects to be analyzed.
-- **`options`**: - Optional parameters (similarity defaults to false).
+- **`data`**: An array of objects to be analyzed.
+- **`options`**: Optional parameters (similarity defaults to false).
 
 ### Returns
 
@@ -280,23 +271,23 @@ async function addSheetRows(
 
 ### Parameters
 
-- **`data`**: - An array of objects, where each object represents a row to be
+- **`data`**: An array of objects, where each object represents a row to be
   appended to the sheet. The keys of the objects should match the existing
   column headers in the sheet.
-- **`sheetUrl`**: - The URL of the Google Sheet to which rows will be appended.
+- **`sheetUrl`**: The URL of the Google Sheet to which rows will be appended.
   This URL should point to a specific sheet (e.g., ending with `#gid=0`).
-- **`options`**: - An optional object with configuration options:
-- **`options.headerIndex`**: - The 0-based index of the row that contains the
+- **`options`**: An optional object with configuration options:
+- **`options.headerIndex`**: The 0-based index of the row that contains the
   headers in your sheet. By default, the first row (index 0) is considered the
   header. Use this if your headers are in a different row.
-- **`options.raw`**: - If `true`, data will be written as raw values, preventing
+- **`options.raw`**: If `true`, data will be written as raw values, preventing
   Google Sheets from automatically guessing data types or applying formatting.
   This can be useful for preserving exact string representations. Defaults to
   `false`.
-- **`options.apiEmail`**: - Optional. Your Google Service Account email. If
+- **`options.apiEmail`**: Optional. Your Google Service Account email. If
   provided, this will override the `process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL`
   environment variable.
-- **`options.apiKey`**: - Optional. Your Google Service Account private key. If
+- **`options.apiKey`**: Optional. Your Google Service Account private key. If
   provided, this will override the `process.env.GOOGLE_PRIVATE_KEY` environment
   variable.
 
@@ -374,12 +365,12 @@ function addZScore<T extends Record<string, unknown>, K extends string>(
 
 ### Parameters
 
-- **`data`**: - An array of objects. Each object should contain the variable for
+- **`data`**: An array of objects. Each object should contain the variable for
   which the Z-score is to be calculated.
-- **`variable`**: - The key (as a string) of the numeric variable for which the
+- **`variable`**: The key (as a string) of the numeric variable for which the
   Z-score will be computed.
-- **`options`**: - Optional settings for the Z-score calculation.
-- **`options.newKey`**: - The name of the new key to be added to each object,
+- **`options`**: Optional settings for the Z-score calculation.
+- **`options.newKey`**: The name of the new key to be added to each object,
   representing the Z-score. If not provided, it defaults to `'zScore'`.
 
 ### Returns
@@ -450,11 +441,11 @@ function addZScore<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`data`**: - An array of objects. Each object should contain the variable for
+- **`data`**: An array of objects. Each object should contain the variable for
   which the Z-score is to be calculated.
-- **`variable`**: - The key (as a string) of the numeric variable for which the
+- **`variable`**: The key (as a string) of the numeric variable for which the
   Z-score will be computed.
-- **`options`**: - Optional settings (newKey defaults to undefined, using
+- **`options`**: Optional settings (newKey defaults to undefined, using
   'zScore').
 
 ### Returns
@@ -690,86 +681,82 @@ async function askAI(
 
 ### Parameters
 
-- **`prompt`**: - The primary text input for the AI model.
-- **`options`**: - A comprehensive set of options.
-- **`options.systemPrompt`**: - An optional system prompt to provide additional
+- **`prompt`**: The primary text input for the AI model.
+- **`options`**: A comprehensive set of options.
+- **`options.systemPrompt`**: An optional system prompt to provide additional
   context or instructions to the AI model. This can help guide the AI's response
   in a specific direction or tone.
-- **`options.model`**: - The specific AI model to use (e.g.,
-  'gemini-1.5-flash'). Defaults to the `AI_MODEL` environment variable.
-- **`options.apiKey`**: - Your API key for the AI service. Defaults to the
+- **`options.model`**: The specific AI model to use (e.g., 'gemini-1.5-flash').
+  Defaults to the `AI_MODEL` environment variable.
+- **`options.apiKey`**: Your API key for the AI service. Defaults to the
   `AI_KEY` environment variable.
-- **`options.vertex`**: - Set to `true` to use Vertex AI for authentication.
+- **`options.vertex`**: Set to `true` to use Vertex AI for authentication.
   Auto-enables if `AI_PROJECT` and `AI_LOCATION` are set.
-- **`options.project`**: - Your Google Cloud project ID. Defaults to the
+- **`options.project`**: Your Google Cloud project ID. Defaults to the
   `AI_PROJECT` environment variable.
-- **`options.location`**: - The Google Cloud location for your project. Defaults
+- **`options.location`**: The Google Cloud location for your project. Defaults
   to the `AI_LOCATION` environment variable.
-- **`options.ollama`**: - Set to `true` to use a local Ollama model. Defaults to
+- **`options.ollama`**: Set to `true` to use a local Ollama model. Defaults to
   the `OLLAMA` environment variable. If you want your Ollama instance to be
   used, you can pass it here too.
-- **`options.webSearch`**: - (Gemini only) If `true`, enables web search
-  grounding for the AI's responses. Be careful of extra costs. Defaults to
-  `false`.
-- **`options.HTMLFrom`**: - A URL or an array of URLs to scrape HTML content
-  from. The content is appended to the prompt.
-- **`options.screenshotFrom`**: - A URL or an array of URLs to take a screenshot
+- **`options.webSearch`**: (Gemini only) If `true`, enables web search grounding
+  for the AI's responses. Be careful of extra costs. Defaults to `false`.
+- **`options.HTMLFrom`**: A URL or an array of URLs to scrape HTML content from.
+  The content is appended to the prompt.
+- **`options.screenshotFrom`**: A URL or an array of URLs to take a screenshot
   from for analysis.
-- **`options.image`**: - A path or GCS URL (or an array of them) to an image
-  file.
-- **`options.video`**: - A path or GCS URL (or an array of them) to a video
-  file.
-- **`options.audio`**: - A path or GCS URL (or an array of them) to an audio
-  file.
-- **`options.pdf`**: - A path or GCS URL (or an array of them) to a PDF file.
-- **`options.text`**: - A path or GCS URL (or an array of them) to a text file.
-- **`options.returnJson`**: - If `true`, instructs the AI to return a JSON
-  object. Defaults to `false`.
-- **`options.parseJson`**: - If `true`, automatically parses the AI's response
-  as JSON. Defaults to `true` if `returnJson` is `true`, otherwise `false`.
-- **`options.schemaJson`**: - A Zod JSON schema object to enforce structured
+- **`options.image`**: A path or GCS URL (or an array of them) to an image file.
+- **`options.video`**: A path or GCS URL (or an array of them) to a video file.
+- **`options.audio`**: A path or GCS URL (or an array of them) to an audio file.
+- **`options.pdf`**: A path or GCS URL (or an array of them) to a PDF file.
+- **`options.text`**: A path or GCS URL (or an array of them) to a text file.
+- **`options.returnJson`**: If `true`, instructs the AI to return a JSON object.
+  Defaults to `false`.
+- **`options.parseJson`**: If `true`, automatically parses the AI's response as
+  JSON. Defaults to `true` if `returnJson` is `true`, otherwise `false`.
+- **`options.schemaJson`**: A Zod JSON schema object to enforce structured
   output. When provided, the AI will return data that conforms to the specified
   schema. Automatically enables `returnJson` and `parseJson`.
-- **`options.cache`**: - If `true`, caches the response locally in a
+- **`options.cache`**: If `true`, caches the response locally in a
   `.journalism-cache` directory. Defaults to `false`.
-- **`options.verbose`**: - If `true`, enables detailed logging, including token
+- **`options.verbose`**: If `true`, enables detailed logging, including token
   usage and estimated costs. Defaults to `false`.
-- **`options.clean`**: - A function to process and clean the AI's response
-  before it is returned or tested. This function is called after JSON parsing
-  (if `parseJson` is `true`). The response parameter will be the parsed JSON
-  object if `parseJson` is true, or a string otherwise.
-- **`options.test`**: - A function or an array of functions to validate the AI's
+- **`options.clean`**: A function to process and clean the AI's response before
+  it is returned or tested. This function is called after JSON parsing (if
+  `parseJson` is `true`). The response parameter will be the parsed JSON object
+  if `parseJson` is true, or a string otherwise.
+- **`options.test`**: A function or an array of functions to validate the AI's
   response before it's returned.
-- **`options.contextWindow`**: - An option to specify the context window size
-  for Ollama models. By default, Ollama sets this depending on the model, which
-  can be lower than the actual maximum context window size of the model.
-- **`options.thinkingBudget`**: - Sets the reasoning token budget: 0 to disable
+- **`options.contextWindow`**: An option to specify the context window size for
+  Ollama models. By default, Ollama sets this depending on the model, which can
+  be lower than the actual maximum context window size of the model.
+- **`options.thinkingBudget`**: Sets the reasoning token budget: 0 to disable
   (default, though some models may reason regardless), -1 for a dynamic budget,
   or > 0 for a fixed budget. For Ollama models, any non-zero value simply
   enables reasoning, ignoring the specific budget amount. Note: `thinkingLevel`
   takes precedence over `thinkingBudget` if both are provided.
-- **`options.thinkingLevel`**: - Sets the thinking level for reasoning:
-  "minimal", "low", "medium", or "high", which some models expect instead of
+- **`options.thinkingLevel`**: Sets the thinking level for reasoning: "minimal",
+  "low", "medium", or "high", which some models expect instead of
   `thinkingBudget`. Takes precedence over `thinkingBudget` if both are provided.
   For Ollama models, any value enables reasoning.
-- **`options.includeThoughts`**: - If `true`, includes the AI's reasoning
-  thoughts in the output when using a thinking budget or thinking level.
-  Defaults to `false`.
-- **`options.temperature`**: - Sets the temperature for response generation,
+- **`options.includeThoughts`**: If `true`, includes the AI's reasoning thoughts
+  in the output when using a thinking budget or thinking level. Defaults to
+  `false`.
+- **`options.temperature`**: Sets the temperature for response generation,
   controlling the randomness of the output. A value of 0 (default) makes the
   output more deterministic, while higher values (e.g., 0.7) increase creativity
   and variability.`.
-- **`options.detailedResponse`**: - If `true`, returns an object containing both
+- **`options.detailedResponse`**: If `true`, returns an object containing both
   the response and metadata (tokens, cost, duration, etc.). Defaults to `false`.
-- **`options.geminiParameters`**: - Additional parameters to pass to the Gemini
+- **`options.geminiParameters`**: Additional parameters to pass to the Gemini
   `generateContentStream` method. These will be merged with the default
   parameters, allowing you to override or extend the configuration (e.g., custom
   safety settings, generation config, system instructions).
-- **`options.ollamaParameters`**: - Additional parameters to pass to the Ollama
+- **`options.ollamaParameters`**: Additional parameters to pass to the Ollama
   `chat` method. These will be merged with the default parameters, allowing you
   to override or extend the configuration (e.g., custom options, keep_alive
   settings).
-- **`options.metrics`**: - An object to track cumulative metrics across multiple
+- **`options.metrics`**: An object to track cumulative metrics across multiple
   AI requests. Pass an object with `totalCost`, `totalInputTokens`,
   `totalOutputTokens`, and `totalRequests` properties (all initialized to 0).
   The function will update these values after each request. Note: `totalCost` is
@@ -1100,86 +1087,82 @@ async function askAI(
 
 ### Parameters
 
-- **`prompt`**: - The primary text input for the AI model.
-- **`options`**: - A comprehensive set of options.
-- **`options.systemPrompt`**: - An optional system prompt to provide additional
+- **`prompt`**: The primary text input for the AI model.
+- **`options`**: A comprehensive set of options.
+- **`options.systemPrompt`**: An optional system prompt to provide additional
   context or instructions to the AI model. This can help guide the AI's response
   in a specific direction or tone.
-- **`options.model`**: - The specific AI model to use (e.g.,
-  'gemini-1.5-flash'). Defaults to the `AI_MODEL` environment variable.
-- **`options.apiKey`**: - Your API key for the AI service. Defaults to the
+- **`options.model`**: The specific AI model to use (e.g., 'gemini-1.5-flash').
+  Defaults to the `AI_MODEL` environment variable.
+- **`options.apiKey`**: Your API key for the AI service. Defaults to the
   `AI_KEY` environment variable.
-- **`options.vertex`**: - Set to `true` to use Vertex AI for authentication.
+- **`options.vertex`**: Set to `true` to use Vertex AI for authentication.
   Auto-enables if `AI_PROJECT` and `AI_LOCATION` are set.
-- **`options.project`**: - Your Google Cloud project ID. Defaults to the
+- **`options.project`**: Your Google Cloud project ID. Defaults to the
   `AI_PROJECT` environment variable.
-- **`options.location`**: - The Google Cloud location for your project. Defaults
+- **`options.location`**: The Google Cloud location for your project. Defaults
   to the `AI_LOCATION` environment variable.
-- **`options.ollama`**: - Set to `true` to use a local Ollama model. Defaults to
+- **`options.ollama`**: Set to `true` to use a local Ollama model. Defaults to
   the `OLLAMA` environment variable. If you want your Ollama instance to be
   used, you can pass it here too.
-- **`options.webSearch`**: - (Gemini only) If `true`, enables web search
-  grounding for the AI's responses. Be careful of extra costs. Defaults to
-  `false`.
-- **`options.HTMLFrom`**: - A URL or an array of URLs to scrape HTML content
-  from. The content is appended to the prompt.
-- **`options.screenshotFrom`**: - A URL or an array of URLs to take a screenshot
+- **`options.webSearch`**: (Gemini only) If `true`, enables web search grounding
+  for the AI's responses. Be careful of extra costs. Defaults to `false`.
+- **`options.HTMLFrom`**: A URL or an array of URLs to scrape HTML content from.
+  The content is appended to the prompt.
+- **`options.screenshotFrom`**: A URL or an array of URLs to take a screenshot
   from for analysis.
-- **`options.image`**: - A path or GCS URL (or an array of them) to an image
-  file.
-- **`options.video`**: - A path or GCS URL (or an array of them) to a video
-  file.
-- **`options.audio`**: - A path or GCS URL (or an array of them) to an audio
-  file.
-- **`options.pdf`**: - A path or GCS URL (or an array of them) to a PDF file.
-- **`options.text`**: - A path or GCS URL (or an array of them) to a text file.
-- **`options.returnJson`**: - If `true`, instructs the AI to return a JSON
-  object. Defaults to `false`.
-- **`options.parseJson`**: - If `true`, automatically parses the AI's response
-  as JSON. Defaults to `true` if `returnJson` is `true`, otherwise `false`.
-- **`options.schemaJson`**: - A Zod JSON schema object to enforce structured
+- **`options.image`**: A path or GCS URL (or an array of them) to an image file.
+- **`options.video`**: A path or GCS URL (or an array of them) to a video file.
+- **`options.audio`**: A path or GCS URL (or an array of them) to an audio file.
+- **`options.pdf`**: A path or GCS URL (or an array of them) to a PDF file.
+- **`options.text`**: A path or GCS URL (or an array of them) to a text file.
+- **`options.returnJson`**: If `true`, instructs the AI to return a JSON object.
+  Defaults to `false`.
+- **`options.parseJson`**: If `true`, automatically parses the AI's response as
+  JSON. Defaults to `true` if `returnJson` is `true`, otherwise `false`.
+- **`options.schemaJson`**: A Zod JSON schema object to enforce structured
   output. When provided, the AI will return data that conforms to the specified
   schema. Automatically enables `returnJson` and `parseJson`.
-- **`options.cache`**: - If `true`, caches the response locally in a
+- **`options.cache`**: If `true`, caches the response locally in a
   `.journalism-cache` directory. Defaults to `false`.
-- **`options.verbose`**: - If `true`, enables detailed logging, including token
+- **`options.verbose`**: If `true`, enables detailed logging, including token
   usage and estimated costs. Defaults to `false`.
-- **`options.clean`**: - A function to process and clean the AI's response
-  before it is returned or tested. This function is called after JSON parsing
-  (if `parseJson` is `true`). The response parameter will be the parsed JSON
-  object if `parseJson` is true, or a string otherwise.
-- **`options.test`**: - A function or an array of functions to validate the AI's
+- **`options.clean`**: A function to process and clean the AI's response before
+  it is returned or tested. This function is called after JSON parsing (if
+  `parseJson` is `true`). The response parameter will be the parsed JSON object
+  if `parseJson` is true, or a string otherwise.
+- **`options.test`**: A function or an array of functions to validate the AI's
   response before it's returned.
-- **`options.contextWindow`**: - An option to specify the context window size
-  for Ollama models. By default, Ollama sets this depending on the model, which
-  can be lower than the actual maximum context window size of the model.
-- **`options.thinkingBudget`**: - Sets the reasoning token budget: 0 to disable
+- **`options.contextWindow`**: An option to specify the context window size for
+  Ollama models. By default, Ollama sets this depending on the model, which can
+  be lower than the actual maximum context window size of the model.
+- **`options.thinkingBudget`**: Sets the reasoning token budget: 0 to disable
   (default, though some models may reason regardless), -1 for a dynamic budget,
   or > 0 for a fixed budget. For Ollama models, any non-zero value simply
   enables reasoning, ignoring the specific budget amount. Note: `thinkingLevel`
   takes precedence over `thinkingBudget` if both are provided.
-- **`options.thinkingLevel`**: - Sets the thinking level for reasoning:
-  "minimal", "low", "medium", or "high", which some models expect instead of
+- **`options.thinkingLevel`**: Sets the thinking level for reasoning: "minimal",
+  "low", "medium", or "high", which some models expect instead of
   `thinkingBudget`. Takes precedence over `thinkingBudget` if both are provided.
   For Ollama models, any value enables reasoning.
-- **`options.includeThoughts`**: - If `true`, includes the AI's reasoning
-  thoughts in the output when using a thinking budget or thinking level.
-  Defaults to `false`.
-- **`options.temperature`**: - Sets the temperature for response generation,
+- **`options.includeThoughts`**: If `true`, includes the AI's reasoning thoughts
+  in the output when using a thinking budget or thinking level. Defaults to
+  `false`.
+- **`options.temperature`**: Sets the temperature for response generation,
   controlling the randomness of the output. A value of 0 (default) makes the
   output more deterministic, while higher values (e.g., 0.7) increase creativity
   and variability.`.
-- **`options.detailedResponse`**: - If `true`, returns an object containing both
+- **`options.detailedResponse`**: If `true`, returns an object containing both
   the response and metadata (tokens, cost, duration, etc.). Defaults to `false`.
-- **`options.geminiParameters`**: - Additional parameters to pass to the Gemini
+- **`options.geminiParameters`**: Additional parameters to pass to the Gemini
   `generateContentStream` method. These will be merged with the default
   parameters, allowing you to override or extend the configuration (e.g., custom
   safety settings, generation config, system instructions).
-- **`options.ollamaParameters`**: - Additional parameters to pass to the Ollama
+- **`options.ollamaParameters`**: Additional parameters to pass to the Ollama
   `chat` method. These will be merged with the default parameters, allowing you
   to override or extend the configuration (e.g., custom options, keep_alive
   settings).
-- **`options.metrics`**: - An object to track cumulative metrics across multiple
+- **`options.metrics`**: An object to track cumulative metrics across multiple
   AI requests. Pass an object with `totalCost`, `totalInputTokens`,
   `totalOutputTokens`, and `totalRequests` properties (all initialized to 0).
   The function will update these values after each request. Note: `totalCost` is
@@ -1460,25 +1443,25 @@ async function askAIPool(
 
 ### Parameters
 
-- **`requests`**: - An array of request objects to process.
-- **`requests[].id`**: - An optional identifier for the request, useful for
+- **`requests`**: An array of request objects to process.
+- **`requests[].id`**: An optional identifier for the request, useful for
   matching results back to inputs.
-- **`requests[].prompt`**: - The primary text input for the AI model.
-- **`requests[].options`**: - Options passed to {@link askAI} for each
-  individual request. See {@link askAI} for the full list of available options.
-- **`poolSize`**: - The number of concurrent workers processing requests.
-- **`poolOptions`**: - Configuration for the pool execution.
-- **`poolOptions.logProgress`**: - If `true`, logs progress to the console after
+- **`requests[].prompt`**: The primary text input for the AI model.
+- **`requests[].options`**: Options passed to {@link askAI} for each individual
+  request. See {@link askAI} for the full list of available options.
+- **`poolSize`**: The number of concurrent workers processing requests.
+- **`poolOptions`**: Configuration for the pool execution.
+- **`poolOptions.logProgress`**: If `true`, logs progress to the console after
   each completed or failed request. Defaults to `false`.
-- **`poolOptions.retry`**: - The maximum number of retry attempts for a failed
+- **`poolOptions.retry`**: The maximum number of retry attempts for a failed
   request. Defaults to `0` (no retries).
-- **`poolOptions.retryCheck`**: - A function that receives the error and returns
+- **`poolOptions.retryCheck`**: A function that receives the error and returns
   whether the request should be retried. If not provided, all failed requests
   are retried up to the `retry` limit.
-- **`poolOptions.minRequestDurationMs`**: - A minimum duration in milliseconds
-  for each request. If a request completes faster, the worker will wait before
+- **`poolOptions.minRequestDurationMs`**: A minimum duration in milliseconds for
+  each request. If a request completes faster, the worker will wait before
   picking up the next one. Useful for rate limiting.
-- **`poolOptions.metrics`**: - An object to track cumulative metrics across all
+- **`poolOptions.metrics`**: An object to track cumulative metrics across all
   requests in the pool. Pass an object with `totalCost`, `totalInputTokens`,
   `totalOutputTokens`, and `totalRequests` properties (all initialized to 0).
 
@@ -2529,13 +2512,13 @@ function generateCirPath(
 
 ### Parameters
 
-- **`startValue`**: - The initial value of the process (e.g., current interest
+- **`startValue`**: The initial value of the process (e.g., current interest
   rate).
-- **`a`**: - The speed of mean reversion.
-- **`b`**: - The long-term mean to which the process reverts.
-- **`sigma`**: - The volatility of the process.
-- **`years`**: - The number of years to simulate.
-- **`periodsPerYear`**: - The number of simulation steps per year (e.g., 12 for
+- **`a`**: The speed of mean reversion.
+- **`b`**: The long-term mean to which the process reverts.
+- **`sigma`**: The volatility of the process.
+- **`years`**: The number of years to simulate.
+- **`periodsPerYear`**: The number of simulation steps per year (e.g., 12 for
   monthly).
 
 ### Returns
@@ -2595,12 +2578,12 @@ function generateGbmPath(
 
 ### Parameters
 
-- **`startValue`**: - The initial value of the asset at the beginning of the
+- **`startValue`**: The initial value of the asset at the beginning of the
   simulation
-- **`mu`**: - The expected annualized drift (average growth rate) of the asset
-- **`sigma`**: - The annualized volatility (degree of variation) of the asset
-- **`years`**: - The total duration of the simulation in years
-- **`periodsPerYear`**: - The number of simulation steps per year (e.g., 252 for
+- **`mu`**: The expected annualized drift (average growth rate) of the asset
+- **`sigma`**: The annualized volatility (degree of variation) of the asset
+- **`years`**: The total duration of the simulation in years
+- **`periodsPerYear`**: The number of simulation steps per year (e.g., 252 for
   daily trading days, 12 for monthly data, 52 for weekly)
 
 ### Returns
@@ -2773,10 +2756,10 @@ function getCirParameters(
 
 ### Parameters
 
-- **`values`**: - An array of numerical data points (e.g., historical interest
+- **`values`**: An array of numerical data points (e.g., historical interest
   rates).
-- **`periodsPerYear`**: - The number of data points per year (e.g., 252 for
-  daily, 12 for monthly).
+- **`periodsPerYear`**: The number of data points per year (e.g., 252 for daily,
+  12 for monthly).
 
 ### Returns
 
@@ -2926,12 +2909,12 @@ function getClosest<T extends { properties: unknown }>(
 
 ### Parameters
 
-- **`lon`**: - The longitude of the reference point.
-- **`lat`**: - The latitude of the reference point.
-- **`geoItems`**: - An array of geographical items with properties objects.
-- **`getItemLon`**: - A function that returns longitude from an item.
-- **`getItemLat`**: - A function that returns latitude from an item.
-- **`options`**: - Settings with addDistance: true for items with properties.
+- **`lon`**: The longitude of the reference point.
+- **`lat`**: The latitude of the reference point.
+- **`geoItems`**: An array of geographical items with properties objects.
+- **`getItemLon`**: A function that returns longitude from an item.
+- **`getItemLat`**: A function that returns latitude from an item.
+- **`options`**: Settings with addDistance: true for items with properties.
 
 ### Returns
 
@@ -2957,12 +2940,12 @@ function getClosest<T>(
 
 ### Parameters
 
-- **`lon`**: - The longitude of the reference point.
-- **`lat`**: - The latitude of the reference point.
-- **`geoItems`**: - An array of geographical items without properties objects.
-- **`getItemLon`**: - A function that returns longitude from an item.
-- **`getItemLat`**: - A function that returns latitude from an item.
-- **`options`**: - Settings with addDistance: true for items without properties.
+- **`lon`**: The longitude of the reference point.
+- **`lat`**: The latitude of the reference point.
+- **`geoItems`**: An array of geographical items without properties objects.
+- **`getItemLon`**: A function that returns longitude from an item.
+- **`getItemLat`**: A function that returns latitude from an item.
+- **`options`**: Settings with addDistance: true for items without properties.
 
 ### Returns
 
@@ -2994,10 +2977,10 @@ function getCovarianceMatrix(
 
 ### Parameters
 
-- **`data`**: - A 2D array of numbers representing the dataset. Each inner array
+- **`data`**: A 2D array of numbers representing the dataset. Each inner array
   is a data point, and each element is a variable.
-- **`options`**: - Optional settings for the covariance matrix computation.
-- **`options.invert`**: - If `true`, the function will return the inverse of the
+- **`options`**: Optional settings for the covariance matrix computation.
+- **`options.invert`**: If `true`, the function will return the inverse of the
   computed covariance matrix. Defaults to `false`.
 
 ### Returns
@@ -3143,9 +3126,9 @@ async function getEmbedding(
   instance to be used, you can pass it here too.
 - **`options.verbose`**: If `true`, logs additional information such as
   execution time and the truncated input text. Defaults to `false`.
-- **`options.contextWindow`**: - An option to specify the context window size
-  for Ollama models. By default, Ollama sets this depending on the model, which
-  can be lower than the actual maximum context window size of the model.
+- **`options.contextWindow`**: An option to specify the context window size for
+  Ollama models. By default, Ollama sets this depending on the model, which can
+  be lower than the actual maximum context window size of the model.
 
 ### Returns
 
@@ -3230,21 +3213,21 @@ async function getEnvironmentCanadaRecords<T extends Record<string, unknown>>(lo
 
 ### Parameters
 
-- **`locations`**: - An array of location objects, each containing `lat` and
-  `lon` properties. Additional properties will be preserved in the output.
-- **`variable`**: - The type of weather record to retrieve. Must be one of: -
+- **`locations`**: An array of location objects, each containing `lat` and `lon`
+  properties. Additional properties will be preserved in the output.
+- **`variable`**: The type of weather record to retrieve. Must be one of: -
   `"DAILY MAXIMUM TEMPERATURE"`: Record high temperatures in Celsius -
   `"DAILY TOTAL PRECIPITATION"`: Record precipitation amounts in millimeters -
   `"DAILY TOTAL SNOWFALL"`: Record snowfall amounts in centimeters
-- **`dateRange`**: - A tuple of two date strings in "YYYY-MM-DD" format
+- **`dateRange`**: A tuple of two date strings in "YYYY-MM-DD" format
   representing the start and end dates (inclusive) for the record retrieval.
   Note: The year values are only used for iteration purposes to determine which
   calendar days to fetch records for - the actual records returned are
   historical all-time extremes regardless of the year specified.
-- **`options`**: - Configuration options for the data retrieval.
-- **`options.delay`**: - Delay in milliseconds between API requests. Defaults to
+- **`options`**: Configuration options for the data retrieval.
+- **`options.delay`**: Delay in milliseconds between API requests. Defaults to
   100ms. Increase this value if you encounter rate limiting.
-- **`options.verbose`**: - If `true`, logs detailed information about station
+- **`options.verbose`**: If `true`, logs detailed information about station
   selection and API requests. Useful for debugging and monitoring progress.
   Defaults to `false`.
 
@@ -3350,9 +3333,9 @@ function getGbmParameters(
 
 ### Parameters
 
-- **`values`**: - An array of numerical values (e.g., historical prices)
-- **`periodsPerYear`**: - The number of data points per year (e.g., 252 for
-  daily trading days, 12 for monthly data, 52 for weekly)
+- **`values`**: An array of numerical values (e.g., historical prices)
+- **`periodsPerYear`**: The number of data points per year (e.g., 252 for daily
+  trading days, 12 for monthly data, 52 for weekly)
 
 ### Returns
 
@@ -3394,7 +3377,7 @@ async function getGeoTiffDetails(
 
 ### Parameters
 
-- **`path`**: - The absolute path to the GeoTIFF file.
+- **`path`**: The absolute path to the GeoTIFF file.
 
 ### Returns
 
@@ -3442,9 +3425,9 @@ async function getGeoTiffValues(
 
 ### Parameters
 
-- **`lat`**: - The latitude coordinate for which to extract the value.
-- **`lon`**: - The longitude coordinate for which to extract the value.
-- **`geoTiffDetails`**: - An object containing the GeoTIFF image details,
+- **`lat`**: The latitude coordinate for which to extract the value.
+- **`lon`**: The longitude coordinate for which to extract the value.
+- **`geoTiffDetails`**: An object containing the GeoTIFF image details,
   typically obtained from `getGeoTiffDetails`.
 
 ### Returns
@@ -3484,12 +3467,12 @@ async function getHtmlTable(
 
 ### Parameters
 
-- **`url`**: - The URL of the web page containing the HTML table.
-- **`options`**: - An optional object to specify how to locate the table.
-- **`options.selector`**: - A CSS selector string to identify the target table
-  on the page. If not provided, the function will look for the first `<table>`
+- **`url`**: The URL of the web page containing the HTML table.
+- **`options`**: An optional object to specify how to locate the table.
+- **`options.selector`**: A CSS selector string to identify the target table on
+  the page. If not provided, the function will look for the first `<table>`
   element.
-- **`options.index`**: - The 0-based index of the table to select if multiple
+- **`options.index`**: The 0-based index of the table to select if multiple
   tables match the `selector`. Defaults to `0`.
 
 ### Returns
@@ -3534,8 +3517,8 @@ function getHumidex(temperature: number, humidity: number): number;
 
 ### Parameters
 
-- **`temperature`**: - The ambient temperature in Celsius.
-- **`humidity`**: - The relative humidity as a percentage (0-100).
+- **`temperature`**: The ambient temperature in Celsius.
+- **`humidity`**: The relative humidity as a percentage (0-100).
 
 ### Returns
 
@@ -3582,7 +3565,7 @@ function getId(length?: number): string;
 
 ### Parameters
 
-- **`length`**: - The desired length of the generated ID. Defaults to 6.
+- **`length`**: The desired length of the generated ID. Defaults to 6.
 
 ### Returns
 
@@ -3601,6 +3584,148 @@ console.log(id); // e.g., 'a1B2c3'
 const customId = getId(10);
 console.log(customId); // e.g., 'a1B2c3D4e5'
 ```
+
+## getIncomeTax
+
+Calculates a comprehensive breakdown of Canadian federal and provincial income
+taxes, including capital gains.
+
+Calculation Engine Methodology:
+
+**1. Mandatory Payroll Deductions:**
+
+- Calculates Tier 1 CPP/QPP base contribution (claimed as a Non-Refundable Tax
+  Credit (NRTC)).
+- Calculates Tier 1 CPP/QPP enhanced contribution (claimed as a tax deduction).
+- Calculates Tier 2 CPP2/QPP2 based on the Yearly Additional Maximum Pensionable
+  Earnings (YAMPE) (claimed as a tax deduction).
+- Calculates EI (and QPIP for Quebec residents) up to their respective annual
+  maximum insurable earnings.
+
+**2. Federal Tax & Non-Refundable Tax Credits (NRTCs):**
+
+- Calculates gross federal tax using progressive federal tax brackets.
+- Determines the Federal Basic Personal Amount (BPA), applying a linear
+  phase-out for high earners.
+- Calculates the Canada Employment Amount (CEA) against employment income up to
+  the annual maximum.
+- Aggregates the federal NRTC base (BPA + Base CPP/QPP + EI + QPIP + CEA) and
+  converts it to a credit amount, accounting for the 15% top-up credit rate for
+  amounts above the first bracket threshold.
+- Applies the Federal Abatement exclusively for Quebec residents.
+
+**3. Provincial Tax & NRTCs:**
+
+- Calculates gross provincial tax using the specific province's progressive tax
+  brackets.
+- **Quebec-Specific:** Applies the Deduction for Workers as an income reduction
+  before tax calculation. Applies the Person Living Alone amount to the NRTC
+  base (if applicable). Uses a decoupled NRTC rate.
+- Retrieves the provincial BPA, executing a specific linear phase-out for
+  Manitoba residents, and dynamically mirroring the federal BPA phase-out for
+  Yukon residents.
+- Aggregates the provincial NRTC base (Provincial BPA + Base CPP/QPP + EI + QPIP
+  if in Quebec + CEA if in Yukon + Family Tax Benefit if in Manitoba).
+
+**4. Provincial-Specific Modifiers (If Applicable):**
+
+- **B.C. Tax Reduction:** A non-refundable credit for B.C. residents with
+  low-to-moderate taxable income (subject to phase-out).
+- **New Brunswick Tax Reduction:** A non-refundable credit for N.B. residents
+  with low-to-moderate taxable income (subject to phase-out).
+- **Newfoundland and Labrador Tax Reduction:** A non-refundable credit for N.L.
+  residents with low-to-moderate taxable income (subject to phase-out).
+- **Nova Scotia Tax Reduction:** A non-refundable credit for N.S. residents with
+  low-to-moderate taxable income (subject to phase-out).
+- **Prince Edward Island Tax Reduction:** A non-refundable credit for P.E.I.
+  residents with low-to-moderate taxable income (subject to phase-out).
+- **Ontario Tax Reduction (OTR) & LIFT:** Reduces or eliminates basic Ontario
+  tax for low-income earners, and applies the Low-income Individuals and
+  Families Tax (LIFT) Credit.
+- **Ontario Surtax:** Applies a two-tier cascading surtax on net provincial tax
+  in Ontario.
+- **Provincial Health Premiums:** Calculates the Ontario Health Premium based on
+  strict taxable income bands, and the Quebec RAMQ premium based on income
+  thresholds.
+
+**5. Capital Gains:**
+
+- Applies a 50% inclusion rate to any provided capital gains.
+- Isolates the exact tax burden associated with those capital gains by computing
+  the marginal difference between a "with gains" and "without gains" tax
+  profile.
+
+### Signature
+
+```typescript
+function getIncomeTax(
+  employmentIncome: number,
+  province:
+    | "Newfoundland and Labrador"
+    | "Prince Edward Island"
+    | "Nova Scotia"
+    | "New Brunswick"
+    | "Quebec"
+    | "Ontario"
+    | "Manitoba"
+    | "Saskatchewan"
+    | "Alberta"
+    | "British Columbia"
+    | "Yukon"
+    | "Northwest Territories"
+    | "Nunavut",
+  year: 2025,
+  options?: {
+    quebec?: { ramq?: boolean; livingAlone?: boolean };
+    capitalGains?: number;
+    rrsp?: number;
+  },
+): {
+  federalRate: number;
+  provincialRate: number;
+  grossFederalTax: number;
+  appliedFederalCredits: number;
+  federalAbatement: number;
+  grossProvincialTax: number;
+  appliedProvincialCredits: number;
+  provincialTaxReduction: number;
+  provincialSurtax: number;
+  healthPremium: number;
+  cppOrQppBase: number;
+  cppOrQppEnhanced: number;
+  cpp2OrQpp2Premium: number;
+  eiPremium: number;
+  qpipPremium: number;
+  taxableCapitalGains: number;
+  capitalGainsTax: number;
+  capitalGainsRate: number;
+  totalTaxAndPremiums: number;
+};
+```
+
+### Parameters
+
+- **`employmentIncome`**: The individual's total gross annual taxable employment
+  income (assumes T4 income).
+- **`province`**: The Canadian province or territory of residence.
+- **`year`**: The specific tax year.
+- **`options`**: Additional options for specific tax scenarios. Includes
+  `quebec.ramq`, `quebec.livingAlone`, `capitalGains`, and `rrsp`.
+
+### Returns
+
+A fully itemized object containing marginal rates, gross taxes, applied
+negative-valued credits, mandatory premiums, capital gains specifics, and the
+verified total deduction sum.
+
+### Examples
+
+// Basic scenario: $100k employment income in Ontario getIncomeTax(100000,
+"Ontario", 2025);
+
+// With options: $80k employment income in Quebec, with $10k RRSP contribution
+and $5k Capital Gains, excluding RAMQ getIncomeTax(80000, "Quebec", 2025, {
+rrsp: 10000, capitalGains: 5000, quebec: { ramq: false } });
 
 ## getMahalanobisDistance
 
@@ -3626,10 +3751,10 @@ function getMahalanobisDistance(
 
 ### Parameters
 
-- **`x1`**: - The first data point (an array of numbers).
-- **`x2`**: - The second data point (an array of numbers).
-- **`invCovMatrix`**: - The inverted covariance matrix of the dataset (a 2D
-  array of numbers).
+- **`x1`**: The first data point (an array of numbers).
+- **`x2`**: The second data point (an array of numbers).
+- **`invCovMatrix`**: The inverted covariance matrix of the dataset (a 2D array
+  of numbers).
 
 ### Returns
 
@@ -3710,18 +3835,18 @@ function getMortgagePenalty(
 
 ### Parameters
 
-- **`parameters`**: - The mortgage details.
-- **`parameters.remainingMonthsToTerm`**: - Number of months left in the current
+- **`parameters`**: The mortgage details.
+- **`parameters.remainingMonthsToTerm`**: Number of months left in the current
   mortgage term.
-- **`parameters.mortgageBalance`**: - The current outstanding mortgage balance.
-- **`parameters.postedInterestRate`**: - The original posted interest rate when
+- **`parameters.mortgageBalance`**: The current outstanding mortgage balance.
+- **`parameters.postedInterestRate`**: The original posted interest rate when
   the mortgage was signed.
-- **`parameters.rateDiscount`**: - The discount received from the posted rate
-  (as a decimal, e.g., 0.01 for 1%).
-- **`parameters.rateMargin`**: - Any additional margin added to the rate.
-- **`parameters.currentPostedRates`**: - A record mapping term lengths (in
-  years) to current posted interest rates.
-- **`parameters.mortgageType`**: - Either "fixed" or "variable".
+- **`parameters.rateDiscount`**: The discount received from the posted rate (as
+  a decimal, e.g., 0.01 for 1%).
+- **`parameters.rateMargin`**: Any additional margin added to the rate.
+- **`parameters.currentPostedRates`**: A record mapping term lengths (in years)
+  to current posted interest rates.
+- **`parameters.mortgageType`**: Either "fixed" or "variable".
 
 ### Returns
 
@@ -3760,8 +3885,7 @@ const penalty = getMortgagePenalty({
 
 ## getSalesTax
 
-Calculates the Canadian sales tax for a given amount and province. Rates as of
-March 2026.
+Calculates the Canadian sales tax for a given amount, province, and year.
 
 ### Signature
 
@@ -3782,6 +3906,7 @@ function getSalesTax(
     | "Quebec"
     | "Saskatchewan"
     | "Yukon",
+  year: 2025,
 ): {
   gst: number;
   pst: number;
@@ -3793,8 +3918,9 @@ function getSalesTax(
 
 ### Parameters
 
-- **`amount`**: - The base amount before tax.
-- **`province`**: - The province or territory.
+- **`amount`**: The base amount before tax.
+- **`province`**: The province or territory.
+- **`year`**: The tax year.
 
 ### Returns
 
@@ -3803,7 +3929,7 @@ An object containing the breakdown of taxes and the total amount.
 ### Examples
 
 ```ts
-const salesTax = getSalesTax(100, "QC");
+const salesTax = getSalesTax(100, "Quebec", 2025);
 console.log(salesTax);
 // { gst: 5, pst: 9.975, hst: 0, totalTax: 14.975, totalAmount: 114.975 }
 ```
@@ -3852,18 +3978,18 @@ function getSampleSizeMean<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`data`**: - An array of objects used to calculate the sample standard
+- **`data`**: An array of objects used to calculate the sample standard
   deviation. Each object must contain the specified key with numeric values.
-- **`key`**: - The key in each data object that contains the numeric values to
+- **`key`**: The key in each data object that contains the numeric values to
   analyze for calculating the sample size.
-- **`confidenceLevel`**: - The desired confidence level for the sample. Must be
+- **`confidenceLevel`**: The desired confidence level for the sample. Must be
   90, 95, or 99. The higher the confidence level, the larger the returned sample
   size.
-- **`marginOfError`**: - The acceptable margin of error in the same units as the
+- **`marginOfError`**: The acceptable margin of error in the same units as the
   data values. The smaller the margin of error, the larger the returned sample
   size.
-- **`options`**: - Optional configuration object.
-- **`options.populationSize`**: - The total size of the population. If not
+- **`options`**: Optional configuration object.
+- **`options.populationSize`**: The total size of the population. If not
   provided, the function assumes the provided data represents the entire
   population and uses data.length as the population size.
 
@@ -3963,13 +4089,13 @@ function getSampleSizeProportion(
 
 ### Parameters
 
-- **`populationSize`**: - The size of the population from which the sample will
-  be drawn. Used in the finite population correction formula for more accurate
+- **`populationSize`**: The size of the population from which the sample will be
+  drawn. Used in the finite population correction formula for more accurate
   sample size calculations.
-- **`confidenceLevel`**: - The desired confidence level for the sample. Must be
+- **`confidenceLevel`**: The desired confidence level for the sample. Must be
   90, 95, or 99. The higher the confidence level, the larger the returned sample
   size.
-- **`marginOfError`**: - The acceptable margin of error as a percentage (1-100).
+- **`marginOfError`**: The acceptable margin of error as a percentage (1-100).
   The smaller the margin of error, the larger the returned sample size.
 
 ### Returns
@@ -4022,12 +4148,12 @@ function getSeason(
 
 ### Parameters
 
-- **`options`**: - An object containing options for determining the season.
-- **`options.date`**: - Optional. The date for which to determine the season.
+- **`options`**: An object containing options for determining the season.
+- **`options.date`**: Optional. The date for which to determine the season.
   Defaults to the current date if not provided.
-- **`options.hemisphere`**: - Optional. The hemisphere for which to determine
-  the season. Can be 'northern' or 'southern'. Defaults to 'northern'.
-- **`options.type`**: - Optional. The type of season calculation to use. Can be
+- **`options.hemisphere`**: Optional. The hemisphere for which to determine the
+  season. Can be 'northern' or 'southern'. Defaults to 'northern'.
+- **`options.type`**: Optional. The type of season calculation to use. Can be
   'meteorological' or 'astronomical'. Defaults to 'astronomical'.
 
 ### Returns
@@ -4102,20 +4228,20 @@ function getSheetData(
 
 ### Parameters
 
-- **`sheetUrl`**: - The URL of the Google Sheet from which to retrieve data.
-  This URL should point to a specific sheet (e.g., ending with `#gid=0`).
-- **`options`**: - An optional object with configuration options:
-- **`options.skip`**: - The number of rows to skip from the beginning of the
-  sheet before parsing the data. This is useful for sheets that have metadata at
-  the top. Defaults to `0`.
-- **`options.csv`**: - If `true`, the function will return the raw data as a CSV
+- **`sheetUrl`**: The URL of the Google Sheet from which to retrieve data. This
+  URL should point to a specific sheet (e.g., ending with `#gid=0`).
+- **`options`**: An optional object with configuration options:
+- **`options.skip`**: The number of rows to skip from the beginning of the sheet
+  before parsing the data. This is useful for sheets that have metadata at the
+  top. Defaults to `0`.
+- **`options.csv`**: If `true`, the function will return the raw data as a CSV
   string. If `false` or omitted, it will return an array of objects, where each
   object represents a row and keys correspond to column headers. Defaults to
   `false`.
-- **`options.apiEmail`**: - Optional. Your Google Service Account email. If
+- **`options.apiEmail`**: Optional. Your Google Service Account email. If
   provided, this will override the `GOOGLE_SERVICE_ACCOUNT_EMAIL` environment
   variable.
-- **`options.apiKey`**: - Optional. Your Google Service Account private key. If
+- **`options.apiKey`**: Optional. Your Google Service Account private key. If
   provided, this will override the `GOOGLE_PRIVATE_KEY` environment variable.
 
 ### Returns
@@ -4192,20 +4318,20 @@ function getSheetData(
 
 ### Parameters
 
-- **`sheetUrl`**: - The URL of the Google Sheet from which to retrieve data.
-  This URL should point to a specific sheet (e.g., ending with `#gid=0`).
-- **`options`**: - An optional object with configuration options:
-- **`options.skip`**: - The number of rows to skip from the beginning of the
-  sheet before parsing the data. This is useful for sheets that have metadata at
-  the top. Defaults to `0`.
-- **`options.csv`**: - If `true`, the function will return the raw data as a CSV
+- **`sheetUrl`**: The URL of the Google Sheet from which to retrieve data. This
+  URL should point to a specific sheet (e.g., ending with `#gid=0`).
+- **`options`**: An optional object with configuration options:
+- **`options.skip`**: The number of rows to skip from the beginning of the sheet
+  before parsing the data. This is useful for sheets that have metadata at the
+  top. Defaults to `0`.
+- **`options.csv`**: If `true`, the function will return the raw data as a CSV
   string. If `false` or omitted, it will return an array of objects, where each
   object represents a row and keys correspond to column headers. Defaults to
   `false`.
-- **`options.apiEmail`**: - Optional. Your Google Service Account email. If
+- **`options.apiEmail`**: Optional. Your Google Service Account email. If
   provided, this will override the `GOOGLE_SERVICE_ACCOUNT_EMAIL` environment
   variable.
-- **`options.apiKey`**: - Optional. Your Google Service Account private key. If
+- **`options.apiKey`**: Optional. Your Google Service Account private key. If
   provided, this will override the `GOOGLE_PRIVATE_KEY` environment variable.
 
 ### Returns
@@ -4287,20 +4413,20 @@ async function getSheetData(
 
 ### Parameters
 
-- **`sheetUrl`**: - The URL of the Google Sheet from which to retrieve data.
-  This URL should point to a specific sheet (e.g., ending with `#gid=0`).
-- **`options`**: - An optional object with configuration options:
-- **`options.skip`**: - The number of rows to skip from the beginning of the
-  sheet before parsing the data. This is useful for sheets that have metadata at
-  the top. Defaults to `0`.
-- **`options.csv`**: - If `true`, the function will return the raw data as a CSV
+- **`sheetUrl`**: The URL of the Google Sheet from which to retrieve data. This
+  URL should point to a specific sheet (e.g., ending with `#gid=0`).
+- **`options`**: An optional object with configuration options:
+- **`options.skip`**: The number of rows to skip from the beginning of the sheet
+  before parsing the data. This is useful for sheets that have metadata at the
+  top. Defaults to `0`.
+- **`options.csv`**: If `true`, the function will return the raw data as a CSV
   string. If `false` or omitted, it will return an array of objects, where each
   object represents a row and keys correspond to column headers. Defaults to
   `false`.
-- **`options.apiEmail`**: - Optional. Your Google Service Account email. If
+- **`options.apiEmail`**: Optional. Your Google Service Account email. If
   provided, this will override the `GOOGLE_SERVICE_ACCOUNT_EMAIL` environment
   variable.
-- **`options.apiKey`**: - Optional. Your Google Service Account private key. If
+- **`options.apiKey`**: Optional. Your Google Service Account private key. If
   provided, this will override the `GOOGLE_PRIVATE_KEY` environment variable.
 
 ### Returns
@@ -4377,16 +4503,16 @@ async function getStatCanTable(
 
 ### Parameters
 
-- **`pid`**: - The Product ID (PID) of the Statistics Canada table. This is a
+- **`pid`**: The Product ID (PID) of the Statistics Canada table. This is a
   string of up to 8 digits. If a longer string is provided, it will be truncated
   to the first 8 characters.
-- **`options`**: - Optional settings to customize the data retrieval.
-- **`options.lang`**: - The language of the table data. Can be 'en' for English
-  or 'fr' for French. Defaults to 'en'.
-- **`options.returnRawCSV`**: - A boolean indicating whether to return the raw
-  CSV data as a string instead of a parsed array of objects. Useful for direct
-  file storage or custom parsing. Defaults to `false`.
-- **`options.debug`**: - A boolean indicating whether to enable debug logging to
+- **`options`**: Optional settings to customize the data retrieval.
+- **`options.lang`**: The language of the table data. Can be 'en' for English or
+  'fr' for French. Defaults to 'en'.
+- **`options.returnRawCSV`**: A boolean indicating whether to return the raw CSV
+  data as a string instead of a parsed array of objects. Useful for direct file
+  storage or custom parsing. Defaults to `false`.
+- **`options.debug`**: A boolean indicating whether to enable debug logging to
   the console, showing fetch URLs and other process details. Defaults to
   `false`.
 
@@ -4449,22 +4575,22 @@ async function getYahooFinanceData(
 
 ### Parameters
 
-- **`symbol`**: - The stock symbol (ticker) for which to fetch data (e.g.,
-  'AAPL' for Apple Inc., '^GSPTSE' for S&P/TSX Composite Index).
-- **`startDate`**: - The start date for the data range (inclusive). Data will be
+- **`symbol`**: The stock symbol (ticker) for which to fetch data (e.g., 'AAPL'
+  for Apple Inc., '^GSPTSE' for S&P/TSX Composite Index).
+- **`startDate`**: The start date for the data range (inclusive). Data will be
   fetched from this date onwards.
-- **`endDate`**: - The end date for the data range (inclusive). Data will be
+- **`endDate`**: The end date for the data range (inclusive). Data will be
   fetched up to this date.
-- **`variable`**: - The specific financial variable to retrieve. Can be one
-  of: - `"open"`: The opening price for the period. - `"high"`: The highest
-  price for the period. - `"low"`: The lowest price for the period. - `"close"`:
-  The closing price for the period. - `"adjclose"`: The adjusted closing price,
+- **`variable`**: The specific financial variable to retrieve. Can be one of: -
+  `"open"`: The opening price for the period. - `"high"`: The highest price for
+  the period. - `"low"`: The lowest price for the period. - `"close"`: The
+  closing price for the period. - `"adjclose"`: The adjusted closing price,
   accounting for dividends and stock splits. - `"volume"`: The trading volume
   for the period.
-- **`interval`**: - The time interval for the data points. Can be one of: -
+- **`interval`**: The time interval for the data points. Can be one of: -
   `"1d"`: Daily data. - `"1h"`: Hourly data. - `"1m"`: Minute-by-minute data.
-- **`useBrowser`**: - If true, the function will use Playwright to fetch the
-  data. This can be useful when facing rate limiting issues with the traditional
+- **`useBrowser`**: If true, the function will use Playwright to fetch the data.
+  This can be useful when facing rate limiting issues with the traditional
   fetch.
 
 ### Returns
@@ -4523,12 +4649,12 @@ async function inBucket(
 
 ### Parameters
 
-- **`destination`**: - The full path to the file within the bucket (e.g.,
+- **`destination`**: The full path to the file within the bucket (e.g.,
   'my-folder/my-file.txt').
-- **`options`**: - Optional settings for configuring the GCS client.
-- **`options.project`**: - Your Google Cloud Project ID. If not provided, it
+- **`options`**: Optional settings for configuring the GCS client.
+- **`options.project`**: Your Google Cloud Project ID. If not provided, it
   defaults to the `BUCKET_PROJECT` environment variable.
-- **`options.bucket`**: - The name of the Google Cloud Storage bucket. If not
+- **`options.bucket`**: The name of the Google Cloud Storage bucket. If not
   provided, it defaults to the `BUCKET_NAME` environment variable.
 
 ### Returns
@@ -4578,7 +4704,7 @@ function invertMatrix(matrix: number[][]): number[][];
 
 ### Parameters
 
-- **`matrix`**: - The square matrix to be inverted. It must be a 2D array where
+- **`matrix`**: The square matrix to be inverted. It must be a 2D array where
   the number of rows equals the number of columns.
 
 ### Returns
@@ -4664,34 +4790,34 @@ function logBarChart<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`data`**: - An array of objects, where each object represents a bar in the
+- **`data`**: An array of objects, where each object represents a bar in the
   chart. Each object should contain keys corresponding to the `labels` and
   `values` parameters.
-- **`labels`**: - The key in the data objects whose values will be used as
-  textual labels for each bar (e.g., 'category', 'name', 'country').
-- **`values`**: - The key in the data objects whose numerical values will
+- **`labels`**: The key in the data objects whose values will be used as textual
+  labels for each bar (e.g., 'category', 'name', 'country').
+- **`values`**: The key in the data objects whose numerical values will
   determine the length of each bar and be displayed alongside the labels (e.g.,
   'sales', 'count', 'percentage').
-- **`options`**: - Optional configuration for customizing the appearance and
+- **`options`**: Optional configuration for customizing the appearance and
   behavior of the chart.
-- **`options.formatLabels`**: - A function to format the labels displayed on the
+- **`options.formatLabels`**: A function to format the labels displayed on the
   chart. It receives the raw label value as input and should return a string.
   Defaults to converting the label to a string.
-- **`options.formatValues`**: - A function to format the numerical values
+- **`options.formatValues`**: A function to format the numerical values
   displayed next to the bars. It receives the raw numerical value as input and
   should return a string. Defaults to formatting the number using `formatNumber`
   (which adds commas for thousands, etc.).
-- **`options.width`**: - The maximum width of the bars in characters. The bars
+- **`options.width`**: The maximum width of the bars in characters. The bars
   will scale proportionally to this width. A larger width allows for more
   detailed visualization. Defaults to `40`.
-- **`options.title`**: - An optional title to display above the chart. If not
+- **`options.title`**: An optional title to display above the chart. If not
   provided, a default title based on `labels` and `values` keys will be
   generated.
-- **`options.totalLabel`**: - An optional label to display for the total sum of
+- **`options.totalLabel`**: An optional label to display for the total sum of
   all values at the bottom of the chart. If provided, the sum of all `values`
   will be calculated and displayed next to this label.
-- **`options.compact`**: - If `true`, the chart will be rendered in a more
-  compact format, reducing vertical spacing between bars. Defaults to `false`.
+- **`options.compact`**: If `true`, the chart will be rendered in a more compact
+  format, reducing vertical spacing between bars. Defaults to `false`.
 
 ### Examples
 
@@ -4761,36 +4887,35 @@ function logDotChart<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`data`**: - An array of objects representing the data to be visualized. Each
+- **`data`**: An array of objects representing the data to be visualized. Each
   object should contain keys corresponding to the `x` and `y` parameters.
-- **`x`**: - The key in the data objects whose values will be plotted on the
+- **`x`**: The key in the data objects whose values will be plotted on the
   x-axis. Values must be numbers or Date objects.
-- **`y`**: - The key in the data objects whose values will be plotted on the
+- **`y`**: The key in the data objects whose values will be plotted on the
   y-axis. Values must be numbers.
-- **`options`**: - An optional object to customize the chart's appearance and
+- **`options`**: An optional object to customize the chart's appearance and
   behavior.
-- **`options.formatX`**: - A function to format the x-axis values for display.
-  It receives the raw x-value as input and should return a string. If the first
+- **`options.formatX`**: A function to format the x-axis values for display. It
+  receives the raw x-value as input and should return a string. If the first
   data point's x value is a Date, it defaults to formatting the date as
   "YYYY-MM-DD".
-- **`options.formatY`**: - A function to format the y-axis values for display.
-  It receives the raw y-value as input and should return a string.
-- **`options.smallMultiples`**: - A key in the data objects to create small
+- **`options.formatY`**: A function to format the y-axis values for display. It
+  receives the raw y-value as input and should return a string.
+- **`options.smallMultiples`**: A key in the data objects to create small
   multiples (separate charts) for each unique value of this key. This is useful
   for comparing trends across different categories.
-- **`options.fixedScales`**: - If `true` and `smallMultiples` is used, all small
+- **`options.fixedScales`**: If `true` and `smallMultiples` is used, all small
   multiple charts will share the same x and y scales, allowing for direct
   comparison of magnitudes. If `false`, each small multiple will have its own
   independent scales. Defaults to `false`.
-- **`options.smallMultiplesPerRow`**: - The number of small multiples to display
+- **`options.smallMultiplesPerRow`**: The number of small multiples to display
   per row when `smallMultiples` is used. Defaults to `3`.
-- **`options.width`**: - The width of the chart in characters. This affects the
+- **`options.width`**: The width of the chart in characters. This affects the
   horizontal resolution of the chart. Defaults to `60`.
-- **`options.height`**: - The height of the chart in lines. This affects the
+- **`options.height`**: The height of the chart in lines. This affects the
   vertical resolution of the chart. Defaults to `20`.
-- **`options.title`**: - The title of the chart. If not provided, a default
-  title based on `x`, `y`, and `smallMultiples` (if applicable) will be
-  generated.
+- **`options.title`**: The title of the chart. If not provided, a default title
+  based on `x`, `y`, and `smallMultiples` (if applicable) will be generated.
 
 ### Examples
 
@@ -4876,36 +5001,35 @@ function logLineChart<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`data`**: - An array of objects representing the data to be visualized. Each
+- **`data`**: An array of objects representing the data to be visualized. Each
   object should contain keys corresponding to the `x` and `y` parameters.
-- **`x`**: - The key in the data objects whose values will be plotted on the
+- **`x`**: The key in the data objects whose values will be plotted on the
   x-axis. Values must be numbers or Date objects.
-- **`y`**: - The key in the data objects whose values will be plotted on the
+- **`y`**: The key in the data objects whose values will be plotted on the
   y-axis. Values must be numbers.
-- **`options`**: - An optional object to customize the chart's appearance and
+- **`options`**: An optional object to customize the chart's appearance and
   behavior.
-- **`options.formatX`**: - A function to format the x-axis values for display.
-  It receives the raw x-value as input and should return a string. If the first
+- **`options.formatX`**: A function to format the x-axis values for display. It
+  receives the raw x-value as input and should return a string. If the first
   data point's x value is a Date, it defaults to formatting the date as
   "YYYY-MM-DD".
-- **`options.formatY`**: - A function to format the y-axis values for display.
-  It receives the raw y-value as input and should return a string.
-- **`options.smallMultiples`**: - A key in the data objects to create small
+- **`options.formatY`**: A function to format the y-axis values for display. It
+  receives the raw y-value as input and should return a string.
+- **`options.smallMultiples`**: A key in the data objects to create small
   multiples (separate charts) for each unique value of this key. This is useful
   for comparing trends across different categories.
-- **`options.fixedScales`**: - If `true` and `smallMultiples` is used, all small
+- **`options.fixedScales`**: If `true` and `smallMultiples` is used, all small
   multiple charts will share the same x and y scales, allowing for direct
   comparison of magnitudes. If `false`, each small multiple will have its own
   independent scales. Defaults to `false`.
-- **`options.smallMultiplesPerRow`**: - The number of small multiples to display
+- **`options.smallMultiplesPerRow`**: The number of small multiples to display
   per row when `smallMultiples` is used. Defaults to `3`.
-- **`options.width`**: - The width of the chart in characters. This affects the
+- **`options.width`**: The width of the chart in characters. This affects the
   horizontal resolution of the chart. Defaults to `60`.
-- **`options.height`**: - The height of the chart in lines. This affects the
+- **`options.height`**: The height of the chart in lines. This affects the
   vertical resolution of the chart. Defaults to `20`.
-- **`options.title`**: - The title of the chart. If not provided, a default
-  title based on `x`, `y`, and `smallMultiples` (if applicable) will be
-  generated.
+- **`options.title`**: The title of the chart. If not provided, a default title
+  based on `x`, `y`, and `smallMultiples` (if applicable) will be generated.
 
 ### Examples
 
@@ -4969,8 +5093,8 @@ function mortgageInsurancePremium(
 
 ### Parameters
 
-- **`purchasePrice`**: - The total price of the property being purchased.
-- **`downPayment`**: - The amount of money paid upfront by the buyer towards the
+- **`purchasePrice`**: The total price of the property being purchased.
+- **`downPayment`**: The amount of money paid upfront by the buyer towards the
   purchase price.
 
 ### Returns
@@ -5068,20 +5192,20 @@ function mortgageMaxAmount(
 
 ### Parameters
 
-- **`annualIncome`**: - The borrower's gross annual income.
-- **`downPayment`**: - The amount of money the borrower is putting down as a
-  down payment.
-- **`rate`**: - The current mortgage interest rate (e.g., 5.25 for 5.25%).
-- **`options`**: - Additional options to fine-tune the calculation:
-- **`options.monthlyDebtPayment`**: - The borrower's total monthly payments for
+- **`annualIncome`**: The borrower's gross annual income.
+- **`downPayment`**: The amount of money the borrower is putting down as a down
+  payment.
+- **`rate`**: The current mortgage interest rate (e.g., 5.25 for 5.25%).
+- **`options`**: Additional options to fine-tune the calculation:
+- **`options.monthlyDebtPayment`**: The borrower's total monthly payments for
   other debts (e.g., car loans, credit cards). Defaults to `0`.
-- **`options.monthlyHeating`**: - The estimated monthly heating costs for the
+- **`options.monthlyHeating`**: The estimated monthly heating costs for the
   property. Defaults to `175` (a common estimate, e.g., by Royal Bank of
   Canada).
-- **`options.monthlyTax`**: - The estimated monthly property tax. Defaults to
+- **`options.monthlyTax`**: The estimated monthly property tax. Defaults to
   `1.5%` of the purchase price annually, divided by 12 (a common estimate, e.g.,
   by Royal Bank of Canada).
-- **`options.monthlyCondoFees`**: - The estimated monthly condo fees, if
+- **`options.monthlyCondoFees`**: The estimated monthly condo fees, if
   applicable. Defaults to `0`.
 
 ### Returns
@@ -5199,27 +5323,26 @@ function mortgagePayments(
 
 ### Parameters
 
-- **`mortgageAmount`**: - The total amount of the mortgage loan.
-- **`rate`**: - The annual interest rate of the mortgage (e.g., `6.00` for
-  6.00%).
-- **`paymentFrequency`**: - The frequency at which mortgage payments are made.
+- **`mortgageAmount`**: The total amount of the mortgage loan.
+- **`rate`**: The annual interest rate of the mortgage (e.g., `6.00` for 6.00%).
+- **`paymentFrequency`**: The frequency at which mortgage payments are made.
   Supported values are: `"weekly"`, `"biWeekly"`, `"monthly"`, `"semiMonthly"`,
   `"acceleratedWeekly"`, `"acceleratedBiWeekly"`.
-- **`term`**: - The term of the mortgage in years. This is the length of the
+- **`term`**: The term of the mortgage in years. This is the length of the
   current mortgage contract.
-- **`amortizationPeriod`**: - The total amortization period of the mortgage in
+- **`amortizationPeriod`**: The total amortization period of the mortgage in
   years. This is the total time it will take to pay off the mortgage.
-- **`options`**: - Additional options for customizing the mortgage calculation
-  and output.
-- **`options.id`**: - An optional string ID to be added to each payment object
-  in the returned array. Useful for tracking payments related to a specific
+- **`options`**: Additional options for customizing the mortgage calculation and
+  output.
+- **`options.id`**: An optional string ID to be added to each payment object in
+  the returned array. Useful for tracking payments related to a specific
   mortgage.
-- **`options.decimals`**: - The number of decimal places to round the financial
+- **`options.decimals`**: The number of decimal places to round the financial
   values (payment, interest, capital, balance) to. Defaults to `2`.
-- **`options.annualCompounding`**: - The number of times the mortgage interest
+- **`options.annualCompounding`**: The number of times the mortgage interest
   should be compounded per year. Defaults to `2` (semi-annual compounding, as is
   standard in Canada).
-- **`options.debug`**: - If `true`, enables debug logging to the console,
+- **`options.debug`**: If `true`, enables debug logging to the console,
   providing additional insights into the calculation process. Defaults to
   `false`.
 
@@ -5396,27 +5519,27 @@ async function overwriteSheetData(
 
 ### Parameters
 
-- **`data`**: - An array of objects to be written to the Google Sheet. The keys
-  of the first object in this array will be used as column headers.
-- **`sheetUrl`**: - The URL of the Google Sheet to be updated. This URL should
+- **`data`**: An array of objects to be written to the Google Sheet. The keys of
+  the first object in this array will be used as column headers.
+- **`sheetUrl`**: The URL of the Google Sheet to be updated. This URL should
   point to a specific sheet (e.g., ending with `#gid=0`).
-- **`options`**: - An optional object with configuration options:
-- **`options.prepend`**: - A string to be added as a new row at the very top of
+- **`options`**: An optional object with configuration options:
+- **`options.prepend`**: A string to be added as a new row at the very top of
   the sheet, before any data or `lastUpdate` information. Useful for adding
   notes or disclaimers.
-- **`options.lastUpdate`**: - If `true`, a row indicating the date and time of
-  the update will be added before the data. Defaults to `false`.
-- **`options.timeZone`**: - If `lastUpdate` is `true`, this option allows you to
+- **`options.lastUpdate`**: If `true`, a row indicating the date and time of the
+  update will be added before the data. Defaults to `false`.
+- **`options.timeZone`**: If `lastUpdate` is `true`, this option allows you to
   specify a time zone for the timestamp (e.g., `"Canada/Eastern"`). If omitted,
   the date will be formatted in UTC.
-- **`options.raw`**: - If `true`, data will be written as raw values, preventing
+- **`options.raw`**: If `true`, data will be written as raw values, preventing
   Google Sheets from automatically guessing data types or applying formatting.
   This can be useful for preserving exact string representations. Defaults to
   `false`.
-- **`options.apiEmail`**: - Optional. Your Google Service Account email. If
+- **`options.apiEmail`**: Optional. Your Google Service Account email. If
   provided, this will override the `GOOGLE_SERVICE_ACCOUNT_EMAIL` environment
   variable.
-- **`options.apiKey`**: - Optional. Your Google Service Account private key. If
+- **`options.apiKey`**: Optional. Your Google Service Account private key. If
   provided, this will override the `GOOGLE_PRIVATE_KEY` environment variable.
 
 ### Returns
@@ -5532,12 +5655,12 @@ function performChiSquaredGoodnessOfFitTest<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`data`**: - An array of objects containing the categorical data and
-  frequency counts.
-- **`categoryKey`**: - The key for the categorical variable.
-- **`observedKey`**: - The key containing the observed frequency count for each
+- **`data`**: An array of objects containing the categorical data and frequency
+  counts.
+- **`categoryKey`**: The key for the categorical variable.
+- **`observedKey`**: The key containing the observed frequency count for each
   category.
-- **`expectedKey`**: - The key containing the expected frequency count for each
+- **`expectedKey`**: The key containing the expected frequency count for each
   category.
 
 ### Returns
@@ -5661,11 +5784,11 @@ function performChiSquaredIndependenceTest<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`data`**: - An array of objects containing the categorical data and
-  frequency counts.
-- **`firstVariableKey`**: - The key for the first categorical variable.
-- **`secondVariableKey`**: - The key for the second categorical variable.
-- **`countKey`**: - The key containing the frequency count for each combination.
+- **`data`**: An array of objects containing the categorical data and frequency
+  counts.
+- **`firstVariableKey`**: The key for the first categorical variable.
+- **`secondVariableKey`**: The key for the second categorical variable.
+- **`countKey`**: The key containing the frequency count for each combination.
 
 ### Returns
 
@@ -5790,14 +5913,14 @@ function performPairedTTest<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`pairedData`**: - An array of objects containing paired observations. Each
+- **`pairedData`**: An array of objects containing paired observations. Each
   object must contain both specified keys with numeric values.
-- **`firstVariableKey`**: - The key for the first measurement in each pair
-  (e.g., "before_event", "baseline", "pre_policy").
-- **`secondVariableKey`**: - The key for the second measurement in each pair
+- **`firstVariableKey`**: The key for the first measurement in each pair (e.g.,
+  "before_event", "baseline", "pre_policy").
+- **`secondVariableKey`**: The key for the second measurement in each pair
   (e.g., "after_event", "follow_up", "post_policy").
-- **`options`**: - Optional configuration object.
-- **`options.tail`**: - The type of test to perform: "two-tailed" (default),
+- **`options`**: Optional configuration object.
+- **`options.tail`**: The type of test to perform: "two-tailed" (default),
   "left-tailed", or "right-tailed".
 
 ### Returns
@@ -5922,14 +6045,14 @@ function performTTest<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`sampleData`**: - An array of objects representing the sample data. Each
+- **`sampleData`**: An array of objects representing the sample data. Each
   object must contain the specified key with numeric values.
-- **`variableKey`**: - The key in each data object that contains the numeric
+- **`variableKey`**: The key in each data object that contains the numeric
   values to analyze for the statistical test.
-- **`hypothesizedMean`**: - The hypothesized population mean to test against
-  (null hypothesis value).
-- **`options`**: - Optional configuration object.
-- **`options.tail`**: - The type of test to perform: "two-tailed" (default),
+- **`hypothesizedMean`**: The hypothesized population mean to test against (null
+  hypothesis value).
+- **`options`**: Optional configuration object.
+- **`options.tail`**: The type of test to perform: "two-tailed" (default),
   "left-tailed", or "right-tailed".
 
 ### Returns
@@ -6061,14 +6184,14 @@ function performTwoSampleTTest<
 
 ### Parameters
 
-- **`group1Data`**: - An array of objects containing observations for the first
+- **`group1Data`**: An array of objects containing observations for the first
   group. Each object must contain the specified key with a numeric value.
-- **`group2Data`**: - An array of objects containing observations for the second
+- **`group2Data`**: An array of objects containing observations for the second
   group. Each object must contain the specified key with a numeric value.
-- **`variableKey`**: - The key for the measurement in both group objects (e.g.,
+- **`variableKey`**: The key for the measurement in both group objects (e.g.,
   "income", "score", "price").
-- **`options`**: - Optional configuration object.
-- **`options.tail`**: - The type of test to perform: "two-tailed" (default),
+- **`options`**: Optional configuration object.
+- **`options.tail`**: The type of test to perform: "two-tailed" (default),
   "left-tailed", or "right-tailed".
 
 ### Returns
@@ -6199,16 +6322,15 @@ function performZTest<T extends Record<string, unknown>>(
 
 ### Parameters
 
-- **`populationData`**: - An array of objects representing the complete
-  population data. Each object must contain the specified key with numeric
-  values.
-- **`sampleData`**: - An array of objects representing the sample data to test
+- **`populationData`**: An array of objects representing the complete population
+  data. Each object must contain the specified key with numeric values.
+- **`sampleData`**: An array of objects representing the sample data to test
   against the population. Each object must contain the specified key with
   numeric values.
-- **`variableKey`**: - The key in each data object that contains the numeric
+- **`variableKey`**: The key in each data object that contains the numeric
   values to analyze for the statistical test.
-- **`options`**: - Optional configuration object.
-- **`options.tail`**: - The type of test to perform: "two-tailed" (default),
+- **`options`**: Optional configuration object.
+- **`options.tail`**: The type of test to perform: "two-tailed" (default),
   "left-tailed", or "right-tailed".
 
 ### Returns
@@ -6314,18 +6436,18 @@ function prettyDuration(
 
 ### Parameters
 
-- **`start`**: - The starting point of the duration. This can be a `Date` object
+- **`start`**: The starting point of the duration. This can be a `Date` object
   or a Unix timestamp (number of milliseconds since epoch).
-- **`options`**: - Optional settings to customize the duration formatting and
+- **`options`**: Optional settings to customize the duration formatting and
   output.
-- **`options.log`**: - If `true`, the formatted duration string will be logged
-  to the console. Defaults to `false`.
-- **`options.end`**: - The ending point of the duration. This can be a `Date`
+- **`options.log`**: If `true`, the formatted duration string will be logged to
+  the console. Defaults to `false`.
+- **`options.end`**: The ending point of the duration. This can be a `Date`
   object or a Unix timestamp. If omitted, the current time (`Date.now()`) will
   be used as the end point.
-- **`options.prefix`**: - A string to prepend to the formatted duration string
+- **`options.prefix`**: A string to prepend to the formatted duration string
   (e.g., "Elapsed time: ").
-- **`options.suffix`**: - A string to append to the formatted duration string
+- **`options.suffix`**: A string to append to the formatted duration string
   (e.g., " (Task completed)").
 
 ### Returns
@@ -6396,15 +6518,15 @@ function printTable(
 
 ### Parameters
 
-- **`data`**: - An array of objects representing the rows of the table. Each
+- **`data`**: An array of objects representing the rows of the table. Each
   object should have string keys.
-- **`options`**: - Optional configuration for table rendering.
-- **`options.maxColumnWidth`**: - The maximum width for any column (default:
-  75). Values exceeding this width will be wrapped at word boundaries.
-- **`options.minColumnWidth`**: - The minimum width for any column (default: 3).
-- **`options.typesRowIndex`**: - The index of a row that contains type
-  annotations (e.g. "VARCHAR/string"). This row will be rendered in grey. If
-  omitted, no row is treated as a types row.
+- **`options`**: Optional configuration for table rendering.
+- **`options.maxColumnWidth`**: The maximum width for any column (default: 75).
+  Values exceeding this width will be wrapped at word boundaries.
+- **`options.minColumnWidth`**: The minimum width for any column (default: 3).
+- **`options.typesRowIndex`**: The index of a row that contains type annotations
+  (e.g. "VARCHAR/string"). This row will be rendered in grey. If omitted, no row
+  is treated as a types row.
 
 ### Returns
 
@@ -6453,13 +6575,13 @@ async function publishChartDW(
 
 ### Parameters
 
-- **`chartId`**: - The unique ID of the Datawrapper chart, table, or map to be
+- **`chartId`**: The unique ID of the Datawrapper chart, table, or map to be
   published. This ID can be found in the Datawrapper URL or dashboard.
-- **`options`**: - Optional parameters to configure the publishing process.
-- **`options.apiKey`**: - The name of the environment variable that stores your
+- **`options`**: Optional parameters to configure the publishing process.
+- **`options.apiKey`**: The name of the environment variable that stores your
   Datawrapper API key (e.g., `"DATAWRAPPER_KEY"`). If not provided, the function
   defaults to looking for the `DATAWRAPPER_KEY` environment variable.
-- **`options.returnResponse`**: - If `true`, the function will return the full
+- **`options.returnResponse`**: If `true`, the function will return the full
   `Response` object from the Datawrapper API call. This can be useful for
   debugging or for more detailed handling of the API response. Defaults to
   `false`.
@@ -6518,20 +6640,20 @@ async function reencode(
 
 ### Parameters
 
-- **`inputFilePath`**: - The absolute path to the input file that needs to be
+- **`inputFilePath`**: The absolute path to the input file that needs to be
   re-encoded.
-- **`outputFilePath`**: - The absolute path where the converted file will be
+- **`outputFilePath`**: The absolute path where the converted file will be
   saved.
-- **`fromEncoding`**: - The character encoding of the input file (e.g.,
+- **`fromEncoding`**: The character encoding of the input file (e.g.,
   'windows-1252', 'latin1', 'ISO-8859-1').
-- **`toEncoding`**: - The desired character encoding for the output file (e.g.,
+- **`toEncoding`**: The desired character encoding for the output file (e.g.,
   'utf-8').
-- **`options`**: - Optional configuration settings for the re-encoding process.
-- **`options.bufferSize`**: - The size of the read buffer in kilobytes (KB). A
+- **`options`**: Optional configuration settings for the re-encoding process.
+- **`options.bufferSize`**: The size of the read buffer in kilobytes (KB). A
   larger buffer can improve performance for very large files but consumes more
   memory. Defaults to `256` KB.
-- **`options.addBOM`**: - If `true`, a Byte Order Mark (BOM) will be added to
-  the output file if the `toEncoding` is UTF-8. A BOM can help some applications
+- **`options.addBOM`**: If `true`, a Byte Order Mark (BOM) will be added to the
+  output file if the `toEncoding` is UTF-8. A BOM can help some applications
   correctly identify the UTF-8 encoding. Defaults to `false`.
 
 ### Returns
@@ -6572,7 +6694,7 @@ function removeDirectory(path: string): void;
 
 ### Parameters
 
-- **`path`**: - The absolute or relative path to the directory to be removed.
+- **`path`**: The absolute or relative path to the directory to be removed.
 
 ### Returns
 
@@ -6605,7 +6727,7 @@ function rewind(object: GeoPermissibleObjects): GeoPermissibleObjects;
 
 ### Parameters
 
-- **`object`**: - The GeoJSON object to rewind.
+- **`object`**: The GeoJSON object to rewind.
 
 ### Returns
 
@@ -6671,17 +6793,17 @@ function round(
 
 ### Parameters
 
-- **`number`**: - The number to be rounded.
-- **`options`**: - An object containing options for rounding.
-- **`options.decimals`**: - The number of decimal places to keep when rounding.
+- **`number`**: The number to be rounded.
+- **`options`**: An object containing options for rounding.
+- **`options.decimals`**: The number of decimal places to keep when rounding.
   For example, `round(123.456, { decimals: 2 })` returns `123.46`.
-- **`options.nearestInteger`**: - The base to which the number should be
-  rounded. For example, `round(123, { nearestInteger: 10 })` rounds to `120`.
-- **`options.significantDigits`**: - The number of significant digits to retain.
+- **`options.nearestInteger`**: The base to which the number should be rounded.
+  For example, `round(123, { nearestInteger: 10 })` rounds to `120`.
+- **`options.significantDigits`**: The number of significant digits to retain.
   Significant digits are counted from the first non-zero digit. For example,
   `round(0.004622, { significantDigits: 1 })` rounds to `0.005`.
-- **`options.try`**: - If `true`, the function will return `NaN` (Not a Number)
-  if the input `number` is not a valid number, instead of throwing an error.
+- **`options.try`**: If `true`, the function will return `NaN` (Not a Number) if
+  the input `number` is not a valid number, instead of throwing an error.
   Defaults to `false`.
 
 ### Returns
@@ -6770,19 +6892,19 @@ async function saveChart(
 
 ### Parameters
 
-- **`data`**: - An array of data objects that your Observable Plot chart
-  function expects.
-- **`chart`**: - A function that takes the `data` array and returns an SVG or
-  HTML element representing the chart. This function should typically be a
-  direct call to `Plot.plot()` or a similar Observable Plot constructor.
-- **`path`**: - The file path where the image or SVG will be saved. The file
+- **`data`**: An array of data objects that your Observable Plot chart function
+  expects.
+- **`chart`**: A function that takes the `data` array and returns an SVG or HTML
+  element representing the chart. This function should typically be a direct
+  call to `Plot.plot()` or a similar Observable Plot constructor.
+- **`path`**: The file path where the image or SVG will be saved. The file
   extension (`.png`, `.jpeg`, or `.svg`) determines the output format.
-- **`options`**: - Optional settings to customize the chart's appearance and
+- **`options`**: Optional settings to customize the chart's appearance and
   behavior.
-- **`options.style`**: - A CSS string to apply custom styles to the chart's
+- **`options.style`**: A CSS string to apply custom styles to the chart's
   container `div` (which has the ID `chart`). This is useful for fine-tuning the
   visual presentation beyond what Observable Plot's `style` option offers.
-- **`options.dark`**: - If `true`, the chart will be rendered with a dark mode
+- **`options.dark`**: If `true`, the chart will be rendered with a dark mode
   theme. This adjusts background and text colors for better visibility in dark
   environments. Defaults to `false`.
 
@@ -6870,7 +6992,8 @@ function simulateRentVsBuy(
     startingYear: number;
     numberOfYears: number;
     tfsaContributions: boolean;
-    combinedTaxRate: number;
+    couple?: boolean;
+    employmentIncome: number;
     province:
       | "Alberta"
       | "British Columbia"
@@ -6993,74 +7116,76 @@ function simulateRentVsBuy(
 
 ### Parameters
 
-- **`parameters`**: - The input parameters for the simulation.
-- **`parameters.startingYear`**: - The year the simulation begins.
-- **`parameters.numberOfYears`**: - The duration of the simulation in years.
-- **`parameters.tfsaContributions`**: - Whether to prioritize TFSA contributions
+- **`parameters`**: The input parameters for the simulation.
+- **`parameters.startingYear`**: The year the simulation begins.
+- **`parameters.numberOfYears`**: The duration of the simulation in years.
+- **`parameters.tfsaContributions`**: Whether to prioritize TFSA contributions
   for investments (tax-free gains).
-- **`parameters.combinedTaxRate`**: - The combined marginal tax rate used for
-  calculating taxes on investment gains.
-- **`parameters.province`**: - The province used to calculate sales tax on the
+- **`parameters.couple`**: Whether to simulate investments and taxes for a
+  couple computing TFSA contributions twice and splitting capital gains in 2.
+  Assumes parameter employmentIncome represents the per-partner income. Defaults
+  to `false`.
+- **`parameters.employmentIncome`**: The employment income used for calculating
+  income taxes on investment gains.
+- **`parameters.province`**: The province used to calculate sales tax on the
   selling fixed fees and commission when selling the home.
-- **`parameters.renter`**: - Configuration for the renter scenario.
-- **`parameters.renter.startingMonthlyRent`**: - The initial monthly rent
-  payment.
-- **`parameters.renter.securityDeposit`**: - The initial security deposit.
-- **`parameters.renter.startingMonthlyInsurance`**: - The initial monthly
-  renter's insurance.
-- **`parameters.buyer`**: - Configuration for the buyer scenarios.
-- **`parameters.buyer.downPayment`**: - The down payment amount.
-- **`parameters.buyer.purchasePrice`**: - The purchase price of the home.
-- **`parameters.buyer.fixedRateDiscount`**: - The discount applied to the posted
+- **`parameters.renter`**: Configuration for the renter scenario.
+- **`parameters.renter.startingMonthlyRent`**: The initial monthly rent payment.
+- **`parameters.renter.securityDeposit`**: The initial security deposit.
+- **`parameters.renter.startingMonthlyInsurance`**: The initial monthly renter's
+  insurance.
+- **`parameters.buyer`**: Configuration for the buyer scenarios.
+- **`parameters.buyer.downPayment`**: The down payment amount.
+- **`parameters.buyer.purchasePrice`**: The purchase price of the home.
+- **`parameters.buyer.fixedRateDiscount`**: The discount applied to the posted
   fixed mortgage rate.
-- **`parameters.buyer.variableRateMargin`**: - The margin added to the variable
+- **`parameters.buyer.variableRateMargin`**: The margin added to the variable
   mortgage rate.
-- **`parameters.buyer.purchaseFixedFees`**: - Fixed fees associated with the
+- **`parameters.buyer.purchaseFixedFees`**: Fixed fees associated with the
   purchase (e.g., notary, land transfer tax).
-- **`parameters.buyer.startingAnnualMaintenanceCost`**: - The initial annual
+- **`parameters.buyer.startingAnnualMaintenanceCost`**: The initial annual
   maintenance cost.
-- **`parameters.buyer.startingAnnualPropertyTax`**: - The initial annual
-  property tax.
-- **`parameters.buyer.startingMonthlyCondoFees`**: - The initial monthly condo
+- **`parameters.buyer.startingAnnualPropertyTax`**: The initial annual property
+  tax.
+- **`parameters.buyer.startingMonthlyCondoFees`**: The initial monthly condo
   fees.
-- **`parameters.buyer.startingMonthlyInsurance`**: - The initial monthly
+- **`parameters.buyer.startingMonthlyInsurance`**: The initial monthly
   homeowner's insurance.
-- **`parameters.buyer.sellingFixedFees`**: - Fixed fees associated with selling
+- **`parameters.buyer.sellingFixedFees`**: Fixed fees associated with selling
   the home (before sales tax).
-- **`parameters.buyer.sellingCommissionRate`**: - The real estate commission
-  rate for selling the home (e.g., 0.05 for 5%).
-- **`parameters.rates`**: - Annualized rates and their values over the
-  simulation period. Each array should have a length of `numberOfYears * 12`.
-  These can be historical or projected rates.
-- **`parameters.rates.marketReturnRate`**: - Monthly market return rates.
-- **`parameters.rates.rentIncrease`**: - Monthly rent increase rates.
-- **`parameters.rates.ownerInsuranceIncrease`**: - Monthly homeowner's insurance
+- **`parameters.buyer.sellingCommissionRate`**: The real estate commission rate
+  for selling the home (e.g., 0.05 for 5%).
+- **`parameters.rates`**: Annualized rates and their values over the simulation
+  period. Each array should have a length of `numberOfYears * 12`. These can be
+  historical or projected rates.
+- **`parameters.rates.marketReturnRate`**: Monthly market return rates.
+- **`parameters.rates.rentIncrease`**: Monthly rent increase rates.
+- **`parameters.rates.ownerInsuranceIncrease`**: Monthly homeowner's insurance
   increase rates.
-- **`parameters.rates.renterInsuranceIncrease`**: - Monthly renter's insurance
+- **`parameters.rates.renterInsuranceIncrease`**: Monthly renter's insurance
   increase rates.
-- **`parameters.rates.maintenanceIncrease`**: - Monthly maintenance cost
-  increase rates.
-- **`parameters.rates.propertyTaxIncrease`**: - Monthly property tax increase
+- **`parameters.rates.maintenanceIncrease`**: Monthly maintenance cost increase
   rates.
-- **`parameters.rates.condoFeeIncrease`**: - Monthly condo fee increase rates.
-- **`parameters.rates.fiveYearInterestRates`**: - Monthly 5-year fixed mortgage
-  interest rates.
-- **`parameters.rates.fourYearInterestRates`**: - Monthly 4-year fixed mortgage
-  interest rates.
-- **`parameters.rates.threeYearInterestRates`**: - Monthly 3-year fixed mortgage
-  interest rates.
-- **`parameters.rates.twoYearInterestRates`**: - Monthly 2-year fixed mortgage
-  interest rates.
-- **`parameters.rates.oneYearInterestRates`**: - Monthly 1-year fixed mortgage
-  interest rates.
-- **`parameters.rates.variableInterestRates`**: - Monthly variable mortgage
-  interest rates.
-- **`parameters.rates.appreciationIncrease`**: - Monthly home appreciation
+- **`parameters.rates.propertyTaxIncrease`**: Monthly property tax increase
   rates.
-- **`parameters.rates.sellingFixedFeesIncrease`**: - Monthly increase rates for
+- **`parameters.rates.condoFeeIncrease`**: Monthly condo fee increase rates.
+- **`parameters.rates.fiveYearInterestRates`**: Monthly 5-year fixed mortgage
+  interest rates.
+- **`parameters.rates.fourYearInterestRates`**: Monthly 4-year fixed mortgage
+  interest rates.
+- **`parameters.rates.threeYearInterestRates`**: Monthly 3-year fixed mortgage
+  interest rates.
+- **`parameters.rates.twoYearInterestRates`**: Monthly 2-year fixed mortgage
+  interest rates.
+- **`parameters.rates.oneYearInterestRates`**: Monthly 1-year fixed mortgage
+  interest rates.
+- **`parameters.rates.variableInterestRates`**: Monthly variable mortgage
+  interest rates.
+- **`parameters.rates.appreciationIncrease`**: Monthly home appreciation rates.
+- **`parameters.rates.sellingFixedFeesIncrease`**: Monthly increase rates for
   selling fixed fees.
-- **`options`**: - Additional simulation options.
-- **`options.finalBalanceOnly`**: - If `true`, the returned results will only
+- **`options`**: Additional simulation options.
+- **`options.finalBalanceOnly`**: If `true`, the returned results will only
   include the final balance (before and after selling) for each scenario.
   Defaults to `false`.
 
@@ -7103,7 +7228,7 @@ const results = simulateRentVsBuy({
   startingYear: 2024,
   numberOfYears: 10,
   tfsaContributions: true,
-  combinedTaxRate: 0.4,
+  employmentIncome: 100000,
   province: "Ontario",
   renter: {
     startingMonthlyRent: 2000,
@@ -7154,7 +7279,8 @@ function simulateRentVsBuyMonteCarlo(
     startingYear: number;
     numberOfYears: number;
     tfsaContributions: boolean;
-    combinedTaxRate: number;
+    couple?: boolean;
+    employmentIncome: number;
     province:
       | "Alberta"
       | "British Columbia"
@@ -7279,89 +7405,91 @@ function simulateRentVsBuyMonteCarlo(
 
 ### Parameters
 
-- **`parameters`**: - The input parameters for the Monte Carlo simulation.
-- **`parameters.iterations`**: - The number of simulation iterations to run.
-- **`parameters.startingYear`**: - The year the simulation begins.
-- **`parameters.numberOfYears`**: - The duration of each simulation in years.
-- **`parameters.tfsaContributions`**: - Whether to prioritize TFSA contributions
+- **`parameters`**: The input parameters for the Monte Carlo simulation.
+- **`parameters.iterations`**: The number of simulation iterations to run.
+- **`parameters.startingYear`**: The year the simulation begins.
+- **`parameters.numberOfYears`**: The duration of each simulation in years.
+- **`parameters.tfsaContributions`**: Whether to prioritize TFSA contributions
   for investments (tax-free gains).
-- **`parameters.combinedTaxRate`**: - The combined marginal tax rate used for
-  calculating taxes on investment gains.
-- **`parameters.province`**: - The Canadian province or territory, used for
+- **`parameters.couple`**: Whether to simulate investments and taxes for a
+  couple computing TFSA contributions twice and splitting capital gains in 2.
+  Assumes parameter employmentIncome represents the per-partner income. Defaults
+  to `false`.
+- **`parameters.employmentIncome`**: The employment income used for calculating
+  income taxes on investment gains.
+- **`parameters.province`**: The Canadian province or territory, used for
   calculating sales taxes.
-- **`parameters.renter`**: - Configuration for the renter scenario.
-- **`parameters.renter.startingMonthlyRent`**: - The initial monthly rent
-  payment.
-- **`parameters.renter.securityDeposit`**: - The initial security deposit (e.g.,
+- **`parameters.renter`**: Configuration for the renter scenario.
+- **`parameters.renter.startingMonthlyRent`**: The initial monthly rent payment.
+- **`parameters.renter.securityDeposit`**: The initial security deposit (e.g.,
   last month's rent).
-- **`parameters.renter.startingMonthlyInsurance`**: - The initial monthly
-  renter's (tenant) insurance cost.
-- **`parameters.buyer`**: - Configuration for the buyer scenarios.
-- **`parameters.buyer.downPayment`**: - The total down payment amount paid at
-  the start.
-- **`parameters.buyer.purchasePrice`**: - The initial purchase price of the
-  home.
-- **`parameters.buyer.fixedRateDiscount`**: - The discount applied to the posted
+- **`parameters.renter.startingMonthlyInsurance`**: The initial monthly renter's
+  (tenant) insurance cost.
+- **`parameters.buyer`**: Configuration for the buyer scenarios.
+- **`parameters.buyer.downPayment`**: The total down payment amount paid at the
+  start.
+- **`parameters.buyer.purchasePrice`**: The initial purchase price of the home.
+- **`parameters.buyer.fixedRateDiscount`**: The discount applied to the posted
   fixed mortgage rate (e.g., `1.5` for 1.5% off).
-- **`parameters.buyer.variableRateMargin`**: - The margin added or subtracted
-  from the variable mortgage rate.
-- **`parameters.buyer.purchaseFixedFees`**: - One-time costs at purchase
-  (notary, land transfer tax, etc.).
-- **`parameters.buyer.startingAnnualMaintenanceCost`**: - Initial annual cost
-  for home maintenance.
-- **`parameters.buyer.startingAnnualPropertyTax`**: - Initial annual property
-  tax amount.
-- **`parameters.buyer.startingMonthlyCondoFees`**: - Initial monthly condo fees
+- **`parameters.buyer.variableRateMargin`**: The margin added or subtracted from
+  the variable mortgage rate.
+- **`parameters.buyer.purchaseFixedFees`**: One-time costs at purchase (notary,
+  land transfer tax, etc.).
+- **`parameters.buyer.startingAnnualMaintenanceCost`**: Initial annual cost for
+  home maintenance.
+- **`parameters.buyer.startingAnnualPropertyTax`**: Initial annual property tax
+  amount.
+- **`parameters.buyer.startingMonthlyCondoFees`**: Initial monthly condo fees
   (if applicable).
-- **`parameters.buyer.startingMonthlyInsurance`**: - Initial monthly homeowner's
+- **`parameters.buyer.startingMonthlyInsurance`**: Initial monthly homeowner's
   insurance cost.
-- **`parameters.buyer.sellingFixedFees`**: - One-time fixed costs when selling
-  the property (before sales tax).
-- **`parameters.buyer.sellingCommissionRate`**: - The commission rate paid to
-  real estate agents upon sale (e.g., `0.05` for 5%).
-- **`parameters.gbmParameters`**: - Parameters for the Geometric Brownian Motion
+- **`parameters.buyer.sellingFixedFees`**: One-time fixed costs when selling the
+  property (before sales tax).
+- **`parameters.buyer.sellingCommissionRate`**: The commission rate paid to real
+  estate agents upon sale (e.g., `0.05` for 5%).
+- **`parameters.gbmParameters`**: Parameters for the Geometric Brownian Motion
   models. Each sub-object (market, rent, etc.) requires: - `startValue`: The
   initial annual rate (e.g., 0.05 for 5%). - `mu`: The drift or expected annual
   growth rate. - `sigma`: The annual volatility.
-- **`parameters.gbmParameters.market`**: - Market return rates for savings.
-- **`parameters.gbmParameters.rent`**: - Rent increase rates.
-- **`parameters.gbmParameters.ownerInsurance`**: - Homeowner's insurance
-  increase rates.
-- **`parameters.gbmParameters.renterInsurance`**: - Renter's insurance increase
+- **`parameters.gbmParameters.market`**: Market return rates for savings.
+- **`parameters.gbmParameters.rent`**: Rent increase rates.
+- **`parameters.gbmParameters.ownerInsurance`**: Homeowner's insurance increase
   rates.
-- **`parameters.gbmParameters.maintenance`**: - Maintenance cost increase rates.
-- **`parameters.gbmParameters.propertyTax`**: - Property tax increase rates.
-- **`parameters.gbmParameters.condoFee`**: - Condo fee increase rates.
-- **`parameters.gbmParameters.appreciation`**: - Home value appreciation rates.
-- **`parameters.gbmParameters.sellingFixedFees`**: - Selling fixed fees increase
+- **`parameters.gbmParameters.renterInsurance`**: Renter's insurance increase
   rates.
-- **`parameters.gbmParameters.fiveYearInterestRates`**: - Parameters for the CIR
+- **`parameters.gbmParameters.maintenance`**: Maintenance cost increase rates.
+- **`parameters.gbmParameters.propertyTax`**: Property tax increase rates.
+- **`parameters.gbmParameters.condoFee`**: Condo fee increase rates.
+- **`parameters.gbmParameters.appreciation`**: Home value appreciation rates.
+- **`parameters.gbmParameters.sellingFixedFees`**: Selling fixed fees increase
+  rates.
+- **`parameters.gbmParameters.fiveYearInterestRates`**: Parameters for the CIR
   model for 5-year fixed rates. Requires `a` (speed of mean reversion), `b`
   (long-term mean), `sigma` (volatility), and `startValue`.
-- **`parameters.gbmParameters.fourYearInterestRates`**: - Parameters for the CIR
+- **`parameters.gbmParameters.fourYearInterestRates`**: Parameters for the CIR
   model for 4-year fixed rates.
-- **`parameters.gbmParameters.threeYearInterestRates`**: - Parameters for the
-  CIR model for 3-year fixed rates.
-- **`parameters.gbmParameters.twoYearInterestRates`**: - Parameters for the CIR
+- **`parameters.gbmParameters.threeYearInterestRates`**: Parameters for the CIR
+  model for 3-year fixed rates.
+- **`parameters.gbmParameters.twoYearInterestRates`**: Parameters for the CIR
   model for 2-year fixed rates.
-- **`parameters.gbmParameters.oneYearInterestRates`**: - Parameters for the CIR
+- **`parameters.gbmParameters.oneYearInterestRates`**: Parameters for the CIR
   model for 1-year fixed rates.
-- **`parameters.gbmParameters.variableInterestRates`**: - Parameters for the CIR
+- **`parameters.gbmParameters.variableInterestRates`**: Parameters for the CIR
   model for variable rates.
-- **`options`**: - Additional simulation options.
-- **`options.verbose`**: - If `true`, logs the simulation's progress to the
+- **`options`**: Additional simulation options.
+- **`options.verbose`**: If `true`, logs the simulation's progress to the
   console, including the current iteration and estimated time remaining. Useful
   for long-running simulations.
-- **`options.verboseStep`**: - The frequency of progress logging. For example,
+- **`options.verboseStep`**: The frequency of progress logging. For example,
   setting this to `50` will log progress every 50 iterations. Defaults to `1` if
   `verbose` is true.
-- **`options.values`**: - If `true`, the function will capture and return
-  detailed monthly financial data (such as asset balances and net gains) for
-  every iteration of the simulation. Be cautious with high iteration counts as
-  this can consume significant memory.
-- **`options.rates`**: - If `true`, the function will capture and return the
-  exact stochastic interest and appreciation rates generated for every
-  iteration. Useful for auditing the simulation's statistical properties.
+- **`options.values`**: If `true`, the function will capture and return detailed
+  monthly financial data (such as asset balances and net gains) for every
+  iteration of the simulation. Be cautious with high iteration counts as this
+  can consume significant memory.
+- **`options.rates`**: If `true`, the function will capture and return the exact
+  stochastic interest and appreciation rates generated for every iteration.
+  Useful for auditing the simulation's statistical properties.
 
 ### Returns
 
@@ -7458,14 +7586,14 @@ function sleep(
 
 ### Parameters
 
-- **`ms`**: - The number of milliseconds to pause execution for. This is the
+- **`ms`**: The number of milliseconds to pause execution for. This is the
   target duration of the sleep.
-- **`options`**: - Optional parameters to customize the sleep behavior.
-- **`options.start`**: - A `Date` object representing a starting timestamp. If
+- **`options`**: Optional parameters to customize the sleep behavior.
+- **`options.start`**: A `Date` object representing a starting timestamp. If
   provided, the function will subtract the time elapsed since this `start` time
   from the `ms` duration. This is particularly useful for respecting API rate
   limits.
-- **`options.log`**: - If `true`, the function will log messages to the console
+- **`options.log`**: If `true`, the function will log messages to the console
   indicating the sleep duration or if no sleep was needed. Defaults to `false`.
 
 ### Returns
@@ -7527,9 +7655,9 @@ function styledLayerDescriptor(
 
 ### Parameters
 
-- **`layer`**: - The name of the WMS layer to which this SLD will be applied
+- **`layer`**: The name of the WMS layer to which this SLD will be applied
   (e.g., `"GDPS.ETA_TT"`).
-- **`colorScale`**: - An array of objects, where each object defines a `color`
+- **`colorScale`**: An array of objects, where each object defines a `color`
   (hex code) and a `value` (the data threshold for that color). The function
   will sort these entries by value in ascending order to create a proper color
   gradient.
@@ -7595,22 +7723,22 @@ async function toBucket(
 
 ### Parameters
 
-- **`file`**: - The absolute or relative path to the local file that you want to
+- **`file`**: The absolute or relative path to the local file that you want to
   upload.
-- **`destination`**: - The desired path and filename for the file within the GCS
+- **`destination`**: The desired path and filename for the file within the GCS
   bucket (e.g., `"my-folder/my-uploaded-file.txt"`).
-- **`options`**: - Optional settings to customize the upload behavior.
-- **`options.project`**: - Your Google Cloud Project ID. If not provided, it
+- **`options`**: Optional settings to customize the upload behavior.
+- **`options.project`**: Your Google Cloud Project ID. If not provided, it
   defaults to the `BUCKET_PROJECT` environment variable.
-- **`options.bucket`**: - The name of the Google Cloud Storage bucket. If not
+- **`options.bucket`**: The name of the Google Cloud Storage bucket. If not
   provided, it defaults to the `BUCKET_NAME` environment variable.
-- **`options.metadata`**: - An object containing custom metadata to be
-  associated with the uploaded file (e.g., `contentType`, `cacheControl`). This
-  is passed directly to the GCS upload options.
-- **`options.overwrite`**: - If `true`, an existing file at the `destination`
-  path in the bucket will be overwritten. Cannot be used with `skip: true`.
-  Defaults to `false`.
-- **`options.skip`**: - If `true`, the upload will be skipped if a file with the
+- **`options.metadata`**: An object containing custom metadata to be associated
+  with the uploaded file (e.g., `contentType`, `cacheControl`). This is passed
+  directly to the GCS upload options.
+- **`options.overwrite`**: If `true`, an existing file at the `destination` path
+  in the bucket will be overwritten. Cannot be used with `skip: true`. Defaults
+  to `false`.
+- **`options.skip`**: If `true`, the upload will be skipped if a file with the
   same `destination` path already exists in the bucket. If the local file does
   not exist but the remote file does, the URI of the remote file will be
   returned without an error. Cannot be used with `overwrite: true`. Defaults to
@@ -7691,13 +7819,13 @@ function unzip(
 
 ### Parameters
 
-- **`zippedFile`**: - The absolute or relative path to the zipped file (`.zip`)
-  to be extracted.
-- **`output`**: - The absolute or relative path to the directory where the
+- **`zippedFile`**: The absolute or relative path to the zipped file (`.zip`) to
+  be extracted.
+- **`output`**: The absolute or relative path to the directory where the
   contents of the zipped file will be extracted. If the directory does not
   exist, it will be created.
-- **`options`**: - Optional settings for the unzip operation.
-- **`options.deleteZippedFile`**: - If `true`, the original zipped file will be
+- **`options`**: Optional settings for the unzip operation.
+- **`options.deleteZippedFile`**: If `true`, the original zipped file will be
   deleted from the filesystem after its contents have been successfully
   extracted. Defaults to `false`.
 
@@ -7777,70 +7905,69 @@ async function updateAnnotationsDW(
 
 ### Parameters
 
-- **`chartId`**: - The ID of the Datawrapper chart to update. This ID can be
-  found in the Datawrapper URL or dashboard.
-- **`annotations`**: - An array of annotation objects. Each object defines a
+- **`chartId`**: The ID of the Datawrapper chart to update. This ID can be found
+  in the Datawrapper URL or dashboard.
+- **`annotations`**: An array of annotation objects. Each object defines a
   single annotation with its properties. Required properties for each annotation
   are `x`, `y`, and `text`.
-- **`annotations.x`**: - The x-coordinate of the annotation's position on the
+- **`annotations.x`**: The x-coordinate of the annotation's position on the
   chart.
-- **`annotations.y`**: - The y-coordinate of the annotation's position on the
+- **`annotations.y`**: The y-coordinate of the annotation's position on the
   chart.
-- **`annotations.text`**: - The text content of the annotation.
-- **`annotations.bg`**: - If `true`, the annotation text will have a background.
+- **`annotations.text`**: The text content of the annotation.
+- **`annotations.bg`**: If `true`, the annotation text will have a background.
   Defaults to `false`.
-- **`annotations.dx`**: - The horizontal offset of the annotation text from its
+- **`annotations.dx`**: The horizontal offset of the annotation text from its
   `x` coordinate, in pixels. Defaults to `0`.
-- **`annotations.dy`**: - The vertical offset of the annotation text from its
-  `y` coordinate, in pixels. Defaults to `0`.
-- **`annotations.bold`**: - If `true`, the annotation text will be bold.
-  Defaults to `false`.
-- **`annotations.size`**: - The font size of the annotation text in pixels.
+- **`annotations.dy`**: The vertical offset of the annotation text from its `y`
+  coordinate, in pixels. Defaults to `0`.
+- **`annotations.bold`**: If `true`, the annotation text will be bold. Defaults
+  to `false`.
+- **`annotations.size`**: The font size of the annotation text in pixels.
   Defaults to `12`.
-- **`annotations.align`**: - The alignment of the annotation text relative to
-  its `x` and `y` coordinates. Can be `"tl"` (top-left), `"tc"` (top-center),
-  `"tr"` (top-right), `"ml"` (middle-left), `"mc"` (middle-center), `"mr"`
+- **`annotations.align`**: The alignment of the annotation text relative to its
+  `x` and `y` coordinates. Can be `"tl"` (top-left), `"tc"` (top-center), `"tr"`
+  (top-right), `"ml"` (middle-left), `"mc"` (middle-center), `"mr"`
   (middle-right), `"bl"` (bottom-left), `"bc"` (bottom-center), or `"br"`
   (bottom-right). Defaults to `"mr"`.
-- **`annotations.color`**: - The color of the annotation text (e.g.,
-  `"#FF0000"`, `"red"`). Defaults to `"#8C8C8C"`.
-- **`annotations.width`**: - The maximum width of the annotation text box in
+- **`annotations.color`**: The color of the annotation text (e.g., `"#FF0000"`,
+  `"red"`). Defaults to `"#8C8C8C"`.
+- **`annotations.width`**: The maximum width of the annotation text box in
   pixels. Text will wrap if it exceeds this width. Defaults to `20`.
-- **`annotations.italic`**: - If `true`, the annotation text will be italic.
+- **`annotations.italic`**: If `true`, the annotation text will be italic.
   Defaults to `false`.
-- **`annotations.underline`**: - If `true`, the annotation text will be
+- **`annotations.underline`**: If `true`, the annotation text will be
   underlined. Defaults to `false`.
-- **`annotations.showMobile`**: - If `true`, the annotation will be visible on
+- **`annotations.showMobile`**: If `true`, the annotation will be visible on
   mobile devices. Defaults to `true`.
-- **`annotations.showDesktop`**: - If `true`, the annotation will be visible on
+- **`annotations.showDesktop`**: If `true`, the annotation will be visible on
   desktop devices. Defaults to `true`.
-- **`annotations.mobileFallback`**: - If `true`, the annotation will be
-  displayed as a simple text label on mobile if it's too complex. Defaults to
-  `false`.
-- **`annotations.connectorLine`**: - An object defining the properties of a
+- **`annotations.mobileFallback`**: If `true`, the annotation will be displayed
+  as a simple text label on mobile if it's too complex. Defaults to `false`.
+- **`annotations.connectorLine`**: An object defining the properties of a
   connector line from the annotation to a data point.
-- **`annotations.connectorLine.type`**: - The type of the connector line. Can be
+- **`annotations.connectorLine.type`**: The type of the connector line. Can be
   `"straight"`, `"curveRight"`, or `"curveLeft"`. Defaults to `"straight"`.
-- **`annotations.connectorLine.circle`**: - If `true`, a circle will be drawn at
+- **`annotations.connectorLine.circle`**: If `true`, a circle will be drawn at
   the end of the connector line. Defaults to `false`.
-- **`annotations.connectorLine.stroke`**: - The stroke width of the connector
+- **`annotations.connectorLine.stroke`**: The stroke width of the connector
   line. Can be `1`, `2`, or `3`. Defaults to `1`.
-- **`annotations.connectorLine.enabled`**: - If `true`, the connector line will
-  be drawn. Defaults to `false`.
-- **`annotations.connectorLine.arrowHead`**: - The style of the arrowhead. Can
-  be `"lines"`, `"triangle"`, or `false` (no arrowhead). Defaults to `"lines"`.
-- **`annotations.connectorLine.circleStyle`**: - The style of the circle at the
+- **`annotations.connectorLine.enabled`**: If `true`, the connector line will be
+  drawn. Defaults to `false`.
+- **`annotations.connectorLine.arrowHead`**: The style of the arrowhead. Can be
+  `"lines"`, `"triangle"`, or `false` (no arrowhead). Defaults to `"lines"`.
+- **`annotations.connectorLine.circleStyle`**: The style of the circle at the
   end of the connector line. Defaults to `"solid"`.
-- **`annotations.connectorLine.circleRadius`**: - The radius of the circle at
-  the end of the connector line. Defaults to `10`.
-- **`annotations.connectorLine.inheritColor`**: - If `true`, the connector line
+- **`annotations.connectorLine.circleRadius`**: The radius of the circle at the
+  end of the connector line. Defaults to `10`.
+- **`annotations.connectorLine.inheritColor`**: If `true`, the connector line
   will inherit the annotation's text color. Defaults to `false`.
-- **`annotations.connectorLine.targetPadding`**: - The padding between the end
-  of the connector line and the target data point. Defaults to `4`.
-- **`options.apiKey`**: - The name of the environment variable that stores your
+- **`annotations.connectorLine.targetPadding`**: The padding between the end of
+  the connector line and the target data point. Defaults to `4`.
+- **`options.apiKey`**: The name of the environment variable that stores your
   Datawrapper API key. If not provided, the function defaults to looking for
   `DATAWRAPPER_KEY`.
-- **`options.returnResponse`**: - If `true`, the function will return the full
+- **`options.returnResponse`**: If `true`, the function will return the full
   `Response` object from the Datawrapper API call. This can be useful for
   debugging or for more detailed handling of the API response. Defaults to
   `false`.
@@ -7923,17 +8050,17 @@ async function updateDataDW(
 
 ### Parameters
 
-- **`chartId`**: - The unique ID of the Datawrapper chart, table, or map to
+- **`chartId`**: The unique ID of the Datawrapper chart, table, or map to
   update. This ID can be found in the Datawrapper URL or dashboard.
-- **`data`**: - The data to update the chart, table, or map with. For standard
+- **`data`**: The data to update the chart, table, or map with. For standard
   charts and tables, this should be a CSV formatted string. For locator maps,
   this should be a JSON string representing the map's data (e.g., markers,
   areas).
-- **`options`**: - Optional parameters to configure the data update process.
-- **`options.apiKey`**: - The name of the environment variable that stores your
+- **`options`**: Optional parameters to configure the data update process.
+- **`options.apiKey`**: The name of the environment variable that stores your
   Datawrapper API key (e.g., `"DATAWRAPPER_KEY"`). If not provided, the function
   defaults to looking for `process.env.DATAWRAPPER_KEY`.
-- **`options.returnResponse`**: - If `true`, the function will return the full
+- **`options.returnResponse`**: If `true`, the function will return the full
   `Response` object from the Datawrapper API call. This can be useful for
   debugging or for more detailed handling of the API response. Defaults to
   `false`.
@@ -8076,14 +8203,14 @@ async function updateNotesDW(
 
 ### Parameters
 
-- **`chartId`**: - The unique ID of the Datawrapper chart, table, or map to
+- **`chartId`**: The unique ID of the Datawrapper chart, table, or map to
   update. This ID can be found in the Datawrapper URL or dashboard.
-- **`note`**: - The string content to update the chart's notes field with.
-- **`options`**: - Optional parameters to configure the notes update process.
-- **`options.apiKey`**: - The name of the environment variable that stores your
+- **`note`**: The string content to update the chart's notes field with.
+- **`options`**: Optional parameters to configure the notes update process.
+- **`options.apiKey`**: The name of the environment variable that stores your
   Datawrapper API key (e.g., `"DATAWRAPPER_KEY"`). If not provided, the function
   defaults to looking for the `DATAWRAPPER_KEY` environment variable.
-- **`options.returnResponse`**: - If `true`, the function will return the full
+- **`options.returnResponse`**: If `true`, the function will return the full
   `Response` object from the Datawrapper API call. This can be useful for
   debugging or for more detailed handling of the API response. Defaults to
   `false`.
@@ -8157,26 +8284,26 @@ function variableMortgagePayments(
 
 ### Parameters
 
-- **`mortgageAmount`**: - The total amount of the mortgage loan.
-- **`rates`**: - An array of annual interest rates (e.g.,
+- **`mortgageAmount`**: The total amount of the mortgage loan.
+- **`rates`**: An array of annual interest rates (e.g.,
   `[6.00, 6.00, 5.50, 5.50, ...]` for rates in percentages). The array must
   contain at least as many rates as there are payments in the term. Each element
   corresponds to the rate for that payment period (0-based index).
-- **`term`**: - The term of the mortgage in years. This is the length of the
+- **`term`**: The term of the mortgage in years. This is the length of the
   current mortgage contract.
-- **`amortizationPeriod`**: - The total amortization period of the mortgage in
+- **`amortizationPeriod`**: The total amortization period of the mortgage in
   years. This is the total time it will take to pay off the mortgage.
-- **`options`**: - Additional options for customizing the mortgage calculation
-  and output.
-- **`options.id`**: - An optional string ID to be added to each payment object
-  in the returned array. Useful for tracking payments related to a specific
+- **`options`**: Additional options for customizing the mortgage calculation and
+  output.
+- **`options.id`**: An optional string ID to be added to each payment object in
+  the returned array. Useful for tracking payments related to a specific
   mortgage.
-- **`options.decimals`**: - The number of decimal places to round the financial
+- **`options.decimals`**: The number of decimal places to round the financial
   values (payment, interest, capital, balance) to. Defaults to `2`.
-- **`options.annualCompounding`**: - The number of times the mortgage interest
+- **`options.annualCompounding`**: The number of times the mortgage interest
   should be compounded per year. Defaults to `12` (monthly compounding). Set to
   `2` for semi-annual compounding as is standard in Canada.
-- **`options.debug`**: - If `true`, enables debug logging to the console,
+- **`options.debug`**: If `true`, enables debug logging to the console,
   providing additional insights into the calculation process. Defaults to
   `false`.
 
@@ -8241,10 +8368,10 @@ function zip(files: string | string[], zipFile: string): void;
 
 ### Parameters
 
-- **`files`**: - A string representing the path to a folder, or an array of
+- **`files`**: A string representing the path to a folder, or an array of
   strings representing paths to individual files. These are the items to be
   included in the zip archive.
-- **`zipFile`**: - The absolute or relative path, including the filename and
+- **`zipFile`**: The absolute or relative path, including the filename and
   `.zip` extension, where the created zip archive will be saved (e.g.,
   `"./archives/my-data.zip"`).
 
