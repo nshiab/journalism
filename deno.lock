@@ -2,20 +2,22 @@
   "version": "5",
   "specifiers": {
     "jsr:@nshiab/journalism-ai@^1.2.14": "1.2.14",
-    "jsr:@nshiab/journalism-climate@^1.0.5": "1.0.5",
+    "jsr:@nshiab/journalism-climate@^1.0.6": "1.0.6",
     "jsr:@nshiab/journalism-dataviz@^1.0.4": "1.0.4",
-    "jsr:@nshiab/journalism-extras@^1.0.3": "1.0.3",
-    "jsr:@nshiab/journalism-finance@^1.5.8": "1.5.8",
-    "jsr:@nshiab/journalism-format@^1.1.3": "1.1.3",
-    "jsr:@nshiab/journalism-geo@^1.0.4": "1.0.4",
-    "jsr:@nshiab/journalism-google@^1.0.5": "1.0.5",
-    "jsr:@nshiab/journalism-statistics@^1.2.3": "1.2.3",
+    "jsr:@nshiab/journalism-extras@^1.0.4": "1.0.4",
+    "jsr:@nshiab/journalism-finance@^1.5.14": "1.5.14",
+    "jsr:@nshiab/journalism-format@^1.1.3": "1.1.4",
+    "jsr:@nshiab/journalism-format@^1.1.4": "1.1.4",
+    "jsr:@nshiab/journalism-geo@^1.0.4": "1.0.5",
+    "jsr:@nshiab/journalism-geo@^1.0.5": "1.0.5",
+    "jsr:@nshiab/journalism-google@^1.0.6": "1.0.6",
+    "jsr:@nshiab/journalism-statistics@^1.2.3": "1.2.4",
+    "jsr:@nshiab/journalism-statistics@^1.2.4": "1.2.4",
     "jsr:@nshiab/journalism-web-scraping@^1.0.2": "1.0.2",
-    "jsr:@nshiab/journalism-web@^1.0.1": "1.0.1",
+    "jsr:@nshiab/journalism-web@^1.0.2": "1.0.2",
     "npm:@google-cloud/storage@^7.19.0": "7.19.0",
-    "npm:@google/genai@^1.46.0": "1.47.0",
-    "npm:@types/d3-geo@^3.1.0": "3.1.0",
-    "npm:adm-zip@~0.5.16": "0.5.16",
+    "npm:@google/genai@^1.46.0": "1.48.0",
+    "npm:adm-zip@~0.5.16": "0.5.17",
     "npm:cheerio@^1.2.0": "1.2.0",
     "npm:d3-array@^3.2.4": "3.2.4",
     "npm:d3-dsv@^3.0.1": "3.0.1",
@@ -29,84 +31,83 @@
     "npm:jsonrepair@^3.13.3": "3.13.3",
     "npm:jstat@^1.9.6": "1.9.6",
     "npm:ollama@~0.6.3": "0.6.3",
-    "npm:playwright-chromium@^1.58.2": "1.58.2",
-    "npm:playwright@^1.58.2": "1.58.2"
+    "npm:playwright-chromium@^1.58.2": "1.59.1",
+    "npm:playwright@^1.58.2": "1.59.1"
   },
   "jsr": {
     "@nshiab/journalism-ai@1.2.14": {
       "integrity": "a5ae7d8737863dd8426d5968e1206a156502c393df694f41f8868dc6a7907f91",
       "dependencies": [
-        "jsr:@nshiab/journalism-format",
+        "jsr:@nshiab/journalism-format@^1.1.3",
         "npm:@google/genai",
         "npm:jsonrepair",
         "npm:ollama",
         "npm:playwright-chromium"
       ]
     },
-    "@nshiab/journalism-climate@1.0.5": {
-      "integrity": "c506aee82f93585416a7abff7e1f67951308886f945a9ad92ebe1476f3d9275a",
+    "@nshiab/journalism-climate@1.0.6": {
+      "integrity": "30419bf1029e3afa97759061b4746d3bd03b4c0bcf57501a05ba5981eda62509",
       "dependencies": [
-        "jsr:@nshiab/journalism-geo"
+        "jsr:@nshiab/journalism-geo@^1.0.4"
       ]
     },
     "@nshiab/journalism-dataviz@1.0.4": {
       "integrity": "910009e449744438377dc2d19487b4061b4615754c4e6ea2a98c1e766cde2d4e",
       "dependencies": [
-        "jsr:@nshiab/journalism-format",
-        "npm:@types/d3-geo",
+        "jsr:@nshiab/journalism-format@^1.1.3",
         "npm:d3-array",
         "npm:d3-geo",
         "npm:playwright-chromium"
       ]
     },
-    "@nshiab/journalism-extras@1.0.3": {
-      "integrity": "35cde7f4783993be4dd74afb5b7b793d22ebaf2eee7db72aec77367ba511877e",
+    "@nshiab/journalism-extras@1.0.4": {
+      "integrity": "71398f5bc42e0af44c9ac003d505553347d1a3b2007d41ef29b371a0d444fbfe",
       "dependencies": [
-        "jsr:@nshiab/journalism-format",
+        "jsr:@nshiab/journalism-format@^1.1.3",
         "npm:adm-zip",
         "npm:iconv-lite"
       ]
     },
-    "@nshiab/journalism-finance@1.5.8": {
-      "integrity": "96f97f7b1b3a9fd9195c2018b9962668894f5d82206f121e8dc1180ff2ed0ba4",
+    "@nshiab/journalism-finance@1.5.14": {
+      "integrity": "6a8ca90757903622f8af693b37f63371f134ec4645d6c856ee6dc2ab62458baa",
       "dependencies": [
-        "jsr:@nshiab/journalism-format",
-        "jsr:@nshiab/journalism-statistics",
+        "jsr:@nshiab/journalism-format@^1.1.3",
+        "jsr:@nshiab/journalism-statistics@^1.2.3",
         "npm:playwright"
       ]
     },
-    "@nshiab/journalism-format@1.1.3": {
-      "integrity": "4019271dd851340b9cbd4056ede4e120c0bde5b96a7b928a2095ab7a3b617382",
+    "@nshiab/journalism-format@1.1.4": {
+      "integrity": "016fcad2670cfb92babc3959f872d68fe4b52f98c9708b42f39aea2ac39d154e",
       "dependencies": [
         "npm:d3-dsv",
         "npm:date-fns-tz"
       ]
     },
-    "@nshiab/journalism-geo@1.0.4": {
-      "integrity": "5717b2a724e86f1f3178a5104b53535fea1b5e85f410beb76f560db24b751da9",
+    "@nshiab/journalism-geo@1.0.5": {
+      "integrity": "4f99635904c1d0974288518ba0631d568d2721ef4bfc3f175220c0b0ca0537b3",
       "dependencies": [
         "npm:d3-array",
         "npm:geotiff"
       ]
     },
-    "@nshiab/journalism-google@1.0.5": {
-      "integrity": "0143ca7f785fc8a36fb422a4bf7871fa3d1154dc39c90d434903fbee62e86747",
+    "@nshiab/journalism-google@1.0.6": {
+      "integrity": "fddfb399cf0ac1e6ffa43d566924cb36a0285f547ab8f033729e7c4292e245af",
       "dependencies": [
-        "jsr:@nshiab/journalism-format",
+        "jsr:@nshiab/journalism-format@^1.1.3",
         "npm:@google-cloud/storage",
         "npm:d3-dsv",
         "npm:google-auth-library",
         "npm:google-spreadsheet"
       ]
     },
-    "@nshiab/journalism-statistics@1.2.3": {
-      "integrity": "071e41c3c7e99fd3b64c6999755601bf474d42fa7a008cc20aa687108488fecd",
+    "@nshiab/journalism-statistics@1.2.4": {
+      "integrity": "67d36d32447ad05bf1eb0ec01ba1f451aee60b757a0f583f1c80e850f881c2d8",
       "dependencies": [
         "npm:jstat"
       ]
     },
-    "@nshiab/journalism-web@1.0.1": {
-      "integrity": "5ad3581be261e5849e9328a318918b036719131747fc5c731c6ba759b84ca8fa",
+    "@nshiab/journalism-web@1.0.2": {
+      "integrity": "b5831a82a67d00231f68d03cf2d51d2f277e03818098f1bdb4aa941b1f08a7fd",
       "dependencies": [
         "npm:d3-dsv",
         "npm:fflate"
@@ -156,8 +157,8 @@
         "uuid@8.3.2"
       ]
     },
-    "@google/genai@1.47.0": {
-      "integrity": "sha512-0VV7AaXm5rQu3oRHNZNEubRAOL2lv5u+YA72eWnDwcOx3B1jFRbvtgL4drRHlocRHOnludvr3xmbQGbR+/RQAQ==",
+    "@google/genai@1.48.0": {
+      "integrity": "sha512-plonYK4ML2PrxsRD9SeqmFt76eREWkQdPCglOA6aYDzL1AAbE+7PUnT54SvpWGfws13L0AZEqGSpL7+1IPnTxQ==",
       "dependencies": [
         "google-auth-library@10.6.2",
         "p-retry",
@@ -208,17 +209,8 @@
     "@types/caseless@0.12.5": {
       "integrity": "sha512-hWtVTC2q7hc7xZ/RLbxapMvDMgUnDvKvMOpKal4DrMyfGBUfB1oKaZlIRr6mJL+If3bAP6sV/QneGzF6tJjZDg=="
     },
-    "@types/d3-geo@3.1.0": {
-      "integrity": "sha512-856sckF0oP/diXtS4jNsiQw/UuK5fQG8l/a9VVLeSouf1/PPbBE1i1W852zVwKwYCBkFJJB7nCFTbk6UMEXBOQ==",
-      "dependencies": [
-        "@types/geojson"
-      ]
-    },
-    "@types/geojson@7946.0.16": {
-      "integrity": "sha512-6C8nqWur3j98U6+lXDfTUWIfgvZU+EumvpHKcYjujKH7woYyLj2sUmff0tRhrqM7BohUw7Pz3ZB1jj2gW9Fvmg=="
-    },
-    "@types/node@25.5.0": {
-      "integrity": "sha512-jp2P3tQMSxWugkCUKLRPVUpGaL5MVFwF8RDuSRztfwgN1wmqJeMSbKlnEtQqU8UrhTmzEmZdu2I6v2dpp7XIxw==",
+    "@types/node@25.5.2": {
+      "integrity": "sha512-tO4ZIRKNC+MDWV4qKVZe3Ql/woTnmHDr5JD8UI5hn2pwBrHEwOEMZK7WlNb5RKB6EoJ02gwmQS9OrjuFnZYdpg==",
       "dependencies": [
         "undici-types"
       ]
@@ -244,8 +236,8 @@
         "event-target-shim"
       ]
     },
-    "adm-zip@0.5.16": {
-      "integrity": "sha512-TGw5yVi4saajsSEgz25grObGHEUaDrniwvA2qwSC060KfqGPdglhvPMA2lPIoxs3PQIItj2iag35fONcQqgUaQ=="
+    "adm-zip@0.5.17": {
+      "integrity": "sha512-+Ut8d9LLqwEvHHJl1+PIHqoyDxFgVN847JTVM3Izi3xHDWPE4UtzzXysMZQs64DMcrJfBeS/uoEP4AD3HQHnQQ=="
     },
     "agent-base@6.0.2": {
       "integrity": "sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==",
@@ -484,8 +476,8 @@
         "path-expression-matcher"
       ]
     },
-    "fast-xml-parser@5.5.9": {
-      "integrity": "sha512-jldvxr1MC6rtiZKgrFnDSvT8xuH+eJqxqOBThUVjYrxssYTo1avZLGql5l0a0BAERR01CadYzZ83kVEkbyDg+g==",
+    "fast-xml-parser@5.5.10": {
+      "integrity": "sha512-go2J2xODMc32hT+4Xr/bBGXMaIoiCwrwp2mMtAvKyvEFW6S/v5Gn2pBmE4nvbwNjGhpcAiOwEv7R6/GZ6XRa9w==",
       "dependencies": [
         "fast-xml-builder",
         "path-expression-matcher",
@@ -846,23 +838,23 @@
         "entities@6.0.1"
       ]
     },
-    "path-expression-matcher@1.2.0": {
-      "integrity": "sha512-DwmPWeFn+tq7TiyJ2CxezCAirXjFxvaiD03npak3cRjlP9+OjTmSy1EpIrEbh+l6JgUundniloMLDQ/6VTdhLQ=="
+    "path-expression-matcher@1.4.0": {
+      "integrity": "sha512-s4DQMxIdhj3jLFWd9LxHOplj4p9yQ4ffMGowFf3cpEgrrJjEhN0V5nxw4Ye1EViAGDoL4/1AeO6qHpqYPOzE4Q=="
     },
-    "playwright-chromium@1.58.2": {
-      "integrity": "sha512-SCoQ3hjBs7FfO46CoOtgAUg77BuYwCni1bzQgm47IUyLBTipnGkLxLnaUNRKXvPYO4hAyt8++Z6wVShVnhrzmw==",
+    "playwright-chromium@1.59.1": {
+      "integrity": "sha512-aTsPenkxsr9np4vIHuMEND6comqepVvzbL0MwkozFNliwGZjTqrBUQ7TF6Ay1ZIU/e7rcUpGsCTUG+nqwxG2Xw==",
       "dependencies": [
         "playwright-core"
       ],
       "scripts": true,
       "bin": true
     },
-    "playwright-core@1.58.2": {
-      "integrity": "sha512-yZkEtftgwS8CsfYo7nm0KE8jsvm6i/PTgVtB8DL726wNf6H2IMsDuxCpJj59KDaxCtSnrWan2AeDqM7JBaultg==",
+    "playwright-core@1.59.1": {
+      "integrity": "sha512-HBV/RJg81z5BiiZ9yPzIiClYV/QMsDCKUyogwH9p3MCP6IYjUFu/MActgYAvK0oWyV9NlwM3GLBjADyWgydVyg==",
       "bin": true
     },
-    "playwright@1.58.2": {
-      "integrity": "sha512-vA30H8Nvkq/cPBnNw4Q8TWz1EJyqgpuinBcHET0YVJVFldr8JDNiU9LaWAE1KqSkRYazuaBhTpB5ZzShOezQ6A==",
+    "playwright@1.59.1": {
+      "integrity": "sha512-C8oWjPR3F81yljW9o5OxcWzfh6avkVwDD2VYdwIGqTkl+OGFISgypqzfu7dOe4QNLL2aqcWBmI3PMtLIK233lw==",
       "dependencies": [
         "playwright-core"
       ],
@@ -935,8 +927,8 @@
         "safe-buffer"
       ]
     },
-    "strnum@2.2.2": {
-      "integrity": "sha512-DnR90I+jtXNSTXWdwrEy9FakW7UX+qUZg28gj5fk2vxxl7uS/3bpI4fjFYVmdK9etptYBPNkpahuQnEwhwECqA=="
+    "strnum@2.2.3": {
+      "integrity": "sha512-oKx6RUCuHfT3oyVjtnrmn19H1SiCqgJSg+54XqURKp5aCMbrXrhLjRN9TjuwMjiYstZ0MzDrHqkGZ5dFTKd+zg=="
     },
     "stubs@3.0.0": {
       "integrity": "sha512-PdHt7hHUJKxvTCgbKX9C1V/ftOcjJQgz8BZwNfV5c4B6dcGqlpelTbJ999jBGZ2jYiPAwcX5dP6oBwVlBlUbxw=="
@@ -1019,16 +1011,16 @@
   "workspace": {
     "dependencies": [
       "jsr:@nshiab/journalism-ai@^1.2.14",
-      "jsr:@nshiab/journalism-climate@^1.0.5",
+      "jsr:@nshiab/journalism-climate@^1.0.6",
       "jsr:@nshiab/journalism-dataviz@^1.0.4",
-      "jsr:@nshiab/journalism-extras@^1.0.3",
-      "jsr:@nshiab/journalism-finance@^1.5.8",
-      "jsr:@nshiab/journalism-format@^1.1.3",
-      "jsr:@nshiab/journalism-geo@^1.0.4",
-      "jsr:@nshiab/journalism-google@^1.0.5",
-      "jsr:@nshiab/journalism-statistics@^1.2.3",
+      "jsr:@nshiab/journalism-extras@^1.0.4",
+      "jsr:@nshiab/journalism-finance@^1.5.14",
+      "jsr:@nshiab/journalism-format@^1.1.4",
+      "jsr:@nshiab/journalism-geo@^1.0.5",
+      "jsr:@nshiab/journalism-google@^1.0.6",
+      "jsr:@nshiab/journalism-statistics@^1.2.4",
       "jsr:@nshiab/journalism-web-scraping@^1.0.2",
-      "jsr:@nshiab/journalism-web@^1.0.1"
+      "jsr:@nshiab/journalism-web@^1.0.2"
     ]
   }
 }
