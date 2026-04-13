@@ -1,6 +1,6 @@
 {
   "name": "@nshiab/journalism",
-  "version": "2.8.2",
+  "version": "2.8.3",
   "exports": {
     ".": "./src/index.ts",
     "./web": "./src/web.ts"
@@ -8,6 +8,8 @@
   "tasks": {
     "all-tests": "deno install && deno fmt --check && deno lint && deno check src/index.ts && deno doc --lint src/index.ts && deno publish --allow-dirty --dry-run && deno task llm",
     "llm": "deno doc --json src/index.ts > docs.json && deno run -A src/generateLlmMd.ts && deno fmt llm.md",
+    "patch-no-tests": "deno run -A src/incrementVersion.ts patch",
+    "minor-no-tests": "deno run -A src/incrementVersion.ts minor",
     "patch": "deno task all-tests && deno run -A src/incrementVersion.ts patch",
     "minor": "deno task all-tests && deno run -A src/incrementVersion.ts minor",
     "major": "deno task all-tests && deno run -A src/incrementVersion.ts major"
