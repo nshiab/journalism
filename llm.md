@@ -2844,6 +2844,27 @@ const earthCoords = geoTo3D(0, 0, 6371, { decimals: 0 }); // Earth's approximate
 console.log(earthCoords); // Expected output: { x: 0, y: 6371, z: 0 } (for 0,0 lat/lon)
 ```
 
+## getCholeskyMatrix
+
+Performs Cholesky Decomposition on a symmetric, positive-definite covariance
+matrix.
+
+### Signature
+
+```typescript
+function getCholeskyMatrix(matrix: number[][], jitter?: number): number[][];
+```
+
+### Parameters
+
+- **`matrix`**: A square, symmetric, positive-definite covariance matrix.
+- **`jitter`**: A tiny positive value (e.g., 1e-9) added to the diagonal to
+  force positive-definiteness.
+
+### Returns
+
+A lower triangular matrix L.
+
 ## getCirParameters
 
 Estimates the parameters of the Cox-Ingersoll-Ross (CIR) model based on
@@ -3068,6 +3089,95 @@ function getClosest<T>(
 ### Returns
 
 The closest item with distance added directly to the item.
+
+## getCorrelatedShocks
+
+Multiplies a lower triangular Cholesky matrix (L) by a vector of independent
+standard normal random variables (Z).
+
+### Signature
+
+```typescript
+function getCorrelatedShocks(L: number[][], Z: number[]): number[];
+```
+
+### Parameters
+
+- **`L`**: The lower triangular matrix.
+- **`Z`**: An array of independent standard normal random variables.
+
+### Returns
+
+An array of correlated random variables.
+
+## getCorrelationMatrix
+
+Computes the correlation matrix for a given dataset. The correlation matrix is a
+square matrix that describes the correlation between each pair of variables in a
+dataset.
+
+The function takes a 2D array (matrix) as input, where each inner array
+represents a data point and each element within the inner array represents a
+variable. It calculates the Pearson correlation coefficient between all pairs of
+variables.
+
+Optionally, you can choose to invert the computed correlation matrix by setting
+the `invert` option to `true`.
+
+### Signature
+
+```typescript
+function getCorrelationMatrix(
+  data: number[][],
+  options?: { invert?: boolean },
+): number[][];
+```
+
+### Parameters
+
+- **`data`**: A 2D array of numbers representing the dataset. Each inner array
+  is a data point, and each element is a variable.
+- **`options`**: Optional settings for the correlation matrix computation.
+- **`options.invert`**: If `true`, the function will return the inverse of the
+  computed correlation matrix. Defaults to `false`.
+
+### Returns
+
+A 2D array representing the correlation matrix. If `options.invert` is `true`,
+the inverse correlation matrix is returned.
+
+### Throws
+
+- **`Error`**: If any element in the input `data` is not a number.
+
+### Examples
+
+```ts
+// Basic usage: Compute the correlation matrix for a 2x2 dataset.
+const twoVariables = [
+  [6.5, 11],
+  [7.1, 12.2],
+  [6.3, 10.5],
+];
+const matrix2x2 = getCorrelationMatrix(twoVariables);
+console.log(matrix2x2);
+// Expected output (approximately):
+// [
+//   [1, -0.1208],
+//   [-0.1208, 1]
+// ]
+```
+
+```ts
+// Compute the inverse correlation matrix for a 2x2 dataset.
+const invertedMatrix2x2 = getCorrelationMatrix(twoVariables, { invert: true });
+console.log(invertedMatrix2x2);
+// Expected output (approximately):
+// [
+//   [1.0148, 0.1226],
+//   [0.1226, 1.0148]
+// ]
+```
 
 ## getCovarianceMatrix
 
@@ -3858,6 +3968,59 @@ capital gains tax baked into them. Summing all itemized deductions plus
 and $5k Capital Gains, excluding RAMQ getIncomeTax(80000, "Quebec", 2025, {
 rrsp: 10000, capitalGains: 5000, quebec: { ramq: false } });
 
+## getLandTransferTax
+
+Calculates the standard Land Transfer Tax (or equivalent registration fee) for a
+given city and property value based on 2026 tax frameworks.
+
+-
+  - **Rebate Limitations and Exclusions:** The `firstTimeOwner` parameter
+    applies structural, point-of-sale land transfer tax rebates assuming the
+    buyer meets all idealized programmatic criteria (e.g., absolute zero global
+    ownership history, Canadian citizenship/PR, and continuous provincial
+    residency).
+-
+  - The following rebates and subsidies are INTENTIONALLY EXCLUDED from this
+    calculation:
+
+* **Nova Scotia:** The First-Time Home Buyers Rebate is excluded because it is
+  restricted exclusively to a refund on the provincial portion of the HST for
+  _newly built_ properties, not the 1.5% municipal Deed Transfer Tax calculated
+  here.
+* **Montreal (HPAP) & Quebec City (Programme Accès Famille):** Excluded because
+  they operate as localized financial grants or down payment assistance loans
+  requiring specific household compositions (e.g., dependents under 18) or
+  new-build environmental certifications, rather than structural tax base
+  reductions.
+* **Manitoba & Quebec (2026 Provincial):** Excluded because their respective
+  FTHB relief amounts are general income tax credits claimed on annual tax
+  returns in the spring/fall, not an upfront point-of-sale deduction from the
+  land transfer tax.
+
+- @param city - The metropolitan market.
+
+### Signature
+
+```typescript
+function getLandTransferTax(
+  city: City,
+  propertyValue: number,
+  year: 2026,
+  firstTimeOwner?: boolean,
+): number;
+```
+
+### Parameters
+
+- **`propertyValue`**: The fair market value or purchase price of the property.
+- **`year`**: The tax year (currently only 2026 is supported).
+- **`firstTimeOwner`**: Indicates if the purchaser qualifies for strict FTHB
+  exemptions.
+
+### Returns
+
+The total calculated transaction friction cost in Canadian Dollars.
+
 ## getMahalanobisDistance
 
 Computes the Mahalanobis distance between two data points (`x1` and `x2`) given
@@ -4012,6 +4175,59 @@ const penalty = getMortgagePenalty({
   rateAdjustmentVariable: 0.0025,
   currentPostedRates: {}, // Not used for variable
   mortgageType: "variable",
+});
+```
+
+## getRentVsBuyCholeskyMatrix
+
+Generates a Cholesky decomposition matrix from historical variable data,
+formatted specifically for the `simulateRentVsBuyMonteCarlo` function.
+
+This helper calculates the covariance matrix of the provided data arrays,
+normalizes it into a correlation matrix, and computes the Cholesky
+decomposition, mapping variables internally to the correct 16x16 matrix indices.
+
+If no data object is provided, it returns the Cholesky decomposition of an
+identity matrix (which results in independent, uncorrelated paths).
+
+### Signature
+
+```typescript
+function getRentVsBuyCholeskyMatrix(
+  data?: StochasticData,
+  options?: { jitter?: number },
+): number[][];
+```
+
+### Parameters
+
+- **`data`**: An object containing arrays of equal-length historical values for
+  all 16 variables.
+- **`options`**: Optional configuration.
+- **`options.jitter`**: A tiny positive value (e.g., 1e-9) added to the diagonal
+  of the correlation matrix to force positive-definiteness. This can be useful
+  if the decomposition fails due to numerical precision issues.
+
+### Examples
+
+```ts
+// Using an identity matrix (no correlation)
+const choleskyMatrixId = getRentVsBuyCholeskyMatrix();
+
+// Using historical data to capture true economic correlations
+const choleskyMatrixCorrelated = getRentVsBuyCholeskyMatrix({
+  employmentIncome: [75000, 76000, 78000, ...],
+  market: [0.05, 0.07, -0.02, ...],
+  rent: [1500, 1550, 1600, ...],
+  // ... and the remaining 13 variables
+});
+
+// Using jitter to handle numerical precision issues
+const choleskyMatrixWithJitter = getRentVsBuyCholeskyMatrix(historicalData, { jitter: 1e-9 });
+
+const results = simulateRentVsBuyMonteCarlo({
+  // ... other parameters
+  choleskyMatrix: choleskyMatrixCorrelated,
 });
 ```
 
@@ -4721,9 +4937,9 @@ async function getYahooFinanceData(
   for the period.
 - **`interval`**: The time interval for the data points. Can be one of: -
   `"1d"`: Daily data. - `"1h"`: Hourly data. - `"1m"`: Minute-by-minute data.
-- **`useBrowser`**: If true, the function will use Playwright to fetch the data.
-  This can be useful when facing rate limiting issues with the traditional
-  fetch.
+- **`useBrowser`**: If true, the function will use a browser-like User-Agent to
+  fetch the data. This can be useful when facing rate limiting issues with the
+  traditional fetch.
 
 ### Returns
 
@@ -7007,9 +7223,7 @@ try {
 ## saveChart
 
 Saves an [Observable Plot](https://github.com/observablehq/plot) chart as an
-image file (`.png` or `.jpeg`) or an SVG file (`.svg`).
-
-When saving as an SVG, only the SVG elements will be captured.
+image file (`.png`) or an SVG file (`.svg`).
 
 ### Signature
 
@@ -7027,18 +7241,17 @@ async function saveChart(
 - **`data`**: An array of data objects that your Observable Plot chart function
   expects.
 - **`chart`**: A function that takes the `data` array and returns an SVG or HTML
-  element representing the chart. This function should typically be a direct
-  call to `Plot.plot()` or a similar Observable Plot constructor.
+  element representing the chart. Inside this function, `d3`, `Plot`, and
+  `journalismFormat` globals are available, with their members destructured
+  (e.g. `formatNumber`, `formatDate`, `round` from journalism-format; `min`,
+  `max`, `mean`, etc. from d3; and all Plot marks).
 - **`path`**: The file path where the image or SVG will be saved. The file
-  extension (`.png`, `.jpeg`, or `.svg`) determines the output format.
+  extension (`.png` or `.svg`) determines the output format.
 - **`options`**: Optional settings to customize the chart's appearance and
   behavior.
-- **`options.style`**: A CSS string to apply custom styles to the chart's
-  container `div` (which has the ID `chart`). This is useful for fine-tuning the
-  visual presentation beyond what Observable Plot's `style` option offers.
+- **`options.style`**: A CSS string to apply custom styles to the chart.
 - **`options.dark`**: If `true`, the chart will be rendered with a dark mode
-  theme. This adjusts background and text colors for better visibility in dark
-  environments. Defaults to `false`.
+  theme. Defaults to `false`.
 
 ### Returns
 
@@ -7077,22 +7290,6 @@ await saveChart(dataForSvg, chartForSvg, svgPath, {
 console.log(`Chart saved to ${svgPath}`);
 ```
 
-```ts
-// Save a line chart in dark mode.
-import { line, plot } from "@observablehq/plot";
-
-const dataForDark = [{ month: "Jan", temp: 5 }, { month: "Feb", temp: 7 }, {
-  month: "Mar",
-  temp: 10,
-}];
-const chartForDark = (d) =>
-  plot({ marks: [line(d, { x: "month", y: "temp" })] });
-const darkPath = "output/line-chart-dark.jpeg";
-
-await saveChart(dataForDark, chartForDark, darkPath, { dark: true });
-console.log(`Chart saved to ${darkPath}`);
-```
-
 ## simulateRentVsBuy
 
 Simulates and compares the financial outcomes of renting versus buying a home
@@ -7126,20 +7323,7 @@ function simulateRentVsBuy(
     tfsaContributions: boolean;
     annualInvestmentFeeRate: number;
     couple: boolean;
-    province:
-      | "Alberta"
-      | "British Columbia"
-      | "Manitoba"
-      | "New Brunswick"
-      | "Newfoundland and Labrador"
-      | "Nova Scotia"
-      | "Northwest Territories"
-      | "Nunavut"
-      | "Ontario"
-      | "Prince Edward Island"
-      | "Quebec"
-      | "Saskatchewan"
-      | "Yukon";
+    city: City;
     renter: {
       startingMonthlyRent: number;
       securityDeposit: number;
@@ -7150,6 +7334,7 @@ function simulateRentVsBuy(
       purchasePrice: number;
       fixedRateAdjustment: number;
       variableRateAdjustment: number;
+      firstTimeOwner: boolean;
       purchaseFixedFees: number;
       startingAnnualMaintenanceCost: number;
       startingAnnualPropertyTax: number;
@@ -7212,6 +7397,7 @@ function simulateRentVsBuy(
         | "condoFees"
         | "downPayment"
         | "purchaseFixedFees"
+        | "landTransferTax"
         | "insurancePremium"
         | "tfsaFees"
         | "stocksFees";
@@ -7289,8 +7475,8 @@ function simulateRentVsBuy(
   couple doubling TFSA contribution room and splitting capital gains in 2.
   Assumes each per-month value in parameters.values.employmentIncome represents
   the per-partner income.
-- **`parameters.province`**: The province used to calculate sales tax on the
-  selling fixed fees and commission when selling the home.
+- **`parameters.city`**: The city where the home is located, used to calculate
+  land transfer tax and derive the province for sales and income taxes.
 - **`parameters.renter`**: Configuration for the renter scenario.
 - **`parameters.renter.startingMonthlyRent`**: The initial monthly rent payment.
 - **`parameters.renter.securityDeposit`**: The initial security deposit.
@@ -7303,8 +7489,11 @@ function simulateRentVsBuy(
   posted fixed mortgage rate (added to the posted rate).
 - **`parameters.buyer.variableRateAdjustment`**: The adjustment applied to the
   variable mortgage rate (added to the posted rate).
+- **`parameters.buyer.firstTimeOwner`**: Whether the buyer is a first-time
+  owner, used to calculate land transfer tax rebates.
 - **`parameters.buyer.purchaseFixedFees`**: Fixed fees associated with the
-  purchase (e.g., notary, land transfer tax).
+  purchase (e.g., notary). Do not include land transfer tax here, as it is
+  calculated automatically based on the city.
 - **`parameters.buyer.startingAnnualMaintenanceCost`**: The initial annual
   maintenance cost.
 - **`parameters.buyer.startingAnnualPropertyTax`**: The initial annual property
@@ -7436,7 +7625,7 @@ const results = simulateRentVsBuy({
   tfsaContributions: true,
   annualInvestmentFeeRate: 0,
   couple: false,
-  province: "Ontario",
+  city: "Toronto",
   renter: {
     startingMonthlyRent: 2000,
     securityDeposit: 2000,
@@ -7447,7 +7636,8 @@ const results = simulateRentVsBuy({
     purchasePrice: 500000,
     fixedRateAdjustment: -0.015,
     variableRateAdjustment: -0.005,
-    purchaseFixedFees: 5000,
+    firstTimeOwner: true,
+    purchaseFixedFees: 2000,
     startingAnnualMaintenanceCost: 2000,
     startingAnnualPropertyTax: 3000,
     startingMonthlyCondoFees: 300,
@@ -7511,8 +7701,8 @@ function simulateRentVsBuyMonteCarlo(
   couple doubling TFSA contribution room and splitting capital gains in 2.
   Assumes the stochastic employmentIncome parameter represents the per-partner
   income.
-- **`parameters.province`**: The Canadian province or territory, used for
-  calculating sales taxes.
+- **`parameters.city`**: The city where the home is located, used to calculate
+  land transfer tax and derive the province for sales and income taxes.
 - **`parameters.renter`**: Configuration for the renter scenario.
 - **`parameters.renter.securityDeposit`**: The initial security deposit or last
   month's rent (scenario-dependent).
@@ -7523,12 +7713,18 @@ function simulateRentVsBuyMonteCarlo(
   posted fixed mortgage rate (added to the posted rate).
 - **`parameters.buyer.variableRateAdjustment`**: The adjustment applied to the
   variable mortgage rate (added to the posted rate).
+- **`parameters.buyer.firstTimeOwner`**: Whether the buyer is a first-time
+  owner, used to calculate land transfer tax rebates.
 - **`parameters.buyer.purchaseFixedFees`**: One-time costs at purchase (notary,
-  land transfer tax, etc.).
+  etc.). Do not include land transfer tax here, as it is calculated
+  automatically based on the city.
 - **`parameters.buyer.sellingCommissionRate`**: The commission rate paid to real
   estate agents upon sale (e.g., `0.05` for 5%).
 - **`parameters.buyer.floorRate`**: The minimum interest rate (posted +
   adjustment) for mortgages.
+- **`parameters.choleskyMatrix`**: Mandatory Cholesky decomposition matrix for
+  the 16 stochastic variables. Must be pre-computed using
+  `getRentVsBuyCholeskyMatrix` from this library.
 - **`parameters.stochasticParameters`**: Parameters for the stochastic models.
   For all parameters (market return rate, dollar amounts, interest rates),
   use: - `initialValue`: The starting value (e.g., `0.07` for 7% market return,
@@ -7625,15 +7821,25 @@ object-array shapes.
 ### Examples
 
 ```ts
+import {
+  getRentVsBuyCholeskyMatrix,
+  simulateRentVsBuyMonteCarlo,
+} from "@nshiab/journalism-finance";
+
+// Assuming you have an object `historicalData` of type `StochasticData`
+// where each key holds an array of historical values for that variable.
+const choleskyMatrix = getRentVsBuyCholeskyMatrix(historicalData);
+
 const results = simulateRentVsBuyMonteCarlo({
   iterations: 1000,
+  choleskyMatrix,
   winVariable: "balanceAfterSelling",
   startingYear: 2026,
   numberOfYears: 25,
   tfsaContributions: true,
   annualInvestmentFeeRate: 0.0025,
   couple: false,
-  province: "Ontario",
+  city: "Toronto",
   renter: {
     securityDeposit: 1500,
   },
@@ -7641,7 +7847,8 @@ const results = simulateRentVsBuyMonteCarlo({
     downPayment: 50000,
     fixedRateAdjustment: -0.015,
     variableRateAdjustment: -0.005,
-    purchaseFixedFees: 5000,
+    firstTimeOwner: true,
+    purchaseFixedFees: 2000,
     sellingCommissionRate: 0.05,
     floorRate: 0.01,
   },
@@ -7740,6 +7947,64 @@ await sleep(100, { start: startTime, log: true });
 await sleep(2000, { log: true });
 // Expected console output: "Sleeping for 2 sec, 0 ms..." (or similar)
 ```
+
+## stepCir
+
+Calculates the next value in a Cox-Ingersoll-Ross (CIR) process.
+
+### Signature
+
+```typescript
+function stepCir(
+  currentValue: number,
+  a: number,
+  b: number,
+  sigma: number,
+  dt: number,
+  shock: number,
+): number;
+```
+
+### Parameters
+
+- **`currentValue`**: The current value of the process.
+- **`a`**: The speed of mean reversion.
+- **`b`**: The long-term mean level.
+- **`sigma`**: The volatility coefficient.
+- **`dt`**: The time step.
+- **`shock`**: A standard normal random variable (Z).
+
+### Returns
+
+The next value in the process.
+
+## stepGbm
+
+Calculates the next value in a Geometric Brownian Motion (GBM) process.
+
+### Signature
+
+```typescript
+function stepGbm(
+  currentValue: number,
+  mu: number,
+  sigma: number,
+  dt: number,
+  shock: number,
+): number;
+```
+
+### Parameters
+
+- **`currentValue`**: The current value of the process.
+- **`mu`**: The drift coefficient.
+- **`sigma`**: The volatility coefficient.
+- **`dt`**: The time step.
+- **`shock`**: A standard normal random variable (Z).
+
+### Returns
+
+The next value in the process.
 
 ## styledLayerDescriptor
 

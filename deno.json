@@ -1,6 +1,6 @@
 {
   "name": "@nshiab/journalism",
-  "version": "2.8.6",
+  "version": "2.8.7",
   "exports": {
     ".": "./src/index.ts",
     "./web": "./src/web.ts"
@@ -23,13 +23,13 @@
   "imports": {
     "@nshiab/journalism-ai": "jsr:@nshiab/journalism-ai@^1.2.17",
     "@nshiab/journalism-climate": "jsr:@nshiab/journalism-climate@^1.0.6",
-    "@nshiab/journalism-dataviz": "jsr:@nshiab/journalism-dataviz@^1.0.4",
+    "@nshiab/journalism-dataviz": "jsr:@nshiab/journalism-dataviz@^1.0.9",
     "@nshiab/journalism-extras": "jsr:@nshiab/journalism-extras@^1.0.4",
-    "@nshiab/journalism-finance": "jsr:@nshiab/journalism-finance@^1.5.15",
-    "@nshiab/journalism-format": "jsr:@nshiab/journalism-format@^1.1.4",
+    "@nshiab/journalism-finance": "jsr:@nshiab/journalism-finance@^1.5.19",
+    "@nshiab/journalism-format": "jsr:@nshiab/journalism-format@^1.1.5",
     "@nshiab/journalism-geo": "jsr:@nshiab/journalism-geo@^1.0.5",
     "@nshiab/journalism-google": "jsr:@nshiab/journalism-google@^1.0.6",
-    "@nshiab/journalism-statistics": "jsr:@nshiab/journalism-statistics@^1.2.4",
+    "@nshiab/journalism-statistics": "jsr:@nshiab/journalism-statistics@^1.5.1",
     "@nshiab/journalism-web": "jsr:@nshiab/journalism-web@^1.0.2",
     "@nshiab/journalism-web-scraping": "jsr:@nshiab/journalism-web-scraping@^1.0.2"
   },
