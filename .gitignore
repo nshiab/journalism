@@ -1,5 +1,6 @@
 node_modules
 .DS_Store
 .env
+npm/
 cov_profile
 docs.json

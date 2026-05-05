@@ -1,6 +1,6 @@
 {
   "name": "@nshiab/journalism",
-  "version": "2.8.10",
+  "version": "2.8.11",
   "description": "Useful TypeScript functions for journalism projects.",
   "repository": "https://github.com/nshiab/journalism",
   "license": "MIT",
