@@ -4061,6 +4061,51 @@ console.log(
 );
 ```
 
+## getMinimumDownPayment
+
+Calculates the minimum down payment required for a property purchase in Canada,
+based on the purchase price.
+
+The calculation follows the Financial Consumer Agency of Canada (FCAC) rules:
+
+- For properties $500,000 or less: 5% of the purchase price.
+- For properties between $500,000 and $1.5 million: 5% of the first $500,000,
+  plus 10% of the portion above $500,000.
+- For properties $1.5 million or more: 20% of the total purchase price.
+
+### Signature
+
+```typescript
+function getMinimumDownPayment(purchasePrice: number): number;
+```
+
+### Parameters
+
+- **`purchasePrice`**: The total price of the property being purchased.
+
+### Returns
+
+The minimum down payment amount.
+
+### Examples
+
+```ts
+// Minimum down payment for a $400,000 home (5%)
+const downPayment400k = getMinimumDownPayment(400_000);
+console.log(downPayment400k); // 20000
+
+// Minimum down payment for a $600,000 home (5% of 500k + 10% of 100k)
+const downPayment600k = getMinimumDownPayment(600_000);
+console.log(downPayment600k); // 35000
+
+// Minimum down payment for a $1,600,000 home (20%)
+const downPayment1600k = getMinimumDownPayment(1_600_000);
+console.log(downPayment1600k); // 320000
+```
+
+Reference:
+https://www.canada.ca/en/financial-consumer-agency/services/mortgages/down-payment.html
+
 ## getMortgagePenalty
 
 Calculates the mortgage prepayment penalty.
@@ -5411,9 +5456,8 @@ required in such cases.
 
 ### Throws
 
-- **`Error`**: If the down payment is less than 5% of the purchase price, as
-  this is generally the minimum required down payment for insured mortgages in
-  Canada.
+- **`Error`**: If the down payment is less than the minimum required down
+  payment in Canada.
 
 ### Examples
 
@@ -5444,7 +5488,7 @@ try {
   mortgageInsurancePremium(500_000, 20_000); // 4% down payment
 } catch (error) {
   console.error("Error:", error.message);
-  // Expected output: "Error: The down payment must be more than 5% of the purchase price..."
+  // Expected output: "Error: The down payment is less than the minimum required down payment..."
 }
 ```
 
@@ -7301,6 +7345,7 @@ function simulateRentVsBuy(
       sellingFixedFees: number;
       sellingCommissionRate: number;
       floorRate: number;
+      investsSavings: boolean;
     };
     values: {
       employmentIncome: number[];
@@ -7334,6 +7379,7 @@ function simulateRentVsBuy(
     ) => void;
     winVariable?: "balance" | "balanceAfterSelling" | "assets";
     groups?: string[];
+    adjustToInflation?: RentVsBuyRates;
   },
 ): (
   & {
@@ -7441,7 +7487,8 @@ function simulateRentVsBuy(
 - **`parameters.renter.startingMonthlyInsurance`**: The initial monthly renter's
   insurance.
 - **`parameters.buyer`**: Configuration for the buyer scenarios.
-- **`parameters.buyer.downPayment`**: The down payment amount.
+- **`parameters.buyer.downPayment`**: The down payment amount. Must meet the
+  minimum required down payment in Canada based on the purchase price.
 - **`parameters.buyer.purchasePrice`**: The purchase price of the home.
 - **`parameters.buyer.fixedRateAdjustment`**: The adjustment applied to the
   posted fixed mortgage rate (added to the posted rate).
@@ -7466,6 +7513,10 @@ function simulateRentVsBuy(
   for selling the home (e.g., 0.05 for 5%).
 - **`parameters.buyer.floorRate`**: The minimum interest rate (posted +
   adjustment) for mortgages.
+- **`parameters.buyer.investsSavings`**: Whether the buyer invests any monthly
+  savings (difference between their expenses and the renter's/max expenses) into
+  the stock market. If `false`, these savings are discarded (simulating
+  lifestyle inflation or other spending).
 - **`parameters.values`**: Shared absolute values over the simulation period.
   Each array should have a length of `numberOfYears * 12`.
 - **`parameters.values.employmentIncome`**: Monthly employment income used for
@@ -7519,38 +7570,40 @@ function simulateRentVsBuy(
 - **`options.groups`**: Internal filter used by `simulateRentVsBuyMonteCarlo`
   via `details.iterationsGroups`. Restricts which groups are emitted by
   `onRecord` and pushed to results.
+- **`options.adjustToInflation`**: The rate parameter used as a proxy for
+  inflation to discount all future dollar values back to Year 0 (today's
+  dollars). For example, setting this to `"sellingFixedFeesIncrease"` will use
+  that parameter's values to calculate the monthly discount factor. Defaults to
+  `undefined` (no adjustment).
 
 ### Returns
 
 A detailed array of monthly results for each scenario (renter, buyerFixed,
-buyerVariable). Each object in the array represents a specific data point for a
-given month, categorized by:
+buyerVariable).
 
-- `monthlyExpenses` or `cumulativeExpenses`:
-- `rent`, `insurance`, `securityDeposit` (for Renter)
-- `mortgageCapital`, `mortgageInterests`, `maintenance`, `propertyTax`,
+### Throws
+
+- **`Error`**: If the down payment is less than the minimum required down
+  payment in Canada. Each object in the array represents a specific data point
+  for a given month, categorized by: - `monthlyExpenses` or
+  `cumulativeExpenses`: - `rent`, `insurance`, `securityDeposit` (for Renter) -
+  `mortgageCapital`, `mortgageInterests`, `maintenance`, `propertyTax`,
   `condoFees`, `downPayment`, `purchaseFixedFees`, `insurancePremium` (for
-  Buyers)
-- `tfsaFees`, `stocksFees` (for all scenarios)
-- `monthlyGains` or `cumulativeGains`:
-- `tfsaGains`, `tfsaContribution`, `stocksGains`, `newStocks` (for all
-  scenarios)
-- `homeEquityGains` (for Buyers)
-- `assets`:
-- `tfsa`, `stocks` (for all scenarios)
-- `securityDeposit` (for Renter)
-- `homeEquity` (for Buyers)
-- `summary`: `balance` (monthly net worth)
-- `summaryCumulative`: `balance` (cumulative net worth), `balanceAfterSelling`
-  (net worth after hypothetical property sale and associated taxes/fees)
-- `saleCosts`: `stockTaxes` (includes `employmentIncome` used for calculation),
+  Buyers) - `tfsaFees`, `stocksFees` (for all scenarios) - `monthlyGains` or
+  `cumulativeGains`: - `tfsaGains`, `tfsaContribution`, `stocksGains`,
+  `newStocks` (for all scenarios) - `homeEquityGains` (for Buyers) - `assets`: -
+  `tfsa`, `stocks` (for all scenarios) - `securityDeposit` (for Renter) -
+  `homeEquity` (for Buyers) - `summary`: `balance` (monthly net worth) -
+  `summaryCumulative`: `balance` (cumulative net worth), `balanceAfterSelling`
+  (net worth after hypothetical property sale and associated taxes/fees) -
+  `saleCosts`: `stockTaxes` (includes `employmentIncome` used for calculation),
   `homeSellingCommission`, `homeSellingFixedFees`, `mortgagePenalty`,
-  `mortgageBalance` (hypothetical costs incurred upon selling)
-- `saleNetGains`: `stockSellingGains`, `tfsaSellingGains`, `homeSellingGains`,
-  `securityDeposit` (hypothetical gains realized upon selling)
-- `totals`: `monthlyExpenses`, `cumulativeExpenses`, `monthlyGains`,
-  `cumulativeGains`, `assets`, `saleCosts`, `saleNetGains` (sum of all variables
-  in each respective group; always emitted even when zero)
+  `mortgageBalance` (hypothetical costs incurred upon selling) - `saleNetGains`:
+  `stockSellingGains`, `tfsaSellingGains`, `homeSellingGains`, `securityDeposit`
+  (hypothetical gains realized upon selling) - `totals`: `monthlyExpenses`,
+  `cumulativeExpenses`, `monthlyGains`, `cumulativeGains`, `assets`,
+  `saleCosts`, `saleNetGains` (sum of all variables in each respective group;
+  always emitted even when zero)
 
 ### Examples
 
@@ -7595,6 +7648,7 @@ const results = simulateRentVsBuy({
     fixedRateAdjustment: -0.015,
     variableRateAdjustment: -0.005,
     firstTimeOwner: true,
+    investsSavings: true,
     purchaseFixedFees: 2000,
     startingAnnualMaintenanceCost: 2000,
     startingAnnualPropertyTax: 3000,
@@ -7603,6 +7657,7 @@ const results = simulateRentVsBuy({
     sellingFixedFees: 2000,
     sellingCommissionRate: 0.05,
     floorRate: 0.01,
+    investsSavings: true,
   },
   values,
   rates,
@@ -7666,7 +7721,8 @@ function simulateRentVsBuyMonteCarlo(
   month's rent (scenario-dependent).
 - **`parameters.buyer`**: Configuration for the buyer scenarios.
 - **`parameters.buyer.downPayment`**: The total down payment amount paid at the
-  start.
+  start. Must meet the minimum required down payment in Canada based on the
+  initial property appreciation value.
 - **`parameters.buyer.fixedRateAdjustment`**: The adjustment applied to the
   posted fixed mortgage rate (added to the posted rate).
 - **`parameters.buyer.variableRateAdjustment`**: The adjustment applied to the
@@ -7680,6 +7736,9 @@ function simulateRentVsBuyMonteCarlo(
   estate agents upon sale (e.g., `0.05` for 5%).
 - **`parameters.buyer.floorRate`**: The minimum interest rate (posted +
   adjustment) for mortgages.
+- **`parameters.buyer.investsSavings`**: Whether the buyer invests any monthly
+  savings (difference between their expenses and the renter's/max expenses) into
+  the stock market. If `false`, these savings are discarded.
 - **`parameters.choleskyMatrix`**: Mandatory Cholesky decomposition matrix for
   the 16 stochastic variables. Must be pre-computed using
   `getRentVsBuyCholeskyMatrix` from this library.
@@ -7755,6 +7814,11 @@ function simulateRentVsBuyMonteCarlo(
   `true`. Restricts which groups are included in the `monthlyIterations` output
   (e.g. `["assets", "summaryCumulative"]`), reducing memory usage. Also filters
   the shared column-major buffer used by `details.quantiles`.
+- **`options.adjustToInflation`**: The rate parameter used as a proxy for
+  inflation to discount all future dollar values back to Year 0 (today's
+  dollars). For example, setting this to `"sellingFixedFeesIncrease"` will use
+  the simulated path of that parameter to calculate the monthly discount factor.
+  Defaults to `undefined` (no adjustment).
 
 ### Returns
 
@@ -7764,17 +7828,19 @@ matrices, transferable via `postMessage`). Use `decodeMonteCarloWinners`,
 `decodeMonteCarloMonthlyQuantiles` from `@nshiab/journalism-finance` to restore
 object-array shapes.
 
-- `winners`: A `WinnersColumnar` with `monthIndex`, `amount` (`Float64Array`)
-  and `category` (`Uint8Array`) indicating which scenario won each iteration.
-  Decode with `decodeMonteCarloWinners`.
-- `values`: A `ColumnarResult` with stochastic path values per iteration
-  (enabled with `options.values`). Decode with `decodeMonteCarloValues`.
-- `details.monthlyIterations`: A `ColumnarResult` with raw monthly records per
+### Throws
+
+- **`Error`**: If the down payment is less than the minimum required down
+  payment in Canada. - `winners`: A `WinnersColumnar` with `monthIndex`,
+  `amount` (`Float64Array`) and `category` (`Uint8Array`) indicating which
+  scenario won each iteration. Decode with `decodeMonteCarloWinners`. -
+  `values`: A `ColumnarResult` with stochastic path values per iteration
+  (enabled with `options.values`). Decode with `decodeMonteCarloValues`. -
+  `details.monthlyIterations`: A `ColumnarResult` with raw monthly records per
   iteration (enabled with `options.details.iterations`). Decode with
-  `decodeMonteCarloMonthlyIterations`.
-- `details.monthlyQuantiles`: A `ColumnarResult` with pre-computed quantile
-  summaries (enabled with `options.details.quantiles`). Decode with
-  `decodeMonteCarloMonthlyQuantiles`.
+  `decodeMonteCarloMonthlyIterations`. - `details.monthlyQuantiles`: A
+  `ColumnarResult` with pre-computed quantile summaries (enabled with
+  `options.details.quantiles`). Decode with `decodeMonteCarloMonthlyQuantiles`.
 
 ### Examples
 
@@ -7806,9 +7872,11 @@ const results = simulateRentVsBuyMonteCarlo({
     fixedRateAdjustment: -0.015,
     variableRateAdjustment: -0.005,
     firstTimeOwner: true,
+    investsSavings: true,
     purchaseFixedFees: 2000,
     sellingCommissionRate: 0.05,
     floorRate: 0.01,
+    investsSavings: true,
   },
   stochasticParameters: {
     employmentIncome: { initialValue: 80000, mu: 0.03, sigma: 0.05 },

@@ -1,0 +1,23 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = noScientificNotation;
+/**
+ * Converts a number to a string, avoiding scientific notation for very small numbers.
+ * @param value The number to convert.
+ * @returns The string representation of the number.
+ */
+function noScientificNotation(value) {
+    const isNegative = value < 0;
+    const absValue = Math.abs(value);
+    if (absValue < 0.000001) {
+        let valueString = absValue.toFixed(20);
+        while (valueString.length > 1 &&
+            (valueString.at(-1) === "0" || valueString.at(-1) === ".")) {
+            valueString = valueString.slice(0, valueString.length - 1);
+        }
+        return isNegative ? `-${valueString}` : valueString;
+    }
+    else {
+        return `${value}`;
+    }
+}

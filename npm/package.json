@@ -1,0 +1,49 @@
+{
+  "name": "@nshiab/journalism",
+  "version": "2.8.9",
+  "description": "Useful TypeScript functions for journalism projects.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nshiab/journalism"
+  },
+  "license": "MIT",
+  "main": "./script/index.js",
+  "module": "./esm/index.js",
+  "exports": {
+    ".": {
+      "import": "./esm/index.js",
+      "require": "./script/index.js"
+    },
+    "./web": {
+      "import": "./esm/web.js",
+      "require": "./script/web.js"
+    }
+  },
+  "scripts": {},
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@google-cloud/storage": "^7.19.0",
+    "@google/genai": "^1.52.0",
+    "@napi-rs/canvas": "^1.0.0",
+    "@observablehq/plot": "^0.6.17",
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/d3-geo": "^3.1.0",
+    "adm-zip": "^0.5.17",
+    "cheerio": "^1.2.0",
+    "d3-array": "^3.2.4",
+    "d3-dsv": "^3.0.1",
+    "d3-geo": "^3.1.1",
+    "date-fns-tz": "^3.2.0",
+    "fflate": "^0.8.2",
+    "geotiff": "^3.0.5",
+    "google-auth-library": "^10.6.2",
+    "google-spreadsheet": "^5.2.0",
+    "iconv-lite": "^0.7.2",
+    "jstat": "^1.9.6",
+    "linkedom": "^0.18.12",
+    "ollama": "^0.6.3"
+  },
+  "_generatedBy": "dnt@dev"
+}

@@ -1,0 +1,69 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.default = drawChart;
+const getAxisX_js_1 = __importDefault(require("./getAxisX.js"));
+const getAxisY_js_1 = __importDefault(require("./getAxisY.js"));
+const getChartData_js_1 = __importDefault(require("./getChartData.js"));
+/**
+ * Draws a chart based on the specified type and data.
+ * @param type The type of chart to draw, either 'line' or 'dot'.
+ * @param drawFunction The function used to draw the specific chart elements (dots or lines).
+ * @param data The data to be plotted.
+ * @param x The key for the x-axis values in the data.
+ * @param y The key for the y-axis values in the data.
+ * @param color The color to use for the chart elements.
+ * @param options Configuration options for the chart, including dimensions, axis formatting, and title.
+ * @returns An object containing the chart data as a 2D array of strings and the x-axis labels.
+ */
+function drawChart(type, drawFunction, data, x, y, color, options) {
+    // Convert numeric min/max back to original format for formatting
+    // Check if the first data point's x value is a Date to determine the format
+    const isDateX = data.length > 0 && data[0][x] instanceof Date;
+    const xMinForFormat = isDateX ? new Date(options.xMin) : options.xMin;
+    const xMaxForFormat = isDateX ? new Date(options.xMax) : options.xMax;
+    const { xAxis, xTicks, xLabels, topFrame } = (0, getAxisX_js_1.default)(type, x, {
+        xMin: xMinForFormat,
+        xMax: xMaxForFormat,
+        formatX: options.formatX,
+        width: options.width,
+    });
+    const { yAxis } = (0, getAxisY_js_1.default)({
+        height: options.height,
+        formatY: options.formatY,
+        yMin: options.yMin,
+        yMax: options.yMax,
+    });
+    const chartData = (0, getChartData_js_1.default)(type, options.height, options.width);
+    drawFunction(data, y, options.yMin, options.yMax, color, chartData, {
+        width: options.width,
+        height: options.height,
+    });
+    const chart = [topFrame, ...chartData, xTicks, xAxis];
+    // We add the y-axis and y-ticks
+    for (let i = 0; i < chart.length; i++) {
+        chart[i].unshift(...yAxis[i]);
+    }
+    // We close the frame
+    for (let i = 0; i < chart.length; i++) {
+        if (i === 0) {
+            chart[i].push("\x1b[90m┐\x1b[0m");
+        }
+        else if (i > 0 && i < chart.length - 2) {
+            chart[i].push("\x1b[90m│\x1b[0m");
+        }
+        else if (i === chart.length - 2) {
+            chart[i].push("\x1b[90m┘\x1b[0m");
+        }
+    }
+    if (options.title) {
+        chart.unshift([
+            `${options.title}`
+                .padEnd(chart[0].length, " ")
+                .replace(options.title, `\x1b[2m${options.title}\x1b[0m`),
+        ]);
+    }
+    return { chart, xLabels };
+}
