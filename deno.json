@@ -1,6 +1,6 @@
 {
   "name": "@nshiab/journalism",
-  "version": "2.8.11",
+  "version": "2.8.12",
   "description": "Useful TypeScript functions for journalism projects.",
   "repository": "https://github.com/nshiab/journalism",
   "license": "MIT",
@@ -10,7 +10,7 @@
   },
   "tasks": {
     "all-tests": "deno install && deno fmt --check && deno lint && deno check src/index.ts && deno doc --lint src/index.ts && deno publish --allow-dirty --dry-run && deno task llm",
-    "llm": "deno doc --json src/index.ts > docs.json && deno run -A src/generateLlmMd.ts && deno fmt llm.md",
+    "llm": "deno run -A jsr:@nshiab/deno-docs-to-md && deno fmt llm.md",
     "patch": "deno task all-tests && deno run -A jsr:@nshiab/bump-version patch",
     "minor": "deno task all-tests && deno run -A jsr:@nshiab/bump-version minor",
     "major": "deno task all-tests && deno run -A jsr:@nshiab/bump-version major"
@@ -27,17 +27,17 @@
   },
   "nodeModulesDir": "auto",
   "imports": {
-    "@nshiab/journalism-ai": "jsr:@nshiab/journalism-ai@^1.2.20",
-    "@nshiab/journalism-climate": "jsr:@nshiab/journalism-climate@^1.0.8",
-    "@nshiab/journalism-dataviz": "jsr:@nshiab/journalism-dataviz@^1.0.12",
-    "@nshiab/journalism-extras": "jsr:@nshiab/journalism-extras@^1.0.6",
-    "@nshiab/journalism-finance": "jsr:@nshiab/journalism-finance@^1.5.24",
-    "@nshiab/journalism-format": "jsr:@nshiab/journalism-format@^1.1.7",
-    "@nshiab/journalism-geo": "jsr:@nshiab/journalism-geo@^1.0.6",
-    "@nshiab/journalism-google": "jsr:@nshiab/journalism-google@^1.0.7",
-    "@nshiab/journalism-statistics": "jsr:@nshiab/journalism-statistics@^1.5.2",
-    "@nshiab/journalism-web": "jsr:@nshiab/journalism-web@^1.0.5",
-    "@nshiab/journalism-web-scraping": "jsr:@nshiab/journalism-web-scraping@^2.0.2"
+    "@nshiab/journalism-ai": "jsr:@nshiab/journalism-ai@^1.2.21",
+    "@nshiab/journalism-climate": "jsr:@nshiab/journalism-climate@^1.0.9",
+    "@nshiab/journalism-dataviz": "jsr:@nshiab/journalism-dataviz@^1.0.14",
+    "@nshiab/journalism-extras": "jsr:@nshiab/journalism-extras@^1.0.8",
+    "@nshiab/journalism-finance": "jsr:@nshiab/journalism-finance@^1.5.26",
+    "@nshiab/journalism-format": "jsr:@nshiab/journalism-format@^1.1.9",
+    "@nshiab/journalism-geo": "jsr:@nshiab/journalism-geo@^1.0.10",
+    "@nshiab/journalism-google": "jsr:@nshiab/journalism-google@^1.0.10",
+    "@nshiab/journalism-statistics": "jsr:@nshiab/journalism-statistics@^1.5.5",
+    "@nshiab/journalism-web": "jsr:@nshiab/journalism-web@^1.0.8",
+    "@nshiab/journalism-web-scraping": "jsr:@nshiab/journalism-web-scraping@^2.0.4"
   },
   "compilerOptions": {
     "lib": [

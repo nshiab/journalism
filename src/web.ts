@@ -1,12 +1,22 @@
 /**
- * This module provides a collection of functions to be used in web applications.
+ * @module
  *
- * To import a function, use:
+ * The Journalism library
+ *
+ * To install the library with Deno, use:
+ * ```bash
+ * deno add jsr:@nshiab/journalism
+ * ```
+ *
+ * To install the library with Node.js, use:
+ * ```bash
+ * npx jsr add @nshiab/journalism
+ * ```
+ *
+ * To import a function from the web entry point, use:
  * ```ts
  * import { functionName } from "@nshiab/journalism/web";
  * ```
- *
- * @module
  */
 
 export * from "@nshiab/journalism-climate/web";

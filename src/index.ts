@@ -17,6 +17,11 @@
  * ```ts
  * import { functionName } from "@nshiab/journalism";
  * ```
+ *
+ * To import a function from the web entry point, use:
+ * ```ts
+ * import { functionName } from "@nshiab/journalism/web";
+ * ```
  */
 
 export * from "@nshiab/journalism-ai";
