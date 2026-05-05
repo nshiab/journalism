@@ -1,4 +1,0 @@
-import type { Persona } from "./types/persona.js";
-import type { MortgagePayment } from "./types/mortgagePayment.js";
-export default function computeSale(monthIndex: number, persona: Persona, employmentIncome: number, mortgagePayment: MortgagePayment | null, currentPostedRates: Record<number, number> | null, mortgageType: "fixed" | "variable" | null, winVariableOnly: boolean, numberOfMonths: number, province: "Alberta" | "British Columbia" | "Manitoba" | "New Brunswick" | "Newfoundland and Labrador" | "Nova Scotia" | "Northwest Territories" | "Nunavut" | "Ontario" | "Prince Edward Island" | "Quebec" | "Saskatchewan" | "Yukon", couple?: boolean, salesTaxMultiplier?: number): void;
-//# sourceMappingURL=computeSale.d.ts.map
