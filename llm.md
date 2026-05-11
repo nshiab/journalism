@@ -4390,11 +4390,13 @@ function logBarChart<T extends Record<string, unknown>>(
   values: keyof T,
   options?: {
     formatLabels?: (d: T[labels]) => string;
-    formatValues?: (d: T[values]) => string;
+    formatValues?: (d: number) => string;
     width?: number;
     title?: string;
     totalLabel?: string;
     compact?: boolean;
+    showPercentages?: boolean;
+    showTotal?: boolean;
   },
 ): void;
 ```
@@ -4415,7 +4417,7 @@ function logBarChart<T extends Record<string, unknown>>(
   chart. It receives the raw label value as input and should return a string.
   Defaults to converting the label to a string.
 - **`options.formatValues`**: A function to format the numerical values
-  displayed next to the bars. It receives the raw numerical value as input and
+  displayed next to the bars. It receives the numerical value as input and
   should return a string. Defaults to formatting the number using `formatNumber`
   (which adds commas for thousands, etc.).
 - **`options.width`**: The maximum width of the bars in characters. The bars
@@ -4426,9 +4428,14 @@ function logBarChart<T extends Record<string, unknown>>(
   generated.
 - **`options.totalLabel`**: An optional label to display for the total sum of
   all values at the bottom of the chart. If provided, the sum of all `values`
-  will be calculated and displayed next to this label.
+  will be calculated and displayed next to this label. This also enables the
+  display of the total row.
 - **`options.compact`**: If `true`, the chart will be rendered in a more compact
   format, reducing vertical spacing between bars. Defaults to `false`.
+- **`options.showPercentages`**: If `true`, the percentage of the total for each
+  bar will be displayed next to its value. Defaults to `false`.
+- **`options.showTotal`**: If `true`, the total sum of all values will be
+  displayed above the chart. Defaults to `false`.
 
 ### Examples
 
@@ -4444,7 +4451,7 @@ logBarChart(salesData, "region", "sales", { title: "Regional Sales Overview" });
 ```
 
 ```ts
-// Display product popularity with custom value formatting and a compact layout.
+// Display product popularity with custom value formatting, a compact layout, and show percentages.
 const productPopularity = [
   { product: "Laptop", views: 5000 },
   { product: "Mouse", views: 1500 },
@@ -4455,6 +4462,7 @@ logBarChart(productPopularity, "product", "views", {
   width: 30,
   compact: true,
   totalLabel: "Total Views",
+  showPercentages: true,
 });
 ```
 
@@ -4485,7 +4493,7 @@ function logDotChart<T extends Record<string, unknown>>(
   y: keyof T,
   options?: {
     formatX?: (d: T[x]) => string;
-    formatY?: (d: T[y]) => string;
+    formatY?: (d: number) => string;
     smallMultiples?: keyof T;
     fixedScales?: boolean;
     smallMultiplesPerRow?: number;
@@ -4511,7 +4519,7 @@ function logDotChart<T extends Record<string, unknown>>(
   data point's x value is a Date, it defaults to formatting the date as
   "YYYY-MM-DD".
 - **`options.formatY`**: A function to format the y-axis values for display. It
-  receives the raw y-value as input and should return a string.
+  receives the numerical y-value as input and should return a string.
 - **`options.smallMultiples`**: A key in the data objects to create small
   multiples (separate charts) for each unique value of this key. This is useful
   for comparing trends across different categories.
@@ -4541,7 +4549,7 @@ const timeSeriesData = [
 
 logDotChart(timeSeriesData, "date", "value", {
   formatX: (d) => (d as Date).toISOString().slice(0, 10),
-  formatY: (d) => "$" + (d as number).toString(),
+  formatY: (d) => "$" + d.toString(),
   title: "Monthly Sales Trend",
 });
 ```
@@ -4561,7 +4569,7 @@ const multiCategoryData = [
 
 logDotChart(multiCategoryData, "date", "value", {
   formatX: (d) => (d as Date).toISOString().slice(0, 10),
-  formatY: (d) => "$" + (d as number).toString(),
+  formatY: (d) => "$" + d.toString(),
   smallMultiples: "category",
   smallMultiplesPerRow: 2,
   fixedScales: true,
@@ -4599,7 +4607,7 @@ function logLineChart<T extends Record<string, unknown>>(
   y: keyof T,
   options?: {
     formatX?: (d: T[x]) => string;
-    formatY?: (d: T[y]) => string;
+    formatY?: (d: number) => string;
     smallMultiples?: keyof T;
     fixedScales?: boolean;
     smallMultiplesPerRow?: number;
@@ -4616,6 +4624,7 @@ function logLineChart<T extends Record<string, unknown>>(
   object should contain keys corresponding to the `x` and `y` parameters.
 - **`x`**: The key in the data objects whose values will be plotted on the
   x-axis. Values must be numbers or Date objects.
+- **`labels`**: The key for labels in the data.
 - **`y`**: The key in the data objects whose values will be plotted on the
   y-axis. Values must be numbers.
 - **`options`**: An optional object to customize the chart's appearance and
@@ -4625,7 +4634,7 @@ function logLineChart<T extends Record<string, unknown>>(
   data point's x value is a Date, it defaults to formatting the date as
   "YYYY-MM-DD".
 - **`options.formatY`**: A function to format the y-axis values for display. It
-  receives the raw y-value as input and should return a string.
+  receives the numerical y-value as input and should return a string.
 - **`options.smallMultiples`**: A key in the data objects to create small
   multiples (separate charts) for each unique value of this key. This is useful
   for comparing trends across different categories.
@@ -4674,7 +4683,7 @@ const multiCategoryData = [
 
 logLineChart(multiCategoryData, "date", "value", {
   formatX: (d) => (d as Date).toLocaleDateString(),
-  formatY: (d) => "$" + (d as number).toString(),
+  formatY: (d) => "$" + d.toString(),
   smallMultiples: "category",
   smallMultiplesPerRow: 2,
   fixedScales: true,
