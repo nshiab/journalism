@@ -6648,6 +6648,7 @@ function simulateRentVsBuy(
     ) => void;
     winVariable?: "balance" | "balanceAfterSelling" | "assets";
     groups?: string[];
+    variables?: string[];
     adjustToInflation?: RentVsBuyRates;
   },
 ): (
@@ -6671,7 +6672,7 @@ function simulateRentVsBuy(
         | "downPayment"
         | "purchaseFixedFees"
         | "landTransferTax"
-        | "insurancePremium"
+        | "insurancePremiumTax"
         | "tfsaFees"
         | "stocksFees";
       effectiveInterestRate?: number;
@@ -6717,6 +6718,28 @@ function simulateRentVsBuy(
         | "securityDeposit";
     }
     | {
+      group: "monthlyRecurringExpenses";
+      variable:
+        | "rent"
+        | "insurance"
+        | "mortgageCapital"
+        | "mortgageInterests"
+        | "maintenance"
+        | "propertyTax"
+        | "condoFees"
+        | "tfsaFees"
+        | "stocksFees";
+    }
+    | {
+      group: "monthlyNonRecurringExpenses";
+      variable:
+        | "downPayment"
+        | "purchaseFixedFees"
+        | "landTransferTax"
+        | "insurancePremiumTax"
+        | "securityDeposit";
+    }
+    | {
       group: "totals";
       variable:
         | "monthlyExpenses"
@@ -6725,7 +6748,9 @@ function simulateRentVsBuy(
         | "cumulativeGains"
         | "assets"
         | "saleCosts"
-        | "saleNetGains";
+        | "saleNetGains"
+        | "monthlyRecurringExpenses"
+        | "monthlyNonRecurringExpenses";
     }
   )
 )[];
@@ -6788,8 +6813,9 @@ function simulateRentVsBuy(
   lifestyle inflation or other spending).
 - **`parameters.values`**: Shared absolute values over the simulation period.
   Each array should have a length of `numberOfYears * 12`.
-- **`parameters.values.employmentIncome`**: Monthly employment income used for
-  calculating income taxes on investment gains.
+- **`parameters.values.employmentIncome`**: Annual employment income at each
+  simulated month, used for calculating marginal income tax rates on investment
+  gains.
 - **`parameters.values.fiveYearInterestRates`**: Monthly 5-year fixed mortgage
   interest rates.
 - **`parameters.values.fourYearInterestRates`**: Monthly 4-year fixed mortgage
@@ -6837,13 +6863,23 @@ function simulateRentVsBuy(
   `winVariable` entry) per category is still pushed to the results array for
   winner extraction.
 - **`options.groups`**: Internal filter used by `simulateRentVsBuyMonteCarlo`
-  via `details.iterationsGroups`. Restricts which groups are emitted by
-  `onRecord` and pushed to results.
+  via `details.filterGroups`. Restricts which groups are emitted by `onRecord`
+  and pushed to results.
+- **`options.variables`**: Internal filter used by `simulateRentVsBuyMonteCarlo`
+  via `details.filterVariables`. Restricts which individual variables within
+  allowed groups are emitted by `onRecord`. An empty array is treated as no
+  filter.
 - **`options.adjustToInflation`**: The rate parameter used as a proxy for
-  inflation to discount all future dollar values back to Year 0 (today's
-  dollars). For example, setting this to `"sellingFixedFeesIncrease"` will use
-  that parameter's values to calculate the monthly discount factor. Defaults to
-  `undefined` (no adjustment).
+  inflation to express future dollar values in today's constant dollars. When
+  set (e.g. to `"sellingFixedFeesIncrease"`), point-in-time metrics (like
+  `monthlyExpenses`, `assets`, and `balance`) are discounted by the current
+  month's inflation factor. Cumulative totals (like `cumulativeExpenses` and
+  `cumulativeGains`) accumulate real values incrementally — meaning each nominal
+  monthly contribution is discounted before being added to the running sum.
+  One-time upfront costs paid at month 0 (`downPayment`, `purchaseFixedFees`,
+  `landTransferTax`, `insurancePremiumTax`, `securityDeposit`) are **not**
+  discounted because their real value already equals their nominal value.
+  Defaults to `undefined` (no adjustment).
 
 ### Returns
 
@@ -6857,7 +6893,7 @@ buyerVariable).
   for a given month, categorized by: - `monthlyExpenses` or
   `cumulativeExpenses`: - `rent`, `insurance`, `securityDeposit` (for Renter) -
   `mortgageCapital`, `mortgageInterests`, `maintenance`, `propertyTax`,
-  `condoFees`, `downPayment`, `purchaseFixedFees`, `insurancePremium` (for
+  `condoFees`, `downPayment`, `purchaseFixedFees`, `insurancePremiumTax` (for
   Buyers) - `tfsaFees`, `stocksFees` (for all scenarios) - `monthlyGains` or
   `cumulativeGains`: - `tfsaGains`, `tfsaContribution`, `stocksGains`,
   `newStocks` (for all scenarios) - `homeEquityGains` (for Buyers) - `assets`: -
@@ -6869,10 +6905,18 @@ buyerVariable).
   `homeSellingCommission`, `homeSellingFixedFees`, `mortgagePenalty`,
   `mortgageBalance` (hypothetical costs incurred upon selling) - `saleNetGains`:
   `stockSellingGains`, `tfsaSellingGains`, `homeSellingGains`, `securityDeposit`
-  (hypothetical gains realized upon selling) - `totals`: `monthlyExpenses`,
-  `cumulativeExpenses`, `monthlyGains`, `cumulativeGains`, `assets`,
-  `saleCosts`, `saleNetGains` (sum of all variables in each respective group;
-  always emitted even when zero)
+  (hypothetical gains realized upon selling) - `monthlyRecurringExpenses`:
+  `rent`, `insurance`, `mortgageCapital`, `mortgageInterests`, `maintenance`,
+  `propertyTax`, `condoFees`, `tfsaFees`, `stocksFees` — same values as the
+  corresponding `monthlyExpenses` variables, restricted to costs that recur
+  every month. - `monthlyNonRecurringExpenses`: `downPayment`,
+  `purchaseFixedFees`, `landTransferTax`, `insurancePremiumTax`,
+  `securityDeposit` — same values as the corresponding `monthlyExpenses`
+  variables, restricted to one-time upfront costs (nonzero only at month 0). -
+  `totals`: `monthlyExpenses`, `cumulativeExpenses`, `monthlyGains`,
+  `cumulativeGains`, `assets`, `saleCosts`, `saleNetGains`,
+  `monthlyRecurringExpenses`, `monthlyNonRecurringExpenses` (sum of all
+  variables in each respective group; always emitted even when zero)
 
 ### Examples
 
@@ -7058,36 +7102,75 @@ function simulateRentVsBuyMonteCarlo(
   simulations.
 - **`options.verboseStep`**: The frequency of progress logging. For example,
   setting this to `50` will log progress every 50 iterations. Defaults to `1`.
-- **`options.values`**: If `true`, the function will capture and return detailed
-  monthly financial data (such as asset balances and net gains) for every
-  iteration of the simulation. Be cautious with high iteration counts as this
-  can consume significant memory.
+- **`options.values`**: If `true`, captures the stochastic path values for all
+  16 variables (e.g. employment income, market returns, interest rates) across
+  all iterations. Dollar-amount paths (employment income, rent, insurances,
+  maintenance, property tax, condo fees, appreciation, selling fixed fees) are
+  expressed in real (inflation-adjusted) dollars when
+  `options.adjustToInflation` is set, using the same deflation factor as
+  `details`. Rate paths (market returns, all six interest rates) are always
+  nominal. Decode with `decodeMonteCarloValues`. Be cautious with high iteration
+  counts as this can consume significant memory.
 - **`options.details`**: When provided, enables detailed monthly data
   collection. Both sub-options share the same internal column-major buffer, so
   enabling both together is more memory-efficient than the sum of their
   individual costs.
 - **`options.details.iterations`**: If `true`, captures and returns the raw
   monthly financial data for every variable, group, and category for each
-  individual iteration. Requires `details.iterationsGroups` to be set and
-  non-empty — throws otherwise. Each record includes `iteration` (0-based
-  index), `category`, `group`, `variable`, `monthIndex`, and `amount`. Useful
-  for custom aggregations or visualization of individual paths. Be aware that
-  this can produce a very large number of records (iterations × months ×
-  variables × 3 categories), so use `iterationsGroups` to limit scope.
+  individual iteration. Requires `details.filterGroups` to be set and non-empty
+  — throws otherwise. Each record includes `iteration` (0-based index),
+  `category`, `group`, `variable`, `monthIndex`, and `amount`. Useful for custom
+  aggregations or visualization of individual paths. Be aware that this can
+  produce a very large number of records (iterations × months × variables × 3
+  categories), so use `filterGroups` and `filterVariables` to limit scope.
 - **`options.details.quantiles`**: When provided, pre-computes the specified
   quantile levels (e.g. `[0, 0.5, 1]` for min/median/max) across all iterations
   for every variable/group/category/month combination. Layout:
   `data[key][qIdx * cols + monthIndex]`. Decode with
   `decodeMonteCarloMonthlyQuantiles`.
-- **`options.details.iterationsGroups`**: Required when `details.iterations` is
+- **`options.details.firstMonth`**: If `true`, captures data for all available
+  groups and variables for the first month (monthIndex 0) during the first
+  iteration. Returned as an array of objects in `details.firstMonth`. This
+  capture is independent of `filterGroups` and `filterVariables`, making it
+  useful for a complete manifest of initial costs.
+- **`options.details.filterGroups`**: Required when `details.iterations` is
   `true`. Restricts which groups are included in the `monthlyIterations` output
   (e.g. `["assets", "summaryCumulative"]`), reducing memory usage. Also filters
-  the shared column-major buffer used by `details.quantiles`.
+  the shared column-major buffer used by `details.quantiles`. Available
+  groups: - `monthlyExpenses`: Monthly cash outlays (rent, mortgage, taxes,
+  fees, etc.). - `cumulativeExpenses`: Total cash outlays from start to current
+  month. - `monthlyRecurringExpenses`: Recurring monthly costs (same as
+  monthlyExpenses but excluding one-time items). -
+  `monthlyNonRecurringExpenses`: One-time costs (down payment, closing costs). -
+  `monthlyGains`: Monthly asset appreciation and contribution (market gains,
+  home equity). - `cumulativeGains`: Total accumulated gains from start to
+  current month. - `assets`: Current value of assets (stocks, TFSA, home equity,
+  deposit). - `summary`: Point-in-time metrics like `balance`. -
+  `summaryCumulative`: Final snapshot metrics like `balanceAfterSelling`. -
+  `saleCosts`: Costs incurred upon selling (taxes, commission, penalties). -
+  `saleNetGains`: Gains realized upon selling. - `totals`: Group-level sums of
+  all variables in each of the above groups (e.g., `variable: "monthlyExpenses"`
+  under `group: "totals"`).
+- **`options.details.filterVariables`**: Optional finer-grained filter applied
+  within the allowed groups. Restricts which individual variables are stored in
+  the columnar buffer (e.g. `["balance", "homeEquity"]`), reducing memory usage.
+  Also filters the shared column-major buffer used by `details.quantiles`. An
+  empty array is treated as no filter (all variables are stored). Commonly used
+  variables: - `rent`, `mortgageCapital`, `mortgageInterests`, `maintenance`,
+  `propertyTax`, `condoFees` (expenses). - `tfsa`, `stocks`, `homeEquity`
+  (assets). - `balance`, `balanceAfterSelling` (summary). -
+  `monthlyRecurringExpenses`, `monthlyExpenses`, `assets` (totals).
 - **`options.adjustToInflation`**: The rate parameter used as a proxy for
-  inflation to discount all future dollar values back to Year 0 (today's
-  dollars). For example, setting this to `"sellingFixedFeesIncrease"` will use
-  the simulated path of that parameter to calculate the monthly discount factor.
-  Defaults to `undefined` (no adjustment).
+  inflation to express future dollar values in today's constant dollars. When
+  set (e.g. to `"sellingFixedFeesIncrease"`), point-in-time metrics (like
+  `monthlyExpenses`, `assets`, and `balance`) are discounted by the current
+  month's simulated inflation factor. Cumulative totals (like
+  `cumulativeExpenses` and `cumulativeGains`) accumulate real values
+  incrementally — meaning each nominal monthly contribution is discounted before
+  being added to the running sum. One-time upfront costs paid at month 0
+  (`downPayment`, `purchaseFixedFees`, `landTransferTax`, `insurancePremium`,
+  `securityDeposit`) are **not** discounted because their real value already
+  equals their nominal value. Defaults to `undefined` (no adjustment).
 
 ### Returns
 
@@ -7097,19 +7180,22 @@ matrices, transferable via `postMessage`). Use `decodeMonteCarloWinners`,
 `decodeMonteCarloMonthlyQuantiles` from `@nshiab/journalism-finance` to restore
 object-array shapes.
 
+- `winners`: A `WinnersColumnar` with `monthIndex`, `amount` (`Float64Array`)
+  and `category` (`Uint8Array`) indicating which scenario won each iteration.
+  Decode with `decodeMonteCarloWinners`.
+- `values`: A `ColumnarResult` with stochastic path values per iteration
+  (enabled with `options.values`). Decode with `decodeMonteCarloValues`.
+- `details.monthlyIterations`: A `ColumnarResult` with raw monthly records per
+  iteration (enabled with `options.details.iterations`). Decode with
+  `decodeMonteCarloMonthlyIterations`.
+- `details.monthlyQuantiles`: A `ColumnarResult` with pre-computed quantile
+  summaries (enabled with `options.details.quantiles`). Decode with
+  `decodeMonteCarloMonthlyQuantiles`.
+
 ### Throws
 
 - **`Error`**: If the down payment is less than the minimum required down
-  payment in Canada. - `winners`: A `WinnersColumnar` with `monthIndex`,
-  `amount` (`Float64Array`) and `category` (`Uint8Array`) indicating which
-  scenario won each iteration. Decode with `decodeMonteCarloWinners`. -
-  `values`: A `ColumnarResult` with stochastic path values per iteration
-  (enabled with `options.values`). Decode with `decodeMonteCarloValues`. -
-  `details.monthlyIterations`: A `ColumnarResult` with raw monthly records per
-  iteration (enabled with `options.details.iterations`). Decode with
-  `decodeMonteCarloMonthlyIterations`. - `details.monthlyQuantiles`: A
-  `ColumnarResult` with pre-computed quantile summaries (enabled with
-  `options.details.quantiles`). Decode with `decodeMonteCarloMonthlyQuantiles`.
+  payment in Canada.
 
 ### Examples
 

@@ -1,11 +1,11 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@nshiab/journalism-ai@^1.2.22": "1.2.22",
+    "jsr:@nshiab/journalism-ai@^1.2.23": "1.2.23",
     "jsr:@nshiab/journalism-climate@^1.0.9": "1.0.9",
     "jsr:@nshiab/journalism-dataviz@^1.0.16": "1.0.16",
     "jsr:@nshiab/journalism-extras@^1.0.8": "1.0.8",
-    "jsr:@nshiab/journalism-finance@^1.5.27": "1.5.27",
+    "jsr:@nshiab/journalism-finance@^1.5.39": "1.5.39",
     "jsr:@nshiab/journalism-format@^1.1.3": "1.1.9",
     "jsr:@nshiab/journalism-format@^1.1.5": "1.1.9",
     "jsr:@nshiab/journalism-format@^1.1.7": "1.1.9",
@@ -39,8 +39,8 @@
     "npm:ollama@~0.6.3": "0.6.3"
   },
   "jsr": {
-    "@nshiab/journalism-ai@1.2.22": {
-      "integrity": "90c9135fde25ba18c8539187642dc6c2adaa6839a4fdd2ca7c24bf970e975cc2",
+    "@nshiab/journalism-ai@1.2.23": {
+      "integrity": "18b231efa5800f91c732879deaeb55e2c4ff93311c25d5bf67188d4aafc9ab4a",
       "dependencies": [
         "jsr:@nshiab/journalism-format@^1.1.9",
         "npm:@google/genai",
@@ -74,8 +74,8 @@
         "npm:iconv-lite"
       ]
     },
-    "@nshiab/journalism-finance@1.5.27": {
-      "integrity": "237c8390c0c668215a49e6346e212bccd229d232a33a51e2fb870c344af8f99d",
+    "@nshiab/journalism-finance@1.5.39": {
+      "integrity": "8e876606c675b549c5750a2964b75debf2a55f95cd97ec3c939681baec01d8bd",
       "dependencies": [
         "jsr:@nshiab/journalism-format@^1.1.5",
         "jsr:@nshiab/journalism-statistics@^1.5.1"
@@ -1381,11 +1381,11 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@nshiab/journalism-ai@^1.2.22",
+      "jsr:@nshiab/journalism-ai@^1.2.23",
       "jsr:@nshiab/journalism-climate@^1.0.9",
       "jsr:@nshiab/journalism-dataviz@^1.0.16",
       "jsr:@nshiab/journalism-extras@^1.0.8",
-      "jsr:@nshiab/journalism-finance@^1.5.27",
+      "jsr:@nshiab/journalism-finance@^1.5.39",
       "jsr:@nshiab/journalism-format@^1.1.9",
       "jsr:@nshiab/journalism-geo@^1.0.10",
       "jsr:@nshiab/journalism-google@^1.0.10",
