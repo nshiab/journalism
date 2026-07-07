@@ -10,8 +10,7 @@
     "jsr:@nshiab/journalism-format@^1.1.5": "1.1.9",
     "jsr:@nshiab/journalism-format@^1.1.7": "1.1.9",
     "jsr:@nshiab/journalism-format@^1.1.9": "1.1.9",
-    "jsr:@nshiab/journalism-geo@^1.0.21": "1.0.21",
-    "jsr:@nshiab/journalism-geo@^1.0.4": "1.0.21",
+    "jsr:@nshiab/journalism-geo@^1.0.4": "1.0.22",
     "jsr:@nshiab/journalism-google@^1.0.10": "1.0.10",
     "jsr:@nshiab/journalism-statistics@^1.5.1": "1.5.5",
     "jsr:@nshiab/journalism-statistics@^1.5.5": "1.5.5",
@@ -20,6 +19,7 @@
     "npm:@google-cloud/storage@^7.19.0": "7.21.0",
     "npm:@google/genai@^2.0.1": "2.10.0",
     "npm:@napi-rs/canvas@1": "1.0.2",
+    "npm:@nshiab/journalism-geo@1.0.22": "1.0.22",
     "npm:@observablehq/plot@~0.6.17": "0.6.17",
     "npm:@resvg/resvg-js@^2.6.2": "2.6.2",
     "npm:@types/d3-geo@^3.1.0": "3.1.0",
@@ -89,8 +89,8 @@
         "npm:date-fns-tz"
       ]
     },
-    "@nshiab/journalism-geo@1.0.21": {
-      "integrity": "43c81bb7787ce373f06e0dd64ff9fadc406ef15c193b56963ee9bdd07d494019",
+    "@nshiab/journalism-geo@1.0.22": {
+      "integrity": "0518f176fb2fa0d18ceaf03ed25fa4492cd5c2cae1fd296b605e852856c47673",
       "dependencies": [
         "npm:d3-array",
         "npm:d3-geo",
@@ -245,6 +245,14 @@
     },
     "@nodable/entities@2.2.0": {
       "integrity": "sha512-9uGyhaQavEUMC8AIddIjau4NsnsXhou+j5sBAGojCM1oxmQpVKTWR/9JxABD6UAv12vpIms55fPZKFQEhG6uBg=="
+    },
+    "@nshiab/journalism-geo@1.0.22": {
+      "integrity": "sha512-69uQYb+PClxXjUJnVJxNspV553bLhvkjZL6TAnOQApYnWXIgzTPk+S5JLEGdoSQUBzaiCGaz9/phKhpifm479Q==",
+      "dependencies": [
+        "d3-array",
+        "d3-geo",
+        "geotiff"
+      ]
     },
     "@observablehq/plot@0.6.17": {
       "integrity": "sha512-/qaXP/7mc4MUS0s4cPPFASDRjtsWp85/TbfsciqDgU1HwYixbSbbytNuInD8AcTYC3xaxACgVX06agdfQy9W+g==",
@@ -1389,11 +1397,11 @@
       "jsr:@nshiab/journalism-extras@^1.0.8",
       "jsr:@nshiab/journalism-finance@^1.5.40",
       "jsr:@nshiab/journalism-format@^1.1.9",
-      "jsr:@nshiab/journalism-geo@^1.0.21",
       "jsr:@nshiab/journalism-google@^1.0.10",
       "jsr:@nshiab/journalism-statistics@^1.5.5",
       "jsr:@nshiab/journalism-web-scraping@^2.0.4",
-      "jsr:@nshiab/journalism-web@^1.0.8"
+      "jsr:@nshiab/journalism-web@^1.0.8",
+      "npm:@nshiab/journalism-geo@1.0.22"
     ]
   }
 }

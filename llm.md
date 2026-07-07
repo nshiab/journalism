@@ -537,138 +537,111 @@ console.log(plotPoints);
 // ]
 ```
 
-## askAI
+## askGemini
 
-Interacts with a Large Language Model (LLM) to perform a wide range of tasks,
-from answering questions to analyzing multimedia content. This function serves
-as a versatile interface to various AI models, including Google's Gemini and
-local models via Ollama.
+Interacts with Google's Gemini models to perform a wide range of tasks, from
+answering questions to analyzing multimedia content.
 
-The function is designed to be highly configurable, allowing you to specify the
-AI model, credentials, and various input types such as text, images, audio,
-video, and even web pages. It also includes features for caching responses to
-improve performance and reduce costs, as well as for testing and cleaning the
-AI's output.
+**Authentication**: set `AI_KEY` (API key) or `AI_PROJECT` + `AI_LOCATION`
+(Vertex AI) environment variables, or pass credentials directly via options.
 
-**Authentication**: The function can be authenticated using environment
-variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`, `AI_MODEL`) or by passing
-credentials directly in the `options` object. Options will always take
-precedence over environment variables.
+**Caching**: set `cache: true` to persist responses in `.journalism-cache`.
 
-**Local Models**: To use a local model with Ollama, set the `OLLAMA` environment
-variable to `true` and ensure that Ollama is running on your machine. You will
-also need to specify the model name using the `AI_MODEL` environment variable or
-the `model` option. If you want your Ollama instance to be used, you can pass an
-instance of the `Ollama` class as the `ollama` option.
+**File handling**: pass files via `files: [{ path, type }]`. Local paths and
+`gs://` GCS URLs are both supported for images, audio, video, PDF, and text.
 
-**Caching**: Caching is a powerful feature that saves the AI's response to a
-local directory (`.journalism-cache`). When the same request is made again, the
-cached response is returned instantly, saving time and API costs. To enable
-caching, set the `cache` option to `true`.
+**Web Search Grounding**: set `webSearch: true` to let the model search the web
+in real time (extra API cost).
 
-**File Handling**: The function can process both local files and files stored in
-Google Cloud Storage (GCS). Simply provide the file path or the `gs://` URL.
-Note that Ollama only supports local files.
-
-**Web Search Grounding**: For Gemini models, you can enable web search grounding
-by setting `webSearch` to `true`. This allows the AI to search the web for
-current information and ground its responses in real-time data. Note that this
-feature incurs additional API costs.
-
-Temperature is set at 0 by default to encourage more deterministic responses.
-Safety filters are enabled by default (default is `true`), but they are disabled
-by default when using Vertex AI (default is `false`). Users can always override
-this default with the `safetyEnabled` option.
+Safety filters are on by default (`true`) but off when using Vertex AI
+(`false`); override with `safetyEnabled`.
 
 ### Signature
 
 ```typescript
-async function askAI(
+async function askGemini(
   prompt: string,
-  options: {
+  options?: {
     systemPrompt?: string;
     model?: string;
     apiKey?: string;
     vertex?: boolean;
     project?: string;
     location?: string;
-    ollama?: boolean | any;
     webSearch?: boolean;
-    HTMLFrom?: string | string[];
-    screenshotFrom?: string | string[];
-    image?: string | string[];
-    video?: string | string[];
-    audio?: string | string[];
-    pdf?: string | string[];
-    text?: string | string[];
-    returnJson?: boolean;
-    parseJson?: boolean;
+    files?: {
+      path: string;
+      type: "image" | "video" | "audio" | "pdf" | "text";
+    }[];
     schemaJson?: unknown;
-    verbose?: boolean;
     cache?: boolean;
-    test?: ((response: unknown) => void) | ((response: unknown) => void)[];
-    clean?: (response: unknown) => unknown;
-    contextWindow?: number;
-    thinkingBudget?: number;
     thinkingLevel?: "minimal" | "low" | "medium" | "high";
-    includeThoughts?: boolean;
-    temperature?: number;
     safetyEnabled?: boolean;
-    detailedResponse: true;
     geminiParameters?: any;
-    ollamaParameters?: any;
-    metrics?: {
-      totalCost: number;
-      totalInputTokens: number;
-      totalOutputTokens: number;
-      totalRequests: number;
-    };
   },
 ): Promise<
   {
     response: unknown;
-    rawResponse: unknown;
     fromCache: boolean;
     prompt: string;
+    systemPrompt: string | null;
+    webSearch: boolean;
+    thinkingLevel: "minimal" | "low" | "medium" | "high" | null;
+    safetyEnabled: boolean;
+    files: {
+      path: string;
+      type: "image" | "video" | "audio" | "pdf" | "text";
+    }[];
     promptTokenCount: number;
     outputTokenCount: number;
     totalTokens: number;
     tokensPerSecond: number;
-    estimatedCost?: number;
+    estimatedCost: number | null;
     durationMs: number;
     model: string;
-    thoughts: string;
+    thoughts: string | null;
     thoughtsTokenCount: number;
   }
 >;
 ```
 
+### Parameters
+
+- **`prompt`**: The primary text prompt.
+- **`options.systemPrompt`**: Optional system prompt.
+- **`options.model`**: Model name; defaults to `AI_MODEL` env var.
+- **`options.apiKey`**: API key; defaults to `AI_KEY` env var.
+- **`options.vertex`**: Use Vertex AI authentication.
+- **`options.project`**: GCP project ID; defaults to `AI_PROJECT` env var.
+- **`options.location`**: GCP location; defaults to `AI_LOCATION` env var.
+- **`options.webSearch`**: Enable web search grounding (extra cost).
+- **`options.files`**: Files to send alongside the prompt, in order. Each entry
+  has a `path` (local path or `gs://` URL) and a `type` (`"image"`, `"video"`,
+  `"audio"`, `"pdf"`, or `"text"`). All files are appended as separate content
+  parts after the prompt.
+- **`options.schemaJson`**: Zod JSON schema for structured output.
+- **`options.cache`**: Cache the response in `.journalism-cache`.
+- **`options.thinkingLevel`**: Thinking level: "minimal" | "low" | "medium" |
+  "high".
+- **`options.safetyEnabled`**: Override safety filter defaults.
+- **`options.geminiParameters`**: Extra params merged into `generateContent`.
+
 ### Examples
 
 ```ts
-// Basic usage: Get a simple text response from the AI.
-// Assumes credentials are set in environment variables.
-const capital = await askAI("What is the capital of France?");
-console.log(capital); // "Paris"
+const result = await askGemini("What is the capital of France?");
+console.log(result.response); // "Paris"
 ```
 
 ```ts
-// Enable caching to save the response and avoid repeated API calls.
-// A .journalism-cache directory will be created.
-const cachedCapital = await askAI("What is the capital of France?", {
-  cache: true,
-});
-```
-
-```ts
-// Pass API credentials directly as options.
-const response = await askAI("What is the capital of France?", {
+// Pass credentials directly.
+const response = await askGemini("What is the capital of France?", {
   apiKey: "your_api_key",
-  model: "gemini-1.5-flash",
+  model: "gemini-3.5-flash",
 });
 
-// Use Vertex AI for authentication.
-const vertexResponse = await askAI("What is the capital of France?", {
+// Vertex AI.
+const vertexResponse = await askGemini("What is the capital of France?", {
   vertex: true,
   project: "your_project_id",
   location: "us-central1",
@@ -676,274 +649,51 @@ const vertexResponse = await askAI("What is the capital of France?", {
 ```
 
 ```ts
-// Combine web search with other features for fact-checking.
-const factCheck = await askAI(
-  `Based on current web sources, verify the following claim and provide supporting evidence: "Renewable energy now accounts for over 30% of global electricity generation."`,
-  {
-    webSearch: true,
-  },
+// Web search grounding.
+const factCheck = await askGemini(
+  `Verify: "Renewable energy now accounts for over 30% of global electricity generation."`,
+  { webSearch: true },
 );
-console.log(factCheck);
 ```
 
 ```ts
-// Return a response that conforms to a specific JSON schema.
+// Structured JSON output with a Zod schema.
 import * as z from "zod";
-
 const schema = z.toJSONSchema(
-  z.array(z.object({
-    name: z.string(),
-    age: z.number(),
-    gender: z.enum(["man", "woman"]),
-  })),
+  z.array(z.object({ name: z.string(), age: z.number() })),
 );
+await askGemini("Give me 10 random people.", { schemaJson: schema });
+```
 
-await askAI("Give me 10 random people.", {
-  verbose: true,
-  cache: true,
-  schemaJson: schema,
+```ts
+// Analyse a local image.
+const info = await askGemini("Describe this image.", {
+  files: [{ path: "./photo.jpg", type: "image" }],
 });
 ```
 
-````ts
-// Scrape and analyze HTML content from a URL.
-const orders = await askAI(
-  `From the following HTML, extract the executive order titles, their dates (in yyyy-mm-dd format), and their URLs. Return the data as a JSON array of objects.`,
-  {
-    HTMLFrom: "https://www.whitehouse.gov/presidential-actions/executive-orders/",
-    returnJson: true,
-  },
-);
-console.table(orders);
-
-@example
 ```ts
-// Analyze a local image file.
-const personInfo = await askAI(
-  `Analyze the provided image and return a JSON object with the following details:
-  - name: The name of the person if they are a recognizable public figure.
-  - description: A brief description of the image.
-  - isPolitician: A boolean indicating if the person is a politician.`,
-  {
-    image: "./path/to/your_image.jpg",
-    returnJson: true,
-  },
-);
-console.log(personInfo);
-
-// Analyze an image from Google Cloud Storage.
-const gcsImageInfo = await askAI(
-  `Describe the scene in this image.`,
-  {
-    image: "gs://your-bucket/your_image.jpg",
-  },
-);
-console.log(gcsImageInfo);
-
-// Transcribe an audio file.
-const speechDetails = await askAI(
-  `Transcribe the speech in this audio file. If possible, identify the speaker and the approximate date of the speech.`,
-  {
-    audio: "./path/to/speech.mp3",
-    returnJson: true,
-  },
-);
-console.log(speechDetails);
-
-// Analyze a video file.
-const videoAnalysis = await askAI(
-  `Create a timeline of events from this video. For each event, provide a timestamp, a short description, and identify the main people involved.`,
-  {
-    video: "./path/to/your_video.mp4",
-    returnJson: true,
-  },
-);
-console.table(videoAnalysis);
-````
-
-@example
-
-```ts
-// Extract structured data from a PDF document.
-const caseSummary = await askAI(
-  `This is a Supreme Court decision. Provide a list of objects with a date and a brief summary for each important event of the case's merits, sorted chronologically.`,
-  {
-    pdf: "./path/to/decision.pdf",
-    returnJson: true,
-  },
-);
-console.table(caseSummary);
-
-// Summarize a local text file.
-const summary = await askAI(
-  `Analyze the content of this CSV file and provide a summary of its key findings.`,
-  {
-    text: "./path/to/data.csv",
-  },
-);
-console.log(summary);
-```
-
-@example
-
-```ts
-// Process multiple files of different types in a single call.
-const multiFileSummary = await askAI(
-  `Provide a brief summary for each file I've provided.`,
-  {
-    HTMLFrom: "https://www.un.org/en/global-issues",
-    audio: "path/to/speech.mp3",
-    image: "path/to/protest.jpg",
-    video: "path/to/event.mp4",
-    pdf: "path/to/report.pdf",
-    text: "path/to/notes.txt",
-    returnJson: true,
-  },
-);
-console.log(multiFileSummary);
-
-// Use a clean and test function to process and validate the AI's output.
-const europeanCountries = await askAI(
-  `Give me a list of three countries in Northern Europe.`,
-  {
-    returnJson: true,
-    clean: (response: unknown) => {
-      // Example: Trim whitespace from each country name in the array
-      if (Array.isArray(response)) {
-        return response.map((item) =>
-          typeof item === "string" ? item.trim() : item
-        );
-      }
-      return response;
-    },
-    test: (response) => {
-      if (!Array.isArray(response)) {
-        throw new Error("Response is not an array.");
-      }
-      if (response.length !== 3) {
-        throw new Error("Response does not contain exactly three items.");
-      }
-      console.log(
-        "Test passed: The response is a valid list of three countries.",
-      );
-    },
-  },
-);
-console.log(europeanCountries);
-```
-
-@example
-
-```ts
-// Track cumulative metrics across multiple AI requests.
-const metrics = {
-  totalCost: 0,
-  totalInputTokens: 0,
-  totalOutputTokens: 0,
-  totalRequests: 0,
-};
-
-await askAI("What is the capital of France?", { metrics });
-await askAI("What is the population of Paris?", { metrics });
-
-console.log("Total cost:", metrics.totalCost);
-console.log("Total input tokens:", metrics.totalInputTokens);
-console.log("Total output tokens:", metrics.totalOutputTokens);
-console.log("Total requests:", metrics.totalRequests);
-```
-
-@example
-
-```ts
-// Get detailed metadata including tokens, cost, and duration.
-const result = await askAI("What is the capital of France?", {
-  detailedResponse: true,
+// Analyse a file stored in Google Cloud Storage.
+const result = await askGemini("Summarize this document.", {
+  files: [{ path: "gs://my-bucket/report.pdf", type: "pdf" }],
+  vertex: true,
+  project: "my-gcp-project",
+  location: "us-central1",
 });
-
-console.log("Response:", result.response);
-console.log("Model:", result.model);
-// Result includes: response, prompt, promptTokenCount, outputTokenCount, totalTokens,
-// tokensPerSecond, estimatedCost (for Google models), durationMs, model, thoughts, and more
-
-// Access specific fields
-console.log(`Used ${result.totalTokens} tokens in ${result.durationMs}ms`);
-if (result.estimatedCost) {
-  console.log(`Estimated cost: $${result.estimatedCost}`);
-}
 ```
 
-@param prompt - The primary text input for the AI model. @param options - A
-comprehensive set of options. @param options.systemPrompt - An optional system
-prompt to provide additional context or instructions to the AI model. This can
-help guide the AI's response in a specific direction or tone. @param
-options.model - The specific AI model to use (e.g., 'gemini-1.5-flash').
-Defaults to the `AI_MODEL` environment variable. @param options.apiKey - Your
-API key for the AI service. Defaults to the `AI_KEY` environment variable.
-@param options.vertex - Set to `true` to use Vertex AI for authentication.
-Auto-enables if `AI_PROJECT` and `AI_LOCATION` are set. @param options.project -
-Your Google Cloud project ID. Defaults to the `AI_PROJECT` environment variable.
-@param options.location - The Google Cloud location for your project. Defaults
-to the `AI_LOCATION` environment variable. @param options.ollama - Set to `true`
-to use a local Ollama model. Defaults to the `OLLAMA` environment variable. If
-you want your Ollama instance to be used, you can pass it here too. @param
-options.webSearch - (Gemini only) If `true`, enables web search grounding for
-the AI's responses. Be careful of extra costs. Defaults to `false`. @param
-options.HTMLFrom - A URL or an array of URLs to scrape HTML content from. The
-content is appended to the prompt. JavaScript is not executed. @param
-options.screenshotFrom - (Deprecated) A URL or an array of URLs to take a
-screenshot from for analysis. This feature has been removed. Use the `image`
-option instead. @param options.image - A path or GCS URL (or an array of them)
-to an image file. @param options.video - A path or GCS URL (or an array of them)
-to a video file. @param options.audio - A path or GCS URL (or an array of them)
-to an audio file. @param options.pdf - A path or GCS URL (or an array of them)
-to a PDF file. @param options.text - A path or GCS URL (or an array of them) to
-a text file. @param options.returnJson - If `true`, instructs the AI to return a
-JSON object. Defaults to `false`. @param options.parseJson - If `true`,
-automatically parses the AI's response as JSON. Defaults to `true` if
-`returnJson` is `true`, otherwise `false`. @param options.schemaJson - A Zod
-JSON schema object to enforce structured output. When provided, the AI will
-return data that conforms to the specified schema. Automatically enables
-`returnJson` and `parseJson`. @param options.cache - If `true`, caches the
-response locally in a `.journalism-cache` directory. Defaults to `false`. @param
-options.verbose - If `true`, enables detailed logging, including token usage and
-estimated costs. Defaults to `false`. @param options.clean - A function to
-process and clean the AI's response before it is returned or tested. This
-function is called after JSON parsing (if `parseJson` is `true`). The response
-parameter will be the parsed JSON object if `parseJson` is true, or a string
-otherwise. @param options.test - A function or an array of functions to validate
-the AI's response before it's returned. @param options.contextWindow - An option
-to specify the context window size for Ollama models. By default, Ollama sets
-this depending on the model, which can be lower than the actual maximum context
-window size of the model. @param options.thinkingBudget - Sets the reasoning
-token budget: 0 to disable (default, though some models may reason regardless),
--1 for a dynamic budget, or > 0 for a fixed budget. For Ollama models, any
-non-zero value simply enables reasoning, ignoring the specific budget amount.
-Note: `thinkingLevel` takes precedence over `thinkingBudget` if both are
-provided. @param options.thinkingLevel - Sets the thinking level for reasoning:
-"minimal", "low", "medium", or "high", which some models expect instead of
-`thinkingBudget`. Takes precedence over `thinkingBudget` if both are provided.
-For Ollama models, any value enables reasoning. @param options.includeThoughts -
-If `true`, includes the AI's reasoning thoughts in the output when using a
-thinking budget or thinking level. Defaults to `false`. @param
-options.temperature - Sets the temperature for response generation, controlling
-the randomness of the output. A value of 0 (default) makes the output more
-deterministic, while higher values (e.g., 0.7) increase creativity and
-variability.`.
-  @param options.safetyEnabled - Controls whether safety filters are enabled. If set to`true`, filters are active; if`false`, they are disabled. By default, this is`false`when using Vertex AI and`true`otherwise. This setting can be explicitly overridden for any model.
-  @param options.detailedResponse - If`true`, returns an object containing both the response and metadata (tokens, cost, duration, etc.). Defaults to`false`.
-  @param options.geminiParameters - Additional parameters to pass to the Gemini`generateContentStream`method. These will be merged with the default parameters, allowing you to override or extend the configuration (e.g., custom safety settings, generation config, system instructions).
-  @param options.ollamaParameters - Additional parameters to pass to the Ollama`chat`method. These will be merged with the default parameters, allowing you to override or extend the configuration (e.g., custom options, keep_alive settings).
-  @param options.metrics - An object to track cumulative metrics across multiple AI requests. Pass an object with`totalCost`,`totalInputTokens`,`totalOutputTokens`, and`totalRequests`properties (all initialized to 0). The function will update these values after each request. Note:`totalCost`
-is only calculated for Google GenAI models, not for Ollama. @return
-{Promise<unknown>} A Promise that resolves to the AI's response.
+```ts
+// Access token usage and estimated cost directly from the response.
+const result = await askGemini("What is the capital of France?");
+console.log(result.response); // "Paris"
+console.log(`${result.totalTokens} tokens, $${result.estimatedCost}`);
+```
 
-@category AI
+## askGeminiPool
 
-## askAIPool
-
-Processes multiple AI requests concurrently using a pool of workers. This
-function wraps {@link askAI} and manages parallel execution, retries, progress
-logging, and error handling for batch operations.
+Processes multiple Gemini requests concurrently using a pool of workers. This
+function wraps {@link askGemini} and manages parallel execution, retries,
+progress logging, and error handling for batch operations.
 
 Each request in the array is processed by a worker from the pool. The pool size
 controls how many requests run simultaneously. Results and errors are returned
@@ -953,25 +703,111 @@ to inputs.
 ### Signature
 
 ```typescript
-async function askAIPool(
-  requests: askAIRequest[],
+async function askGeminiPool(
+  requests: {
+    id?: string;
+    prompt: string;
+    options?: {
+      systemPrompt?: string;
+      model?: string;
+      apiKey?: string;
+      vertex?: boolean;
+      project?: string;
+      location?: string;
+      webSearch?: boolean;
+      files?: {
+        path: string;
+        type: "image" | "video" | "audio" | "pdf" | "text";
+      }[];
+      schemaJson?: unknown;
+      cache?: boolean;
+      thinkingLevel?: "minimal" | "low" | "medium" | "high";
+      safetyEnabled?: boolean;
+      geminiParameters?: any;
+    };
+  }[],
   poolSize: number,
   poolOptions?: {
     logProgress?: boolean;
     retry?: number;
     retryCheck?: (error: unknown) => Promise<boolean> | boolean;
     minRequestDurationMs?: number;
-    metrics?: {
-      totalCost: number;
-      totalInputTokens: number;
-      totalOutputTokens: number;
-      totalRequests: number;
-    };
   },
 ): Promise<
   {
-    results: { index: number; request: askAIRequest; result: unknown }[];
-    errors: Array<{ index: number; request: askAIRequest; error: unknown }>;
+    results: {
+      index: number;
+      request: {
+        id?: string;
+        prompt: string;
+        options?: {
+          systemPrompt?: string;
+          model?: string;
+          apiKey?: string;
+          vertex?: boolean;
+          project?: string;
+          location?: string;
+          webSearch?: boolean;
+          files?: {
+            path: string;
+            type: "image" | "video" | "audio" | "pdf" | "text";
+          }[];
+          schemaJson?: unknown;
+          cache?: boolean;
+          thinkingLevel?: "minimal" | "low" | "medium" | "high";
+          safetyEnabled?: boolean;
+          geminiParameters?: any;
+        };
+      };
+      result: {
+        response: unknown;
+        fromCache: boolean;
+        prompt: string;
+        systemPrompt: string | null;
+        webSearch: boolean;
+        thinkingLevel: "minimal" | "low" | "medium" | "high" | null;
+        safetyEnabled: boolean;
+        files: {
+          path: string;
+          type: "image" | "video" | "audio" | "pdf" | "text";
+        }[];
+        promptTokenCount: number;
+        outputTokenCount: number;
+        totalTokens: number;
+        tokensPerSecond: number;
+        estimatedCost: number | null;
+        durationMs: number;
+        model: string;
+        thoughts: string | null;
+        thoughtsTokenCount: number;
+      };
+    }[];
+    errors: {
+      index: number;
+      request: {
+        id?: string;
+        prompt: string;
+        options?: {
+          systemPrompt?: string;
+          model?: string;
+          apiKey?: string;
+          vertex?: boolean;
+          project?: string;
+          location?: string;
+          webSearch?: boolean;
+          files?: {
+            path: string;
+            type: "image" | "video" | "audio" | "pdf" | "text";
+          }[];
+          schemaJson?: unknown;
+          cache?: boolean;
+          thinkingLevel?: "minimal" | "low" | "medium" | "high";
+          safetyEnabled?: boolean;
+          geminiParameters?: any;
+        };
+      };
+      error: unknown;
+    }[];
   }
 >;
 ```
@@ -982,8 +818,9 @@ async function askAIPool(
 - **`requests[].id`**: An optional identifier for the request, useful for
   matching results back to inputs.
 - **`requests[].prompt`**: The primary text input for the AI model.
-- **`requests[].options`**: Options passed to {@link askAI} for each individual
-  request. See {@link askAI} for the full list of available options.
+- **`requests[].options`**: Options passed to {@link askGemini} for each
+  individual request. See {@link askGemini} for the full list of available
+  options.
 - **`poolSize`**: The number of concurrent workers processing requests.
 - **`poolOptions`**: Configuration for the pool execution.
 - **`poolOptions.logProgress`**: If `true`, logs progress to the console after
@@ -996,9 +833,6 @@ async function askAIPool(
 - **`poolOptions.minRequestDurationMs`**: A minimum duration in milliseconds for
   each request. If a request completes faster, the worker will wait before
   picking up the next one. Useful for rate limiting.
-- **`poolOptions.metrics`**: An object to track cumulative metrics across all
-  requests in the pool. Pass an object with `totalCost`, `totalInputTokens`,
-  `totalOutputTokens`, and `totalRequests` properties (all initialized to 0).
 
 ### Returns
 
@@ -1010,7 +844,7 @@ request, and error), both sorted by original index.
 
 ```ts
 // Basic usage: Process a batch of prompts with a pool of 5 concurrent workers.
-const { results, errors } = await askAIPool(
+const { results, errors } = await askGeminiPool(
   [
     { prompt: "What is the capital of France?" },
     { prompt: "What is the capital of Germany?" },
@@ -1019,13 +853,13 @@ const { results, errors } = await askAIPool(
   5,
 );
 for (const r of results) {
-  console.log(r.result);
+  console.log(r.result.response);
 }
 ```
 
 ```ts
 // Use an id to easily identify each request in the results.
-const { results, errors } = await askAIPool(
+const { results, errors } = await askGeminiPool(
   [
     { id: "france", prompt: "What is the capital of France?" },
     { id: "germany", prompt: "What is the capital of Germany?" },
@@ -1033,21 +867,27 @@ const { results, errors } = await askAIPool(
   2,
 );
 for (const r of results) {
-  console.log(r.request.id, r.result);
+  console.log(r.request.id, r.result.response);
 }
 ```
 
 ```ts
 // Enable progress logging and retries.
-const { results, errors } = await askAIPool(
+const { results, errors } = await askGeminiPool(
   [
     {
       prompt: "Summarize this article.",
-      options: { text: "./article1.txt", returnJson: true },
+      options: {
+        files: [{ path: "./article1.txt", type: "text" }],
+        schemaJson: schema,
+      },
     },
     {
       prompt: "Summarize this article.",
-      options: { text: "./article2.txt", returnJson: true },
+      options: {
+        files: [{ path: "./article2.txt", type: "text" }],
+        schemaJson: schema,
+      },
     },
   ],
   3,
@@ -1060,35 +900,15 @@ console.log(`${results.length} succeeded, ${errors.length} failed`);
 ```
 
 ```ts
-// Track cumulative metrics and enforce a minimum request duration to respect rate limits.
-const metrics = {
-  totalCost: 0,
-  totalInputTokens: 0,
-  totalOutputTokens: 0,
-  totalRequests: 0,
-};
-const { results } = await askAIPool(
-  [
-    { prompt: "What is 2+2?" },
-    { prompt: "What is 3+3?" },
-  ],
-  2,
-  {
-    minRequestDurationMs: 1000,
-    metrics,
-  },
-);
-console.log("Total cost:", metrics.totalCost);
-console.log("Total requests:", metrics.totalRequests);
-```
-
-```ts
 // Use retryCheck to only retry on specific errors.
-const { results, errors } = await askAIPool(
+const { results, errors } = await askGeminiPool(
   [
     {
       prompt: "Analyze this image.",
-      options: { image: "./photo.jpg", returnJson: true },
+      options: {
+        files: [{ path: "./photo.jpg", type: "image" }],
+        schemaJson: schema,
+      },
     },
   ],
   1,
@@ -1116,7 +936,7 @@ const schema = z.toJSONSchema(
   }),
 );
 
-const { results, errors } = await askAIPool(
+const { results, errors } = await askGeminiPool(
   [
     {
       prompt: "Give me 5 characters from Harry Potter.",
@@ -1129,10 +949,134 @@ const { results, errors } = await askAIPool(
   ],
   2,
 );
-// Each result will conform to the specified schema
+// Each result.response will conform to the specified schema
 for (const r of results) {
-  console.log(r.result); // { people: [{ name: "...", age: ..., gender: "..." }, ...] }
+  console.log(r.result.response); // { people: [{ name: "...", age: ..., gender: "..." }, ...] }
 }
+```
+
+## askOllama
+
+Interacts with a local Ollama model to perform a wide range of tasks.
+
+Ollama must be running on the machine. Set the `AI_MODEL` environment variable
+or pass `model` directly.
+
+Pass a custom `Ollama` instance via the `ollama` option to target a non-default
+host.
+
+**File handling**: pass local files via `files: [{ path, type }]`. Only
+`"image"` and `"text"` types are supported for now.
+
+**Caching**: set `cache: true` to persist responses in `.journalism-cache`.
+
+Temperature defaults to 0 for deterministic responses.
+
+### Signature
+
+```typescript
+async function askOllama(
+  prompt: string,
+  options?: {
+    systemPrompt?: string;
+    model?: string;
+    ollama?: unknown;
+    files?: { path: string; type: "image" | "text" }[];
+    schemaJson?: unknown;
+    cache?: boolean;
+    contextWindow?: number;
+    thinkingLevel?: boolean | "low" | "medium" | "high";
+    temperature?: number;
+    ollamaParameters?: unknown;
+  },
+): Promise<
+  {
+    response: unknown;
+    fromCache: boolean;
+    prompt: string;
+    systemPrompt: string | null;
+    thinkingLevel: boolean | "low" | "medium" | "high" | null;
+    contextWindow: number | null;
+    temperature: number;
+    files: { path: string; type: "image" | "text" }[];
+    promptTokenCount: number;
+    outputTokenCount: number;
+    totalTokens: number;
+    tokensPerSecond: number;
+    durationMs: number;
+    model: string;
+    thoughts: string | null;
+  }
+>;
+```
+
+### Parameters
+
+- **`prompt`**: The primary text prompt.
+- **`options.model`**: Model name; defaults to `AI_MODEL` env var.
+- **`options.ollama`**: Custom `Ollama` instance targeting a specific host.
+- **`options.systemPrompt`**: Optional system prompt.
+- **`options.files`**: Files to send alongside the prompt. Only `"image"` and
+  `"text"` types are supported (local paths only; no GCS, audio, video, or PDF).
+  Text files are sent as separate user messages after the prompt; images are
+  sent as attachments to the prompt message.
+- **`options.schemaJson`**: JSON schema for structured output.
+- **`options.cache`**: Cache the response in `.journalism-cache`.
+- **`options.contextWindow`**: Override the model's context window size.
+- **`options.thinkingLevel`**: Enables reasoning. Pass `true` for models that
+  only support on/off, or `"low"`, `"medium"`, or `"high"` for granular control.
+- **`options.temperature`**: Sampling temperature (default 0).
+- **`options.ollamaParameters`**: Extra params merged into `client.chat`.
+
+### Examples
+
+```ts
+// Assumes AI_MODEL is set in environment variables.
+const result = await askOllama("What is the capital of France?");
+console.log(result.response); // "Paris"
+```
+
+```ts
+// Use a custom Ollama instance.
+import { Ollama } from "ollama";
+const client = new Ollama({ host: "http://127.0.0.1:11434" });
+const result = await askOllama("What is the capital of France?", {
+  ollama: client,
+});
+```
+
+```ts
+// Analyse a local image.
+const result = await askOllama("Describe this image.", {
+  files: [{ path: "./photo.jpg", type: "image" }],
+});
+```
+
+```ts
+// Structured JSON output.
+import * as z from "zod";
+const schema = z.toJSONSchema(
+  z.object({ country: z.string(), capital: z.string() }),
+);
+const result = await askOllama(
+  "What is the capital of France?",
+  { schemaJson: schema },
+);
+```
+
+```ts
+// Enable thinking / reasoning.
+const result = await askOllama(
+  "What is 17 * 23?",
+  { thinkingLevel: "low" },
+);
+```
+
+```ts
+// Access token usage directly from the response.
+const result = await askOllama("What is the capital of France?");
+console.log(result.response); // "Paris"
+console.log(`${result.totalTokens} tokens in ${result.durationMs}ms`);
 ```
 
 ## camelCase
@@ -1426,8 +1370,6 @@ function decodeMonteCarloValues(
 
 ## decodeMonteCarloWinners
 
-Decodes a columnar `winners` result back into the original object-array shape.
-
 `category` bytes map to category names via `WINNER_CATEGORIES` (0 = "renter", 1
 = "buyerFixed", 2 = "buyerVariable"). Records are returned in iteration order
 (row 0 = iteration 0).
@@ -1442,6 +1384,32 @@ function decodeMonteCarloWinners(
   monthIndex: number;
   amount: number;
   category: "renter" | "buyerFixed" | "buyerVariable";
+}[];
+```
+
+## decodeMonteCarloWinnerSnapshots
+
+Decodes a `winnerSnapshots` result into a flat record array.
+
+Each record represents one 5-year checkpoint (strictly before `numberOfYears`).
+`renter`, `buyerFixed`, and `buyerVariable` are win rates in the range [0, 1]
+and sum to 1. The median fields hold the median `winVariable` amount for that
+category at the checkpoint.
+
+### Signature
+
+```typescript
+function decodeMonteCarloWinnerSnapshots(
+  ws: WinnerSnapshots,
+): {
+  year: number;
+  monthIndex: number;
+  renter: number;
+  buyerFixed: number;
+  buyerVariable: number;
+  renterMedian: number;
+  buyerFixedMedian: number;
+  buyerVariableMedian: number;
 }[];
 ```
 
@@ -2297,6 +2265,127 @@ const earthCoords = geoTo3D(0, 0, 6371, { decimals: 0 }); // Earth's approximate
 console.log(earthCoords); // Expected output: { x: 0, y: 6371, z: 0 } (for 0,0 lat/lon)
 ```
 
+## geoToBlender
+
+Converts GeoJSON borders into an OBJ file that can be imported in Blender.
+
+Polygon rings, MultiPolygon rings, LineStrings, and MultiLineStrings are
+exported as OBJ line geometry. Polygon and MultiPolygon rings are always closed
+into loops (a closing coordinate is appended when the source data omits it),
+while LineStrings and MultiLineStrings are left exactly as provided. Flat
+projection functions are placed on Blender's X/Y plane with Z up and north
+toward positive Y. The `"orthographic"` projection exports borders in 3D on a
+sphere using `geoTo3D`. Set `maxSegmentLength` to add extra vertices along long
+orthographic segments.
+
+When fitting a flat projection with `fitExtent`/`fitSize`, run the GeoJSON
+through {@link rewind} first. Many data sources wind their polygons the wrong
+way for `d3-geo`, which makes the fit collapse to a near-zero scale and produces
+an empty-looking OBJ.
+
+### Signature
+
+```typescript
+function geoToBlender(
+  geojsonPath: string,
+  projection:
+    | "orthographic"
+    | ((coordinates: [number, number]) => [number, number] | null),
+  outputPath: string,
+  options?: { radius?: number; decimals?: number; maxSegmentLength?: number },
+): Promise<string>;
+```
+
+### Parameters
+
+- **`geojsonPath`**: The path to the GeoJSON file to convert.
+- **`projection`**: A flat projection function or `"orthographic"` for 3D globe
+  borders.
+- **`outputPath`**: The path where the OBJ file will be written.
+- **`options`**: Optional settings for orthographic radius, coordinate rounding,
+  and orthographic segment densification.
+
+### Returns
+
+A Promise that resolves to the output path.
+
+### Examples
+
+```ts
+import { geoToBlender, rewind } from "@nshiab/journalism-geo";
+import { geoConicConformal } from "d3-geo";
+import { readFile } from "node:fs/promises";
+
+const geojsonPath = "./data/canada.geojson";
+const geojson = JSON.parse(await readFile(geojsonPath, "utf8"));
+// Rewind so fitExtent measures the real extent instead of collapsing.
+const domain = rewind(geojson);
+const projection = geoConicConformal()
+  .rotate([100, -60])
+  .fitExtent([[-5, -5], [5, 5]], domain);
+await geoToBlender(geojsonPath, projection, "./output/canada.obj", {
+  decimals: 3,
+});
+```
+
+## geoToBlenderPoint
+
+Converts one longitude/latitude coordinate into Blender coordinates.
+
+Flat projection functions are placed on Blender's X/Y plane with Z up and north
+toward positive Y. The `"orthographic"` projection exports the coordinate in 3D
+on a sphere using `geoTo3D`.
+
+When fitting a flat projection with `fitExtent`/`fitSize`, run the GeoJSON
+through {@link rewind} first. Many data sources wind their polygons the wrong
+way for `d3-geo`, which makes the fit collapse to a near-zero scale and places
+every point at nearly the same spot. Use the same fitted projection here as the
+one passed to `geoToBlender` so the point lines up with the borders.
+
+### Signature
+
+```typescript
+function geoToBlenderPoint(
+  lon: number,
+  lat: number,
+  projection:
+    | "orthographic"
+    | ((coordinates: [number, number]) => [number, number] | null),
+  options?: { radius?: number; decimals?: number; toArray?: false },
+): { x: number; y: number; z: number };
+```
+
+### Parameters
+
+- **`lon`**: The longitude of the geographical point, in degrees.
+- **`lat`**: The latitude of the geographical point, in degrees.
+- **`projection`**: A flat projection function or `"orthographic"` for a 3D
+  globe point.
+- **`options`**: Optional settings for orthographic radius, coordinate rounding,
+  and return shape.
+
+### Returns
+
+Blender coordinates.
+
+### Examples
+
+```ts
+import { geoToBlenderPoint, rewind } from "@nshiab/journalism-geo";
+import { geoConicConformal } from "d3-geo";
+import { readFile } from "node:fs/promises";
+
+const geojson = JSON.parse(await readFile("./data/canada.geojson", "utf8"));
+// Rewind so fitExtent measures the real extent instead of collapsing.
+const domain = rewind(geojson);
+const projection = geoConicConformal()
+  .rotate([100, -60])
+  .fitExtent([[-5, -5], [5, 5]], domain);
+const point = geoToBlenderPoint(-73.5674, 45.5019, projection, {
+  decimals: 3,
+});
+```
+
 ## getCholeskyMatrix
 
 Performs Cholesky Decomposition on a symmetric, positive-definite covariance
@@ -2676,6 +2765,71 @@ console.log(invertedMatrix4x4); // Expected output (approximately): // [ //
 [-0.9196015969508056, -0.583230998661561, 1886.7655549874191, 3.078393760864504]
 // ]
 
+## getDataDW
+
+Gets the data of a Datawrapper chart, table, or map.
+
+Authentication is handled via an API key, which can be provided through
+environment variables (`DATAWRAPPER_KEY`) or explicitly in the options.
+
+### Signature
+
+```typescript
+async function getDataDW(
+  chartId: string,
+  options?: { apiKey?: string; parse?: boolean; returnResponse?: boolean },
+): Promise<string | Record<string, string>[] | unknown>;
+```
+
+### Parameters
+
+- **`chartId`**: The unique ID of the Datawrapper chart, table, or map. This ID
+  can be found in the Datawrapper URL or dashboard.
+- **`options`**: Optional parameters to configure the request.
+- **`options.apiKey`**: The name of the environment variable that stores your
+  Datawrapper API key (e.g., `"DATAWRAPPER_KEY"`). If not provided, the function
+  defaults to looking for the `DATAWRAPPER_KEY` environment variable.
+- **`options.parse`**: If `true`, the response will be parsed and returned as a
+  JavaScript value. CSV data (charts and tables) is returned as an array of
+  objects; JSON data (maps) is returned as a parsed object. Defaults to `false`.
+- **`options.returnResponse`**: If `true`, the function will return the full
+  `Response` object from the Datawrapper API call. This can be useful for
+  debugging or for more detailed handling of the API response. Defaults to
+  `false`.
+
+### Returns
+
+A Promise that resolves to a raw `string` by default, a parsed value if `parse`
+is `true` (`Record<string, string>[]` for CSV charts/tables, or a `object` for
+JSON maps), or a `Response` object if `returnResponse` is `true`.
+
+### Examples
+
+```ts
+import { getDataDW } from "journalism-dataviz";
+
+const data = await getDataDW("myChartId");
+console.log(data); // raw CSV string
+```
+
+```ts
+// Parse a chart or table — returns an array of objects (all values are strings).
+const rows = await getDataDW("myChartId", { parse: true });
+console.log(rows); // [{ salary: "75000", hireDate: "2022-12-15" }, ...]
+```
+
+```ts
+// Parse a locator map — detects JSON automatically and returns a parsed object.
+const map = await getDataDW("myMapId", { parse: true });
+console.log(map); // { type: "FeatureCollection", features: [...], markers: [] }
+```
+
+```ts
+// If your API key is stored under a different name in process.env (e.g., `DW_KEY`).
+const data = await getDataDW("anotherChartId", { apiKey: "DW_KEY" });
+console.log(data);
+```
+
 ## getEmbedding
 
 Generates a numerical embedding (vector representation) for a given text string.
@@ -2980,7 +3134,7 @@ the `getGeoTiffValues` function.
 ### Signature
 
 ```typescript
-async function getGeoTiffDetails(
+function getGeoTiffDetails(
   path: string,
 ): Promise<
   {
@@ -3028,7 +3182,7 @@ using the details returned by it.
 ### Signature
 
 ```typescript
-async function getGeoTiffValues(
+function getGeoTiffValues(
   lat: number,
   lon: number,
   geoTiffDetails: {
@@ -6646,6 +6800,12 @@ function simulateRentVsBuy(
       monthIndex: number,
       amount: number,
     ) => void;
+    onSnapshotRecord?: (
+      category: string,
+      monthIndex: number,
+      amount: number,
+    ) => void;
+    snapshotMonths?: Set<number>;
     winVariable?: "balance" | "balanceAfterSelling" | "assets";
     groups?: string[];
     variables?: string[];
