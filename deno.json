@@ -1,6 +1,6 @@
 {
   "name": "@nshiab/journalism",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Useful TypeScript functions for journalism projects.",
   "repository": "https://github.com/nshiab/journalism",
   "license": "MIT",
@@ -27,14 +27,14 @@
   },
   "nodeModulesDir": "auto",
   "imports": {
-    "@nshiab/journalism-ai": "jsr:@nshiab/journalism-ai@^2.0.0",
+    "@nshiab/journalism-ai": "jsr:@nshiab/journalism-ai@^2.0.1",
     "@nshiab/journalism-climate": "jsr:@nshiab/journalism-climate@^1.0.9",
     "@nshiab/journalism-dataviz": "jsr:@nshiab/journalism-dataviz@^1.0.17",
     "@nshiab/journalism-extras": "jsr:@nshiab/journalism-extras@^1.0.8",
-    "@nshiab/journalism-finance": "jsr:@nshiab/journalism-finance@^1.5.40",
+    "@nshiab/journalism-finance": "jsr:@nshiab/journalism-finance@^1.5.41",
     "@nshiab/journalism-format": "jsr:@nshiab/journalism-format@^1.1.9",
     "@nshiab/journalism-geo": "npm:@nshiab/journalism-geo@1.0.22",
-    "@nshiab/journalism-google": "jsr:@nshiab/journalism-google@^1.0.10",
+    "@nshiab/journalism-google": "jsr:@nshiab/journalism-google@^1.0.11",
     "@nshiab/journalism-statistics": "jsr:@nshiab/journalism-statistics@^1.5.5",
     "@nshiab/journalism-web": "jsr:@nshiab/journalism-web@^1.0.8",
     "@nshiab/journalism-web-scraping": "jsr:@nshiab/journalism-web-scraping@^2.0.4"

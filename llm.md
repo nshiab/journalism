@@ -559,50 +559,10 @@ Safety filters are on by default (`true`) but off when using Vertex AI
 ### Signature
 
 ```typescript
-async function askGemini(
+async function askGemini<TResponse>(
   prompt: string,
-  options?: {
-    systemPrompt?: string;
-    model?: string;
-    apiKey?: string;
-    vertex?: boolean;
-    project?: string;
-    location?: string;
-    webSearch?: boolean;
-    files?: {
-      path: string;
-      type: "image" | "video" | "audio" | "pdf" | "text";
-    }[];
-    schemaJson?: unknown;
-    cache?: boolean;
-    thinkingLevel?: "minimal" | "low" | "medium" | "high";
-    safetyEnabled?: boolean;
-    geminiParameters?: any;
-  },
-): Promise<
-  {
-    response: unknown;
-    fromCache: boolean;
-    prompt: string;
-    systemPrompt: string | null;
-    webSearch: boolean;
-    thinkingLevel: "minimal" | "low" | "medium" | "high" | null;
-    safetyEnabled: boolean;
-    files: {
-      path: string;
-      type: "image" | "video" | "audio" | "pdf" | "text";
-    }[];
-    promptTokenCount: number;
-    outputTokenCount: number;
-    totalTokens: number;
-    tokensPerSecond: number;
-    estimatedCost: number | null;
-    durationMs: number;
-    model: string;
-    thoughts: string | null;
-    thoughtsTokenCount: number;
-  }
->;
+  options?: AskGeminiOptions<TResponse>,
+): Promise<GeminiDetailedResponse<TResponse>>;
 ```
 
 ### Parameters
@@ -621,8 +581,15 @@ async function askGemini(
   parts after the prompt.
 - **`options.schemaJson`**: Zod JSON schema for structured output.
 - **`options.cache`**: Cache the response in `.journalism-cache`.
+- **`options.processResponse`**: Transform or validate the response before it is
+  returned. If it rejects a cached response, that cache entry is removed so a
+  retry can generate a fresh response.
+- **`options.thinkingBudget`**: Reasoning token budget. Use `0` to disable
+  thinking, `-1` for a dynamic budget, or a positive number for a fixed budget.
+  Ignored when `thinkingLevel` is provided.
 - **`options.thinkingLevel`**: Thinking level: "minimal" | "low" | "medium" |
   "high".
+- **`options.temperature`**: Sampling temperature sent to Gemini.
 - **`options.safetyEnabled`**: Override safety filter defaults.
 - **`options.geminiParameters`**: Extra params merged into `generateContent`.
 
@@ -703,113 +670,11 @@ to inputs.
 ### Signature
 
 ```typescript
-async function askGeminiPool(
-  requests: {
-    id?: string;
-    prompt: string;
-    options?: {
-      systemPrompt?: string;
-      model?: string;
-      apiKey?: string;
-      vertex?: boolean;
-      project?: string;
-      location?: string;
-      webSearch?: boolean;
-      files?: {
-        path: string;
-        type: "image" | "video" | "audio" | "pdf" | "text";
-      }[];
-      schemaJson?: unknown;
-      cache?: boolean;
-      thinkingLevel?: "minimal" | "low" | "medium" | "high";
-      safetyEnabled?: boolean;
-      geminiParameters?: any;
-    };
-  }[],
+function askGeminiPool<TResponse>(
+  requests: AskGeminiPoolRequest<TResponse>[],
   poolSize: number,
-  poolOptions?: {
-    logProgress?: boolean;
-    retry?: number;
-    retryCheck?: (error: unknown) => Promise<boolean> | boolean;
-    minRequestDurationMs?: number;
-  },
-): Promise<
-  {
-    results: {
-      index: number;
-      request: {
-        id?: string;
-        prompt: string;
-        options?: {
-          systemPrompt?: string;
-          model?: string;
-          apiKey?: string;
-          vertex?: boolean;
-          project?: string;
-          location?: string;
-          webSearch?: boolean;
-          files?: {
-            path: string;
-            type: "image" | "video" | "audio" | "pdf" | "text";
-          }[];
-          schemaJson?: unknown;
-          cache?: boolean;
-          thinkingLevel?: "minimal" | "low" | "medium" | "high";
-          safetyEnabled?: boolean;
-          geminiParameters?: any;
-        };
-      };
-      result: {
-        response: unknown;
-        fromCache: boolean;
-        prompt: string;
-        systemPrompt: string | null;
-        webSearch: boolean;
-        thinkingLevel: "minimal" | "low" | "medium" | "high" | null;
-        safetyEnabled: boolean;
-        files: {
-          path: string;
-          type: "image" | "video" | "audio" | "pdf" | "text";
-        }[];
-        promptTokenCount: number;
-        outputTokenCount: number;
-        totalTokens: number;
-        tokensPerSecond: number;
-        estimatedCost: number | null;
-        durationMs: number;
-        model: string;
-        thoughts: string | null;
-        thoughtsTokenCount: number;
-      };
-    }[];
-    errors: {
-      index: number;
-      request: {
-        id?: string;
-        prompt: string;
-        options?: {
-          systemPrompt?: string;
-          model?: string;
-          apiKey?: string;
-          vertex?: boolean;
-          project?: string;
-          location?: string;
-          webSearch?: boolean;
-          files?: {
-            path: string;
-            type: "image" | "video" | "audio" | "pdf" | "text";
-          }[];
-          schemaJson?: unknown;
-          cache?: boolean;
-          thinkingLevel?: "minimal" | "low" | "medium" | "high";
-          safetyEnabled?: boolean;
-          geminiParameters?: any;
-        };
-      };
-      error: unknown;
-    }[];
-  }
->;
+  poolOptions?: AskGeminiPoolOptions,
+): Promise<AskGeminiPoolResult<TResponse>>;
 ```
 
 ### Parameters
@@ -818,6 +683,9 @@ async function askGeminiPool(
 - **`requests[].id`**: An optional identifier for the request, useful for
   matching results back to inputs.
 - **`requests[].prompt`**: The primary text input for the AI model.
+- **`requests[].processResponse`**: An optional function that transforms or
+  validates the response inside the retry loop. If it throws, the request is
+  retried according to `poolOptions`.
 - **`requests[].options`**: Options passed to {@link askGemini} for each
   individual request. See {@link askGemini} for the full list of available
   options.
@@ -975,39 +843,10 @@ Temperature defaults to 0 for deterministic responses.
 ### Signature
 
 ```typescript
-async function askOllama(
+async function askOllama<TResponse>(
   prompt: string,
-  options?: {
-    systemPrompt?: string;
-    model?: string;
-    ollama?: unknown;
-    files?: { path: string; type: "image" | "text" }[];
-    schemaJson?: unknown;
-    cache?: boolean;
-    contextWindow?: number;
-    thinkingLevel?: boolean | "low" | "medium" | "high";
-    temperature?: number;
-    ollamaParameters?: unknown;
-  },
-): Promise<
-  {
-    response: unknown;
-    fromCache: boolean;
-    prompt: string;
-    systemPrompt: string | null;
-    thinkingLevel: boolean | "low" | "medium" | "high" | null;
-    contextWindow: number | null;
-    temperature: number;
-    files: { path: string; type: "image" | "text" }[];
-    promptTokenCount: number;
-    outputTokenCount: number;
-    totalTokens: number;
-    tokensPerSecond: number;
-    durationMs: number;
-    model: string;
-    thoughts: string | null;
-  }
->;
+  options?: AskOllamaOptions<TResponse>,
+): Promise<OllamaDetailedResponse<TResponse>>;
 ```
 
 ### Parameters
@@ -1027,6 +866,9 @@ async function askOllama(
   only support on/off, or `"low"`, `"medium"`, or `"high"` for granular control.
 - **`options.temperature`**: Sampling temperature (default 0).
 - **`options.ollamaParameters`**: Extra params merged into `client.chat`.
+- **`options.processResponse`**: Transform or validate the response before it is
+  returned. If it rejects a cached response, that cache entry is removed so a
+  retry can generate a fresh response.
 
 ### Examples
 
@@ -1392,9 +1234,10 @@ function decodeMonteCarloWinners(
 Decodes a `winnerSnapshots` result into a flat record array.
 
 Each record represents one 5-year checkpoint (strictly before `numberOfYears`).
-`renter`, `buyerFixed`, and `buyerVariable` are win rates in the range [0, 1]
-and sum to 1. The median fields hold the median `winVariable` amount for that
-category at the checkpoint.
+`renter`, `buyerFixed`, and `buyerVariable` are win rates strictly in the range
+[0.01, 0.98] (smoothed to [0.01, 0.01, 0.98] in extreme scenarios) and sum to 1.
+The median fields hold the median `winVariable` amount for that category at the
+checkpoint.
 
 ### Signature
 
@@ -2841,16 +2684,15 @@ This function supports both Google's Gemini AI models and local models running
 with Ollama. It provides options for authentication, model selection, and
 caching to optimize performance and cost.
 
-**Authentication**: Credentials and model information can be provided via
-environment variables (`AI_KEY`, `AI_PROJECT`, `AI_LOCATION`,
-`AI_EMBEDDINGS_MODEL`) or directly through the `options` object. Options take
-precedence over environment variables.
+**Authentication**: With no explicit provider, credentials, model information,
+and provider selection come from environment variables (`AI_KEY`, `AI_PROJECT`,
+`AI_LOCATION`, `AI_EMBEDDINGS_MODEL`, `AI_EMBEDDINGS_PROVIDER`). Providerless
+options intentionally contain only fields shared by every provider.
 
-**Local Models**: To use a local model with Ollama, set the `OLLAMA` environment
-variable to `true` and ensure Ollama is running on your machine. You will also
-need to specify the model name using the `AI_EMBEDDINGS_MODEL` environment
-variable or the `model` option. If you want your Ollama instance to be used, you
-can pass an instance of the `Ollama` class as the `ollama` option.
+**Local Models**: To use a local model with Ollama, pass `provider: "ollama"`,
+or set `AI_EMBEDDINGS_PROVIDER=ollama` (the legacy `OLLAMA` environment variable
+is also supported), and ensure Ollama is running. A custom `Ollama` client can
+be passed in the provider-specific `ollama` option.
 
 **Caching**: To save resources and time, you can enable caching by setting
 `cache` to `true`. Responses will be stored in a local `.journalism-cache`
@@ -2863,17 +2705,7 @@ your `.gitignore` file.
 ```typescript
 async function getEmbedding(
   text: string,
-  options?: {
-    model?: string;
-    apiKey?: string;
-    vertex?: boolean;
-    project?: string;
-    location?: string;
-    cache?: boolean;
-    ollama?: boolean | any;
-    verbose?: boolean;
-    contextWindow?: number;
-  },
+  options?: GetEmbeddingOptions,
 ): Promise<number[]>;
 ```
 
@@ -2881,22 +2713,25 @@ async function getEmbedding(
 
 - **`text`**: The input text string for which to generate the embedding.
 - **`options`**: Configuration options for the embedding generation.
+- **`options.provider`**: Explicitly selects Gemini/Vertex or Ollama. When
+  omitted, `AI_EMBEDDINGS_PROVIDER` is used, then the legacy `OLLAMA` fallback,
+  then Gemini.
 - **`options.model`**: The specific embedding model to use (e.g.,
   'text-embedding-004'). Defaults to the `AI_EMBEDDINGS_MODEL` environment
   variable.
-- **`options.apiKey`**: Your API key for authentication with Google Gemini.
-  Defaults to the `AI_KEY` environment variable.
-- **`options.vertex`**: If `true`, uses Vertex AI for authentication. Defaults
-  to `false`.
+- **`options.apiKey`**: Your Gemini API or Vertex Express Mode API key. Defaults
+  to the `AI_KEY` environment variable.
+- **`options.vertex`**: If `true`, explicitly selects the Vertex AI backend for
+  the Google provider.
 - **`options.project`**: Your Google Cloud project ID for Vertex AI. Defaults to
   the `AI_PROJECT` environment variable.
 - **`options.location`**: The Google Cloud location for your Vertex AI project.
   Defaults to the `AI_LOCATION` environment variable.
 - **`options.cache`**: If `true`, enables caching of the embedding response.
   Defaults to `false`.
-- **`options.ollama`**: If `true`, uses Ollama for local embedding generation.
-  Defaults to the `OLLAMA` environment variable. If you want your Ollama
-  instance to be used, you can pass it here too.
+- **`options.ollama`**: A custom Ollama client. Boolean selection remains
+  supported at runtime for compatibility but is deprecated; use
+  `provider: "ollama"` instead.
 - **`options.verbose`**: If `true`, logs additional information such as
   execution time and the truncated input text. Defaults to `false`.
 - **`options.contextWindow`**: An option to specify the context window size for
@@ -2905,13 +2740,14 @@ async function getEmbedding(
 
 ### Returns
 
-A promise that resolves to an an array of numbers representing the generated
+A promise that resolves to an array of numbers representing the generated
 embedding.
 
 ### Examples
 
 ```ts
-// Basic usage: Generate an embedding for a simple text.
+// Environment-selected usage. Configure AI_EMBEDDINGS_PROVIDER,
+// AI_EMBEDDINGS_MODEL, and the matching credentials first.
 const embedding = await getEmbedding(
   "The quick brown fox jumps over the lazy dog.",
 );
@@ -2932,11 +2768,32 @@ console.log(cachedEmbedding);
 const customEmbedding = await getEmbedding(
   "Machine learning is a subset of AI.",
   {
+    provider: "gemini",
     model: "another-embedding-model",
     apiKey: "your_custom_api_key",
   },
 );
 console.log(customEmbedding);
+```
+
+```ts
+// Explicit Vertex AI usage.
+const vertexEmbedding = await getEmbedding("Local reporting matters.", {
+  provider: "gemini",
+  vertex: true,
+  model: "text-embedding-004",
+  project: "your-project",
+  location: "northamerica-northeast1",
+});
+```
+
+```ts
+// Explicit Ollama usage.
+const ollamaEmbedding = await getEmbedding("Local reporting matters.", {
+  provider: "ollama",
+  model: "nomic-embed-text",
+  contextWindow: 8192,
+});
 ```
 
 ```ts
@@ -2946,6 +2803,40 @@ const verboseEmbedding = await getEmbedding(
   { verbose: true },
 );
 console.log(verboseEmbedding);
+```
+
+## getEmbeddingIdentity
+
+Returns the canonical, non-secret identity for an embedding request. Downstream
+persisted data can compare this value to decide whether vectors are compatible
+with the current request.
+
+### Signature
+
+```typescript
+function getEmbeddingIdentity(
+  options?: GetEmbeddingOptions,
+  environment?: EmbeddingEnvironment,
+): EmbeddingIdentity;
+```
+
+### Parameters
+
+- **`options`**: Provider-aware embedding options.
+- **`environment`**: Environment used to resolve omitted values.
+
+### Returns
+
+The canonical identity used by embedding caches.
+
+### Examples
+
+```ts
+const identity = getEmbeddingIdentity({
+  provider: "ollama",
+  model: "nomic-embed-text",
+  contextWindow: 8192,
+});
 ```
 
 ## getEnvironmentCanadaRecords
@@ -7343,6 +7234,12 @@ object-array shapes.
 - `winners`: A `WinnersColumnar` with `monthIndex`, `amount` (`Float64Array`)
   and `category` (`Uint8Array`) indicating which scenario won each iteration.
   Decode with `decodeMonteCarloWinners`.
+- `winnerSnapshots`: A `WinnerSnapshots` containing per-checkpoint win rates and
+  median amounts. Win rates are clipped/smoothed to the range `[0.01, 0.98]`
+  (for a single dominant winner, with other scenarios receiving 1% each,
+  yielding `[0.01, 0.01, 0.98]`) so they never return exactly 0% or 100%,
+  reflecting unmodeled tail risks and preventing deterministic misinterpretation
+  of statistical estimates.
 - `values`: A `ColumnarResult` with stochastic path values per iteration
   (enabled with `options.values`). Decode with `decodeMonteCarloValues`.
 - `details.monthlyIterations`: A `ColumnarResult` with raw monthly records per
