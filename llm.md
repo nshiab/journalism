@@ -545,7 +545,8 @@ answering questions to analyzing multimedia content.
 **Authentication**: set `AI_KEY` (API key) or `AI_PROJECT` + `AI_LOCATION`
 (Vertex AI) environment variables, or pass credentials directly via options.
 
-**Caching**: set `cache: true` to persist responses in `.journalism-cache`.
+**Caching**: responses are persisted in `.journalism-cache` by default. Set
+`cache: false` to disable caching.
 
 **File handling**: pass files via `files: [{ path, type }]`. Local paths and
 `gs://` GCS URLs are both supported for images, audio, video, PDF, and text.
@@ -580,7 +581,8 @@ async function askGemini<TResponse>(
   `"audio"`, `"pdf"`, or `"text"`). All files are appended as separate content
   parts after the prompt.
 - **`options.schemaJson`**: Zod JSON schema for structured output.
-- **`options.cache`**: Cache the response in `.journalism-cache`.
+- **`options.cache`**: Cache the response in `.journalism-cache`. Defaults to
+  `true`.
 - **`options.processResponse`**: Transform or validate the response before it is
   returned. If it rejects a cached response, that cache entry is removed so a
   retry can generate a fresh response.
@@ -667,6 +669,10 @@ controls how many requests run simultaneously. Results and errors are returned
 separately, sorted by their original index, making it easy to match outputs back
 to inputs.
 
+**Caching**: each request uses {@link askGemini}'s default caching behavior, so
+responses are persisted in `.journalism-cache` by default. Set
+`options.cache: false` on an individual request to disable caching for it.
+
 ### Signature
 
 ```typescript
@@ -687,7 +693,8 @@ function askGeminiPool<TResponse>(
   validates the response inside the retry loop. If it throws, the request is
   retried according to `poolOptions`.
 - **`requests[].options`**: Options passed to {@link askGemini} for each
-  individual request. See {@link askGemini} for the full list of available
+  individual request. Caching defaults to `true`; set `cache: false` to disable
+  it for that request. See {@link askGemini} for the full list of available
   options.
 - **`poolSize`**: The number of concurrent workers processing requests.
 - **`poolOptions`**: Configuration for the pool execution.
@@ -836,7 +843,8 @@ host.
 **File handling**: pass local files via `files: [{ path, type }]`. Only
 `"image"` and `"text"` types are supported for now.
 
-**Caching**: set `cache: true` to persist responses in `.journalism-cache`.
+**Caching**: responses are persisted in `.journalism-cache` by default. Set
+`cache: false` to disable caching.
 
 Temperature defaults to 0 for deterministic responses.
 
@@ -860,7 +868,8 @@ async function askOllama<TResponse>(
   Text files are sent as separate user messages after the prompt; images are
   sent as attachments to the prompt message.
 - **`options.schemaJson`**: JSON schema for structured output.
-- **`options.cache`**: Cache the response in `.journalism-cache`.
+- **`options.cache`**: Cache the response in `.journalism-cache`. Defaults to
+  `true`.
 - **`options.contextWindow`**: Override the model's context window size.
 - **`options.thinkingLevel`**: Enables reasoning. Pass `true` for models that
   only support on/off, or `"low"`, `"medium"`, or `"high"` for granular control.
@@ -1039,7 +1048,7 @@ createDirectory("./output/data/my-file.json");
 
 Converts an array of objects into a CSV (Comma-Separated Values) string.
 
-The function takes an array of objects and returns a string in CSV format. The first line of the string will be the headers, which are derived from the keys of the first object in the array. Each subsequent line will represent an object, with the values in the same order as the headers.
+The function takes an array of objects and returns a string in CSV format. The first line contains the union of keys found across all objects, in discovery order. Each subsequent line represents an object, with values in the same order as the headers.
 
 ### Signature
 ```typescript
@@ -1048,8 +1057,8 @@ function dataAsCsv(arrayOfObjects: Record<string, unknown>[]): string;
 
 ### Parameters
 
-- **`data`**: An array of objects to be converted. All objects in the array
-  should have the same keys.
+- **`arrayOfObjects`**: The objects to convert. Rows may have different keys;
+  columns are inferred from all rows.
 
 ### Returns
 
@@ -2129,7 +2138,7 @@ an empty-looking OBJ.
 ### Signature
 
 ```typescript
-function geoToBlender(
+async function geoToBlender(
   geojsonPath: string,
   projection:
     | "orthographic"
@@ -2694,11 +2703,10 @@ or set `AI_EMBEDDINGS_PROVIDER=ollama` (the legacy `OLLAMA` environment variable
 is also supported), and ensure Ollama is running. A custom `Ollama` client can
 be passed in the provider-specific `ollama` option.
 
-**Caching**: To save resources and time, you can enable caching by setting
-`cache` to `true`. Responses will be stored in a local `.journalism-cache`
+**Caching**: Responses are cached by default in a local `.journalism-cache`
 directory. If the same request is made again, the cached response will be
-returned, avoiding redundant API calls. Remember to add `.journalism-cache` to
-your `.gitignore` file.
+returned, avoiding redundant API calls. Set `cache` to `false` to disable
+caching. Remember to add `.journalism-cache` to your `.gitignore` file.
 
 ### Signature
 
@@ -2728,7 +2736,7 @@ async function getEmbedding(
 - **`options.location`**: The Google Cloud location for your Vertex AI project.
   Defaults to the `AI_LOCATION` environment variable.
 - **`options.cache`**: If `true`, enables caching of the embedding response.
-  Defaults to `false`.
+  Defaults to `true`.
 - **`options.ollama`**: A custom Ollama client. Boolean selection remains
   supported at runtime for compatibility but is deprecated; use
   `provider: "ollama"` instead.
@@ -2755,10 +2763,9 @@ console.log(embedding); // [0.012, -0.034, ..., 0.056] (example output)
 ```
 
 ```ts
-// Generate an embedding with caching enabled.
+// Embeddings are cached by default.
 const cachedEmbedding = await getEmbedding(
   "Artificial intelligence is transforming industries.",
-  { cache: true },
 );
 console.log(cachedEmbedding);
 ```
@@ -2872,7 +2879,7 @@ your needs.
 ### Signature
 
 ```typescript
-async function getEnvironmentCanadaRecords<T extends Record<string, unknown>>(locations: T[], variable: "DAILY MAXIMUM TEMPERATURE" | "DAILY TOTAL PRECIPITATION" | "DAILY TOTAL SNOWFALL", dateRange: [${[0m[36mnumber[0m}-${[0m[36mnumber[0m}-${[0m[36mnumber[0m}, ${[0m[36mnumber[0m}-${[0m[36mnumber[0m}-${[0m[36mnumber[0m}], options?: { delay?: number; verbose?: boolean }): Promise<(T & { recordMonth: number; recordDay: number; recordVariable: string; recordValue: number; recordYear: number; previousRecordValue: number; previousRecordYear: number; recordStationName: string; recordStationId: string; recordStationLat: number; recordStationLon: number; recordStationDistance: number; recordStationRecordBegin: string; recordStationRecordEnd: string | null })[]>;
+async function getEnvironmentCanadaRecords<T extends Record<string, unknown>>(locations: T[], variable: "DAILY MAXIMUM TEMPERATURE" | "DAILY TOTAL PRECIPITATION" | "DAILY TOTAL SNOWFALL", dateRange: [${number}-${number}-${number}, ${number}-${number}-${number}], options?: { delay?: number; verbose?: boolean }): Promise<(T & { recordMonth: number; recordDay: number; recordVariable: string; recordValue: number; recordYear: number; previousRecordValue: number; previousRecordYear: number; recordStationName: string; recordStationId: string; recordStationLat: number; recordStationLon: number; recordStationDistance: number; recordStationRecordBegin: string; recordStationRecordEnd: string | null })[]>;
 ```
 
 ### Parameters
@@ -3025,7 +3032,7 @@ the `getGeoTiffValues` function.
 ### Signature
 
 ```typescript
-function getGeoTiffDetails(
+async function getGeoTiffDetails(
   path: string,
 ): Promise<
   {
@@ -3073,7 +3080,7 @@ using the details returned by it.
 ### Signature
 
 ```typescript
-function getGeoTiffValues(
+async function getGeoTiffValues(
   lat: number,
   lon: number,
   geoTiffDetails: {
@@ -3139,7 +3146,7 @@ function.
 async function getHtmlTable(
   urlOrHtml: string,
   options?: { selector?: string; index?: number },
-): Promise<DSVRowArray<string>>;
+): Promise<Array<Record<string, string>>>;
 ```
 
 ### Parameters
@@ -3566,12 +3573,18 @@ The calculation follows the Financial Consumer Agency of Canada (FCAC) rules:
 ### Signature
 
 ```typescript
-function getMinimumDownPayment(purchasePrice: number): number;
+function getMinimumDownPayment(
+  purchasePrice: number,
+  options?: { decimals?: number },
+): number;
 ```
 
 ### Parameters
 
 - **`purchasePrice`**: The total price of the property being purchased.
+- **`options`**: Additional calculation options.
+- **`options.decimals`**: The number of decimal places to round the result to.
+  By default, the result is not rounded.
 
 ### Returns
 
@@ -3591,6 +3604,10 @@ console.log(downPayment600k); // 35000
 // Minimum down payment for a $1,600,000 home (20%)
 const downPayment1600k = getMinimumDownPayment(1_600_000);
 console.log(downPayment1600k); // 320000
+
+// Round the result to two decimal places
+const downPaymentWithDecimals = getMinimumDownPayment(123.456, { decimals: 2 });
+console.log(downPaymentWithDecimals); // 6.17
 ```
 
 Reference:
@@ -4154,7 +4171,7 @@ It can typically be found in the URL of the table's page (e.g.,
 async function getStatCanTable(
   pid: string,
   options?: { lang?: "en" | "fr"; returnRawCSV?: boolean; debug?: boolean },
-): Promise<string | DSVRowArray<string>>;
+): Promise<string | Array<Record<string, string>>>;
 ```
 
 ### Parameters
@@ -6719,10 +6736,7 @@ async function saveChart(
 - **`data`**: An array of data objects that your Observable Plot chart function
   expects.
 - **`chart`**: A function that takes the `data` array and returns an SVG or HTML
-  element representing the chart. Inside this function, `d3`, `Plot`, and
-  `journalismFormat` globals are available, with their members destructured
-  (e.g. `formatNumber`, `formatDate`, `round` from journalism-format; `min`,
-  `max`, `mean`, etc. from d3; and all Plot marks).
+  element representing the chart.
 - **`path`**: The file path where the image or SVG will be saved. The file
   extension (`.png` or `.svg`) determines the output format.
 - **`options`**: Optional settings to customize the chart's appearance and
