@@ -104,10 +104,6 @@ Combined API reference for `@nshiab/journalism` and `@nshiab/journalism/web`.
 - [pushToSheet](functions/pushToSheet.md)
 - [toBucket](functions/toBucket.md)
 
-## Other
-
-- [WINNER\_CATEGORIES](variables/WINNER_CATEGORIES.md)
-
 ## Statistics
 
 - [addClusters](functions/addClusters.md)

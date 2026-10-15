@@ -6,7 +6,6 @@
 
 ## API
 - [DurationTracker](https://raw.githubusercontent.com/nshiab/journalism/v3.1.2/docs/classes/DurationTracker.md): DurationTracker class
-- [WINNER_CATEGORIES](https://raw.githubusercontent.com/nshiab/journalism/v3.1.2/docs/variables/WINNER_CATEGORIES.md): WINNER_CATEGORIES variable
 - [addClusters](https://raw.githubusercontent.com/nshiab/journalism/v3.1.2/docs/functions/addClusters.md): addClusters function
 - [addMahalanobisDistance](https://raw.githubusercontent.com/nshiab/journalism/v3.1.2/docs/functions/addMahalanobisDistance.md): addMahalanobisDistance function
 - [addZScore](https://raw.githubusercontent.com/nshiab/journalism/v3.1.2/docs/functions/addZScore.md): addZScore function

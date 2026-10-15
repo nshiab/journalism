@@ -3696,7 +3696,7 @@ Keys are variable names. Each `Float64Array` has size `iterations × months`.
 
 > **decodeMonteCarloWinners**(`w`): `object`[]
 
-`category` bytes map to category names via `WINNER_CATEGORIES`
+Decodes `category` bytes into category names
 (0 = "renter", 1 = "buyerFixed", 2 = "buyerVariable").
 Records are returned in iteration order (row 0 = iteration 0).
 
@@ -3715,7 +3715,7 @@ Final `amount` of the winning scenario for each iteration.
 `Uint8Array`
 
 Winning scenario category encoded as a byte.
-Decode with `WINNER_CATEGORIES[category[i]]` or use `decodeMonteCarloWinners`.
+Use `decodeMonteCarloWinners` to decode the category names.
 
 ###### monthIndex
 
@@ -5934,7 +5934,7 @@ Final `amount` of the winning scenario for each iteration.
 > **category**: `Uint8Array`
 
 Winning scenario category encoded as a byte.
-Decode with `WINNER_CATEGORIES[category[i]]` or use `decodeMonteCarloWinners`.
+Use `decodeMonteCarloWinners` to decode the category names.
 
 ###### winners.monthIndex
 
@@ -8738,14 +8738,6 @@ const uriExplicit = await toBucket("./local/file.txt", "remote/file.txt", {
 });
 console.log(uriExplicit);
 ```
-
-## Other
-
-### WINNER\_CATEGORIES
-
-> `const` **WINNER\_CATEGORIES**: readonly \[`"renter"`, `"buyerFixed"`, `"buyerVariable"`\]
-
-Category names indexed by `WinnersColumnar.category` byte (0 = renter, 1 = buyerFixed, 2 = buyerVariable).
 
 ## Statistics
 
