@@ -1,22 +1,10 @@
 /**
+ * Useful functions for journalism projects in the browser.
+ *
+ * Install with `npm install @nshiab/journalism`.
+ * Requires Node.js 24.21.0 or later and ES modules.
+ *
  * @module
- *
- * The Journalism library
- *
- * To install the library with Deno, use:
- * ```bash
- * deno add jsr:@nshiab/journalism
- * ```
- *
- * To install the library with Node.js, use:
- * ```bash
- * npx jsr add @nshiab/journalism
- * ```
- *
- * To import a function from the web entry point, use:
- * ```ts
- * import { functionName } from "@nshiab/journalism/web";
- * ```
  */
 
 export * from "@nshiab/journalism-climate/web";

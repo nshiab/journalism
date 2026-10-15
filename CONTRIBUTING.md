@@ -1,72 +1,33 @@
 # How to contribute
 
-Thank you for your interest in contributing!
+Issues, questions and contributions are welcome in the
+[GitHub repository](https://github.com/nshiab/journalism).
 
-If you don't feel comfortable playing with the project's code, keep in mind that
-starting a conversation about a new feature or flagging a bug is already of
-great help! :)
+Use Node.js 24.21.0 or later. Fork or clone the repository, create a branch,
+then install the locked development dependencies:
 
-Feel free to start a
-[conversation](https://github.com/nshiab/journalism/discussions) if some
-questions you have are not answered below.
-
-You can also check
-[this tutorial](https://github.com/firstcontributions/first-contributions) as a
-resource.
-
-## Creating an issue
-
-The first step is to create an issue with a clear title and a description of the
-problem you encountered: https://github.com/nshiab/journalism/issues
-
-If you want to solve the problem yourself, explain what you have in mind and how
-you want to proceed.
-
-## Do your magic
-
-Clone or fork the repository, create a new branch from your issue if relevant,
-and have fun!
-
-The suggested workflow is to create tests in `test/` with the expected outputs
-and to add or modify functions in `src/`.
-
-Read the tests and the functions already present as inspirations. Do your best
-to write clear and understandable code.
-
-Then, do your magic to pass the tests you created. It's a great way to stay
-focused and break down the tasks into small steps.
-
-We use [Deno](https://github.com/denoland/deno) to build and test the library.
-
-Here's how to run a specific test file with one or more tests in it:
-
-```bash
-deno test -A test/format/formatNumber.test.ts
+```sh
+npm ci
 ```
 
-And here's how to run all tests, including formatting, typescript checks,
-linter, and dry run to publish on
-[JSR](https://jsr.io/@nshiab/simple-data-analysis):
+This umbrella package re-exports the journalism libraries through `src/index.ts`
+and `src/web.ts`. Implement changes to individual functions in their owning
+library, then update the dependency here. Add integration tests in `test/` when
+changing the umbrella's exports.
 
-```bash
-deno task all-tests
-```
+| Command                              | Purpose                                                                          |
+| ------------------------------------ | -------------------------------------------------------------------------------- |
+| `vp test`                            | Run all Vitest tests once                                                        |
+| `vp test watch test/exports.test.ts` | Watch the umbrella integration tests                                             |
+| `npm run fix`                        | Fix formatting and automatically fixable lint issues                             |
+| `npm run all-tests`                  | Check formatting, lint and types; run tests; build the package and documentation |
 
-When committing your work, keep in mind that your messages will be public if
-your code gets merged into the main branch.
+If `vp` is not installed globally, use `npx vp` to run the project's local version.
 
-If you have any questions at any step, leave a comment on the relevant issue.
+The website in `site/`, Markdown pages in `docs/`, and root `llm.md` and
+`llms.txt` files are generated automatically. Update source documentation or
+`README.md`, then run `npm run docs`. Commit `docs/`, `llm.md` and `llms.txt`;
+keep `site/` ignored.
 
-## Pull request
-
-Make sure that your code is up-to-date. Some changes could have been pushed to
-the main branch while you worked on your things.
-
-It's now time to create a pull request! Explain what you did in your code and
-what issue you solved.
-
-An experienced contributor will look at your proposition. They might ask
-questions and suggest modifications to your code.
-
-When all questions are answered, and modifications are made, your code will be
-merged into the main branch and officially part of the library! Congrats!
+Run `npm run all-tests` before opening a pull request. Explain the behavior
+changed and any relevant test results in your PR.

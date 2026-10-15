@@ -1,0 +1,68 @@
+{
+  "name": "@nshiab/journalism",
+  "version": "3.1.2",
+  "description": "Useful TypeScript functions for journalism projects.",
+  "homepage": "https://nshiab.github.io/journalism/",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nshiab/journalism.git"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE",
+    "llm.md",
+    "llms.txt"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./web": {
+      "types": "./dist/web.d.mts",
+      "default": "./dist/web.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "fix": "vp check --fix",
+    "docs": "typedoc && node scripts/docs.ts",
+    "all-tests": "vp check && vp test && vp pack && npm run docs",
+    "preversion": "node scripts/check-release-branch.ts && npm run all-tests",
+    "version": "npm run docs && git add docs llm.md llms.txt",
+    "postversion": "git push --atomic origin HEAD \"v$npm_package_version\"",
+    "patch": "npm version patch",
+    "minor": "npm version minor",
+    "major": "npm version major"
+  },
+  "dependencies": {
+    "@nshiab/journalism-ai": "^3.0.0",
+    "@nshiab/journalism-climate": "^1.0.13",
+    "@nshiab/journalism-dataviz": "^1.0.27",
+    "@nshiab/journalism-extras": "^1.0.12",
+    "@nshiab/journalism-finance": "^2.0.2",
+    "@nshiab/journalism-format": "^1.1.12",
+    "@nshiab/journalism-geo": "^1.0.26",
+    "@nshiab/journalism-google": "^2.0.0",
+    "@nshiab/journalism-statistics": "^1.5.9",
+    "@nshiab/journalism-web": "^1.0.12",
+    "@nshiab/journalism-web-scraping": "^2.0.8"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typedoc": "0.28.20",
+    "typedoc-plugin-llms-txt": "0.1.2",
+    "typedoc-plugin-markdown": "4.14.0",
+    "typescript": "6.0.3",
+    "vite-plus": "1.2.0"
+  },
+  "engines": {
+    "node": ">=24.21.0"
+  }
+}
