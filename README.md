@@ -26,7 +26,13 @@ import { createDirectory } from "@nshiab/journalism";
 createDirectory("data");
 ```
 
-For browser-compatible functions, import from `@nshiab/journalism/web`.
+For browser projects, use the `/web` entry point:
+
+```ts
+import { getHumidex } from "@nshiab/journalism/web";
+
+console.log(getHumidex(30, 70)); // 41
+```
 
 To start a data project with folders, configuration and documentation for AI
 agents, run:
