@@ -1,6 +1,6 @@
-node_modules
+node_modules/
+dist/
+site/
+*.tgz
 .DS_Store
 .env
-npm/
-cov_profile
-docs.json

@@ -1,0 +1,73 @@
+[**Journalism v3.1.2**](../index.md)
+
+***
+
+[Journalism](../globals.md) / adjustToInflation
+
+# Function: adjustToInflation()
+
+> **adjustToInflation**(`amount`, `amountCPI`, `targetCPI`, `options?`): `number`
+
+Adjusts a monetary amount for inflation using the Consumer Price Index (CPI).
+
+## Parameters
+
+### amount
+
+`number`
+
+The initial amount of money to be adjusted.
+
+### amountCPI
+
+`number`
+
+The Consumer Price Index (CPI) corresponding to the period of the `amount`.
+
+### targetCPI
+
+`number`
+
+The Consumer Price Index (CPI) for the period to which the amount is being adjusted.
+
+### options?
+
+Optional settings for the calculation.
+
+#### decimals?
+
+`number`
+
+The number of decimal places to which the resulting adjusted amount should be rounded. If not specified, the result will not be rounded.
+
+## Returns
+
+`number`
+
+## Throws
+
+If either CPI value is not a positive finite number.
+
+## Examples
+
+```ts
+// Basic usage: Adjusting $100 from a time when the CPI was 120 to a time when the CPI is 150.
+const adjustedValue = adjustToInflation(100, 120, 150);
+console.log(adjustedValue); // Expected output: 125
+```
+
+```ts
+// With rounding to two decimal places
+const adjustedValueRounded = adjustToInflation(100, 120, 150.5, { decimals: 2 });
+console.log(adjustedValueRounded); // Expected output: 125.42
+```
+
+```ts
+// Calculating the value of a 1990 salary in 2023 terms
+const salary1990 = 45000;
+const cpi1990 = 60.5; // Hypothetical CPI for 1990
+const cpi2023 = 135.2; // Hypothetical CPI for 2023
+const adjustedSalary = adjustToInflation(salary1990, cpi1990, cpi2023, { decimals: 0 });
+console.log(`A $45,000 salary in 1990 is equivalent to approximately ${adjustedSalary} in 2023.`);
+// Expected output: "A $45,000 salary in 1990 is equivalent to approximately $100149 in 2023."
+```
