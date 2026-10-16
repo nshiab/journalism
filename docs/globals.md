@@ -1,8 +1,8 @@
-[**Journalism v4.0.1**](index.md)
+[**Journalism v4.0.2**](index.md)
 
 ***
 
-# Journalism v4.0.1
+# Journalism v4.0.2
 
 Combined API reference for `@nshiab/journalism` and `@nshiab/journalism/web`.
 

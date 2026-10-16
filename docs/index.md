@@ -1,4 +1,4 @@
-**Journalism v4.0.1**
+**Journalism v4.0.2**
 
 ***
 

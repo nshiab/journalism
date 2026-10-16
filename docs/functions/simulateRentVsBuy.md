@@ -1,4 +1,4 @@
-[**Journalism v4.0.1**](../index.md)
+[**Journalism v4.0.2**](../index.md)
 
 ***
 
@@ -324,7 +324,7 @@ Internal filter used by `simulateRentVsBuyMonteCarlo` via `details.filterVariabl
 
 #### winVariable?
 
-`"balance"` \| `"balanceAfterSelling"` \| `"assets"`
+`"assets"` \| `"balance"` \| `"balanceAfterSelling"`
 
 The variable used to identify the winner when extracting the final record. Use `"balanceAfterSelling"` for net balance after a simulated sale, `"balance"` for cumulative balance, or `"assets"` for total raw assets.
 

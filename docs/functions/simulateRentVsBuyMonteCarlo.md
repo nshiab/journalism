@@ -1,4 +1,4 @@
-[**Journalism v4.0.1**](../index.md)
+[**Journalism v4.0.2**](../index.md)
 
 ***
 
@@ -472,7 +472,7 @@ Whether to prioritize TFSA contributions for investments (tax-free gains).
 
 #### winVariable
 
-`"balance"` \| `"balanceAfterSelling"` \| `"assets"`
+`"assets"` \| `"balance"` \| `"balanceAfterSelling"`
 
 The variable used to determine the winner of each iteration. Use `"balanceAfterSelling"` for the net balance after simulated sale of all assets, `"balance"` for the cumulative balance before any sale simulation, or `"assets"` for the total raw asset value (TFSA + stocks + home equity + security deposit).
 
@@ -488,7 +488,7 @@ The rate parameter used as a proxy for inflation to express future dollar values
 
 #### details?
 
-\{ `filterGroups?`: (`"assets"` \| `"monthlyExpenses"` \| `"cumulativeExpenses"` \| `"monthlyGains"` \| `"cumulativeGains"` \| `"summary"` \| `"summaryCumulative"` \| `"saleCosts"` \| `"saleNetGains"` \| `"monthlyRecurringExpenses"` \| `"monthlyNonRecurringExpenses"` \| `"totals"`)[]; `filterVariables?`: (`"rent"` \| `"maintenance"` \| `"propertyTax"` \| `"balance"` \| `"balanceAfterSelling"` \| `"assets"` \| `"monthlyExpenses"` \| `"cumulativeExpenses"` \| `"insurance"` \| `"securityDeposit"` \| `"mortgageCapital"` \| `"mortgageInterests"` \| `"condoFees"` \| `"downPayment"` \| `"purchaseFixedFees"` \| `"landTransferTax"` \| `"insurancePremiumTax"` \| `"tfsaFees"` \| `"stocksFees"` \| `"monthlyGains"` \| `"cumulativeGains"` \| `"saleCosts"` \| `"saleNetGains"` \| `"monthlyRecurringExpenses"` \| `"monthlyNonRecurringExpenses"` \| `"tfsaGains"` \| `"tfsaContribution"` \| `"stocksGains"` \| `"newStocks"` \| `"homeEquityGains"` \| `"tfsa"` \| `"stocks"` \| `"homeEquity"` \| `"stockTaxes"` \| `"homeSellingCommission"` \| `"homeSellingFixedFees"` \| `"mortgagePenalty"` \| `"mortgageBalance"` \| `"stockSellingGains"` \| `"tfsaSellingGains"` \| `"homeSellingGains"`)[]; `firstMonth?`: `boolean`; `iterations?`: `boolean`; `quantiles?`: `number`[]; \}
+\{ `filterGroups?`: (`"assets"` \| `"monthlyExpenses"` \| `"cumulativeExpenses"` \| `"monthlyGains"` \| `"cumulativeGains"` \| `"summary"` \| `"summaryCumulative"` \| `"saleCosts"` \| `"saleNetGains"` \| `"monthlyRecurringExpenses"` \| `"monthlyNonRecurringExpenses"` \| `"totals"`)[]; `filterVariables?`: (`"assets"` \| `"rent"` \| `"maintenance"` \| `"propertyTax"` \| `"balance"` \| `"balanceAfterSelling"` \| `"monthlyExpenses"` \| `"cumulativeExpenses"` \| `"insurance"` \| `"securityDeposit"` \| `"mortgageCapital"` \| `"mortgageInterests"` \| `"condoFees"` \| `"downPayment"` \| `"purchaseFixedFees"` \| `"landTransferTax"` \| `"insurancePremiumTax"` \| `"tfsaFees"` \| `"stocksFees"` \| `"monthlyGains"` \| `"cumulativeGains"` \| `"saleCosts"` \| `"saleNetGains"` \| `"monthlyRecurringExpenses"` \| `"monthlyNonRecurringExpenses"` \| `"tfsaGains"` \| `"tfsaContribution"` \| `"stocksGains"` \| `"newStocks"` \| `"homeEquityGains"` \| `"tfsa"` \| `"stocks"` \| `"homeEquity"` \| `"stockTaxes"` \| `"homeSellingCommission"` \| `"homeSellingFixedFees"` \| `"mortgagePenalty"` \| `"mortgageBalance"` \| `"stockSellingGains"` \| `"tfsaSellingGains"` \| `"homeSellingGains"`)[]; `firstMonth?`: `boolean`; `iterations?`: `boolean`; `quantiles?`: `number`[]; \}
 
 When provided, enables detailed monthly data collection for all iterations.
 - `iterations`: if `true`, captures raw per-iteration monthly records returned in `details.monthlyIterations`. Requires `filterGroups` to be set and non-empty — throws otherwise. Decode with `decodeMonteCarloMonthlyIterations`.
@@ -520,7 +520,7 @@ Required when `details.iterations` is `true`. Restricts which groups are include
 
 #### details.filterVariables?
 
-(`"rent"` \| `"maintenance"` \| `"propertyTax"` \| `"balance"` \| `"balanceAfterSelling"` \| `"assets"` \| `"monthlyExpenses"` \| `"cumulativeExpenses"` \| `"insurance"` \| `"securityDeposit"` \| `"mortgageCapital"` \| `"mortgageInterests"` \| `"condoFees"` \| `"downPayment"` \| `"purchaseFixedFees"` \| `"landTransferTax"` \| `"insurancePremiumTax"` \| `"tfsaFees"` \| `"stocksFees"` \| `"monthlyGains"` \| `"cumulativeGains"` \| `"saleCosts"` \| `"saleNetGains"` \| `"monthlyRecurringExpenses"` \| `"monthlyNonRecurringExpenses"` \| `"tfsaGains"` \| `"tfsaContribution"` \| `"stocksGains"` \| `"newStocks"` \| `"homeEquityGains"` \| `"tfsa"` \| `"stocks"` \| `"homeEquity"` \| `"stockTaxes"` \| `"homeSellingCommission"` \| `"homeSellingFixedFees"` \| `"mortgagePenalty"` \| `"mortgageBalance"` \| `"stockSellingGains"` \| `"tfsaSellingGains"` \| `"homeSellingGains"`)[]
+(`"assets"` \| `"rent"` \| `"maintenance"` \| `"propertyTax"` \| `"balance"` \| `"balanceAfterSelling"` \| `"monthlyExpenses"` \| `"cumulativeExpenses"` \| `"insurance"` \| `"securityDeposit"` \| `"mortgageCapital"` \| `"mortgageInterests"` \| `"condoFees"` \| `"downPayment"` \| `"purchaseFixedFees"` \| `"landTransferTax"` \| `"insurancePremiumTax"` \| `"tfsaFees"` \| `"stocksFees"` \| `"monthlyGains"` \| `"cumulativeGains"` \| `"saleCosts"` \| `"saleNetGains"` \| `"monthlyRecurringExpenses"` \| `"monthlyNonRecurringExpenses"` \| `"tfsaGains"` \| `"tfsaContribution"` \| `"stocksGains"` \| `"newStocks"` \| `"homeEquityGains"` \| `"tfsa"` \| `"stocks"` \| `"homeEquity"` \| `"stockTaxes"` \| `"homeSellingCommission"` \| `"homeSellingFixedFees"` \| `"mortgagePenalty"` \| `"mortgageBalance"` \| `"stockSellingGains"` \| `"tfsaSellingGains"` \| `"homeSellingGains"`)[]
 
 Optional finer-grained filter applied within the allowed groups. Restricts which individual variables are stored in the columnar buffer (e.g. `["balance", "homeEquity"]`), reducing memory usage. Also filters the shared column-major buffer used by `details.quantiles`. An empty array is treated as no filter (all variables are stored).
 
