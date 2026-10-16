@@ -14,13 +14,6 @@
   "hostedBaseUrl": "https://nshiab.github.io/journalism/",
   "outputs": [
     {
-      "name": "html",
-      "path": "site",
-      "options": {
-        "llmsTxt": false
-      }
-    },
-    {
       "name": "markdown",
       "path": ".",
       "options": {
@@ -42,6 +35,13 @@
           "features": ["[README](../README.md): Installation, examples and usage."]
         },
         "theme": "default"
+      }
+    },
+    {
+      "name": "html",
+      "path": "site",
+      "options": {
+        "llmsTxt": false
       }
     }
   ],
