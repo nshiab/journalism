@@ -8,6 +8,8 @@
 
 > **updateInfoDW**(`chartId`, `metadata`, `options?`): `Promise`\<`void` \| `Response`\>
 
+Defined in: [journalism-dataviz/src/dataviz/updateInfoDW.ts:47](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/updateInfoDW.ts#L47)
+
 Updates the title, description, and notes of a Datawrapper chart, table, or map in one API request.
 
 Only supplied fields are updated. Omit a field or pass `undefined` to preserve its existing value; pass an empty string to clear it. At least one field must be supplied. Other chart settings are preserved by Datawrapper's partial metadata update.

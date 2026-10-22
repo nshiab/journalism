@@ -8,6 +8,8 @@
 
 > **getCovarianceMatrix**(`data`, `options?`): `number`[][]
 
+Defined in: [journalism-statistics/src/statistics/getCovarianceMatrix.ts:103](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getCovarianceMatrix.ts#L103)
+
 Computes the covariance matrix for a given dataset. The covariance matrix is a square matrix that describes the covariance between each pair of variables in a dataset.
 
 The function takes a 2D array (matrix) as input, where each inner array represents a data point and each element within the inner array represents a variable. It calculates the covariance between all pairs of variables.

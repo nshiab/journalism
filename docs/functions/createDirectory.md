@@ -8,6 +8,8 @@
 
 > **createDirectory**(`path`): `void`
 
+Defined in: [journalism-extras/src/extras/createDirectory.ts:25](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/createDirectory.ts#L25)
+
 Recursively creates a directory structure. This function is useful for ensuring that a path exists before writing a file to it.
 
 The function will not throw an error if the directory already exists. It can also accept a full file path, in which case it will create all the parent directories, ignoring the filename portion.

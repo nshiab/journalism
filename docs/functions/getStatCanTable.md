@@ -8,6 +8,8 @@
 
 > **getStatCanTable**(`pid`, `options?`): `Promise`\<`string` \| `Record`\<`string`, `string`\>[]\>
 
+Defined in: [journalism-web-scraping/src/web-scraping/getStatCanTable.ts:43](https://github.com/nshiab/journalism-web-scraping/blob/v2.0.8/src/web-scraping/getStatCanTable.ts#L43)
+
 Retrieves tabular data from Statistics Canada's website using a provided Product ID (PID). This function automates the process of fetching, unzipping, and parsing the CSV data directly from StatCan's API, making it easy to integrate official Canadian statistics into applications or analyses.
 
 The PID is a unique identifier for each table on the Statistics Canada website. It can typically be found in the URL of the table's page (e.g., `https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=98100001` where `98100001` is the PID).

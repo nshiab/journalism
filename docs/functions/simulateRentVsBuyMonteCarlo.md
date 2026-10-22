@@ -8,6 +8,8 @@
 
 > **simulateRentVsBuyMonteCarlo**(`parameters`, `options?`): `object`
 
+Defined in: [journalism-finance/src/finance/simulateRentVsBuyMonteCarlo.ts:421](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/simulateRentVsBuyMonteCarlo.ts#L421)
+
 Performs a Monte Carlo simulation for a rent versus buy analysis tailored for a Canadian context.
 This function runs multiple iterations of the `simulateRentVsBuy` function, using stochastic paths
 for various economic factors like market returns, interest rates, and inflation-related costs.

@@ -8,6 +8,8 @@
 
 > **getIncomeTax**(`employmentIncome`, `province`, `year`, `options?`): `object`
 
+Defined in: [journalism-finance/src/finance/getIncomeTax.ts:996](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getIncomeTax.ts#L996)
+
 Calculates a comprehensive breakdown of Canadian federal and provincial income taxes, including capital gains.
 
 Calculation Engine Methodology:

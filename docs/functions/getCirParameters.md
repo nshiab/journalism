@@ -8,6 +8,8 @@
 
 > **getCirParameters**(`values`, `periodsPerYear`): `object`
 
+Defined in: [journalism-statistics/src/statistics/getCirParameters.ts:26](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getCirParameters.ts#L26)
+
 Estimates the parameters of the Cox-Ingersoll-Ross (CIR) model based on historical values using ordinary least squares on the discretized process.
 
 The CIR model is a mean-reverting stochastic process often used to model interest rates or other variables that tend to move toward a long-term average. This function returns the speed of mean reversion (`a`), the long-term mean (`b`), and the volatility (`sigma`).

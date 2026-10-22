@@ -8,6 +8,8 @@
 
 > **getGeoTiffDetails**(`path`): `Promise`\<\{ `bbox`: `number`[]; `bboxHeight`: `number`; `bboxWidth`: `number`; `image`: `GeoTIFFImage`; `pixelHeight`: `number`; `pixelWidth`: `number`; \}\>
 
+Defined in: [journalism-geo/src/geo/getGeoTiffDetails.ts:25](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/getGeoTiffDetails.ts#L25)
+
 Extracts detailed information from a GeoTIFF file, which can then be used with the `getGeoTiffValues` function.
 
 ## Parameters

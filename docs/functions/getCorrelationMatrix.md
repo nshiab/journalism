@@ -8,6 +8,8 @@
 
 > **getCorrelationMatrix**(`data`, `options?`): `number`[][]
 
+Defined in: [journalism-statistics/src/statistics/getCorrelationMatrix.ts:48](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getCorrelationMatrix.ts#L48)
+
 Computes the correlation matrix for a given dataset. The correlation matrix is a square matrix that describes the correlation between each pair of variables in a dataset.
 
 The function takes a 2D array (matrix) as input, where each inner array represents a data point and each element within the inner array represents a variable. It calculates the Pearson correlation coefficient between all pairs of variables.

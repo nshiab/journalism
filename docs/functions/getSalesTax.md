@@ -8,6 +8,8 @@
 
 > **getSalesTax**(`amount`, `province`, `year`): `object`
 
+Defined in: [journalism-finance/src/finance/getSalesTax.ts:61](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getSalesTax.ts#L61)
+
 Calculates the Canadian sales tax for a given amount, province, and year.
 
 ## Parameters

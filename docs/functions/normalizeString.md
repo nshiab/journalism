@@ -8,6 +8,8 @@
 
 > **normalizeString**(`string`, `options?`): `string`
 
+Defined in: [journalism-format/src/format/normalizeString.ts:48](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/normalizeString.ts#L48)
+
 Normalizes a string by converting it to lowercase, stripping accents, punctuation (optional), and trimming whitespace.
 
 ## Parameters

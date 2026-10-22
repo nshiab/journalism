@@ -8,6 +8,8 @@
 
 > **getRentVsBuyCholeskyMatrix**(`data?`, `options?`): `number`[][]
 
+Defined in: [journalism-finance/src/finance/helpers/rentVsBuy/getRentVsBuyCholeskyMatrix.ts:70](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/helpers/rentVsBuy/getRentVsBuyCholeskyMatrix.ts#L70)
+
 Generates a Cholesky decomposition matrix from historical variable data,
 formatted specifically for the `simulateRentVsBuyMonteCarlo` function.
 

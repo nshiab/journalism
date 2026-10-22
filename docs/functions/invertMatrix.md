@@ -8,6 +8,8 @@
 
 > **invertMatrix**(`matrix`): `number`[][]
 
+Defined in: [journalism-statistics/src/statistics/invertMatrix.ts:47](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/invertMatrix.ts#L47)
+
 Computes the inverse of a square matrix.
 
 The function takes a square matrix as input and returns its inverse. It handles both 2x2 and larger square matrices. If the matrix is singular (i.e., its determinant is zero), it cannot be inverted, and the function will throw an error.

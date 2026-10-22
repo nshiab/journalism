@@ -8,6 +8,8 @@
 
 > **getHtmlTable**(`urlOrHtml`, `options?`): `Promise`\<`Record`\<`string`, `string`\>[]\>
 
+Defined in: [journalism-web-scraping/src/web-scraping/getHtmlTable.ts:43](https://github.com/nshiab/journalism-web-scraping/blob/v2.0.8/src/web-scraping/getHtmlTable.ts#L43)
+
 Extracts tabular data from an HTML table from a given URL or an HTML string and returns it as an array of objects. This function is particularly useful for scraping structured data from web pages.
 
 If the page uses JavaScript to render the table, you should fetch the HTML first using a tool like Playwright or Puppeteer and then pass the HTML string to this function.

@@ -8,6 +8,8 @@
 
 > **geoToBlender**(`geojsonPath`, `projection`, `outputPath`, `options?`): `Promise`\<`string`\>
 
+Defined in: [journalism-geo/src/geo/geoToBlender.ts:138](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/geoToBlender.ts#L138)
+
 Converts GeoJSON borders into an OBJ file that can be imported in Blender.
 
 Polygon rings, MultiPolygon rings, LineStrings, and MultiLineStrings are exported as OBJ line geometry.

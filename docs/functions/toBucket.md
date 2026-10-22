@@ -8,6 +8,8 @@
 
 > **toBucket**(`file`, `destination`, `options?`): `Promise`\<`string`\>
 
+Defined in: [journalism-google/src/google/toBucket.ts:70](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/toBucket.ts#L70)
+
 Uploads a local file to a Google Cloud Storage (GCS) bucket and returns the URI of the uploaded file. This function provides robust control over the upload process, including options for skipping uploads if the file already exists, overwriting existing files, and setting custom metadata.
 
 By default, if a file with the same destination path already exists in the bucket, an error will be thrown to prevent accidental overwrites. You can modify this behavior using the `skip` or `overwrite` options.

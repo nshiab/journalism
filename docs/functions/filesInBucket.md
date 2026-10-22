@@ -8,6 +8,8 @@
 
 > **filesInBucket**(`options?`): `Promise`\<`string`[]\>
 
+Defined in: [journalism-google/src/google/filesInBucket.ts:47](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/filesInBucket.ts#L47)
+
 Lists files within a Google Cloud Storage (GCS) bucket. You can list all files in the bucket or narrow down the results to a specific folder. The function can also return the full Google Storage URIs for each file.
 
 This function requires the Google Cloud project ID and the target bucket name. These can be provided either through environment variables (`BUCKET_PROJECT` and `BUCKET_NAME`) or directly as parameters in the `options` object. Parameters passed in `options` will take precedence over environment variables.

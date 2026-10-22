@@ -8,6 +8,8 @@
 
 > **performTTest**\<`T`\>(`sampleData`, `variableKey`, `hypothesizedMean`, `options?`): `object`
 
+Defined in: [journalism-statistics/src/statistics/performTTest.ts:136](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/performTTest.ts#L136)
+
 Performs a one-sample t-test for independent means to determine if a sample mean is significantly different from a hypothesized population mean.
 
 The function compares the mean of a sample against a hypothesized population mean when the population standard deviation is unknown. This is the most common scenario in real-world statistical analysis where we only have sample data and need to estimate the population parameters. This is a test for **independent means** (sample vs population), not related/paired samples.

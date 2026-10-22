@@ -80,6 +80,8 @@ Combined API reference for `@nshiab/journalism` and `@nshiab/journalism/web`.
 
 > **askGemini**\<`TResponse`\>(`prompt`, `options?`): `Promise`\<\{ `durationMs`: `number`; `estimatedCost`: `number` \| `null`; `files`: `object`[]; `fromCache`: `boolean`; `model`: `string`; `outputTokenCount`: `number`; `prompt`: `string`; `promptTokenCount`: `number`; `response`: `TResponse`; `safetyEnabled`: `boolean`; `systemPrompt`: `string` \| `null`; `thinkingLevel`: `"minimal"` \| `"low"` \| `"medium"` \| `"high"` \| `null`; `thoughts`: `string` \| `null`; `thoughtsTokenCount`: `number`; `tokensPerSecond`: `number` \| `null`; `totalTokens`: `number`; `webSearch`: `boolean`; \}\>
 
+Defined in: [journalism-ai/src/ai/askGemini.ts:178](https://github.com/nshiab/journalism-ai/blob/v3.0.0/src/ai/askGemini.ts#L178)
+
 Interacts with Google's Gemini models to perform a wide range of tasks,
 from answering questions to analyzing multimedia content.
 
@@ -281,6 +283,8 @@ console.log(`${result.totalTokens} tokens, $${result.estimatedCost}`);
 
 > **askGeminiPool**\<`TResponse`\>(`requests`, `poolSize`, `poolOptions?`): `Promise`\<\{ `errors`: `object`[]; `results`: `object`[]; \}\>
 
+Defined in: [journalism-ai/src/ai/askGeminiPool.ts:163](https://github.com/nshiab/journalism-ai/blob/v3.0.0/src/ai/askGeminiPool.ts#L163)
+
 Processes multiple Gemini requests concurrently using a pool of workers. This function wraps [askGemini](#askgemini) and manages parallel execution, retries, progress logging, and error handling for batch operations.
 
 Each request in the array is processed by a worker from the pool. The pool size controls how many requests run simultaneously. Results and errors are returned separately, sorted by their original index, making it easy to match outputs back to inputs.
@@ -440,6 +444,8 @@ for (const r of results) {
 
 > **askOllama**\<`TResponse`\>(`prompt`, `options?`): `Promise`\<\{ `contextWindow`: `number` \| `null`; `durationMs`: `number`; `files`: `object`[]; `fromCache`: `boolean`; `model`: `string`; `outputTokenCount`: `number`; `prompt`: `string`; `promptTokenCount`: `number`; `response`: `TResponse`; `systemPrompt`: `string` \| `null`; `temperature`: `number`; `thinkingLevel`: `boolean` \| `"low"` \| `"medium"` \| `"high"` \| `null`; `thoughts`: `string` \| `null`; `tokensPerSecond`: `number` \| `null`; `totalTokens`: `number`; \}\>
 
+Defined in: [journalism-ai/src/ai/askOllama.ts:143](https://github.com/nshiab/journalism-ai/blob/v3.0.0/src/ai/askOllama.ts#L143)
+
 Interacts with a local Ollama model to perform a wide range of tasks.
 
 Ollama must be running on the machine. Set the `AI_MODEL` environment
@@ -594,6 +600,8 @@ console.log(`${result.totalTokens} tokens in ${result.durationMs}ms`);
 ### getEmbedding()
 
 > **getEmbedding**(`text`, `options?`): `Promise`\<`number`[]\>
+
+Defined in: [journalism-ai/src/ai/getEmbedding.ts:103](https://github.com/nshiab/journalism-ai/blob/v3.0.0/src/ai/getEmbedding.ts#L103)
 
 Generates a numerical embedding (vector representation) for a given text string. Embeddings are crucial for various natural language processing (NLP) tasks, including semantic search, text classification, clustering, and anomaly detection, as they allow text to be processed and compared mathematically.
 
@@ -1063,6 +1071,8 @@ const embedding = await getEmbedding("Local reporting matters.", {
 ### getEmbeddingIdentity()
 
 > **getEmbeddingIdentity**(`options?`, `environment?`): \{ `backend`: `"gemini-api"`; `model`: `string`; `provider`: `"gemini"`; `schemaVersion`: `2`; \} \| \{ `backend`: `"vertex"`; `location?`: `string`; `model`: `string`; `project?`: `string`; `provider`: `"gemini"`; `schemaVersion`: `2`; \} \| \{ `backend`: `"ollama"`; `contextWindow?`: `number`; `endpoint`: `string`; `model`: `string`; `provider`: `"ollama"`; `schemaVersion`: `2`; \}
+
+Defined in: [journalism-ai/src/ai/embeddingOptions.ts:379](https://github.com/nshiab/journalism-ai/blob/v3.0.0/src/ai/embeddingOptions.ts#L379)
 
 Returns the canonical, non-secret identity for an embedding request.
 Downstream persisted data can compare this value to decide whether vectors
@@ -1569,6 +1579,8 @@ const identity = getEmbeddingIdentity({
 
 > **getEnvironmentCanadaRecords**\<`T`\>(`locations`, `variable`, `dateRange`, `options?`): `Promise`\<(`T` & `object`)[]\>
 
+Defined in: [journalism-climate/src/climate/getEnvironmentCanadaRecords.ts:102](https://github.com/nshiab/journalism-climate/blob/v1.0.13/src/climate/getEnvironmentCanadaRecords.ts#L102)
+
 Retrieves historical weather records from Environment and Climate Change Canada for specified locations and date ranges. This function fetches extreme weather records (daily maximum temperatures, precipitation, or snowfall) from the closest weather stations to your provided coordinates.
 
 The function uses Environment Canada's Long-Term Climate Extremes (LTCE) API to find the nearest weather stations that have recorded the specified weather variable, then retrieves the historical record values for each day in your specified date range.
@@ -1702,6 +1714,8 @@ console.table(significantSnow);
 
 > **getHumidex**(`temperature`, `humidity`): `number`
 
+Defined in: [journalism-climate/src/climate/getHumidex.ts:28](https://github.com/nshiab/journalism-climate/blob/v1.0.13/src/climate/getHumidex.ts#L28)
+
 Calculates the humidex factor in Celsius based on the given temperature in Celsius and humidity percentage.
 
 If the calculated humidex is less than the provided temperature, the temperature itself is returned.
@@ -1751,6 +1765,8 @@ If the humidity value is not within the valid range of 0 to 100.
 ### getSeason()
 
 > **getSeason**(`options?`): `"winter"` \| `"spring"` \| `"summer"` \| `"fall"`
+
+Defined in: [journalism-climate/src/climate/getSeason.ts:50](https://github.com/nshiab/journalism-climate/blob/v1.0.13/src/climate/getSeason.ts#L50)
 
 Determines the current season based on a given date, hemisphere, and season type. This function provides flexibility by allowing you to specify the exact date, the hemisphere (Northern or Southern), and the method of season calculation (astronomical or meteorological). By default, it uses the current date, the Northern Hemisphere, and astronomical seasons.
 
@@ -1828,6 +1844,8 @@ console.log(`Meteorological season on December 1: ${meteorologicalSeasonDec}`); 
 
 > **getDataDW**(`chartId`, `options?`): `Promise`\<`unknown`\>
 
+Defined in: [journalism-dataviz/src/dataviz/getDataDW.ts:43](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/getDataDW.ts#L43)
+
 Gets the data of a Datawrapper chart, table, or map.
 
 Authentication is handled via an API key, which can be provided through environment variables (`DATAWRAPPER_KEY`) or explicitly in the options.
@@ -1901,6 +1919,8 @@ console.log(data);
 
 > **getInfoDW**(`chartId`, `options?`): `Promise`\<`Record`\<`string`, `unknown`\> \| `Response`\>
 
+Defined in: [journalism-dataviz/src/dataviz/getInfoDW.ts:39](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/getInfoDW.ts#L39)
+
 Gets information and settings for a Datawrapper chart, table, or map.
 
 Returns the full parsed chart object, including any chart-specific fields. Property values are typed as unknown because the response varies by visualization.
@@ -1965,6 +1985,8 @@ if (response instanceof Response) {
 ### logBarChart()
 
 > **logBarChart**\<`T`\>(`data`, `labels`, `values`, `options?`): `void`
+
+Defined in: [journalism-dataviz/src/dataviz/logBarChart.ts:52](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/logBarChart.ts#L52)
 
 Generates and logs a text-based bar chart to the console. This function is useful for quickly visualizing data distributions or comparisons directly within a terminal or log output, without needing a graphical interface. It's particularly effective for presenting categorical data or showing the relative magnitudes of different items.
 
@@ -2086,6 +2108,8 @@ logBarChart(productPopularity, 'product', 'views', {
 ### logDotChart()
 
 > **logDotChart**\<`T`, `X`\>(`data`, `x`, `y`, `options?`): `void`
+
+Defined in: [journalism-dataviz/src/dataviz/logDotChart.ts:72](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/logDotChart.ts#L72)
 
 Generates and logs a text-based dot chart to the console. This function is ideal for visualizing the relationship between two numerical variables. It provides a quick, terminal-friendly way to inspect data trends and distributions.
 
@@ -2229,6 +2253,8 @@ logDotChart(multiCategoryData, "date", "value", {
 
 > **logLineChart**\<`T`, `X`\>(`data`, `x`, `y`, `options?`): `void`
 
+Defined in: [journalism-dataviz/src/dataviz/logLineChart.ts:71](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/logLineChart.ts#L71)
+
 Generates and logs a text-based line chart to the console. This function is particularly useful for visualizing trends over time providing a quick and accessible way to understand data progression directly within a terminal or log output.
 
 The chart is rendered using ASCII characters, ensuring broad compatibility. It supports custom formatting for both x and y-axis values, and can generate small multiples to compare trends across different categories. When the chart's width is smaller than the number of data points, the line represents an averaged approximation of the data, providing a smoothed view of the trend. For optimal visualization, it's recommended that the input `data` be sorted by the x-axis values.
@@ -2370,6 +2396,8 @@ logLineChart(multiCategoryData, "date", "value", {
 
 > **publishChartDW**(`chartId`, `options?`): `Promise`\<`void` \| `Response`\>
 
+Defined in: [journalism-dataviz/src/dataviz/publishChartDW.ts:35](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/publishChartDW.ts#L35)
+
 Publishes a specified Datawrapper chart, table, or map. This function streamlines the process of making your Datawrapper visualizations live, allowing for automated deployment and updates. It handles authentication using an API key, which can be provided via environment variables or directly through options.
 
 #### Parameters
@@ -2430,6 +2458,8 @@ console.log(`Response status for ${chartIDForResponse}: ${response?.status}`);
 ### rewind()
 
 > **rewind**\<`T`\>(`object`): `T`
+
+Defined in: [journalism-dataviz/src/dataviz/rewind.ts:105](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/rewind.ts#L105)
 
 Rewinds the winding order of the specified GeoJSON object to be clockwise. It is based on the D3-geo library's winding order conventions.
 
@@ -2492,6 +2522,8 @@ console.log(rewoundFeature);
 ### saveChart()
 
 > **saveChart**\<`T`\>(`data`, `chart`, `path`, `options?`): `Promise`\<`void`\>
+
+Defined in: [journalism-dataviz/src/dataviz/saveChart.ts:53](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/saveChart.ts#L53)
 
 Saves an [Observable Plot](https://github.com/observablehq/plot) chart or map as a PNG or SVG file.
 The chart function can return an SVG or HTML element directly or through a promise.
@@ -2581,6 +2613,8 @@ await saveChart(
 ### updateAnnotationsDW()
 
 > **updateAnnotationsDW**(`chartId`, `annotations`, `options?`): `Promise`\<`void` \| `Response`\>
+
+Defined in: [journalism-dataviz/src/dataviz/updateAnnotationsDW.ts:84](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/updateAnnotationsDW.ts#L84)
 
 Updates annotations on a Datawrapper chart. This function allows you to programmatically add, modify, or remove text and line annotations on your Datawrapper visualizations, providing precise control over highlighting specific data points or trends.
 
@@ -2695,6 +2729,8 @@ console.log(`Annotations updated for chart ${customApiKeyChartID} using custom A
 ### updateDataDW()
 
 > **updateDataDW**(`chartId`, `data`, `options?`): `Promise`\<`void` \| `Response`\>
+
+Defined in: [journalism-dataviz/src/dataviz/updateDataDW.ts:126](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/updateDataDW.ts#L126)
 
 Updates the data of a specified Datawrapper chart, table, or map. This function is essential for keeping your Datawrapper visualizations dynamic and up-to-date with the latest information. It supports both CSV data for standard charts and tables, and JSON data for more complex visualizations like locator maps.
 
@@ -2853,6 +2889,8 @@ If the API key is not found, if the Datawrapper API returns an error status (e.g
 
 > **updateInfoDW**(`chartId`, `metadata`, `options?`): `Promise`\<`void` \| `Response`\>
 
+Defined in: [journalism-dataviz/src/dataviz/updateInfoDW.ts:47](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/updateInfoDW.ts#L47)
+
 Updates the title, description, and notes of a Datawrapper chart, table, or map in one API request.
 
 Only supplied fields are updated. Omit a field or pass `undefined` to preserve its existing value; pass an empty string to clear it. At least one field must be supplied. Other chart settings are preserved by Datawrapper's partial metadata update.
@@ -2942,6 +2980,8 @@ console.log(response?.status);
 
 > **updateNotesDW**(`chartId`, `note`, `options?`): `Promise`\<`void` \| `Response`\>
 
+Defined in: [journalism-dataviz/src/dataviz/updateNotesDW.ts:30](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/updateNotesDW.ts#L30)
+
 Updates the notes field of a Datawrapper chart, table, or map.
 
 This function delegates to `updateInfoDW()` and logs a deprecation warning once per module instance. Use `updateInfoDW(chartId, { note }, options)` instead.
@@ -3002,6 +3042,8 @@ Use `updateInfoDW(chartId, { note }, options)` instead. This function will be re
 
 ### DurationTracker
 
+Defined in: [journalism-extras/src/extras/DurationTracker.ts:31](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/DurationTracker.ts#L31)
+
 A utility class for tracking the progress and estimating the remaining time of iterative processes. It calculates the average duration of completed iterations and uses this to project the time left for the remaining tasks. This is particularly useful for long-running operations where users need feedback on progress.
 
 The tracker provides methods to mark the start of an iteration and to log the estimated remaining time. The log message can be customized with a prefix and suffix.
@@ -3055,6 +3097,8 @@ A string to append to the logged remaining time message. Defaults to an empty st
 
 > **new DurationTracker**(`length`, `options?`): [`DurationTracker`](#durationtracker)
 
+Defined in: [journalism-extras/src/extras/DurationTracker.ts:50](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/DurationTracker.ts#L50)
+
 Creates an instance of DurationTracker.
 
 ###### Parameters
@@ -3087,17 +3131,23 @@ Optional settings for the tracker.
 
 > **length**: `number`
 
+Defined in: [journalism-extras/src/extras/DurationTracker.ts:39](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/DurationTracker.ts#L39)
+
 The total number of iterations.
 
 ##### prefix
 
 > **prefix**: `string`
 
+Defined in: [journalism-extras/src/extras/DurationTracker.ts:41](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/DurationTracker.ts#L41)
+
 Optional prefix for the log message.
 
 ##### suffix
 
 > **suffix**: `string`
+
+Defined in: [journalism-extras/src/extras/DurationTracker.ts:43](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/DurationTracker.ts#L43)
 
 Option suffix for the log message.
 
@@ -3106,6 +3156,8 @@ Option suffix for the log message.
 ##### log()
 
 > **log**(): `void`
+
+Defined in: [journalism-extras/src/extras/DurationTracker.ts:93](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/DurationTracker.ts#L93)
 
 Logs the estimated remaining time based on the average duration of previous iterations.
 
@@ -3129,6 +3181,8 @@ for (let i = 0; i < totalItems; i++) {
 ##### start()
 
 > **start**(): `void`
+
+Defined in: [journalism-extras/src/extras/DurationTracker.ts:74](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/DurationTracker.ts#L74)
 
 Starts the timer for the current iteration.
 
@@ -3154,6 +3208,8 @@ for (let i = 0; i < totalItems; i++) {
 ### createDirectory()
 
 > **createDirectory**(`path`): `void`
+
+Defined in: [journalism-extras/src/extras/createDirectory.ts:25](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/createDirectory.ts#L25)
 
 Recursively creates a directory structure. This function is useful for ensuring that a path exists before writing a file to it.
 
@@ -3190,6 +3246,8 @@ createDirectory("./output/data/my-file.json");
 ### getId()
 
 > **getId**(`length?`): `string`
+
+Defined in: [journalism-extras/src/extras/getId.ts:26](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/getId.ts#L26)
 
 Generates a unique ID string composed of letters and numbers, without spaces or special characters. By default, the ID has a length of 6 characters. While handy for general use, it is not cryptographically secure, meaning it should not be used for security-sensitive applications where true randomness and unpredictability are required.
 
@@ -3228,6 +3286,8 @@ console.log(customId); // e.g., 'a1B2c3D4e5'
 ### reencode()
 
 > **reencode**(`inputFilePath`, `outputFilePath`, `fromEncoding`, `toEncoding`, `options?`): `Promise`\<`void`\>
+
+Defined in: [journalism-extras/src/extras/reencode.ts:36](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/reencode.ts#L36)
 
 Converts a file from one character encoding to another. This function is particularly optimized for handling large files.
 
@@ -3304,6 +3364,8 @@ console.log("Large file re-encoded with custom buffer and BOM.");
 
 > **removeDirectory**(`path`): `void`
 
+Defined in: [journalism-extras/src/extras/removeDirectory.ts:25](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/removeDirectory.ts#L25)
+
 Removes a directory and all its contents recursively.
 
 **Caution**: Use this function with care, as it permanently deletes files and directories without sending them to the recycle bin or trash. Ensure that the `path` provided is correct to avoid accidental data loss.
@@ -3341,6 +3403,8 @@ console.log("Attempted to remove non-existent folder (no error thrown).");
 ### sleep()
 
 > **sleep**(`ms`, `options?`): `Promise`\<`void`\>
+
+Defined in: [journalism-extras/src/extras/sleep.ts:46](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/sleep.ts#L46)
 
 Pauses the execution of an asynchronous function for a specified duration. This utility is useful for introducing delays in workflows, throttling requests, or simulating real-world latencies.
 
@@ -3414,6 +3478,8 @@ await sleep(2000, { log: true });
 
 > **unzip**(`zippedFile`, `output`, `options?`): `void`
 
+Defined in: [journalism-extras/src/extras/unzip.ts:26](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/unzip.ts#L26)
+
 Unzips a given zipped file to a specified output directory. This function provides a convenient way to extract compressed archives, commonly used for distributing data or software. It offers an option to delete the original zipped file after successful extraction, which is useful for cleanup operations.
 
 #### Parameters
@@ -3466,6 +3532,8 @@ console.log("File unzipped and original zipped file deleted.");
 
 > **zip**(`files`, `zipFile`): `void`
 
+Defined in: [journalism-extras/src/extras/zip.ts:24](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/zip.ts#L24)
+
 Compresses one or more files or an entire folder into a single zip archive. This function is useful for bundling multiple assets, preparing data for transfer, or creating backups.
 
 You can specify individual files to be added to the archive, or provide a path to a directory, in which case all its contents will be compressed. The function automatically creates the necessary directory structure for the output zip file if it doesn't already exist.
@@ -3507,6 +3575,8 @@ console.log("Folder zipped successfully.");
 ### adjustToInflation()
 
 > **adjustToInflation**(`amount`, `amountCPI`, `targetCPI`, `options?`): `number`
+
+Defined in: [journalism-finance/src/finance/adjustToInflation.ts:36](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/adjustToInflation.ts#L36)
 
 Adjusts a monetary amount for inflation using the Consumer Price Index (CPI).
 
@@ -3578,6 +3648,8 @@ console.log(`A $45,000 salary in 1990 is equivalent to approximately ${adjustedS
 
 > **decodeMonteCarloMonthlyIterations**(`c`): `object`[]
 
+Defined in: [journalism-finance/src/finance/decodeMonteCarloResults.ts:23](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/decodeMonteCarloResults.ts#L23)
+
 Decodes a columnar `monthlyIterations` result back into a flat object array.
 
 **⚠️ Memory Warning:** This function can allocate millions of small objects during large simulations.
@@ -3618,6 +3690,8 @@ applied by the `onRecord` callback during data collection.
 ### decodeMonteCarloMonthlyQuantiles()
 
 > **decodeMonteCarloMonthlyQuantiles**(`c`, `quantiles`): `object`[]
+
+Defined in: [journalism-finance/src/finance/decodeMonteCarloResults.ts:112](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/decodeMonteCarloResults.ts#L112)
 
 Decodes a columnar `monthlyQuantiles` result back into a flat record array.
 
@@ -3662,6 +3736,8 @@ The same quantile levels passed to `options.monthlyQuantiles` (e.g. `[0, 0.5, 1]
 
 > **decodeMonteCarloValues**(`c`): `object`[]
 
+Defined in: [journalism-finance/src/finance/decodeMonteCarloResults.ts:72](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/decodeMonteCarloResults.ts#L72)
+
 Decodes a columnar `values` result back into the original object-array shape.
 
 Keys are variable names. Each `Float64Array` has size `iterations × months`.
@@ -3695,6 +3771,8 @@ Keys are variable names. Each `Float64Array` has size `iterations × months`.
 ### decodeMonteCarloWinners()
 
 > **decodeMonteCarloWinners**(`w`): `object`[]
+
+Defined in: [journalism-finance/src/finance/decodeMonteCarloResults.ts:205](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/decodeMonteCarloResults.ts#L205)
 
 Decodes `category` bytes into category names
 (0 = "renter", 1 = "buyerFixed", 2 = "buyerVariable").
@@ -3732,6 +3810,8 @@ Final `monthIndex` of the winning scenario for each iteration.
 ### decodeMonteCarloWinnerSnapshots()
 
 > **decodeMonteCarloWinnerSnapshots**(`ws`): `object`[]
+
+Defined in: [journalism-finance/src/finance/decodeMonteCarloResults.ts:162](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/decodeMonteCarloResults.ts#L162)
 
 Decodes a `winnerSnapshots` result into a flat record array.
 
@@ -3796,6 +3876,8 @@ Month indices of each snapshot (e.g. `[59, 119, 179, 239, 299]` for a 25-year si
 ### getIncomeTax()
 
 > **getIncomeTax**(`employmentIncome`, `province`, `year`, `options?`): `object`
+
+Defined in: [journalism-finance/src/finance/getIncomeTax.ts:996](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getIncomeTax.ts#L996)
 
 Calculates a comprehensive breakdown of Canadian federal and provincial income taxes, including capital gains.
 
@@ -3983,6 +4065,8 @@ getIncomeTax(80000, "Quebec", 2025, {
 
 > **getLandTransferTax**(`city`, `propertyValue`, `year`, `firstTimeOwner?`): `number`
 
+Defined in: [journalism-finance/src/finance/getLandTransferTax.ts:122](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getLandTransferTax.ts#L122)
+
 Calculates the standard Land Transfer Tax (or equivalent registration fee)
 for a given city and property value based on 2026 tax frameworks.
 
@@ -4048,6 +4132,8 @@ console.log(tax); // 4475
 
 > **getMinimumDownPayment**(`purchasePrice`, `options?`): `number`
 
+Defined in: [journalism-finance/src/finance/getMinimumDownPayment.ts:39](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getMinimumDownPayment.ts#L39)
+
 Calculates the minimum down payment required for a property purchase in Canada, based on the purchase price.
 
 The calculation follows the Financial Consumer Agency of Canada (FCAC) rules:
@@ -4110,6 +4196,8 @@ Reference: https://www.canada.ca/en/financial-consumer-agency/services/mortgages
 ### getMortgagePenalty()
 
 > **getMortgagePenalty**(`parameters`): `number`
+
+Defined in: [journalism-finance/src/finance/getMortgagePenalty.ts:49](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getMortgagePenalty.ts#L49)
 
 Calculates the mortgage prepayment penalty.
 
@@ -4205,6 +4293,8 @@ const penalty = getMortgagePenalty({
 ### getRentVsBuyCholeskyMatrix()
 
 > **getRentVsBuyCholeskyMatrix**(`data?`, `options?`): `number`[][]
+
+Defined in: [journalism-finance/src/finance/helpers/rentVsBuy/getRentVsBuyCholeskyMatrix.ts:70](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/helpers/rentVsBuy/getRentVsBuyCholeskyMatrix.ts#L70)
 
 Generates a Cholesky decomposition matrix from historical variable data,
 formatted specifically for the `simulateRentVsBuyMonteCarlo` function.
@@ -4329,6 +4419,8 @@ const results = simulateRentVsBuyMonteCarlo({
 
 > **getSalesTax**(`amount`, `province`, `year`): `object`
 
+Defined in: [journalism-finance/src/finance/getSalesTax.ts:61](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getSalesTax.ts#L61)
+
 Calculates the Canadian sales tax for a given amount, province, and year.
 
 #### Parameters
@@ -4392,6 +4484,8 @@ Reference: https://www.retailcouncil.org/resources/quick-facts/sales-tax-rates-b
 ### getYahooFinanceData()
 
 > **getYahooFinanceData**(`symbol`, `startDate`, `endDate`, `variable`, `interval`): `Promise`\<`object`[]\>
+
+Defined in: [journalism-finance/src/finance/getYahooFinanceData.ts:63](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getYahooFinanceData.ts#L63)
 
 Fetches historical prices or trading volume for a symbol from Yahoo Finance.
 
@@ -4474,6 +4568,8 @@ If Yahoo rejects the request, returns no data, or provides invalid timestamps.
 
 > **mortgageInsurancePremium**(`purchasePrice`, `downPayment`): `number`
 
+Defined in: [journalism-finance/src/finance/mortgageInsurancePremium.ts:47](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/mortgageInsurancePremium.ts#L47)
+
 Calculates the mortgage insurance premium based on the property's purchase price and the down payment amount. This function is designed to reflect the premium rates typically applied in Canada, as outlined by institutions like the Financial Consumer Agency of Canada. The calculated premium is rounded to the nearest integer.
 
 Mortgage insurance is generally required in Canada when the down payment is less than 20% of the home's purchase price.
@@ -4540,6 +4636,8 @@ try {
 ### mortgageMaxAmount()
 
 > **mortgageMaxAmount**(`annualIncome`, `downPayment`, `rate`, `options?`): `object`
+
+Defined in: [journalism-finance/src/finance/mortgageMaxAmount.ts:77](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/mortgageMaxAmount.ts#L77)
 
 Calculates the maximum affordable property purchase price and the corresponding mortgage amount a borrower can qualify for, based on their annual income, down payment, and current mortgage interest rates. This function is designed to simulate mortgage qualification criteria, taking into account various financial factors and debt service ratios.
 
@@ -4730,6 +4828,8 @@ console.log(customExpensesResults);
 
 > **mortgagePayments**(`mortgageAmount`, `rate`, `paymentFrequency`, `term`, `amortizationPeriod`, `options?`): `object`[]
 
+Defined in: [journalism-finance/src/finance/mortgagePayments.ts:72](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/mortgagePayments.ts#L72)
+
 Calculates and returns a detailed schedule of fixed-rate mortgage payments. This function is designed to provide a comprehensive breakdown of each payment, including the principal and interest portions, remaining balance, and cumulative amounts paid. It adheres to Canadian mortgage regulations, which typically require semi-annual compounding, but allows for customization of the compounding frequency.
 
 The function is flexible, supporting various payment frequencies (weekly, bi-weekly, monthly, semi-monthly, accelerated weekly, accelerated bi-weekly) and allowing for the specification of the mortgage amount, interest rate, term, and amortization period. It also includes options for rounding payment values and enabling debug logging.
@@ -4859,6 +4959,8 @@ try {
 ### simulateRentVsBuy()
 
 > **simulateRentVsBuy**(`parameters`, `options?`): (`object` & \{ `effectiveInterestRate?`: `number`; `fixedRateAdjustment?`: `number`; `group`: `"monthlyExpenses"` \| `"cumulativeExpenses"`; `postedInterestRate?`: `number`; `variable`: `"rent"` \| `"maintenance"` \| `"propertyTax"` \| `"insurance"` \| `"securityDeposit"` \| `"mortgageCapital"` \| `"mortgageInterests"` \| `"condoFees"` \| `"downPayment"` \| `"purchaseFixedFees"` \| `"landTransferTax"` \| `"insurancePremiumTax"` \| `"tfsaFees"` \| `"stocksFees"`; `variableRateAdjustment?`: `number`; \} \| \{ `group`: `"monthlyGains"` \| `"cumulativeGains"`; `homeValue?`: `number`; `variable`: `"tfsaGains"` \| `"tfsaContribution"` \| `"stocksGains"` \| `"newStocks"` \| `"homeEquityGains"`; \} \| \{ `group`: `"assets"`; `variable`: `"securityDeposit"` \| `"tfsa"` \| `"stocks"` \| `"homeEquity"`; \} \| \{ `group`: `"summary"`; `variable`: `"balance"`; \} \| \{ `group`: `"summaryCumulative"`; `variable`: `"balance"` \| `"balanceAfterSelling"`; \} \| \{ `employmentIncome?`: `number`; `group`: `"saleCosts"`; `variable`: `"stockTaxes"` \| `"homeSellingCommission"` \| `"homeSellingFixedFees"` \| `"mortgagePenalty"` \| `"mortgageBalance"`; \} \| \{ `group`: `"saleNetGains"`; `variable`: `"securityDeposit"` \| `"stockSellingGains"` \| `"tfsaSellingGains"` \| `"homeSellingGains"`; \} \| \{ `group`: `"monthlyRecurringExpenses"`; `variable`: `"rent"` \| `"maintenance"` \| `"propertyTax"` \| `"insurance"` \| `"mortgageCapital"` \| `"mortgageInterests"` \| `"condoFees"` \| `"tfsaFees"` \| `"stocksFees"`; \} \| \{ `group`: `"monthlyNonRecurringExpenses"`; `variable`: `"securityDeposit"` \| `"downPayment"` \| `"purchaseFixedFees"` \| `"landTransferTax"` \| `"insurancePremiumTax"`; \} \| \{ `group`: `"totals"`; `variable`: `"assets"` \| `"monthlyExpenses"` \| `"cumulativeExpenses"` \| `"monthlyGains"` \| `"cumulativeGains"` \| `"saleCosts"` \| `"saleNetGains"` \| `"monthlyRecurringExpenses"` \| `"monthlyNonRecurringExpenses"`; \})[]
+
+Defined in: [journalism-finance/src/finance/simulateRentVsBuy.ts:177](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/simulateRentVsBuy.ts#L177)
 
 Simulates and compares the financial outcomes of renting versus buying a home over a specified number of years.
 This comprehensive simulation accounts for various factors including mortgage payments (fixed and variable),
@@ -5278,6 +5380,8 @@ const results = simulateRentVsBuy({
 ### simulateRentVsBuyMonteCarlo()
 
 > **simulateRentVsBuyMonteCarlo**(`parameters`, `options?`): `object`
+
+Defined in: [journalism-finance/src/finance/simulateRentVsBuyMonteCarlo.ts:421](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/simulateRentVsBuyMonteCarlo.ts#L421)
 
 Performs a Monte Carlo simulation for a rent versus buy analysis tailored for a Canadian context.
 This function runs multiple iterations of the `simulateRentVsBuy` function, using stochastic paths
@@ -6053,6 +6157,8 @@ const results = simulateRentVsBuyMonteCarlo({
 
 > **variableMortgagePayments**(`mortgageAmount`, `rates`, `term`, `amortizationPeriod`, `options?`): `object`[]
 
+Defined in: [journalism-finance/src/finance/variableMortgagePayments.ts:45](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/variableMortgagePayments.ts#L45)
+
 Calculates and returns a detailed schedule of variable-rate monthly mortgage payments (VRM). This function models a Variable Rate Mortgage where the payment amount stays FIXED for the term, but rate changes affect how much goes to interest vs. principal. If rates rise too high, payments may not cover interest, causing negative amortization (balance increases).
 
 #### Parameters
@@ -6155,6 +6261,8 @@ console.log(payments[24]); // Same payment, but more interest (rate increased)
 
 > **arraysToData**\<`T`\>(`data`): \{ \[K in string \| number \| symbol\]: T\[K\]\[number\] \}[]
 
+Defined in: [journalism-format/src/format/arraysToData.ts:52](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/arraysToData.ts#L52)
+
 Transforms an object of arrays into an array of objects. This function is useful for converting data from a columnar format to a row-based format, which is common in data processing and visualization.
 
 It is assumed that all arrays in the input object have the same length.
@@ -6226,6 +6334,8 @@ console.log(plotPoints);
 
 > **camelCase**(`input`): `string`
 
+Defined in: [journalism-format/src/format/camelCase.ts:30](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/camelCase.ts#L30)
+
 Converts a string into camelCase. This is useful for creating variable names or object keys from human-readable text.
 
 #### Parameters
@@ -6268,6 +6378,8 @@ console.log(result3); // "journalism"
 
 > **capitalize**(`string`): `string`
 
+Defined in: [journalism-format/src/format/capitalize.ts:28](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/capitalize.ts#L28)
+
 Capitalizes the first letter of a given string.
 
 #### Parameters
@@ -6309,6 +6421,8 @@ console.log(singleChar); // "A"
 ### dataAsCsv()
 
 > **dataAsCsv**(`arrayOfObjects`): `string`
+
+Defined in: [journalism-format/src/format/dataAsCsv.ts:94](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/dataAsCsv.ts#L94)
 
 Converts an array of objects into a CSV (Comma-Separated Values) string.
 
@@ -6354,6 +6468,8 @@ console.log(csvString);
 ### dataToArrays()
 
 > **dataToArrays**\<`T`\>(`data`): \{ \[K in string \| number \| symbol\]: T\[K\]\[\] \}
+
+Defined in: [journalism-format/src/format/dataToArrays.ts:49](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/dataToArrays.ts#L49)
 
 Transforms an array of objects into an object of arrays. This function is the inverse of `arraysToData` and is useful for converting data from a row-based format to a columnar format.
 
@@ -6422,6 +6538,8 @@ console.log(separatedVariables);
 ### formatDate()
 
 > **formatDate**(`date`, `format`, `options?`): `string`
+
+Defined in: [journalism-format/src/format/formatDate.ts:55](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/formatDate.ts#L55)
 
 Formats a `Date` object into a human-readable string based on a specified format, style, and time zone. This function provides flexible date and time formatting options, including support for UTC, different linguistic styles (English/French), and various display preferences like abbreviations and zero-padding.
 
@@ -6523,6 +6641,8 @@ console.log(isoFormatted); // "2024-03-15"
 ### formatNumber()
 
 > **formatNumber**(`number`, `options?`): `string`
+
+Defined in: [journalism-format/src/format/formatNumber.ts:62](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/formatNumber.ts#L62)
 
 Formats a number according to specified style, rounding, and display options. This versatile function can handle various numerical formatting needs.
 
@@ -6653,6 +6773,8 @@ console.log(position2); // "2e"
 
 > **normalizeString**(`string`, `options?`): `string`
 
+Defined in: [journalism-format/src/format/normalizeString.ts:48](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/normalizeString.ts#L48)
+
 Normalizes a string by converting it to lowercase, stripping accents, punctuation (optional), and trimming whitespace.
 
 #### Parameters
@@ -6722,6 +6844,8 @@ console.log(normalized); // "emailexamplecom"
 ### prettyDuration()
 
 > **prettyDuration**(`start`, `options?`): `string`
+
+Defined in: [journalism-format/src/format/prettyDuration.ts:49](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/prettyDuration.ts#L49)
 
 Formats a duration into a human-readable string, breaking it down into years, months, days, hours, minutes, seconds, and milliseconds. This function is useful for displaying elapsed time in a user-friendly format, such as for performance logging, task completion times, or general time tracking.
 
@@ -6810,6 +6934,8 @@ console.log(specificDuration); // Returns "22 days, 6 h, 3 min, 15 sec, 0 ms"
 
 > **printTable**(`data`, `options?`): `void`
 
+Defined in: [journalism-format/src/format/printTable.ts:39](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/printTable.ts#L39)
+
 Prints a formatted table to the console with support for word wrapping within cells.
 Unlike console.table(), this function properly handles multi-line content within cells,
 making it ideal for displaying data with long text values.
@@ -6878,6 +7004,8 @@ printTable([types, ...data], { typesRowIndex: 0 });
 ### round()
 
 > **round**(`number`, `options?`): `number`
+
+Defined in: [journalism-format/src/format/round.ts:72](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/round.ts#L72)
 
 Rounds a number based on specified criteria: a fixed number of decimal places, to the nearest integer multiple, or to a specific number of significant digits. This function provides flexible rounding capabilities essential for data presentation and numerical accuracy.
 
@@ -6991,6 +7119,8 @@ try {
 
 > **distance**(`lon1`, `lat1`, `lon2`, `lat2`, `options?`): `number`
 
+Defined in: [journalism-geo/src/geo/distance.ts:33](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/distance.ts#L33)
+
 Calculates the Haversine distance between two geographical points (longitude and latitude) in kilometers. The Haversine formula is used to determine the great-circle distance between two points on a sphere given their longitudes and latitudes.
 
 This function is useful for geospatial applications where accurate distance measurements over the Earth's surface are required,.
@@ -7059,6 +7189,8 @@ console.log(roundedDist); // 504 km
 #### Call Signature
 
 > **geoTo3D**(`lon`, `lat`, `radius`, `options`): \[`number`, `number`, `number`\]
+
+Defined in: [journalism-geo/src/geo/geoTo3D.ts:36](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/geoTo3D.ts#L36)
 
 Converts geographical coordinates (longitude and latitude) into 3D Cartesian (x, y, z) coordinates based on a specified radius.
 
@@ -7130,6 +7262,8 @@ console.log(earthCoords); // Expected output: { x: 0, y: 6371, z: 0 } (for 0,0 l
 #### Call Signature
 
 > **geoTo3D**(`lon`, `lat`, `radius`, `options?`): `object`
+
+Defined in: [journalism-geo/src/geo/geoTo3D.ts:36](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/geoTo3D.ts#L36)
 
 Converts geographical coordinates (longitude and latitude) into 3D Cartesian (x, y, z) coordinates based on a specified radius.
 
@@ -7215,6 +7349,8 @@ console.log(earthCoords); // Expected output: { x: 0, y: 6371, z: 0 } (for 0,0 l
 ### geoToBlender()
 
 > **geoToBlender**(`geojsonPath`, `projection`, `outputPath`, `options?`): `Promise`\<`string`\>
+
+Defined in: [journalism-geo/src/geo/geoToBlender.ts:138](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/geoToBlender.ts#L138)
 
 Converts GeoJSON borders into an OBJ file that can be imported in Blender.
 
@@ -7308,6 +7444,8 @@ await geoToBlender(geojsonPath, projection, "./output/canada.obj", {
 #### Call Signature
 
 > **geoToBlenderPoint**(`lon`, `lat`, `projection`, `options?`): `object`
+
+Defined in: [journalism-geo/src/geo/geoToBlenderPoint.ts:37](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/geoToBlenderPoint.ts#L37)
 
 Converts one longitude/latitude coordinate into Blender coordinates.
 
@@ -7411,6 +7549,8 @@ const point = geoToBlenderPoint(-73.5674, 45.5019, projection, {
 
 > **geoToBlenderPoint**(`lon`, `lat`, `projection`, `options`): \[`number`, `number`, `number`\]
 
+Defined in: [journalism-geo/src/geo/geoToBlenderPoint.ts:37](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/geoToBlenderPoint.ts#L37)
+
 Converts one longitude/latitude coordinate into Blender coordinates.
 
 Flat projection functions are placed on Blender's X/Y plane with Z up and north toward positive Y.
@@ -7495,6 +7635,8 @@ const point = geoToBlenderPoint(-73.5674, 45.5019, "orthographic", {
 #### Call Signature
 
 > **getClosest**\<`T`\>(`lon`, `lat`, `geoItems`, `getItemLon`, `getItemLat`, `options?`): `T`
+
+Defined in: [journalism-geo/src/geo/getClosest.ts:88](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/getClosest.ts#L88)
 
 Finds the geographical item closest to a given reference point (longitude and latitude) from a list of geographical items.
 
@@ -7614,6 +7756,8 @@ console.log(closestPark);
 
 > **getClosest**\<`T`\>(`lon`, `lat`, `geoItems`, `getItemLon`, `getItemLat`, `options`): `T` & `object`
 
+Defined in: [journalism-geo/src/geo/getClosest.ts:88](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/getClosest.ts#L88)
+
 Finds the geographical item closest to a given reference point and adds distance to the properties object.
 
 ##### Type Parameters
@@ -7675,6 +7819,8 @@ The closest item with distance added to its properties object.
 #### Call Signature
 
 > **getClosest**\<`T`\>(`lon`, `lat`, `geoItems`, `getItemLon`, `getItemLat`, `options`): `T` & `object`
+
+Defined in: [journalism-geo/src/geo/getClosest.ts:88](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/getClosest.ts#L88)
 
 Finds the geographical item closest to a given reference point and adds distance directly to the item.
 
@@ -7740,6 +7886,8 @@ The closest item with distance added directly to the item.
 
 > **getGeoTiffDetails**(`path`): `Promise`\<\{ `bbox`: `number`[]; `bboxHeight`: `number`; `bboxWidth`: `number`; `image`: `GeoTIFFImage`; `pixelHeight`: `number`; `pixelWidth`: `number`; \}\>
 
+Defined in: [journalism-geo/src/geo/getGeoTiffDetails.ts:25](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/getGeoTiffDetails.ts#L25)
+
 Extracts detailed information from a GeoTIFF file, which can then be used with the `getGeoTiffValues` function.
 
 #### Parameters
@@ -7777,6 +7925,8 @@ console.log(value) // 255
 ### getGeoTiffValues()
 
 > **getGeoTiffValues**(`lat`, `lon`, `geoTiffDetails`): `Promise`\<`Uint8Array`\<`ArrayBufferLike`\> \| `Uint16Array`\<`ArrayBufferLike`\> \| `Uint32Array`\<`ArrayBufferLike`\> \| `Int8Array`\<`ArrayBufferLike`\> \| `Int16Array`\<`ArrayBufferLike`\> \| `Int32Array`\<`ArrayBufferLike`\> \| `Float32Array`\<`ArrayBufferLike`\> \| `Float64Array`\<`ArrayBufferLike`\>\>
+
+Defined in: [journalism-geo/src/geo/getGeoTiffValues.ts:31](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/getGeoTiffValues.ts#L31)
 
 Extracts values at specific latitude and longitude coordinates from a GeoTIFF image. This function works in conjunction with the `getGeoTiffDetails` function, using the details returned by it.
 
@@ -7848,6 +7998,8 @@ If the coordinates are outside the GeoTIFF's bounding box or if there's an issue
 
 > **styledLayerDescriptor**(`layer`, `colorScale`): `string`
 
+Defined in: [journalism-geo/src/geo/styledLayerDescriptor.ts:33](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/styledLayerDescriptor.ts#L33)
+
 Generates an OpenGIS Styled Layer Descriptor (SLD) XML string, encoded for use in a URL. This function is particularly useful for dynamically styling Web Map Service (WMS) layers, allowing for custom color scales and visual representations of geospatial data directly through the WMS request.
 
 The SLD specifies how a map layer should be rendered. This function focuses on creating a `ColorMap` within the SLD, which defines a gradient of colors based on data values. This is commonly used for visualizing continuous data, such as temperature, elevation, or precipitation, on a map.
@@ -7898,6 +8050,8 @@ console.log(url);
 ### deleteFromBucket()
 
 > **deleteFromBucket**(`destination`, `options?`): `Promise`\<`void`\>
+
+Defined in: [journalism-google/src/google/deleteFromBucket.ts:38](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/deleteFromBucket.ts#L38)
 
 Deletes a specified file from a Google Cloud Storage (GCS) bucket.
 
@@ -7966,6 +8120,8 @@ await deleteFromBucket("reports/2023-summary.pdf", {
 ### downloadFromBucket()
 
 > **downloadFromBucket**(`source`, `destination`, `options?`): `Promise`\<`void`\>
+
+Defined in: [journalism-google/src/google/downloadFromBucket.ts:49](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/downloadFromBucket.ts#L49)
 
 Downloads a file from a Google Cloud Storage (GCS) bucket to a specified local path. This function provides robust handling for existing local files, allowing you to skip downloads or overwrite files as needed.
 
@@ -8055,6 +8211,8 @@ await downloadFromBucket("configs/app-settings.json", "./local-configs/settings.
 
 > **filesInBucket**(`options?`): `Promise`\<`string`[]\>
 
+Defined in: [journalism-google/src/google/filesInBucket.ts:47](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/filesInBucket.ts#L47)
+
 Lists files within a Google Cloud Storage (GCS) bucket. You can list all files in the bucket or narrow down the results to a specific folder. The function can also return the full Google Storage URIs for each file.
 
 This function requires the Google Cloud project ID and the target bucket name. These can be provided either through environment variables (`BUCKET_PROJECT` and `BUCKET_NAME`) or directly as parameters in the `options` object. Parameters passed in `options` will take precedence over environment variables.
@@ -8134,6 +8292,8 @@ console.log("Files from specific bucket:", specificBucketFiles);
 #### Call Signature
 
 > **getSheetData**(`sheetUrl`, `options`): `Promise`\<`string`\>
+
+Defined in: [journalism-google/src/google/getSheetData.ts:62](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/getSheetData.ts#L62)
 
 Retrieves data from a Google Sheet.
 
@@ -8230,6 +8390,8 @@ console.log(dataWithCustomCredentials);
 #### Call Signature
 
 > **getSheetData**(`sheetUrl`, `options?`): `Promise`\<`Record`\<`string`, `string`\>[]\>
+
+Defined in: [journalism-google/src/google/getSheetData.ts:62](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/getSheetData.ts#L62)
 
 Retrieves data from a Google Sheet.
 
@@ -8329,6 +8491,8 @@ console.log(dataWithCustomCredentials);
 
 > **inBucket**(`destination`, `options?`): `Promise`\<`boolean`\>
 
+Defined in: [journalism-google/src/google/inBucket.ts:41](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/inBucket.ts#L41)
+
 Checks if a specified file exists within a Google Cloud Storage (GCS) bucket. This function provides a straightforward way to verify the presence of a file in your GCS infrastructure, which is useful for conditional operations, data validation, or status checks.
 
 Authentication and bucket identification can be configured either through environment variables (`BUCKET_PROJECT` for the Google Cloud Project ID and `BUCKET_NAME` for the bucket name) or by passing them directly as options to the function. Options provided directly will take precedence over environment variables.
@@ -8395,6 +8559,8 @@ if (existsInSpecificBucket) {
 ### openSpreadsheet()
 
 > **openSpreadsheet**(`spreadsheetUrl`, `options?`): `Promise`\<\{ `sheetId?`: `number`; `spreadsheet`: `GoogleSpreadsheet`; \}\>
+
+Defined in: [journalism-google/src/google/openSpreadsheet.ts:59](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/openSpreadsheet.ts#L59)
 
 Opens a Google spreadsheet and returns its loaded representation. When the
 URL identifies a specific tab with a `gid`, that ID is also returned as
@@ -8495,6 +8661,8 @@ const sheet = sheetId === undefined
 ### pushToSheet()
 
 > **pushToSheet**(`data`, `sheetUrl`, `options?`): `Promise`\<`void`\>
+
+Defined in: [journalism-google/src/google/pushToSheet.ts:67](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/pushToSheet.ts#L67)
 
 Writes data to a Google Sheets tab, either replacing its contents or
 appending rows. The tab can be selected by the URL's `gid` or by title.
@@ -8630,6 +8798,8 @@ await pushToSheet(data, sheetUrl, {
 
 > **toBucket**(`file`, `destination`, `options?`): `Promise`\<`string`\>
 
+Defined in: [journalism-google/src/google/toBucket.ts:70](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/toBucket.ts#L70)
+
 Uploads a local file to a Google Cloud Storage (GCS) bucket and returns the URI of the uploaded file. This function provides robust control over the upload process, including options for skipping uploads if the file already exists, overwriting existing files, and setting custom metadata.
 
 By default, if a file with the same destination path already exists in the bucket, an error will be thrown to prevent accidental overwrites. You can modify this behavior using the `skip` or `overwrite` options.
@@ -8745,6 +8915,8 @@ console.log(uriExplicit);
 
 > **addClusters**\<`T`\>(`data`, `minDistance`, `minNeighbours`, `distance`, `options?`): asserts data is (T & \{ clusterId: string \| null; clusterType: "core" \| "border" \| "noise" \})\[\]
 
+Defined in: [journalism-statistics/src/statistics/addClusters.ts:65](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/addClusters.ts#L65)
+
 Groups data points into clusters using the DBSCAN (Density-Based Spatial Clustering of Applications with Noise) algorithm. This method is particularly effective at identifying clusters of arbitrary shapes and handling noise in the data.
 
 The function operates based on two key parameters: `minDistance` (also known as epsilon or ε) and `minNeighbours`. It classifies each data point into one of three categories:
@@ -8854,6 +9026,8 @@ console.log(data);
 
 > **addMahalanobisDistance**\<`T`\>(`origin`, `data`, `options`): (`T` & `object`)[]
 
+Defined in: [journalism-statistics/src/statistics/addMahalanobisDistance.ts:65](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/addMahalanobisDistance.ts#L65)
+
 Calculates the Mahalanobis distance for each object in an array relative to a specified origin point.
 
 The function enriches the input `data` array by adding a `mahaDist` property to each object, representing its Mahalanobis distance from the `origin`. The dimensions for the calculation are determined by the keys in the `origin` object.
@@ -8954,6 +9128,8 @@ console.log(wines);
 
 > **addMahalanobisDistance**\<`T`\>(`origin`, `data`, `options?`): (`T` & `object`)[]
 
+Defined in: [journalism-statistics/src/statistics/addMahalanobisDistance.ts:65](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/addMahalanobisDistance.ts#L65)
+
 Calculates the Mahalanobis distance for each object in an array relative to a specified origin point (without similarity scores).
 
 ##### Type Parameters
@@ -9001,6 +9177,8 @@ The input data array with mahaDist properties added to each object.
 #### Call Signature
 
 > **addZScore**\<`T`, `K`\>(`data`, `variable`, `options`): (`T` & `{ [P in string]: number }`)[]
+
+Defined in: [journalism-statistics/src/statistics/addZScore.ts:56](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/addZScore.ts#L56)
 
 Calculates the Z-score for a specific numeric variable within an array of objects and adds it as a new property to each object. The Z-score is a statistical measure that indicates how many standard deviations a data point is from the mean of the dataset.
 
@@ -9095,6 +9273,8 @@ console.log(studentData);
 
 > **addZScore**\<`T`\>(`data`, `variable`, `options?`): (`T` & `object`)[]
 
+Defined in: [journalism-statistics/src/statistics/addZScore.ts:56](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/addZScore.ts#L56)
+
 Calculates the Z-score for a specific numeric variable within an array of objects using the default 'zScore' key name.
 
 ##### Type Parameters
@@ -9136,6 +9316,8 @@ The input data array with zScore properties added to each object.
 ### euclidianDistance()
 
 > **euclidianDistance**(`x1`, `y1`, `x2`, `y2`): `number`
+
+Defined in: [journalism-statistics/src/statistics/euclidianDistance.ts:33](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/euclidianDistance.ts#L33)
 
 Calculates the Euclidean distance between two points in a 2D Cartesian coordinate system. The Euclidean distance is the shortest straight-line distance between two points, often referred to as the "as the crow flies" distance.
 
@@ -9198,6 +9380,8 @@ console.log(dist3); // 0
 ### generateCirPath()
 
 > **generateCirPath**(`startValue`, `a`, `b`, `sigma`, `years`, `periodsPerYear`): `number`[]
+
+Defined in: [journalism-statistics/src/statistics/generateCirPath.ts:35](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/generateCirPath.ts#L35)
 
 Generates a path of values following the Cox-Ingersoll-Ross (CIR) model.
 
@@ -9276,6 +9460,8 @@ const path = generateCirPath(initialRate, a, b, sigma, 1, 12);
 
 > **generateGbmPath**(`startValue`, `mu`, `sigma`, `years`, `periodsPerYear`): `number`[]
 
+Defined in: [journalism-statistics/src/statistics/generateGbmPath.ts:38](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/generateGbmPath.ts#L38)
+
 Generates a simulated path for an asset using the Geometric Brownian Motion (GBM) model.
 
 Geometric Brownian Motion is a continuous-time stochastic process in which the logarithm of the randomly varying quantity follows a Brownian motion with drift. It is widely used in mathematical finance to model stock prices, as it ensures that values remain positive and accounts for compounded returns.
@@ -9348,6 +9534,8 @@ console.log(`Simulated path: ${path.map(v => v.toFixed(2)).join(', ')}`);
 
 > **getCholeskyMatrix**(`matrix`, `jitter?`): `number`[][]
 
+Defined in: [journalism-statistics/src/statistics/getCholeskyMatrix.ts:9](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getCholeskyMatrix.ts#L9)
+
 Performs Cholesky Decomposition on a symmetric, positive-definite covariance matrix.
 
 #### Parameters
@@ -9375,6 +9563,8 @@ A lower triangular matrix L.
 ### getCirParameters()
 
 > **getCirParameters**(`values`, `periodsPerYear`): `object`
+
+Defined in: [journalism-statistics/src/statistics/getCirParameters.ts:26](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getCirParameters.ts#L26)
 
 Estimates the parameters of the Cox-Ingersoll-Ross (CIR) model based on historical values using ordinary least squares on the discretized process.
 
@@ -9436,6 +9626,8 @@ const { a, b, sigma } = getCirParameters(rates, periodsPerYear);
 
 > **getCorrelatedShocks**(`L`, `Z`): `number`[]
 
+Defined in: [journalism-statistics/src/statistics/getCorrelatedShocks.ts:9](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getCorrelatedShocks.ts#L9)
+
 Multiplies a lower triangular Cholesky matrix (L) by a vector of independent standard normal random variables (Z).
 
 #### Parameters
@@ -9463,6 +9655,8 @@ An array of correlated random variables.
 ### getCorrelationMatrix()
 
 > **getCorrelationMatrix**(`data`, `options?`): `number`[][]
+
+Defined in: [journalism-statistics/src/statistics/getCorrelationMatrix.ts:48](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getCorrelationMatrix.ts#L48)
 
 Computes the correlation matrix for a given dataset. The correlation matrix is a square matrix that describes the correlation between each pair of variables in a dataset.
 
@@ -9532,6 +9726,8 @@ console.log(invertedMatrix2x2);
 ### getCovarianceMatrix()
 
 > **getCovarianceMatrix**(`data`, `options?`): `number`[][]
+
+Defined in: [journalism-statistics/src/statistics/getCovarianceMatrix.ts:103](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getCovarianceMatrix.ts#L103)
 
 Computes the covariance matrix for a given dataset. The covariance matrix is a square matrix that describes the covariance between each pair of variables in a dataset.
 
@@ -9663,6 +9859,8 @@ console.log(invertedMatrix4x4);
 
 > **getGbmParameters**(`values`, `periodsPerYear`): `object`
 
+Defined in: [journalism-statistics/src/statistics/getGbmParameters.ts:27](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getGbmParameters.ts#L27)
+
 Calculates the parameters (drift `mu` and volatility `sigma`) for a Geometric Brownian Motion (GBM) model based on historical data.
 
 Geometric Brownian Motion is a continuous-time stochastic process often used to model stock prices and other financial assets. This function estimates the drift and volatility from a series of observed values, assuming the returns follow a log-normal distribution.
@@ -9716,6 +9914,8 @@ console.log(`Annualized Volatility (sigma): ${sigma.toFixed(4)}`);
 ### getMahalanobisDistance()
 
 > **getMahalanobisDistance**(`x1`, `x2`, `invCovMatrix`): `number`
+
+Defined in: [journalism-statistics/src/statistics/getMahalanobisDistance.ts:59](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getMahalanobisDistance.ts#L59)
 
 Computes the Mahalanobis distance between two data points (`x1` and `x2`) given the inverted covariance matrix of the dataset. The Mahalanobis distance is a measure of the distance between a point and a distribution. It is a unitless measure. This function can handle data points of any dimension (i.e., with more than 2 coordinates).
 
@@ -9799,6 +9999,8 @@ console.log(`Mahalanobis Distance between point1 and point2: ${mahalanobisDist}`
 ### getSampleSizeMean()
 
 > **getSampleSizeMean**\<`T`\>(`data`, `key`, `confidenceLevel`, `marginOfError`, `options?`): `number`
+
+Defined in: [journalism-statistics/src/statistics/getSampleSizeMean.ts:74](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getSampleSizeMean.ts#L74)
 
 Calculates the required sample size for estimating a population mean with a specified confidence level and margin of error.
 
@@ -9915,6 +10117,8 @@ console.log(`For 99% confidence with a 5-point margin of error, sample ${require
 
 > **getSampleSizeProportion**(`populationSize`, `confidenceLevel`, `marginOfError`): `number`
 
+Defined in: [journalism-statistics/src/statistics/getSampleSizeProportion.ts:39](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getSampleSizeProportion.ts#L39)
+
 Calculates the required sample size for estimating a population proportion with a specified confidence level and margin of error.
 
 The function uses the finite population correction formula when the population size is known, which provides more accurate sample size calculations for smaller populations. It assumes a worst-case scenario proportion of 0.5 (50%) to ensure the calculated sample size is sufficient regardless of the actual population proportion.
@@ -9976,6 +10180,8 @@ console.log(`For a city survey with 95% confidence and 4% margin of error, you n
 ### invertMatrix()
 
 > **invertMatrix**(`matrix`): `number`[][]
+
+Defined in: [journalism-statistics/src/statistics/invertMatrix.ts:47](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/invertMatrix.ts#L47)
 
 Computes the inverse of a square matrix.
 
@@ -10041,6 +10247,8 @@ try {
 ### performChiSquaredGoodnessOfFitTest()
 
 > **performChiSquaredGoodnessOfFitTest**\<`T`\>(`data`, `categoryKey`, `observedKey`, `expectedKey`): `object`
+
+Defined in: [journalism-statistics/src/statistics/performChiSquaredGoodnessOfFitTest.ts:103](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/performChiSquaredGoodnessOfFitTest.ts#L103)
 
 Performs a Chi-Squared goodness of fit test to determine if observed frequencies match expected frequencies.
 
@@ -10192,6 +10400,8 @@ try {
 
 > **performChiSquaredIndependenceTest**\<`T`\>(`data`, `firstVariableKey`, `secondVariableKey`, `countKey`): `object`
 
+Defined in: [journalism-statistics/src/statistics/performChiSquaredIndependenceTest.ts:81](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/performChiSquaredIndependenceTest.ts#L81)
+
 Performs a Chi-Squared independence test to determine if two categorical variables are statistically independent or associated.
 
 The Chi-Squared independence test examines whether there is a statistically significant association between two categorical variables by comparing observed frequencies against expected frequencies calculated under the assumption of independence.
@@ -10320,6 +10530,8 @@ if (result.pValue < 0.01) {
 ### performPairedTTest()
 
 > **performPairedTTest**\<`T`\>(`pairedData`, `firstVariableKey`, `secondVariableKey`, `options?`): `object`
+
+Defined in: [journalism-statistics/src/statistics/performPairedTTest.ts:81](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/performPairedTTest.ts#L81)
 
 Performs a paired t-test for dependent means to determine if there is a significant difference between two related samples.
 
@@ -10473,6 +10685,8 @@ if (testResult.pValue < 0.05) {
 
 > **performTTest**\<`T`\>(`sampleData`, `variableKey`, `hypothesizedMean`, `options?`): `object`
 
+Defined in: [journalism-statistics/src/statistics/performTTest.ts:136](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/performTTest.ts#L136)
+
 Performs a one-sample t-test for independent means to determine if a sample mean is significantly different from a hypothesized population mean.
 
 The function compares the mean of a sample against a hypothesized population mean when the population standard deviation is unknown. This is the most common scenario in real-world statistical analysis where we only have sample data and need to estimate the population parameters. This is a test for **independent means** (sample vs population), not related/paired samples.
@@ -10624,6 +10838,8 @@ if (testResult.pValue < 0.05) {
 ### performTwoSampleTTest()
 
 > **performTwoSampleTTest**\<`T1`, `T2`, `K`\>(`group1Data`, `group2Data`, `variableKey`, `options?`): `object`
+
+Defined in: [journalism-statistics/src/statistics/performTwoSampleTTest.ts:101](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/performTwoSampleTTest.ts#L101)
 
 Performs a two-sample t-test for independent means to determine if there is a significant difference between two independent groups.
 
@@ -10817,6 +11033,8 @@ if (testResult.pValue < 0.05) {
 
 > **performZTest**\<`T`\>(`populationData`, `sampleData`, `variableKey`, `options?`): `object`
 
+Defined in: [journalism-statistics/src/statistics/performZTest.ts:82](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/performZTest.ts#L82)
+
 Performs a one-sample Z-test to determine if a sample mean is significantly different from a population mean.
 
 The function compares the mean of a sample against the mean of a known population to test the null hypothesis. It automatically applies the finite population correction (FPC) when the sample size exceeds 5% of the population size, which provides more accurate results for smaller populations. This is a **one-sample Z-test** comparing a sample against a known population, not a comparison between two independent samples.
@@ -10972,6 +11190,8 @@ if (testResult.pValue < 0.05) {
 
 > **stepCir**(`currentValue`, `a`, `b`, `sigma`, `dt`, `shock`): `number`
 
+Defined in: [journalism-statistics/src/statistics/stepCir.ts:13](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/stepCir.ts#L13)
+
 Calculates the next value in a Cox-Ingersoll-Ross (CIR) process.
 
 #### Parameters
@@ -11024,6 +11244,8 @@ The next value in the process.
 
 > **stepGbm**(`currentValue`, `mu`, `sigma`, `dt`, `shock`): `number`
 
+Defined in: [journalism-statistics/src/statistics/stepGbm.ts:12](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/stepGbm.ts#L12)
+
 Calculates the next value in a Geometric Brownian Motion (GBM) process.
 
 #### Parameters
@@ -11069,6 +11291,8 @@ The next value in the process.
 ### downloadCSV()
 
 > **downloadCSV**(`data`, `filename`): `void`
+
+Defined in: [journalism-web/src/web/downloadCsv.ts:28](https://github.com/nshiab/journalism-web/blob/v1.0.12/src/web/downloadCsv.ts#L28)
 
 Triggers a download of the provided data as a CSV (Comma Separated Values) file directly in the user's browser. This function is designed for client-side use, allowing web applications to generate and offer data exports without requiring server-side processing.
 
@@ -11117,6 +11341,8 @@ console.log("CSV download initiated.");
 
 > **zipToUrls**(`url`): `Promise`\<`string`[]\>
 
+Defined in: [journalism-web/src/web/zipToUrls.ts:24](https://github.com/nshiab/journalism-web/blob/v1.0.12/src/web/zipToUrls.ts#L24)
+
 Fetches a ZIP archive from a given URL, extracts all its contained files, and returns an array of object URLs for each extracted file.
 
 Each file within the ZIP archive is converted into a Blob object, and then a corresponding object URL is created.
@@ -11153,6 +11379,8 @@ document.body.appendChild(img);
 ### downloadFile()
 
 > **downloadFile**(`url`, `filePath`): `Promise`\<`void`\>
+
+Defined in: [journalism-web-scraping/src/web-scraping/downloadFile.ts:30](https://github.com/nshiab/journalism-web-scraping/blob/v2.0.8/src/web-scraping/downloadFile.ts#L30)
 
 Downloads a file from a given URL and saves it to a specified local path. This function is useful for programmatically fetching resources from the web, such as datasets, images, or documents.
 
@@ -11195,6 +11423,8 @@ console.log("Image downloaded successfully!");
 ### getHtmlTable()
 
 > **getHtmlTable**(`urlOrHtml`, `options?`): `Promise`\<`Record`\<`string`, `string`\>[]\>
+
+Defined in: [journalism-web-scraping/src/web-scraping/getHtmlTable.ts:43](https://github.com/nshiab/journalism-web-scraping/blob/v2.0.8/src/web-scraping/getHtmlTable.ts#L43)
 
 Extracts tabular data from an HTML table from a given URL or an HTML string and returns it as an array of objects. This function is particularly useful for scraping structured data from web pages.
 
@@ -11260,6 +11490,8 @@ console.log(dataFromHtml);
 ### getStatCanTable()
 
 > **getStatCanTable**(`pid`, `options?`): `Promise`\<`string` \| `Record`\<`string`, `string`\>[]\>
+
+Defined in: [journalism-web-scraping/src/web-scraping/getStatCanTable.ts:43](https://github.com/nshiab/journalism-web-scraping/blob/v2.0.8/src/web-scraping/getStatCanTable.ts#L43)
 
 Retrieves tabular data from Statistics Canada's website using a provided Product ID (PID). This function automates the process of fetching, unzipping, and parsing the CSV data directly from StatCan's API, making it easy to integrate official Canadian statistics into applications or analyses.
 

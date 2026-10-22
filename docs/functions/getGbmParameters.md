@@ -8,6 +8,8 @@
 
 > **getGbmParameters**(`values`, `periodsPerYear`): `object`
 
+Defined in: [journalism-statistics/src/statistics/getGbmParameters.ts:27](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getGbmParameters.ts#L27)
+
 Calculates the parameters (drift `mu` and volatility `sigma`) for a Geometric Brownian Motion (GBM) model based on historical data.
 
 Geometric Brownian Motion is a continuous-time stochastic process often used to model stock prices and other financial assets. This function estimates the drift and volatility from a series of observed values, assuming the returns follow a log-normal distribution.

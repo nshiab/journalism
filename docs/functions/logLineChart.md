@@ -8,6 +8,8 @@
 
 > **logLineChart**\<`T`, `X`\>(`data`, `x`, `y`, `options?`): `void`
 
+Defined in: [journalism-dataviz/src/dataviz/logLineChart.ts:71](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/logLineChart.ts#L71)
+
 Generates and logs a text-based line chart to the console. This function is particularly useful for visualizing trends over time providing a quick and accessible way to understand data progression directly within a terminal or log output.
 
 The chart is rendered using ASCII characters, ensuring broad compatibility. It supports custom formatting for both x and y-axis values, and can generate small multiples to compare trends across different categories. When the chart's width is smaller than the number of data points, the line represents an averaged approximation of the data, providing a smoothed view of the trend. For optimal visualization, it's recommended that the input `data` be sorted by the x-axis values.

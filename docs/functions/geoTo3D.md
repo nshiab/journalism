@@ -10,6 +10,8 @@
 
 > **geoTo3D**(`lon`, `lat`, `radius`, `options`): \[`number`, `number`, `number`\]
 
+Defined in: [journalism-geo/src/geo/geoTo3D.ts:36](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/geoTo3D.ts#L36)
+
 Converts geographical coordinates (longitude and latitude) into 3D Cartesian (x, y, z) coordinates based on a specified radius.
 
 The conversion assumes a spherical Earth model. The `radius` parameter determines the size of the sphere on which the points are projected.
@@ -80,6 +82,8 @@ console.log(earthCoords); // Expected output: { x: 0, y: 6371, z: 0 } (for 0,0 l
 ## Call Signature
 
 > **geoTo3D**(`lon`, `lat`, `radius`, `options?`): `object`
+
+Defined in: [journalism-geo/src/geo/geoTo3D.ts:36](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/geoTo3D.ts#L36)
 
 Converts geographical coordinates (longitude and latitude) into 3D Cartesian (x, y, z) coordinates based on a specified radius.
 

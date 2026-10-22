@@ -8,6 +8,8 @@
 
 > **dataAsCsv**(`arrayOfObjects`): `string`
 
+Defined in: [journalism-format/src/format/dataAsCsv.ts:94](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/dataAsCsv.ts#L94)
+
 Converts an array of objects into a CSV (Comma-Separated Values) string.
 
 The function takes an array of objects and returns a string in CSV format. The first line contains the union of keys found across all objects, in discovery order. Each subsequent line represents an object, with values in the same order as the headers.

@@ -8,6 +8,8 @@
 
 > **zip**(`files`, `zipFile`): `void`
 
+Defined in: [journalism-extras/src/extras/zip.ts:24](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/zip.ts#L24)
+
 Compresses one or more files or an entire folder into a single zip archive. This function is useful for bundling multiple assets, preparing data for transfer, or creating backups.
 
 You can specify individual files to be added to the archive, or provide a path to a directory, in which case all its contents will be compressed. The function automatically creates the necessary directory structure for the output zip file if it doesn't already exist.

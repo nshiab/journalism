@@ -8,6 +8,8 @@
 
 > **addClusters**\<`T`\>(`data`, `minDistance`, `minNeighbours`, `distance`, `options?`): asserts data is (T & \{ clusterId: string \| null; clusterType: "core" \| "border" \| "noise" \})\[\]
 
+Defined in: [journalism-statistics/src/statistics/addClusters.ts:65](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/addClusters.ts#L65)
+
 Groups data points into clusters using the DBSCAN (Density-Based Spatial Clustering of Applications with Noise) algorithm. This method is particularly effective at identifying clusters of arbitrary shapes and handling noise in the data.
 
 The function operates based on two key parameters: `minDistance` (also known as epsilon or ε) and `minNeighbours`. It classifies each data point into one of three categories:

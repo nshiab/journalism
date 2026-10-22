@@ -8,6 +8,8 @@
 
 > **inBucket**(`destination`, `options?`): `Promise`\<`boolean`\>
 
+Defined in: [journalism-google/src/google/inBucket.ts:41](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/inBucket.ts#L41)
+
 Checks if a specified file exists within a Google Cloud Storage (GCS) bucket. This function provides a straightforward way to verify the presence of a file in your GCS infrastructure, which is useful for conditional operations, data validation, or status checks.
 
 Authentication and bucket identification can be configured either through environment variables (`BUCKET_PROJECT` for the Google Cloud Project ID and `BUCKET_NAME` for the bucket name) or by passing them directly as options to the function. Options provided directly will take precedence over environment variables.

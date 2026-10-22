@@ -8,6 +8,8 @@
 
 > **deleteFromBucket**(`destination`, `options?`): `Promise`\<`void`\>
 
+Defined in: [journalism-google/src/google/deleteFromBucket.ts:38](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/deleteFromBucket.ts#L38)
+
 Deletes a specified file from a Google Cloud Storage (GCS) bucket.
 
 The function requires the Google Cloud project ID and the target bucket name. These can be provided either through environment variables (`BUCKET_PROJECT` and `BUCKET_NAME`) or directly as parameters in the `options` object. Parameters passed in `options` will take precedence over environment variables.

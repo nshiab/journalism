@@ -8,6 +8,8 @@
 
 > **getId**(`length?`): `string`
 
+Defined in: [journalism-extras/src/extras/getId.ts:26](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/getId.ts#L26)
+
 Generates a unique ID string composed of letters and numbers, without spaces or special characters. By default, the ID has a length of 6 characters. While handy for general use, it is not cryptographically secure, meaning it should not be used for security-sensitive applications where true randomness and unpredictability are required.
 
 The function ensures uniqueness by keeping track of previously generated IDs within the current session. If a collision occurs (which is highly unlikely for reasonable lengths), it will attempt to generate a new ID. For very small `length` values, repeated collisions might trigger a warning to suggest increasing the length to maintain uniqueness.

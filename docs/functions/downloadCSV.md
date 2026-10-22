@@ -8,6 +8,8 @@
 
 > **downloadCSV**(`data`, `filename`): `void`
 
+Defined in: [journalism-web/src/web/downloadCsv.ts:28](https://github.com/nshiab/journalism-web/blob/v1.0.12/src/web/downloadCsv.ts#L28)
+
 Triggers a download of the provided data as a CSV (Comma Separated Values) file directly in the user's browser. This function is designed for client-side use, allowing web applications to generate and offer data exports without requiring server-side processing.
 
 The function takes an array of JavaScript objects, converts them into a CSV string, creates a Blob, and then simulates a click on a hidden anchor tag to prompt the browser to download the file. This is a common and effective method for initiating file downloads from the browser.

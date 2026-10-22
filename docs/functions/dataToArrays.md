@@ -8,6 +8,8 @@
 
 > **dataToArrays**\<`T`\>(`data`): \{ \[K in string \| number \| symbol\]: T\[K\]\[\] \}
 
+Defined in: [journalism-format/src/format/dataToArrays.ts:49](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/dataToArrays.ts#L49)
+
 Transforms an array of objects into an object of arrays. This function is the inverse of `arraysToData` and is useful for converting data from a row-based format to a columnar format.
 
 ## Type Parameters

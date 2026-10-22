@@ -8,6 +8,8 @@
 
 > **round**(`number`, `options?`): `number`
 
+Defined in: [journalism-format/src/format/round.ts:72](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/round.ts#L72)
+
 Rounds a number based on specified criteria: a fixed number of decimal places, to the nearest integer multiple, or to a specific number of significant digits. This function provides flexible rounding capabilities essential for data presentation and numerical accuracy.
 
 By default, if no options are specified, the function rounds to the nearest whole number.

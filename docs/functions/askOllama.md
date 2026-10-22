@@ -8,6 +8,8 @@
 
 > **askOllama**\<`TResponse`\>(`prompt`, `options?`): `Promise`\<\{ `contextWindow`: `number` \| `null`; `durationMs`: `number`; `files`: `object`[]; `fromCache`: `boolean`; `model`: `string`; `outputTokenCount`: `number`; `prompt`: `string`; `promptTokenCount`: `number`; `response`: `TResponse`; `systemPrompt`: `string` \| `null`; `temperature`: `number`; `thinkingLevel`: `boolean` \| `"low"` \| `"medium"` \| `"high"` \| `null`; `thoughts`: `string` \| `null`; `tokensPerSecond`: `number` \| `null`; `totalTokens`: `number`; \}\>
 
+Defined in: [journalism-ai/src/ai/askOllama.ts:143](https://github.com/nshiab/journalism-ai/blob/v3.0.0/src/ai/askOllama.ts#L143)
+
 Interacts with a local Ollama model to perform a wide range of tasks.
 
 Ollama must be running on the machine. Set the `AI_MODEL` environment

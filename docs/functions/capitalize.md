@@ -8,6 +8,8 @@
 
 > **capitalize**(`string`): `string`
 
+Defined in: [journalism-format/src/format/capitalize.ts:28](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/capitalize.ts#L28)
+
 Capitalizes the first letter of a given string.
 
 ## Parameters

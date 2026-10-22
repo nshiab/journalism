@@ -8,6 +8,8 @@
 
 > **decodeMonteCarloMonthlyQuantiles**(`c`, `quantiles`): `object`[]
 
+Defined in: [journalism-finance/src/finance/decodeMonteCarloResults.ts:112](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/decodeMonteCarloResults.ts#L112)
+
 Decodes a columnar `monthlyQuantiles` result back into a flat record array.
 
 Keys are `"category|group|variable"`. Layout: `data[key][qIdx * cols + monthIndex]`

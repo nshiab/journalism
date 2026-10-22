@@ -8,6 +8,8 @@
 
 > **getSampleSizeMean**\<`T`\>(`data`, `key`, `confidenceLevel`, `marginOfError`, `options?`): `number`
 
+Defined in: [journalism-statistics/src/statistics/getSampleSizeMean.ts:74](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getSampleSizeMean.ts#L74)
+
 Calculates the required sample size for estimating a population mean with a specified confidence level and margin of error.
 
 The function uses the finite population correction formula. It calculates the sample standard deviation from the provided data to estimate the population standard deviation, which is then used in the sample size calculation.

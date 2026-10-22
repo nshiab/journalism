@@ -8,6 +8,8 @@
 
 > **publishChartDW**(`chartId`, `options?`): `Promise`\<`void` \| `Response`\>
 
+Defined in: [journalism-dataviz/src/dataviz/publishChartDW.ts:35](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/publishChartDW.ts#L35)
+
 Publishes a specified Datawrapper chart, table, or map. This function streamlines the process of making your Datawrapper visualizations live, allowing for automated deployment and updates. It handles authentication using an API key, which can be provided via environment variables or directly through options.
 
 ## Parameters

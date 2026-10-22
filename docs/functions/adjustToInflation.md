@@ -8,6 +8,8 @@
 
 > **adjustToInflation**(`amount`, `amountCPI`, `targetCPI`, `options?`): `number`
 
+Defined in: [journalism-finance/src/finance/adjustToInflation.ts:36](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/adjustToInflation.ts#L36)
+
 Adjusts a monetary amount for inflation using the Consumer Price Index (CPI).
 
 ## Parameters

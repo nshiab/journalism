@@ -8,6 +8,8 @@
 
 > **downloadFile**(`url`, `filePath`): `Promise`\<`void`\>
 
+Defined in: [journalism-web-scraping/src/web-scraping/downloadFile.ts:30](https://github.com/nshiab/journalism-web-scraping/blob/v2.0.8/src/web-scraping/downloadFile.ts#L30)
+
 Downloads a file from a given URL and saves it to a specified local path. This function is useful for programmatically fetching resources from the web, such as datasets, images, or documents.
 
 The function uses streams for efficient handling of potentially large files, ensuring that the entire file does not need to be loaded into memory at once.

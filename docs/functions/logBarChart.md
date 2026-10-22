@@ -8,6 +8,8 @@
 
 > **logBarChart**\<`T`\>(`data`, `labels`, `values`, `options?`): `void`
 
+Defined in: [journalism-dataviz/src/dataviz/logBarChart.ts:52](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/logBarChart.ts#L52)
+
 Generates and logs a text-based bar chart to the console. This function is useful for quickly visualizing data distributions or comparisons directly within a terminal or log output, without needing a graphical interface. It's particularly effective for presenting categorical data or showing the relative magnitudes of different items.
 
 The chart is constructed using ASCII characters, making it universally compatible across various terminal environments. It can display data for various categories and their corresponding numerical values, with extensive options for custom formatting of labels and values, controlling the chart's width, and adding a descriptive title or a total label. For optimal visualization, it's recommended that the input `data` be sorted by the `values` key in descending order, though the function does not enforce this.

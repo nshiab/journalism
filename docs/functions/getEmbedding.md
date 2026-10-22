@@ -8,6 +8,8 @@
 
 > **getEmbedding**(`text`, `options?`): `Promise`\<`number`[]\>
 
+Defined in: [journalism-ai/src/ai/getEmbedding.ts:103](https://github.com/nshiab/journalism-ai/blob/v3.0.0/src/ai/getEmbedding.ts#L103)
+
 Generates a numerical embedding (vector representation) for a given text string. Embeddings are crucial for various natural language processing (NLP) tasks, including semantic search, text classification, clustering, and anomaly detection, as they allow text to be processed and compared mathematically.
 
 This function supports both Google's Gemini AI models and local models running with Ollama. It provides options for authentication, model selection, and caching to optimize performance and cost.

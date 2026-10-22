@@ -8,6 +8,8 @@
 
 > **camelCase**(`input`): `string`
 
+Defined in: [journalism-format/src/format/camelCase.ts:30](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/camelCase.ts#L30)
+
 Converts a string into camelCase. This is useful for creating variable names or object keys from human-readable text.
 
 ## Parameters

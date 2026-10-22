@@ -8,6 +8,8 @@
 
 > **getSeason**(`options?`): `"winter"` \| `"spring"` \| `"summer"` \| `"fall"`
 
+Defined in: [journalism-climate/src/climate/getSeason.ts:50](https://github.com/nshiab/journalism-climate/blob/v1.0.13/src/climate/getSeason.ts#L50)
+
 Determines the current season based on a given date, hemisphere, and season type. This function provides flexibility by allowing you to specify the exact date, the hemisphere (Northern or Southern), and the method of season calculation (astronomical or meteorological). By default, it uses the current date, the Northern Hemisphere, and astronomical seasons.
 
 Astronomical seasons are based on the Earth's position in its orbit around the sun, marked by equinoxes and solstices. Meteorological seasons are based on the annual temperature cycle and are typically defined by calendar months, making them consistent for statistical purposes.

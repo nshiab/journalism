@@ -8,6 +8,8 @@
 
 > **stepCir**(`currentValue`, `a`, `b`, `sigma`, `dt`, `shock`): `number`
 
+Defined in: [journalism-statistics/src/statistics/stepCir.ts:13](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/stepCir.ts#L13)
+
 Calculates the next value in a Cox-Ingersoll-Ross (CIR) process.
 
 ## Parameters

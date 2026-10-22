@@ -10,6 +10,8 @@
 
 > **addMahalanobisDistance**\<`T`\>(`origin`, `data`, `options`): (`T` & `object`)[]
 
+Defined in: [journalism-statistics/src/statistics/addMahalanobisDistance.ts:65](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/addMahalanobisDistance.ts#L65)
+
 Calculates the Mahalanobis distance for each object in an array relative to a specified origin point.
 
 The function enriches the input `data` array by adding a `mahaDist` property to each object, representing its Mahalanobis distance from the `origin`. The dimensions for the calculation are determined by the keys in the `origin` object.
@@ -109,6 +111,8 @@ console.log(wines);
 ## Call Signature
 
 > **addMahalanobisDistance**\<`T`\>(`origin`, `data`, `options?`): (`T` & `object`)[]
+
+Defined in: [journalism-statistics/src/statistics/addMahalanobisDistance.ts:65](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/addMahalanobisDistance.ts#L65)
 
 Calculates the Mahalanobis distance for each object in an array relative to a specified origin point (without similarity scores).
 

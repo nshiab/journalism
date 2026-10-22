@@ -8,6 +8,8 @@
 
 > **decodeMonteCarloWinnerSnapshots**(`ws`): `object`[]
 
+Defined in: [journalism-finance/src/finance/decodeMonteCarloResults.ts:162](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/decodeMonteCarloResults.ts#L162)
+
 Decodes a `winnerSnapshots` result into a flat record array.
 
 Each record represents one 5-year checkpoint (strictly before `numberOfYears`).

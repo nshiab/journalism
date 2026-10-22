@@ -8,6 +8,8 @@
 
 > **performZTest**\<`T`\>(`populationData`, `sampleData`, `variableKey`, `options?`): `object`
 
+Defined in: [journalism-statistics/src/statistics/performZTest.ts:82](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/performZTest.ts#L82)
+
 Performs a one-sample Z-test to determine if a sample mean is significantly different from a population mean.
 
 The function compares the mean of a sample against the mean of a known population to test the null hypothesis. It automatically applies the finite population correction (FPC) when the sample size exceeds 5% of the population size, which provides more accurate results for smaller populations. This is a **one-sample Z-test** comparing a sample against a known population, not a comparison between two independent samples.

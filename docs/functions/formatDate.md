@@ -8,6 +8,8 @@
 
 > **formatDate**(`date`, `format`, `options?`): `string`
 
+Defined in: [journalism-format/src/format/formatDate.ts:55](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/formatDate.ts#L55)
+
 Formats a `Date` object into a human-readable string based on a specified format, style, and time zone. This function provides flexible date and time formatting options, including support for UTC, different linguistic styles (English/French), and various display preferences like abbreviations and zero-padding.
 
 ## Parameters

@@ -8,6 +8,8 @@
 
 > **distance**(`lon1`, `lat1`, `lon2`, `lat2`, `options?`): `number`
 
+Defined in: [journalism-geo/src/geo/distance.ts:33](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/distance.ts#L33)
+
 Calculates the Haversine distance between two geographical points (longitude and latitude) in kilometers. The Haversine formula is used to determine the great-circle distance between two points on a sphere given their longitudes and latitudes.
 
 This function is useful for geospatial applications where accurate distance measurements over the Earth's surface are required,.

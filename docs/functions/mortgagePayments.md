@@ -8,6 +8,8 @@
 
 > **mortgagePayments**(`mortgageAmount`, `rate`, `paymentFrequency`, `term`, `amortizationPeriod`, `options?`): `object`[]
 
+Defined in: [journalism-finance/src/finance/mortgagePayments.ts:72](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/mortgagePayments.ts#L72)
+
 Calculates and returns a detailed schedule of fixed-rate mortgage payments. This function is designed to provide a comprehensive breakdown of each payment, including the principal and interest portions, remaining balance, and cumulative amounts paid. It adheres to Canadian mortgage regulations, which typically require semi-annual compounding, but allows for customization of the compounding frequency.
 
 The function is flexible, supporting various payment frequencies (weekly, bi-weekly, monthly, semi-monthly, accelerated weekly, accelerated bi-weekly) and allowing for the specification of the mortgage amount, interest rate, term, and amortization period. It also includes options for rounding payment values and enabling debug logging.

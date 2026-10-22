@@ -8,6 +8,8 @@
 
 > **updateNotesDW**(`chartId`, `note`, `options?`): `Promise`\<`void` \| `Response`\>
 
+Defined in: [journalism-dataviz/src/dataviz/updateNotesDW.ts:30](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/updateNotesDW.ts#L30)
+
 Updates the notes field of a Datawrapper chart, table, or map.
 
 This function delegates to `updateInfoDW()` and logs a deprecation warning once per module instance. Use `updateInfoDW(chartId, { note }, options)` instead.

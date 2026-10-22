@@ -8,6 +8,8 @@
 
 > **reencode**(`inputFilePath`, `outputFilePath`, `fromEncoding`, `toEncoding`, `options?`): `Promise`\<`void`\>
 
+Defined in: [journalism-extras/src/extras/reencode.ts:36](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/reencode.ts#L36)
+
 Converts a file from one character encoding to another. This function is particularly optimized for handling large files.
 
 Character encoding is crucial for ensuring that text data is displayed correctly across different systems and applications. This function helps resolve issues related to garbled text when files are created or read with different encoding standards.

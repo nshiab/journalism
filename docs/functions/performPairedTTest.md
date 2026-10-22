@@ -8,6 +8,8 @@
 
 > **performPairedTTest**\<`T`\>(`pairedData`, `firstVariableKey`, `secondVariableKey`, `options?`): `object`
 
+Defined in: [journalism-statistics/src/statistics/performPairedTTest.ts:81](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/performPairedTTest.ts#L81)
+
 Performs a paired t-test for dependent means to determine if there is a significant difference between two related samples.
 
 The paired t-test is used when comparing two measurements from the same subjects or entities,

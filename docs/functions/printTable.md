@@ -8,6 +8,8 @@
 
 > **printTable**(`data`, `options?`): `void`
 
+Defined in: [journalism-format/src/format/printTable.ts:39](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/printTable.ts#L39)
+
 Prints a formatted table to the console with support for word wrapping within cells.
 Unlike console.table(), this function properly handles multi-line content within cells,
 making it ideal for displaying data with long text values.

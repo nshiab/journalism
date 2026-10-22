@@ -8,6 +8,8 @@
 
 > **getSampleSizeProportion**(`populationSize`, `confidenceLevel`, `marginOfError`): `number`
 
+Defined in: [journalism-statistics/src/statistics/getSampleSizeProportion.ts:39](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/getSampleSizeProportion.ts#L39)
+
 Calculates the required sample size for estimating a population proportion with a specified confidence level and margin of error.
 
 The function uses the finite population correction formula when the population size is known, which provides more accurate sample size calculations for smaller populations. It assumes a worst-case scenario proportion of 0.5 (50%) to ensure the calculated sample size is sufficient regardless of the actual population proportion.

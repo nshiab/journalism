@@ -8,6 +8,8 @@
 
 > **performTwoSampleTTest**\<`T1`, `T2`, `K`\>(`group1Data`, `group2Data`, `variableKey`, `options?`): `object`
 
+Defined in: [journalism-statistics/src/statistics/performTwoSampleTTest.ts:101](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/performTwoSampleTTest.ts#L101)
+
 Performs a two-sample t-test for independent means to determine if there is a significant difference between two independent groups.
 
 The two-sample t-test compares the means of two independent groups when the population standard deviations are unknown.

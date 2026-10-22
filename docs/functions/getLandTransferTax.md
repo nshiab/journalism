@@ -8,6 +8,8 @@
 
 > **getLandTransferTax**(`city`, `propertyValue`, `year`, `firstTimeOwner?`): `number`
 
+Defined in: [journalism-finance/src/finance/getLandTransferTax.ts:122](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getLandTransferTax.ts#L122)
+
 Calculates the standard Land Transfer Tax (or equivalent registration fee)
 for a given city and property value based on 2026 tax frameworks.
 

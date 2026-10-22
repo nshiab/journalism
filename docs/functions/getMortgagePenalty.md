@@ -8,6 +8,8 @@
 
 > **getMortgagePenalty**(`parameters`): `number`
 
+Defined in: [journalism-finance/src/finance/getMortgagePenalty.ts:49](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getMortgagePenalty.ts#L49)
+
 Calculates the mortgage prepayment penalty.
 
 For variable mortgages, the penalty is typically three months of interest.

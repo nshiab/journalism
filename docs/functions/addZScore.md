@@ -10,6 +10,8 @@
 
 > **addZScore**\<`T`, `K`\>(`data`, `variable`, `options`): (`T` & `{ [P in string]: number }`)[]
 
+Defined in: [journalism-statistics/src/statistics/addZScore.ts:56](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/addZScore.ts#L56)
+
 Calculates the Z-score for a specific numeric variable within an array of objects and adds it as a new property to each object. The Z-score is a statistical measure that indicates how many standard deviations a data point is from the mean of the dataset.
 
 The function modifies the input `data` array by adding a new key to each object, which by default is `zScore`. You can customize the name of this new key by using the `newKey` option.
@@ -102,6 +104,8 @@ console.log(studentData);
 ## Call Signature
 
 > **addZScore**\<`T`\>(`data`, `variable`, `options?`): (`T` & `object`)[]
+
+Defined in: [journalism-statistics/src/statistics/addZScore.ts:56](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/addZScore.ts#L56)
 
 Calculates the Z-score for a specific numeric variable within an array of objects using the default 'zScore' key name.
 

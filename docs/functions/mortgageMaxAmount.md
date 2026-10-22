@@ -8,6 +8,8 @@
 
 > **mortgageMaxAmount**(`annualIncome`, `downPayment`, `rate`, `options?`): `object`
 
+Defined in: [journalism-finance/src/finance/mortgageMaxAmount.ts:77](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/mortgageMaxAmount.ts#L77)
+
 Calculates the maximum affordable property purchase price and the corresponding mortgage amount a borrower can qualify for, based on their annual income, down payment, and current mortgage interest rates. This function is designed to simulate mortgage qualification criteria, taking into account various financial factors and debt service ratios.
 
 The calculation incorporates a stress test, where the interest rate used for qualification is the higher of the provided rate + 2% or 5.25% (a common benchmark in Canada). It also considers monthly debt payments, heating costs, property taxes, and condo fees to determine the Gross Debt Service (GDS) and Total Debt Service (TDS) ratios, which are critical in mortgage approvals.

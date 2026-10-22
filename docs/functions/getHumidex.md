@@ -8,6 +8,8 @@
 
 > **getHumidex**(`temperature`, `humidity`): `number`
 
+Defined in: [journalism-climate/src/climate/getHumidex.ts:28](https://github.com/nshiab/journalism-climate/blob/v1.0.13/src/climate/getHumidex.ts#L28)
+
 Calculates the humidex factor in Celsius based on the given temperature in Celsius and humidity percentage.
 
 If the calculated humidex is less than the provided temperature, the temperature itself is returned.

@@ -8,6 +8,8 @@
 
 > **zipToUrls**(`url`): `Promise`\<`string`[]\>
 
+Defined in: [journalism-web/src/web/zipToUrls.ts:24](https://github.com/nshiab/journalism-web/blob/v1.0.12/src/web/zipToUrls.ts#L24)
+
 Fetches a ZIP archive from a given URL, extracts all its contained files, and returns an array of object URLs for each extracted file.
 
 Each file within the ZIP archive is converted into a Blob object, and then a corresponding object URL is created.

@@ -8,6 +8,8 @@
 
 > **prettyDuration**(`start`, `options?`): `string`
 
+Defined in: [journalism-format/src/format/prettyDuration.ts:49](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/prettyDuration.ts#L49)
+
 Formats a duration into a human-readable string, breaking it down into years, months, days, hours, minutes, seconds, and milliseconds. This function is useful for displaying elapsed time in a user-friendly format, such as for performance logging, task completion times, or general time tracking.
 
 The function can calculate the duration from a given start time to the current time, or between a specified start and end time. It provides options for logging the output directly to the console and adding custom prefixes or suffixes to the formatted string. Note that for simplicity, months are approximated as 30 days and years as 365 days.

@@ -10,6 +10,8 @@
 
 > **geoToBlenderPoint**(`lon`, `lat`, `projection`, `options?`): `object`
 
+Defined in: [journalism-geo/src/geo/geoToBlenderPoint.ts:37](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/geoToBlenderPoint.ts#L37)
+
 Converts one longitude/latitude coordinate into Blender coordinates.
 
 Flat projection functions are placed on Blender's X/Y plane with Z up and north toward positive Y.
@@ -111,6 +113,8 @@ const point = geoToBlenderPoint(-73.5674, 45.5019, projection, {
 ## Call Signature
 
 > **geoToBlenderPoint**(`lon`, `lat`, `projection`, `options`): \[`number`, `number`, `number`\]
+
+Defined in: [journalism-geo/src/geo/geoToBlenderPoint.ts:37](https://github.com/nshiab/journalism-geo/blob/v1.0.26/src/geo/geoToBlenderPoint.ts#L37)
 
 Converts one longitude/latitude coordinate into Blender coordinates.
 

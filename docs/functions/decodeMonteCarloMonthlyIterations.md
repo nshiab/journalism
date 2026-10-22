@@ -8,6 +8,8 @@
 
 > **decodeMonteCarloMonthlyIterations**(`c`): `object`[]
 
+Defined in: [journalism-finance/src/finance/decodeMonteCarloResults.ts:23](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/decodeMonteCarloResults.ts#L23)
+
 Decodes a columnar `monthlyIterations` result back into a flat object array.
 
 **⚠️ Memory Warning:** This function can allocate millions of small objects during large simulations.

@@ -8,6 +8,8 @@
 
 > **downloadFromBucket**(`source`, `destination`, `options?`): `Promise`\<`void`\>
 
+Defined in: [journalism-google/src/google/downloadFromBucket.ts:49](https://github.com/nshiab/journalism-google/blob/v2.0.0/src/google/downloadFromBucket.ts#L49)
+
 Downloads a file from a Google Cloud Storage (GCS) bucket to a specified local path. This function provides robust handling for existing local files, allowing you to skip downloads or overwrite files as needed.
 
 The function requires the Google Cloud project ID and the target bucket name. These can be provided either through environment variables (`BUCKET_PROJECT` and `BUCKET_NAME`) or directly as parameters in the `options` object. Parameters passed in `options` will take precedence over environment variables.

@@ -8,6 +8,8 @@
 
 > **decodeMonteCarloWinners**(`w`): `object`[]
 
+Defined in: [journalism-finance/src/finance/decodeMonteCarloResults.ts:205](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/decodeMonteCarloResults.ts#L205)
+
 Decodes `category` bytes into category names
 (0 = "renter", 1 = "buyerFixed", 2 = "buyerVariable").
 Records are returned in iteration order (row 0 = iteration 0).

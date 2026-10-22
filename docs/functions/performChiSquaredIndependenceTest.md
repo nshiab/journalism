@@ -8,6 +8,8 @@
 
 > **performChiSquaredIndependenceTest**\<`T`\>(`data`, `firstVariableKey`, `secondVariableKey`, `countKey`): `object`
 
+Defined in: [journalism-statistics/src/statistics/performChiSquaredIndependenceTest.ts:81](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/performChiSquaredIndependenceTest.ts#L81)
+
 Performs a Chi-Squared independence test to determine if two categorical variables are statistically independent or associated.
 
 The Chi-Squared independence test examines whether there is a statistically significant association between two categorical variables by comparing observed frequencies against expected frequencies calculated under the assumption of independence.

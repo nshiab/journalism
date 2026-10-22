@@ -8,6 +8,8 @@
 
 > **logDotChart**\<`T`, `X`\>(`data`, `x`, `y`, `options?`): `void`
 
+Defined in: [journalism-dataviz/src/dataviz/logDotChart.ts:72](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/logDotChart.ts#L72)
+
 Generates and logs a text-based dot chart to the console. This function is ideal for visualizing the relationship between two numerical variables. It provides a quick, terminal-friendly way to inspect data trends and distributions.
 
 The chart is rendered using ASCII characters, ensuring compatibility across various terminal environments. It supports custom formatting for both x and y-axis values, and can generate small multiples to compare distributions across different categories. While the function expects data to be sorted by the x-axis values for proper rendering, it does not enforce this.

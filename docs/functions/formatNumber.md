@@ -8,6 +8,8 @@
 
 > **formatNumber**(`number`, `options?`): `string`
 
+Defined in: [journalism-format/src/format/formatNumber.ts:62](https://github.com/nshiab/journalism-format/blob/v1.1.12/src/format/formatNumber.ts#L62)
+
 Formats a number according to specified style, rounding, and display options. This versatile function can handle various numerical formatting needs.
 
 The function supports two main styles: "cbc" (Canadian Broadcasting Corporation style, typically English) and "rc" (Radio-Canada style, typically French), which dictate the thousands separator and decimal marker.

@@ -8,6 +8,8 @@
 
 > **getYahooFinanceData**(`symbol`, `startDate`, `endDate`, `variable`, `interval`): `Promise`\<`object`[]\>
 
+Defined in: [journalism-finance/src/finance/getYahooFinanceData.ts:63](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getYahooFinanceData.ts#L63)
+
 Fetches historical prices or trading volume for a symbol from Yahoo Finance.
 
 **Yahoo Finance notice:** This function uses an undocumented Yahoo Finance

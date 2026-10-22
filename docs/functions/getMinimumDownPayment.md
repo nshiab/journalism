@@ -8,6 +8,8 @@
 
 > **getMinimumDownPayment**(`purchasePrice`, `options?`): `number`
 
+Defined in: [journalism-finance/src/finance/getMinimumDownPayment.ts:39](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/getMinimumDownPayment.ts#L39)
+
 Calculates the minimum down payment required for a property purchase in Canada, based on the purchase price.
 
 The calculation follows the Financial Consumer Agency of Canada (FCAC) rules:

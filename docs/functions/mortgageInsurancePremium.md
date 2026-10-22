@@ -8,6 +8,8 @@
 
 > **mortgageInsurancePremium**(`purchasePrice`, `downPayment`): `number`
 
+Defined in: [journalism-finance/src/finance/mortgageInsurancePremium.ts:47](https://github.com/nshiab/journalism-finance/blob/v2.0.3/src/finance/mortgageInsurancePremium.ts#L47)
+
 Calculates the mortgage insurance premium based on the property's purchase price and the down payment amount. This function is designed to reflect the premium rates typically applied in Canada, as outlined by institutions like the Financial Consumer Agency of Canada. The calculated premium is rounded to the nearest integer.
 
 Mortgage insurance is generally required in Canada when the down payment is less than 20% of the home's purchase price.

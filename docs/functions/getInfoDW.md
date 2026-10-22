@@ -8,6 +8,8 @@
 
 > **getInfoDW**(`chartId`, `options?`): `Promise`\<`Record`\<`string`, `unknown`\> \| `Response`\>
 
+Defined in: [journalism-dataviz/src/dataviz/getInfoDW.ts:39](https://github.com/nshiab/journalism-dataviz/blob/v1.0.27/src/dataviz/getInfoDW.ts#L39)
+
 Gets information and settings for a Datawrapper chart, table, or map.
 
 Returns the full parsed chart object, including any chart-specific fields. Property values are typed as unknown because the response varies by visualization.

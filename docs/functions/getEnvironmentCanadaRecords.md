@@ -8,6 +8,8 @@
 
 > **getEnvironmentCanadaRecords**\<`T`\>(`locations`, `variable`, `dateRange`, `options?`): `Promise`\<(`T` & `object`)[]\>
 
+Defined in: [journalism-climate/src/climate/getEnvironmentCanadaRecords.ts:102](https://github.com/nshiab/journalism-climate/blob/v1.0.13/src/climate/getEnvironmentCanadaRecords.ts#L102)
+
 Retrieves historical weather records from Environment and Climate Change Canada for specified locations and date ranges. This function fetches extreme weather records (daily maximum temperatures, precipitation, or snowfall) from the closest weather stations to your provided coordinates.
 
 The function uses Environment Canada's Long-Term Climate Extremes (LTCE) API to find the nearest weather stations that have recorded the specified weather variable, then retrieves the historical record values for each day in your specified date range.

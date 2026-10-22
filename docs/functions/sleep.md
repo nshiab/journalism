@@ -8,6 +8,8 @@
 
 > **sleep**(`ms`, `options?`): `Promise`\<`void`\>
 
+Defined in: [journalism-extras/src/extras/sleep.ts:46](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/sleep.ts#L46)
+
 Pauses the execution of an asynchronous function for a specified duration. This utility is useful for introducing delays in workflows, throttling requests, or simulating real-world latencies.
 
 It can also adjust the pause duration by subtracting any time already elapsed since a given start point, ensuring more precise delays. This is particularly useful for respecting API rate limits, ensuring that the total time spent between requests meets a minimum threshold without over-waiting if the preceding operations took some time. If the elapsed time is greater than or equal to `ms`, the function will resolve immediately without pausing.

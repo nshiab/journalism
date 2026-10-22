@@ -8,6 +8,8 @@
 
 > **generateGbmPath**(`startValue`, `mu`, `sigma`, `years`, `periodsPerYear`): `number`[]
 
+Defined in: [journalism-statistics/src/statistics/generateGbmPath.ts:38](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/generateGbmPath.ts#L38)
+
 Generates a simulated path for an asset using the Geometric Brownian Motion (GBM) model.
 
 Geometric Brownian Motion is a continuous-time stochastic process in which the logarithm of the randomly varying quantity follows a Brownian motion with drift. It is widely used in mathematical finance to model stock prices, as it ensures that values remain positive and accounts for compounded returns.

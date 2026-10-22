@@ -8,6 +8,8 @@
 
 > **unzip**(`zippedFile`, `output`, `options?`): `void`
 
+Defined in: [journalism-extras/src/extras/unzip.ts:26](https://github.com/nshiab/journalism-extras/blob/v1.0.12/src/extras/unzip.ts#L26)
+
 Unzips a given zipped file to a specified output directory. This function provides a convenient way to extract compressed archives, commonly used for distributing data or software. It offers an option to delete the original zipped file after successful extraction, which is useful for cleanup operations.
 
 ## Parameters

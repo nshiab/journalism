@@ -10,7 +10,12 @@
   "treatValidationWarningsAsErrors": true,
   "excludePrivate": true,
   "excludeProtected": true,
-  "plugin": ["typedoc-github-theme", "typedoc-plugin-markdown", "typedoc-plugin-llms-txt"],
+  "plugin": [
+    "typedoc-github-theme",
+    "typedoc-plugin-markdown",
+    "typedoc-plugin-llms-txt",
+    "./scripts/typedoc-dependency-sources.ts"
+  ],
   "hostedBaseUrl": "https://nshiab.github.io/journalism/",
   "outputs": [
     {
@@ -44,6 +49,5 @@
         "llmsTxt": false
       }
     }
-  ],
-  "disableSources": true
+  ]
 }

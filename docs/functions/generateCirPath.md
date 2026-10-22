@@ -8,6 +8,8 @@
 
 > **generateCirPath**(`startValue`, `a`, `b`, `sigma`, `years`, `periodsPerYear`): `number`[]
 
+Defined in: [journalism-statistics/src/statistics/generateCirPath.ts:35](https://github.com/nshiab/journalism-statistics/blob/v1.5.9/src/statistics/generateCirPath.ts#L35)
+
 Generates a path of values following the Cox-Ingersoll-Ross (CIR) model.
 
 The CIR model is a mean-reverting stochastic process used to model variables that tend to return to a long-term average over time, such as interest rates or volatility.
